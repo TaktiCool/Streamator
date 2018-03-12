@@ -262,6 +262,16 @@ DFUNC(dik2Char) = {
     _ctrlFOVLabel ctrlSetText "FOV";
     _ctrlFOVLabel ctrlCommit 0;
 
+    private _ctrlFOVDefaultLine = _display ctrlCreate ["RscPicture", -1];
+    _ctrlFOVDefaultLine ctrlSetPosition [
+        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        PX(BORDERWIDTH / 2),
+        PY(1)
+    ];
+    _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(1,1,0,0)";
+    _ctrlFOVDefaultLine ctrlCommit 0;
+
     [QGVAR(CameraSpeedChanged), {
         (_this select 1) params ["_ctrl"];
         private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
