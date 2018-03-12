@@ -42,10 +42,11 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 if (GVAR(OverlayUnitMarker)) then {
     {
         if (side _x in EGVAR(Common,CompetingSides)) then {
-            private _sideColor = [[0.6, 0, 0, 0.7], [0, 0.4, 0.8, 0.7]] select (side _x == (EGVAR(Common,CompetingSides) select 0));
+            private _sideColor = GVAR(SideColorsArray) getVariable [side _x, [1, 1, 1, 1]];
+            _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
-                private _icon = _x getVariable [QEGVAR(Kit,UIIcon), ""];
+                private _icon = ""; // TODO: Icon which is visible in unit overview of group leader
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
@@ -65,11 +66,11 @@ if (GVAR(OverlayUnitMarker)) then {
 // GROUPS
 if (GVAR(OverlayGroupMarker)) then {
     {
-        if (side _x in EGVAR(Common,CompetingSides)) then {
-            private _sideColor = [[0.6, 0, 0, 1], [0, 0.4, 0.8, 1]] select (side _x == (EGVAR(Common,CompetingSides) select 0));
+        if (!(side _x in [sideLogic, sideUnknown])) then {
+            private _sideColor = GVAR(SideColorsArray) getVariable [side _x, [1, 1, 1, 1]];
+            _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance leader _x;
-            private _groupType = _x getVariable [QEGVAR(Squad,Type), "Rifle"];
-            private _groupMapIcon = [format [QUOTE(PREFIX/CfgGroupTypes/%1/mapIcon), _groupType], "\A3\ui_f\data\map\markers\nato\b_inf.paa"] call CFUNC(getSetting);
+            private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa"; // TODO: Side-dependent Group Icon
             private _pos = (leader _x modelToWorldVisual (leader _x selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
 
