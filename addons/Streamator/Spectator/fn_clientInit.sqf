@@ -1,6 +1,6 @@
 #include "macros.hpp"
 /*
-    Arma At War - AAW
+    Streamator
 
     Author: BadGuy
 
@@ -56,6 +56,28 @@ GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
+
+// small helper function
+DFUNC(getDefaultIcon) = {
+    params ["_side"];
+    switch (_side) do {
+        case (west): {
+            "b_unknown"
+        };
+        case (east): {
+            "o_unknown"
+        };
+        case (independent): {
+            "n_unknown"
+        };
+        case (civilian): {
+            "c_unknown"
+        };
+        default {
+            "hd_unknown"
+         };
+    };
+};
 
 // Small helper functions
 DFUNC(dik2Char) = {
