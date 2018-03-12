@@ -11,6 +11,7 @@ class CfgCLibModules {
             FNC(clientInit);
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);
+            FNC(getUnitType);
             FNC(keyDownEH);
             FNC(keyUpEH);
             FNC(mouseMovingEH);
@@ -19,7 +20,7 @@ class CfgCLibModules {
 
         // UnitTracker
         MODULE(UnitTracker) {
-            dependency[] = {"AAW/Common"};
+            dependency[] = {"Streamator/Spectator"};
             FNC(clientInit);
             FNC(addUnitToTracker);
             FNC(addGroupToTracker);
