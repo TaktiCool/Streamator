@@ -62,19 +62,19 @@ DFUNC(getDefaultIcon) = {
     params ["_side"];
     switch (_side) do {
         case (west): {
-            "\A3\ui_f\data\map\markers\nato\b_unknown"
+            "\A3\ui_f\data\map\markers\nato\b_inf.paa"
         };
         case (east): {
-            "\A3\ui_f\data\map\markers\nato\o_unknown"
+            "\A3\ui_f\data\map\markers\nato\o_inf.paa"
         };
         case (independent): {
-            "\A3\ui_f\data\map\markers\nato\n_unknown"
+            "\A3\ui_f\data\map\markers\nato\n_inf.paa"
         };
         case (civilian): {
-            "\A3\ui_f\data\map\markers\nato\c_unknown"
+            "\A3\ui_f\data\map\markers\nato\c_unknown.paa"
         };
         default {
-            "\A3\ui_f\data\map\markers\nato\n_unknown"
+            "\A3\ui_f\data\map\markers\nato\n_inf.paa"
          };
     };
 };

@@ -15,7 +15,7 @@
 */
 params ["_vehicle", "_vehicleIconId", ["_inGroup", false], ["_isEmpty", false]];
 
-private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _newUnit)), [0.5, 0.5, 0.5, 1]];
+private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _vehicle)), [0.5, 0.5, 0.5, 1]];
 
 private _vehicleMapIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "Icon");
 

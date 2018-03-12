@@ -18,13 +18,13 @@ params ["_newUnit", "_iconId"];
 private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _newUnit)), [0.5, 0.5, 0.5, 1]];
 
 private _icon = [(configFile >> "CfgVehicles" >> typeOf _unit >> "Icon"), DEFAULT_ICON, true] call CFUNC(getConfigDataCached);
-private _manIcon = ["ICON", , _color, _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
+private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
     if (_position getVariable ["ACE_isUnconscious", false] || !alive _position) then {
         _color = [0.5, 0.5, 0.5, 1];
     };
 }];
 
-private _manIconHover = ["ICON", , [0.85,0.85,0,1], _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
+private _manIconHover = ["ICON", _icon, [0.85,0.85,0,1], _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
     if (_position getVariable ["ACE_isUnconscious", false] || !alive _position) then {
         _color = [0.5, 0.5, 0.5, 1];
     };
