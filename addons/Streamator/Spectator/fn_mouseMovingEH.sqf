@@ -21,11 +21,11 @@ params [
     ["_deltaX", 0, [0]],
     ["_deltaY", 0, [0]]
 ];
-
+private _fov_factor = (GVAR(CameraPreviousState) select 4) / 0.75;
 if (GVAR(CameraOffsetMode)) then {
-    GVAR(CameraDirOffset) = GVAR(CameraDirOffset) + _deltaX * 0.5;
-    GVAR(CameraPitchOffset) = -89.0 max (89.9 min (GVAR(CameraPitchOffset) - _deltaY * 0.5));
+    GVAR(CameraDirOffset) = GVAR(CameraDirOffset) + _deltaX * 0.5 * _fov_factor;
+    GVAR(CameraPitchOffset) = -89.0 max (89.9 min (GVAR(CameraPitchOffset) - _deltaY * 0.5* _fov_factor));
 } else {
-    GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5;
-    GVAR(CameraPitch) = -89.0 max (89.9 min (GVAR(CameraPitch) - _deltaY * 0.5));
+    GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5 * _fov_factor;
+    GVAR(CameraPitch) = -89.0 max (89.9 min (GVAR(CameraPitch) - _deltaY * _fov_factor));
 };

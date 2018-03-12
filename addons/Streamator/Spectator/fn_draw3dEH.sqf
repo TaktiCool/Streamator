@@ -41,8 +41,8 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
-        if (side _x in EGVAR(Common,CompetingSides)) then {
-            private _sideColor = GVAR(SideColorsArray) getVariable [side _x, [1, 1, 1, 1]];
+        if (!(side _x in [sideLogic, sideUnknown])) then {
+            private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
@@ -67,10 +67,10 @@ if (GVAR(OverlayUnitMarker)) then {
 if (GVAR(OverlayGroupMarker)) then {
     {
         if (!(side _x in [sideLogic, sideUnknown])) then {
-            private _sideColor = GVAR(SideColorsArray) getVariable [side _x, [1, 1, 1, 1]];
+            private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance leader _x;
-            private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa"; // TODO: Side-dependent Group Icon
+            private _groupMapIcon = _x getVariable [QGVAR(GroupIcon), [side _x] call FUNC(getDefaultIcon)];
             private _pos = (leader _x modelToWorldVisual (leader _x selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
 
