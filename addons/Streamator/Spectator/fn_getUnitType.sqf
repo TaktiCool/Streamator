@@ -24,16 +24,16 @@ if (_unit getUnitTrait "medic") exitWith {
 if (_unit getUnitTrait "engineer" || _unit getUnitTrait "explosiveSpecialist") exitWith {
     "\a3\ui_f\data\gui\cfg\respawnroles\support_ca.paa";
 };
-if ("launch" find (secondaryWeapon _unit) != -1) exitWith {
+if ((secondaryWeapon _unit) find "launch" != -1) exitWith {
     "\a3\ui_f\data\igui\cfg\weaponicons\at_ca.paa";
 };
-if ("srifle" find (primaryWeapon _unit) != -1) exitWith {
+if ((primaryWeapon _unit) find "srifle" != -1) exitWith {
     "\a3\ui_f\data\igui\cfg\weaponicons\srifle_ca.paa";
 };
-if ("LMG" find (primaryWeapon _unit) != -1 || "MMG" find (primaryWeapon _unit) != -1) exitWith {
+if ((primaryWeapon _unit) find "LMG" != -1 || "MMG" find (primaryWeapon _unit) != -1) exitWith {
     "\a3\ui_f\data\igui\cfg\weaponicons\mg_ca.paa";
 };
-if ("GL" find (primaryWeapon _unit) != -1) exitWith {
+if ((primaryWeapon _unit) find "GL" != -1) exitWith {
     "\a3\ui_f\data\igui\cfg\weaponicons\gl_ca.paa";
 };
 
