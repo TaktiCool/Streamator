@@ -17,5 +17,14 @@ class CfgCLibModules {
             FNC(mouseMovingEH);
             FNC(mouseWheelEH);
         };
+
+        // UnitTracker
+        MODULE(UnitTracker) {
+            dependency[] = {"AAW/Common"};
+            FNC(clientInit);
+            FNC(addUnitToTracker);
+            FNC(addGroupToTracker);
+            FNC(addVehicleToTracker);
+        };
     };
 };

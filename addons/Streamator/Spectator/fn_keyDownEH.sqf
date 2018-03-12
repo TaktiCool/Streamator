@@ -161,20 +161,7 @@ private _return = switch (_keyCode) do {
     case DIK_RETURN: { // RETURN
         if (GVAR(InputMode) == 1) exitWith {
             if !(GVAR(InputGuess) isEqualTo []) then {
-                GVAR(CameraFollowTarget) = (GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1;
-                if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
-                    GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
-                };
-
-                if (speed GVAR(CameraFollowTarget) > 20 && {vectorMagnitude GVAR(CameraRelPos) < 30}) then {
-                    GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply 30;
-                };
-
-                GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(CameraRelPos);
-                GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
-
-                GVAR(CameraMode) = 2;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+                 ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1) call FUNC(setCameraTarget);
             };
 
             GVAR(InputMode) = 0;
