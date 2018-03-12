@@ -9,7 +9,6 @@ class CfgCLibModules {
         MODULE(Spectator) {
             dependency[] = {"CLib"};
             FNC(clientInit);
-            FNC(clientInitSector);
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);
             FNC(getUnitType);

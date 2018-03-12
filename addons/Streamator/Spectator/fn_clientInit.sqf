@@ -20,13 +20,13 @@ GVAR(SideColorsArray) = false call CFUNC(createNamespace);
 GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
 GVAR(SideColorsArray) setVariable [str east, [0.6, 0, 0, 1]];
 GVAR(SideColorsArray) setVariable [str independent, [0, 0.5, 0, 1]];
-GVAR(SideColorsArray) setVariable [str civilian, [0.5, 0.5, 0, 1]];
+GVAR(SideColorsArray) setVariable [str civilian, [0.4, 0, 0.5, 1]];
 
 GVAR(SideColorsString) = false call CFUNC(createNamespace);
 GVAR(SideColorsString) setVariable [str west, "#0099EE"];
 GVAR(SideColorsString) setVariable [str east, "#CC3333"];
 GVAR(SideColorsString) setVariable [str independent, "#33CC33"];
-GVAR(SideColorsString) setVariable [str civilian, "#CCCC33"];
+GVAR(SideColorsString) setVariable [str civilian, "#CC33CC"];
 
 GVAR(Camera) = objNull;
 GVAR(CameraPos) = [0, 0, 0];
@@ -62,19 +62,19 @@ DFUNC(getDefaultIcon) = {
     params ["_side"];
     switch (_side) do {
         case (west): {
-            "b_unknown"
+            "\A3\ui_f\data\map\markers\nato\b_unknown"
         };
         case (east): {
-            "o_unknown"
+            "\A3\ui_f\data\map\markers\nato\o_unknown"
         };
         case (independent): {
-            "n_unknown"
+            "\A3\ui_f\data\map\markers\nato\n_unknown"
         };
         case (civilian): {
-            "c_unknown"
+            "\A3\ui_f\data\map\markers\nato\c_unknown"
         };
         default {
-            "hd_unknown"
+            "\A3\ui_f\data\map\markers\nato\n_unknown"
          };
     };
 };
@@ -380,14 +380,13 @@ DFUNC(dik2Char) = {
                         if (GVAR(InputGuessIndex) >= count _guess) then {
                             GVAR(InputGuessIndex) = 0;
                         };
-                        private _friendlySide = (EGVAR(Common,competingSides)) select 0;
 
                         _guess = _guess select [GVAR(InputGuessIndex), count _guess];
                         private _bestGuess = _guess select 0;
                         private _guessStr = _guess apply {
                             format [
                                 "<t color='%1'>%2</t>",
-                                ["#CC3333", "#0099EE"] select ((side group (_x select 1)) isEqualTo _friendlySide),
+                                GVAR(SideColorsString) getVariable [str side group (_x select 1), "#ffffff"],
                                 (_x select 2)
                             ]
                         };
@@ -396,7 +395,7 @@ DFUNC(dik2Char) = {
                         if (GVAR(InputGuessIndex) > 0) then {
                             _temp = _temp + "<img size='0.5' image='\A3\ui_f\data\gui\rsccommon\rschtml\arrow_left_ca.paa'/>";
                         };
-                        private _color = ["#CC3333", "#0099EE"] select ((side group (_bestGuess select 1)) isEqualTo _friendlySide);
+                        private _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
 
                         _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
                         _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
