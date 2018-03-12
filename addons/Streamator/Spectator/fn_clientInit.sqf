@@ -16,6 +16,18 @@
 
 if !(side CLib_player == sideLogic && {player isKindOf "VirtualSpectator_F"}) exitWith {};
 
+GVAR(SideColorsArray) = false call CFUNC(createNamespace);
+GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
+GVAR(SideColorsArray) setVariable [str east, [0.6, 0, 0, 1]];
+GVAR(SideColorsArray) setVariable [str independent, [0, 0.5, 0, 1]];
+GVAR(SideColorsArray) setVariable [str civilian, [0.5, 0.5, 0, 1]];
+
+GVAR(SideColorsString) = false call CFUNC(createNamespace);
+GVAR(SideColorsString) setVariable [str west, "#0099EE"];
+GVAR(SideColorsString) setVariable [str east, "#CC3333"];
+GVAR(SideColorsString) setVariable [str independent, "#33CC33"];
+GVAR(SideColorsString) setVariable [str civilian, "#CCCC33"];
+
 GVAR(Camera) = objNull;
 GVAR(CameraPos) = [0, 0, 0];
 GVAR(CameraDir) = getDirVisual CLib_player;
