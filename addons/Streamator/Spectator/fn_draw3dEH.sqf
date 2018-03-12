@@ -16,8 +16,8 @@
 
 // Cursor Target
 private _nextTarget = objNull;
-private _intersectCam = getPosASL GVAR(Camera);
-private _intersectTarget = _intersectCam vectorAdd (vectorDir GVAR(Camera) vectorMultiply 1000);
+private _intersectCam = AGLToASL positionCameraToWorld [0, 0, 0];
+private _intersectTarget = AGLToASL positionCameraToWorld [0, 0, 1000];
 private _object = lineIntersectsSurfaces [
     _intersectCam,
     _intersectTarget,
