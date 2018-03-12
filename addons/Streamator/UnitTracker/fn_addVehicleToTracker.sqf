@@ -100,8 +100,7 @@ private _vehicleMapIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicl
         private _crewUnits = "";
         private _unitCount = {
             if (alive _x) then {
-                private _selectedKit = _x getVariable [QEGVAR(kit,kit), ""]; // TODO: Remove Dependency
-                private _kitIcon = ([_selectedKit, side group _x, [["UIIcon", "\a3\ui_f\data\IGUI\Cfg\Actions\clear_empty_ca.paa"]]] call EFUNC(Kit,getKitDetails)) select 0; // TODO: Remove Dependency
+                private _kitIcon = _x call FUNC(getUnitType);
                 _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
                 true;
             } else {

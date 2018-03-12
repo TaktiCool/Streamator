@@ -28,7 +28,6 @@ if (side CLib_player == sideLogic && {player isKindOf "VirtualSpectator_F"}) the
     };
 };
 
-private _groupType = _group getVariable [QEGVAR(Squad,Type), "Rifle"];
 private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa";
 
 private _iconPos = [vehicle leader _group, _attachTo];
@@ -136,8 +135,7 @@ private _iconPos = [vehicle leader _group, _attachTo];
 
         private _squadUnits = "";
         private _unitCount = {
-            private _selectedKit = _x getVariable [QEGVAR(kit,kit), ""]; // TODO: Remove Dependency
-            private _kitIcon = ([_selectedKit, side group _x, [["UIIcon", "\a3\ui_f\data\IGUI\Cfg\Actions\clear_empty_ca.paa"]]] call EFUNC(Kit,getKitDetails)) select 0; // TODO: Remove Dependency
+            private _kitIcon = _x call FUNC(getUnitType);
             _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
             true;
         } count _units;
