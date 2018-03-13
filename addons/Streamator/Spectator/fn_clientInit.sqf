@@ -50,7 +50,7 @@ GVAR(lastUnitShooting) = objNull;
 GVAR(CameraPreviousState) = [];
 GVAR(CameraSmoothingTime) = 0.2;
 GVAR(MapState) = [];
-
+GVAR(MapOpen) = false;
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
@@ -427,7 +427,11 @@ DFUNC(dik2Char) = {
                 _temp
             };
             default {
-                "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV"
+                if (GVAR(MapOpen)) then {
+                    "[CTRL+LMB] Teleport  [M] Close Map"
+                } else {
+                    "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV"
+                }
             };
         };
 

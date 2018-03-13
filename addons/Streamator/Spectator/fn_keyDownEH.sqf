@@ -41,6 +41,8 @@ private _return = switch (_keyCode) do {
             _map ctrlSetPosition [safeZoneX + PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), safeZoneW - PX(2 * BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)];
             _map ctrlCommit 0;
 
+            GVAR(MapOpen) = true;
+            QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
             GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_player]];
 
             _map ctrlMapAnimAdd [0, _zoom, _position];
@@ -95,6 +97,9 @@ private _return = switch (_keyCode) do {
                 private _pos = _map ctrlMapScreenToWorld [0.5, 0.5];
                 private _zoom = ctrlMapScale _map;
                 GVAR(MapState) = [_zoom, _pos];
+                GVAR(MapOpen) = false;
+                QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
+
             }];
         } else {
             _mapDisplay closeDisplay 1;
