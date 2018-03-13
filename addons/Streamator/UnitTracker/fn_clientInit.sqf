@@ -74,7 +74,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
                     [_unit, _iconId] call FUNC(addUnitToTracker);
                 };
 
-                if (leader _unit == _unit) then {
+                if (leader _unit == _unit && alive _unit) then {
                     _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _unit, _unit, group _unit isEqualTo group CLib_Player];
                     GVAR(processedIcons) pushBack _iconId;
                     if !(_iconId in GVAR(lastProcessedIcons)) then {

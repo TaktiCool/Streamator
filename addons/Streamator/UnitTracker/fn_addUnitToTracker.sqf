@@ -24,6 +24,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
     if (_position getVariable ["ACE_isUnconscious", false] || !alive _position) then {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\a3\ui_f_curator\data\cfgmarkers\kia_ca.paa";
+        _angle = 0;
     };
 }];
 
