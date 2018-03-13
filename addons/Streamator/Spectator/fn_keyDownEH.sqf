@@ -195,6 +195,7 @@ private _return = switch (_keyCode) do {
         true
     };
     case DIK_N: { // N
+        if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         switch (GVAR(CameraVision)) do {
             case (9): {
