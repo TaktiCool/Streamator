@@ -104,19 +104,24 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F: { // F
         if (GVAR(InputMode) > 0) exitWith {false};
-        if (_ctrl) then {
+        if (_ctrl) exitWith {
             GVAR(InputMode) = 1;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+            true
+        };
+        if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
+            GVAR(lastUnitShooting) call FUNC(setCameraTarget);
+            true
+        };
+        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+            GVAR(CameraFollowTarget) = GVAR(CursorTarget);
+            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
+            GVAR(CameraMode) = 2;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
-            if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget)}}) then {
-                GVAR(CameraFollowTarget) = GVAR(CursorTarget);
-                GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
-                GVAR(CameraMode) = 2;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-            } else {
-                GVAR(CameraMode) = 1;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-            };
+            GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+            true
         };
     };
     case DIK_LSHIFT: { // LShift
@@ -127,6 +132,11 @@ private _return = switch (_keyCode) do {
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraSmoothingMode) = true;
+        false
+    };
+    case DIK_LALT: { // LCTRL
+        if (GVAR(InputMode) > 0) exitWith {false};
+        GVAR(CameraZoomMode) = true;
         false
     };
     case DIK_ESCAPE: { // ESC

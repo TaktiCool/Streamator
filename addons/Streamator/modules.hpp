@@ -1,5 +1,4 @@
-#define MODULE(name) class name
-#define FNC(name) class name
+#include "\tc\CLib\addons\CLib\ModuleMacros.hpp"
 
 class CfgCLibModules {
     class Streamator {

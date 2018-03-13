@@ -38,6 +38,9 @@ if (GVAR(CameraSmoothingMode)) exitWith {
     true
 };
 
-GVAR(CameraFOV) = 0.01 max (2 min (GVAR(CameraFOV) + ( (-_delta) / 30)));
-QGVAR(CameraFOVChanged) call CFUNC(localEvent);
-true
+if (GVAR(CameraZoomMode)) exitWith {
+    GVAR(CameraFOV) = 0.01 max (2 min (GVAR(CameraFOV) + ( (-_delta) / 30)));
+    QGVAR(CameraFOVChanged) call CFUNC(localEvent);
+    true
+};
+false

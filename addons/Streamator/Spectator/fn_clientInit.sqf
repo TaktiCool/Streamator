@@ -38,12 +38,14 @@ GVAR(CameraHeight) = 100;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraOffsetMode) = false;
+GVAR(CameraZoomMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraFollowTarget) = objNull;
 GVAR(CursorTarget) = objNull;
+GVAR(lastUnitShooting) = objNull;
 GVAR(CameraPreviousState) = [];
 GVAR(CameraSmoothingTime) = 0.2;
 GVAR(MapState) = [];
@@ -175,7 +177,7 @@ DFUNC(dik2Char) = {
     _ctrlInfo ctrlSetPosition [safeZoneX + PX(0.3 + BORDERWIDTH), safeZoneY + PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
     _ctrlInfo ctrlSetFontHeight PY(1.5);
     _ctrlInfo ctrlSetFont "RobotoCondensed";
-    _ctrlInfo ctrlSetText "[F] Follow Target    [CTRL + F] Follow Unit/Squad/Objective    [M] Map    [TAB] Reset FOV";
+    _ctrlInfo ctrlSetText "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV";
     _ctrlInfo ctrlCommit 0;
 
     private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1];
@@ -413,7 +415,7 @@ DFUNC(dik2Char) = {
                 _temp
             };
             default {
-                "[F] Follow Cursor Target    [CTRL + F] Follow Unit/Squad/Objective    [M] Map    [F1] Toggle Group Overlay    [F2] Toggle Unit Overlay    [TAB] Reset FOV"
+                "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV"
             };
         };
 
@@ -435,3 +437,12 @@ DFUNC(dik2Char) = {
 addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
 
 [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+
+["entityCreated", {
+    (_this select 0) params ["_target"];
+    if (_target isKindOf "CAManBase") then {
+        _target addEventHandler ["FiredMan", {
+            GVAR(lastUnitShooting) = _this select 0;
+        }];
+    };
+}] call CFUNC(addEventhandler);
