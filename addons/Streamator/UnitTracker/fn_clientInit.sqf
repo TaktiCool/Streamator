@@ -29,7 +29,7 @@ GVAR(lastProcessedIcons) = [];
 
 DFUNC(isValidUnit) = {
     params [["_unit", objNull]];
-    !isNull _unit && alive _unit && simulationEnabled _unit;
+    !isNull _unit && simulationEnabled _unit;
 };
 
 DFUNC(isValidVehicle) = {
