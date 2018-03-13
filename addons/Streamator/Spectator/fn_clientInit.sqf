@@ -387,7 +387,6 @@ DFUNC(dik2Char) = {
             case 1: { // Search FOLLOW Target
                 private _searchStr = GVAR(InputScratchpad);
                 private _temp = "<t color='#cccccc'>Search for Target: </t>";
-                systemChat GVAR(InputScratchpad);
                 if (_searchStr != "") then {
                     private _guess = +GVAR(InputGuess);
                     if !(_guess isEqualTo []) then {
@@ -463,14 +462,14 @@ DFUNC(dik2Char) = {
             _angle = getDirVisual GVAR(Camera);
         }]]
     ] call CFUNC(addMapGraphicsGroup);
+
+    // Camera Update PFH
+    addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
+
+    [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 }, {
     (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
 }] call CFUNC(waitUntil);
-
-// Camera Update PFH
-addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
-
-[DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
