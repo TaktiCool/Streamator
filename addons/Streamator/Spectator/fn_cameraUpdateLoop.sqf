@@ -86,11 +86,12 @@ if (GVAR(CameraSmoothingTime) > 0) then {
     _pitch = _sinPitch atan2 _cosPitch;
 
     _fov = (_lastFov * _smoothingAmount + _fov) / (1 + _smoothingAmount);
-
+    _position set [2, (getTerrainHeightASL _position) max (_position select 2)];
     GVAR(CameraPreviousState) = [time, _position, _direction, _pitch, _fov];
 } else {
     GVAR(CameraPreviousState) = [];
 };
+
 
 GVAR(Camera) setPosASL _position;
 GVAR(Camera) setVectorDirAndUp [[sin _direction * cos _pitch, cos _direction * cos _pitch, sin _pitch], [0, 0, cos _pitch]];
