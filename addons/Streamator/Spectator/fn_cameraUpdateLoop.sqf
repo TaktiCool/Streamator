@@ -16,8 +16,6 @@
 
 private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
 private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
-CLib_Player setPos (getPos GVAR(Camera));
-CLib_Player setVectorDirAndUp [vectorDir GVAR(Camera), vectorUp GVAR(Camera)];
 // Calculate velocity
 private _velocity = [0, 0, 0];
 if (GVAR(InputMode) == 0) then {
@@ -97,3 +95,6 @@ if (GVAR(CameraSmoothingTime) > 0) then {
 GVAR(Camera) setPosASL _position;
 GVAR(Camera) setVectorDirAndUp [[sin _direction * cos _pitch, cos _direction * cos _pitch, sin _pitch], [0, 0, cos _pitch]];
 GVAR(Camera) camSetFov _fov;
+
+CLib_Player setPos (positionCameraToWorld [0, 0, -3]);
+CLib_Player setVectorDirAndUp [vectorDir GVAR(Camera), vectorUp GVAR(Camera)];
