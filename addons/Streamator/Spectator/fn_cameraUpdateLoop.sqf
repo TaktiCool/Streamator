@@ -40,8 +40,8 @@ if (GVAR(InputMode) == 0) then {
     };
 };
 
-private _deltaX = inputAction "cameraLookUp" - inputAction "cameraLookDown";
-private _deltaY = inputAction "cameraLookRight" - inputAction "cameraLookLeft";
+private _deltaX = (inputAction "cameraLookRight" - inputAction "cameraLookLeft") * 2;
+private _deltaY = (inputAction "cameraLookDown" - inputAction "cameraLookUp") * 2;
 [displayNull, _deltaX, _deltaY] call FUNC(mouseMovingEH);
 
 switch (GVAR(CameraMode)) do {
