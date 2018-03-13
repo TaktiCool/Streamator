@@ -189,6 +189,24 @@ private _return = switch (_keyCode) do {
         GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
         true
     };
+    case DIK_N: { // N
+        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
+        switch (GVAR(CameraVision)) do {
+            case (9): {
+                camUseNVG false;
+                false setCamUseTi 0;
+            };
+            case (8): {
+                camUseNVG true;
+                false setCamUseTi 0;
+            };
+            default {
+                camUseNVG false;
+                true setCamUseTi GVAR(CameraVision);
+            };
+        };
+    };
+
     default {
         false
     };

@@ -41,7 +41,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
-        if (!(side _x in [sideLogic, sideUnknown])) then {
+        if (!(side _x in [sideLogic, sideUnknown]) && alive _x) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _x;

@@ -42,6 +42,7 @@ GVAR(CameraZoomMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
 GVAR(CameraFOV) = 0.75;
+GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraFollowTarget) = objNull;
 GVAR(CursorTarget) = objNull;
@@ -269,9 +270,9 @@ DFUNC(dik2Char) = {
         safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
         safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 2),
-        PY(1)
+        PY(0.2)
     ];
-    _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(1,1,0,0)";
+    _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(0,1,0,1)";
     _ctrlFOVDefaultLine ctrlCommit 0;
 
     [QGVAR(CameraSpeedChanged), {
@@ -339,16 +340,18 @@ DFUNC(dik2Char) = {
                     _searchStr = toLower _searchStr;
                     private _guess = [];
                     {
-                        private _name = (_x call CFUNC(name));
-                        private _index = toLower _name find _searchStr;
-                        if (_index >= 0) then {
-                            _guess pushBack [_index, _x, _name];
-                        };
-                        if (leader group _x == _x) then {
-                            private _name = groupId group _x;
+                        if (alive _x) then {
+                            private _name = (_x call CFUNC(name));
                             private _index = toLower _name find _searchStr;
                             if (_index >= 0) then {
                                 _guess pushBack [_index, _x, _name];
+                            };
+                            if (leader group _x == _x) then {
+                                private _name = groupId group _x;
+                                private _index = toLower _name find _searchStr;
+                                if (_index >= 0) then {
+                                    _guess pushBack [_index, _x, _name];
+                                };
                             };
                         };
                         false;
@@ -429,6 +432,12 @@ DFUNC(dik2Char) = {
     (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
     (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
+    [
+        "SpectatorCamera", [["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [0.5,0.5,1,1], GVAR(Camera), 20, 20, GVAR(Camera), "", 1, 0.08, "RobotoCondensed", "right", {
+            _position = getPos GVAR(Camera);
+            _angle = getDirVisual GVAR(Camera);
+        }]]
+    ] call CFUNC(addMapGraphicsGroup);
 }, {
     (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
 }] call CFUNC(waitUntil);
