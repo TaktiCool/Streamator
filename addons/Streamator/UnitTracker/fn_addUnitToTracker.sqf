@@ -37,7 +37,7 @@ private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa
 
 [_iconID, "dblClicked", {
     (_this select 1) params ["_unit"];
-    _unit call EFUNC(Spectator,SetCameraTarget);
+    _unit call EFUNC(Spectator,setCameraTarget);
 }, _leader] call CFUNC(addMapGraphicsEventHandler);
 
 _iconId;

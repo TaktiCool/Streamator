@@ -46,7 +46,7 @@ if (GVAR(OverlayUnitMarker)) then {
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
-                private _icon = ""; // TODO: Icon which is visible in unit overview of group leader
+                private _icon = _x call FUNC(getUnitType); // TODO: Icon which is visible in unit overview of group leader
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];

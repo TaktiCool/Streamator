@@ -100,7 +100,7 @@ private _vehicleMapIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicl
         private _crewUnits = "";
         private _unitCount = {
             if (alive _x) then {
-                private _kitIcon = _x call FUNC(getUnitType);
+                private _kitIcon = _x call EFUNC(Spectator,getUnitType);
                 _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
                 true;
             } else {

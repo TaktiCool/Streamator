@@ -12,6 +12,7 @@ class CfgCLibModules {
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);
             FNC(getUnitType);
+            FNC(setCameraTarget);
             FNC(keyDownEH);
             FNC(keyUpEH);
             FNC(mouseMovingEH);

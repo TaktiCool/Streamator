@@ -15,7 +15,7 @@
 */
 params ["_group", "_groupIconId", ["_attachTo", [0, -20]]];
 
-private _color = EGVAR(Spectator,SideColorsArray) getVariable [side _group, [1, 1, 1, 1]];
+private _color = EGVAR(Spectator,SideColorsArray) getVariable [str side _group, [1, 1, 1, 1]];
 
 private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa";
 
@@ -96,7 +96,7 @@ private _iconPos = [vehicle leader _group, _attachTo];
 
         private _squadUnits = "";
         private _unitCount = {
-            private _kitIcon = _x call FUNC(getUnitType);
+            private _kitIcon = _x call EFUNC(Spectator,getUnitType);
             _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
             true;
         } count _units;
