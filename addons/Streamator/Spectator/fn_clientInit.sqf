@@ -413,7 +413,7 @@ DFUNC(dik2Char) = {
                 _temp
             };
             default {
-                "[F] Follow Cursor Target    [CTRL + F] Follow Unit/Squad/Objective    [M] Map    [F1] Toggle Group Overlay    [F2] Toggle Unit Overlay    [F3] Toggle Sector Overlay    [TAB] Reset FOV"
+                "[F] Follow Cursor Target    [CTRL + F] Follow Unit/Squad/Objective    [M] Map    [F1] Toggle Group Overlay    [F2] Toggle Unit Overlay    [TAB] Reset FOV"
             };
         };
 
