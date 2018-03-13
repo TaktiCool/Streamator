@@ -21,7 +21,7 @@ params [
     ["_deltaX", 0, [0]],
     ["_deltaY", 0, [0]]
 ];
-private _fov_factor = (GVAR(CameraPreviousState) select 4) / 0.75;
+private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;
 if (GVAR(CameraOffsetMode)) then {
     GVAR(CameraDirOffset) = GVAR(CameraDirOffset) + _deltaX * 0.5 * _fov_factor;
     GVAR(CameraPitchOffset) = -89.0 max (89.9 min (GVAR(CameraPitchOffset) - _deltaY * 0.5* _fov_factor));
