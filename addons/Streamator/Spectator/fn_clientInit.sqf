@@ -241,7 +241,6 @@ DFUNC(dik2Char) = {
     _ctrlMouseSmoothingLabel ctrlSetText "SMTH";
     _ctrlMouseSmoothingLabel ctrlCommit 0;
 
-
     private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1];
     _ctrlFOVBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
     _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
@@ -257,6 +256,16 @@ DFUNC(dik2Char) = {
     ];
     _ctrlFOVBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
     _ctrlFOVBar ctrlCommit 0;
+
+    private _ctrlFOVBarCurrent = _display ctrlCreate ["RscPicture", -1];
+    _ctrlFOVBarCurrent ctrlSetPosition [
+        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        PX(BORDERWIDTH / 8),
+        PY(BORDERWIDTH * 4) * _relLength
+    ];
+    _ctrlFOVBarCurrent ctrlSetText "#(argb,8,8,3)color(0,0,1,1)";
+    _ctrlFOVBarCurrent ctrlCommit 0;
 
     private _ctrlFOVLabel = _display ctrlCreate ["RscTextNoShadow", -1];
     _ctrlFOVLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(18 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
@@ -425,6 +434,18 @@ DFUNC(dik2Char) = {
         _ctrl ctrlSetStructuredText parseText _str;
         _ctrl ctrlCommit 0;
     }, _ctrlInfo] call CFUNC(addEventhandler);
+
+    [{
+        (_this select 0) params ["_ctrl"];
+        private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
+        _ctrl ctrlSetPosition [
+            safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
+            safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+            PX(BORDERWIDTH / 8),
+            PY(BORDERWIDTH * 4) * _relLength
+        ];
+        _ctrl ctrlCommit 0;
+    }, 0, _ctrlFOVBarCurrent] call CFUNC(addPerFrameHandler);
 
     [QGVAR(updateInput)] call CFUNC(localEvent);
 
