@@ -41,6 +41,8 @@ private _return = switch (_keyCode) do {
             _map ctrlSetPosition [safeZoneX + PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), safeZoneW - PX(2 * BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)];
             _map ctrlCommit 0;
 
+            GVAR(MapOpen) = true;
+            QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
             GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_player]];
 
             _map ctrlMapAnimAdd [0, _zoom, _position];
@@ -95,6 +97,9 @@ private _return = switch (_keyCode) do {
                 private _pos = _map ctrlMapScreenToWorld [0.5, 0.5];
                 private _zoom = ctrlMapScale _map;
                 GVAR(MapState) = [_zoom, _pos];
+                GVAR(MapOpen) = false;
+                QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
+
             }];
         } else {
             _mapDisplay closeDisplay 1;
@@ -104,19 +109,24 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F: { // F
         if (GVAR(InputMode) > 0) exitWith {false};
-        if (_ctrl) then {
+        if (_ctrl) exitWith {
             GVAR(InputMode) = 1;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+            true
+        };
+        if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
+            GVAR(lastUnitShooting) call FUNC(setCameraTarget);
+            true
+        };
+        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+            GVAR(CameraFollowTarget) = GVAR(CursorTarget);
+            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
+            GVAR(CameraMode) = 2;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
-            if (!isNull GVAR(CursorTarget)) then {
-                GVAR(CameraFollowTarget) = GVAR(CursorTarget);
-                GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
-                GVAR(CameraMode) = 2;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-            } else {
-                GVAR(CameraMode) = 1;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-            };
+            GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+            true
         };
     };
     case DIK_LSHIFT: { // LShift
@@ -127,6 +137,11 @@ private _return = switch (_keyCode) do {
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraSmoothingMode) = true;
+        false
+    };
+    case DIK_LALT: { // LCTRL
+        if (GVAR(InputMode) > 0) exitWith {false};
+        GVAR(CameraZoomMode) = true;
         false
     };
     case DIK_ESCAPE: { // ESC
@@ -175,6 +190,28 @@ private _return = switch (_keyCode) do {
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
         true
     };
+    case DIK_F3: { // F3
+        GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
+        true
+    };
+    case DIK_N: { // N
+        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
+        switch (GVAR(CameraVision)) do {
+            case (9): {
+                camUseNVG false;
+                false setCamUseTi 0;
+            };
+            case (8): {
+                camUseNVG true;
+                false setCamUseTi 0;
+            };
+            default {
+                camUseNVG false;
+                true setCamUseTi GVAR(CameraVision);
+            };
+        };
+    };
+
     default {
         false
     };

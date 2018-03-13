@@ -27,6 +27,9 @@ switch (_keyCode) do {
     case DIK_LCONTROL: { // LCTRL
         GVAR(CameraSmoothingMode) = false;
     };
+    case DIK_LALT: { // LCTRL
+        GVAR(CameraZoomMode) = false;
+    };
 };
 
 false

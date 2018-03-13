@@ -1,5 +1,4 @@
-#define MODULE(name) class name
-#define FNC(name) class name
+#include "\tc\CLib\addons\CLib\ModuleMacros.hpp"
 
 class CfgCLibModules {
     class Streamator {
@@ -8,6 +7,7 @@ class CfgCLibModules {
         // Crates
         MODULE(Spectator) {
             dependency[] = {"CLib"};
+            APIFNC(addCustom3dIcon);
             FNC(clientInit);
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);

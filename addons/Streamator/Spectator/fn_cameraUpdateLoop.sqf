@@ -75,8 +75,6 @@ if (GVAR(CameraSmoothingTime) > 0) then {
         ["_lastFov", _fov]
     ];
 
-
-
     private _smoothingAmount = GVAR(CameraSmoothingTime) / ((time - _lastTime) max 0.001);
     _position = (_lastPosition vectorMultiply _smoothingAmount vectorAdd _position) vectorMultiply (1 / (1 + _smoothingAmount));
 
