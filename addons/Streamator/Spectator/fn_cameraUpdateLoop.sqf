@@ -16,7 +16,8 @@
 
 private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
 private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
-
+CLib_Player setPos (getPos GVAR(Camera));
+CLib_Player setVectorDirAndUp [vectorDir GVAR(Camera), vectorUp GVAR(Camera)];
 // Calculate velocity
 private _velocity = [0, 0, 0];
 if (GVAR(InputMode) == 0) then {
