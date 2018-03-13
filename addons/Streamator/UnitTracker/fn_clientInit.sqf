@@ -41,6 +41,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
 
 [GVAR(ProcessingSM), "init", {
     private _units = +(allUnits select {[_x] call FUNC(isValidUnit)});
+    _units append (allDead select {[_x] call FUNC(isValidUnit) && _x isKindOf "CAManBase"});
     private _vehicles = (vehicles select {[_x] call FUNC(isValidVehicle)});
     GVAR(lastProcessedIcons) = (CGVAR(MapGraphics_MapGraphicsGroup) call CFUNC(allVariables)) select {(_x find toLower QGVAR(IconId)) == 0};
     {
