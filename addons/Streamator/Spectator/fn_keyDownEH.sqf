@@ -129,11 +129,6 @@ private _return = switch (_keyCode) do {
         GVAR(CameraSmoothingMode) = true;
         false
     };
-    case DIK_LALT: { // LAlt
-        if (GVAR(InputMode) > 0) exitWith {true};
-        GVAR(CameraOffsetMode) = true;
-        true
-    };
     case DIK_ESCAPE: { // ESC
         if (GVAR(InputMode) > 0) exitWith {
             GVAR(InputMode) = 0;
@@ -178,10 +173,6 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-        true
-    };
-    case DIK_F3: { // F3
-        GVAR(OverlaySectorMarker) = !GVAR(OverlaySectorMarker);
         true
     };
     default {

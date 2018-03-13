@@ -27,11 +27,6 @@ switch (_keyCode) do {
     case DIK_LCONTROL: { // LCTRL
         GVAR(CameraSmoothingMode) = false;
     };
-    case DIK_LALT: { // LAlt
-        GVAR(CameraOffsetMode) = false;
-        GVAR(CameraDirOffset) = 0;
-        GVAR(CameraPitchOffset) = 0;
-    };
 };
 
 false
