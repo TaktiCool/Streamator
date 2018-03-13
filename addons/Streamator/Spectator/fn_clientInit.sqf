@@ -50,7 +50,7 @@ GVAR(MapState) = [];
 
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
-GVAR(OverlaySectorMarker) = true;
+GVAR(OverlayCustomMarker) = true;
 
 GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";

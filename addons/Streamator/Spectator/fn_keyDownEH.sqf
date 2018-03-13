@@ -108,7 +108,7 @@ private _return = switch (_keyCode) do {
             GVAR(InputMode) = 1;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
         } else {
-            if (!isNull GVAR(CursorTarget)) then {
+            if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget)}}) then {
                 GVAR(CameraFollowTarget) = GVAR(CursorTarget);
                 GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
                 GVAR(CameraMode) = 2;
@@ -173,6 +173,10 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
+        true
+    };
+    case DIK_F3: { // F3
+        GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
         true
     };
     default {
