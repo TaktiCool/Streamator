@@ -18,13 +18,25 @@ params ["_vehicle", "_vehicleIconId", ["_inGroup", false], ["_isEmpty", false]];
 private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _vehicle)), [0.5, 0.5, 0.5, 1]];
 
 private _vehicleMapIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "Icon");
+private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa", [0.85,0.85,0,1], _newUnit, 25, 25, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
+    if (_position getVariable ["ACE_isUnconscious", false] || !alive _position) then {
+        _color = [0.5, 0.5, 0.5, 1];
+    };
+}];
 
 [
     _vehicleIconId,
     [
-        ["ICON", _vehicleMapIcon, _color, _vehicle, 30, 30, _vehicle, "", 1]
+        ["ICON", _vehicleMapIcon, _color, _vehicle, 30, 30, _vehicle, "", 1],
+        _vehIconHover
     ]
 ] call CFUNC(addMapGraphicsGroup);
+
+[_vehicleIconId, "dblclicked", {
+    (_this select 1) params ["_vehicle"];
+    _vehicle call EFUNC(Spectator,setCameraTarget);
+}, _vehicle] call CFUNC(addMapGraphicsEventHandler);
+
 
 [
     _vehicleIconId,

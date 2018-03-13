@@ -34,7 +34,7 @@ DFUNC(isValidUnit) = {
 
 DFUNC(isValidVehicle) = {
     params[ ["_vehicle", objNull]];
-    !isNull _vehicle && (({alive _x} count crew _vehicle) == 0) && (damage _vehicle < 1)
+    !isNull _vehicle && (({alive _x} count crew _vehicle) == 0) && (damage _vehicle < 1) && _vehicle isKindOf "AllVehicles"
 };
 
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);

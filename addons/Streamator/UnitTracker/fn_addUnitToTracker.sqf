@@ -35,7 +35,7 @@ private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa
 [_iconId, [_manIcon]] call CFUNC(addMapGraphicsGroup);
 [_iconId, [_manIcon, _manIconHover, _manDescription], "hover"] call CFUNC(addMapGraphicsGroup);
 
-[_iconID, "dblclicked", {
+[_iconId, "dblclicked", {
     (_this select 1) params ["_unit"];
     _unit call EFUNC(Spectator,setCameraTarget);
 }, _newUnit] call CFUNC(addMapGraphicsEventHandler);
