@@ -16,7 +16,7 @@
 params ["_unit"];
 
 if (leader _unit == _unit) exitWith {
-    "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa";
+    "\a3\ui_f\data\igui\cfg\cursors\leader_ca.paa";
 };
 if (_unit getUnitTrait "medic") exitWith {
     "\a3\ui_f\data\igui\cfg\holdactions\holdaction_revive_ca.paa";

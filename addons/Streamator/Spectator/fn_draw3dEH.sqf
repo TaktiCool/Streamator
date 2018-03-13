@@ -51,9 +51,6 @@ if (GVAR(OverlayUnitMarker)) then {
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
 
                 private _scale = 1.2;
-                if (_icon == "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa") then {
-                    _scale = 1;
-                };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
                 drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
             } else {

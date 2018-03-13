@@ -29,6 +29,11 @@ private _iconPos = [vehicle leader _group, _attachTo];
     ]
 ] call CFUNC(addMapGraphicsGroup);
 
+[_groupIconId, "dblclicked", {
+    (_this select 1) params ["_unit"];
+    _unit call EFUNC(Spectator,setCameraTarget);
+}, leader _group] call CFUNC(addMapGraphicsEventHandler);
+
 [
     _groupIconId,
     "hoverin",
