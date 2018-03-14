@@ -21,11 +21,15 @@ private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa";
 
 private _iconPos = [vehicle leader _group, _attachTo];
 
+private _groupIdElements = (groupId _group) splitString " ";
+private _firstGroupIdElement = _groupIdElements deleteAt 0;
+private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _groupIdElements joinString " "];
+
 [
     _groupIconId,
     [
         ["ICON", _groupMapIcon, _color, _iconPos, 25, 25],
-        ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _iconPos, 25, 25, 0, (groupId _group) select [0, 1], 2]
+        ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _iconPos, 26, 26, 0, _shortGroupId, 2]
     ]
 ] call CFUNC(addMapGraphicsGroup);
 
@@ -102,7 +106,7 @@ private _iconPos = [vehicle leader _group, _attachTo];
         private _squadUnits = "";
         private _unitCount = {
             private _kitIcon = _x call EFUNC(Spectator,getUnitType);
-            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
+            _squadUnits = _squadUnits + format ["<img size='0.9' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
             true;
         } count _units;
 

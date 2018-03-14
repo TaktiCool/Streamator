@@ -50,9 +50,9 @@ if (GVAR(OverlayUnitMarker)) then {
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
 
-                private _scale = 1.2;
+                private _scale = 1.4;
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
-                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
+                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
             } else {
                 if (_distance < UNITDOTDIST) then {
                     _sideColor set [3, 0.5];
