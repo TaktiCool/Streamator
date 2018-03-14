@@ -55,10 +55,57 @@ GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
 
+GVAR(PositionMemory) = [];
+
 GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
+
+DFUNC(savePosition) = {
+    params ["_slot"];
+
+    private _element = [
+        GVAR(CameraMode),
+        GVAR(CameraFollowTarget),
+        GVAR(CameraPos),
+        GVAR(CameraRelPos),
+        GVAR(CameraDir),
+        GVAR(CameraPitch),
+        GVAR(CameraFOV),
+        GVAR(CameraVision)
+    ];
+    GVAR(PositionMemory) set [_slot, _element];
+};
+
+DFUNC(restorePosition) = {
+    params ["_slot"];
+
+    if (_slot > count GVAR(PositionMemory)) exitWith {};
+
+    private _element = GVAR(PositionMemory) select _slot;
+
+    if (count _element != 8) exitWith {};
+    private _lastCameraMode = GVAR(CameraMode);
+    GVAR(CameraMode) = _element select 0;
+    GVAR(CameraFollowTarget) = _element select 1;
+    GVAR(CameraPos) = _element select 2;
+    GVAR(CameraRelPos) = _element select 3;
+    GVAR(CameraDir) = _element select 4;
+    GVAR(CameraPitch) = _element select 5;
+    private _lastCameraFOV = GVAR(CameraMode);
+    GVAR(CameraFOV) = _element select 6;
+    GVAR(CameraVision) = _element select 7;
+
+    if (GVAR(CameraMode) != _lastCameraMode) then {
+        [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+    };
+    if (GVAR(CameraFOV) != _lastCameraFOV) then {
+        [QGVAR(CameraFOVChanged), GVAR(CameraFOV)] call CFUNC(localEvent);
+    };
+};
+
+
 
 // small helper function
 DFUNC(getDefaultIcon) = {

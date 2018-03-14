@@ -18,6 +18,13 @@
     Event handled <Bool>
 */
 
+#define SAVERESTORE(slot) if (GVAR(InputMode) > 0) exitWith {false}; \
+if (_ctrl) then { \
+[slot] call FUNC(savePosition); \
+} else { \
+[slot] call FUNC(restorePosition); \
+}; \
+
 params [
     ["_display", displayNull, [displayNull]],
     ["_keyCode", 0, [0]],
@@ -25,6 +32,8 @@ params [
     ["_ctrl", false, [true]],
     ["_alt", false, [true]]
 ];
+
+
 
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
@@ -212,6 +221,46 @@ private _return = switch (_keyCode) do {
                 true setCamUseTi GVAR(CameraVision);
             };
         };
+    };
+
+    case DIK_1: {
+        SAVERESTORE(0)
+    };
+
+    case DIK_2: {
+        SAVERESTORE(1)
+    };
+
+    case DIK_3: {
+        SAVERESTORE(2)
+    };
+
+    case DIK_4: {
+        SAVERESTORE(3)
+    };
+
+    case DIK_5: {
+        SAVERESTORE(4)
+    };
+
+    case DIK_6: {
+        SAVERESTORE(5)
+    };
+
+    case DIK_7: {
+        SAVERESTORE(6)
+    };
+
+    case DIK_8: {
+        SAVERESTORE(7)
+    };
+
+    case DIK_9: {
+        SAVERESTORE(8)
+    };
+
+    case DIK_0: {
+        SAVERESTORE(9)
     };
 
     default {
