@@ -95,7 +95,7 @@ DFUNC(restorePosition) = {
     private _lastCameraFOV = GVAR(CameraMode);
     GVAR(CameraFOV) = _element select 6;
     GVAR(CameraVision) = _element select 7;
-
+    call FUNC(setVisionMode);
     if (GVAR(CameraMode) != _lastCameraMode) then {
         [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
     };
@@ -173,6 +173,23 @@ DFUNC(dik2Char) = {
         default {""};
     };
     [_char, toUpper _char] select _shift
+};
+
+DFUNC(setVisionMode) = {
+    switch (GVAR(CameraVision)) do {
+        case (9): {
+            camUseNVG false;
+            false setCamUseTi 0;
+        };
+        case (8): {
+            camUseNVG true;
+            false setCamUseTi 0;
+        };
+        default {
+            camUseNVG false;
+            true setCamUseTi GVAR(CameraVision);
+        };
+    };
 };
 
 [QGVAR(InputModeChanged), {

@@ -207,20 +207,7 @@ private _return = switch (_keyCode) do {
     case DIK_N: { // N
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
-        switch (GVAR(CameraVision)) do {
-            case (9): {
-                camUseNVG false;
-                false setCamUseTi 0;
-            };
-            case (8): {
-                camUseNVG true;
-                false setCamUseTi 0;
-            };
-            default {
-                camUseNVG false;
-                true setCamUseTi GVAR(CameraVision);
-            };
-        };
+        call FUNC(setVisionMode);
     };
 
     case DIK_1;
