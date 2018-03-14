@@ -47,11 +47,14 @@ if (GVAR(OverlayUnitMarker)) then {
             _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
-                private _icon = _x call FUNC(getUnitType); // TODO: Icon which is visible in unit overview of group leader
+                private _icon = _x call FUNC(getUnitType);
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
 
                 private _scale = 1.4+0.4*(1-_shotFactor);
+                if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
+                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_disabled_ca.paa", [1,1,1,1], _pos, _size*1.1, _size*1.1, 0];
+                };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
                 drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
             } else {
