@@ -443,9 +443,9 @@ DFUNC(setVisionMode) = {
         (_this select 1) params ["_ctrlFOVLabel", "_ctrlMouseSmoothingLabel", "_ctrlMouseSpeedLabel"];
 
         if (GVAR(CameraSpeedMode)) then {
-            _ctrlMouseSpeedBar ctrlSetTextColor [0, 1, 0, 1];
+            _ctrlMouseSpeedLabel ctrlSetTextColor [0, 1, 0, 1];
         } else {
-            _ctrlMouseSpeedBar ctrlSetTextColor [1, 1, 1, 1];
+            _ctrlMouseSpeedLabel ctrlSetTextColor [1, 1, 1, 1];
         };
         if (GVAR(CameraSmoothingMode)) then {
             _ctrlMouseSmoothingLabel ctrlSetTextColor [0, 1, 0, 1];
