@@ -120,10 +120,10 @@ DFUNC(getDefaultIcon) = {
             "\A3\ui_f\data\map\markers\nato\n_inf.paa"
         };
         case (civilian): {
-            "\A3\ui_f\data\map\markers\nato\n_inf.paa"
+            "\A3\ui_f\data\map\markers\nato\n_unknown.paa"
         };
         default {
-            "\A3\ui_f\data\map\markers\nato\n_inf.paa"
+            "\A3\ui_f\data\map\markers\nato\n_unknown.paa"
          };
     };
 };
