@@ -43,21 +43,23 @@ if (GVAR(OverlayUnitMarker)) then {
     {
         if (!(side _x in [sideLogic, sideUnknown]) && alive _x && simulationEnabled _x) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
-            _sideColor set [3, 0.7];
+            private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
+            _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
                 private _icon = _x call FUNC(getUnitType); // TODO: Icon which is visible in unit overview of group leader
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
 
-                private _scale = 1.4;
+                private _scale = 1.4+0.4*(1-_shotFactor);
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
                 drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
             } else {
                 if (_distance < UNITDOTDIST) then {
                     _sideColor set [3, 0.5];
+                    private _scale = 1+0.4*(1-_shotFactor);
                     private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
-                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4, 0.4, 0];
+                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4*_scale, 0.4*_scale, 0];
                 };
             };
         };

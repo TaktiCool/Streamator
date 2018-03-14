@@ -21,6 +21,9 @@ private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _newUn
 
 private _icon = [(configFile >> "CfgVehicles" >> typeOf _newUnit >> "Icon"), DEFAULT_ICON, true] call CFUNC(getConfigDataCached);
 private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
+    private _shotFactor = 2*(time - (_position getVariable [QEGVAR(Spectator,lastShot), 0])) min 1;
+    _width = _width*(1+0.3*(1-_shotFactor));
+    _height = _width;
     if (_position getVariable ["ACE_isUnconscious", false] || !alive _position) then {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\a3\ui_f_curator\data\cfgmarkers\kia_ca.paa";

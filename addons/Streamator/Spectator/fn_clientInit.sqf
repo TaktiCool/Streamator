@@ -37,7 +37,6 @@ GVAR(CameraPitchOffset) = 0;
 GVAR(CameraHeight) = 100;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
-GVAR(CameraOffsetMode) = false;
 GVAR(CameraZoomMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
@@ -539,6 +538,7 @@ DFUNC(setVisionMode) = {
     if (_target isKindOf "CAManBase") then {
         _target addEventHandler ["FiredMan", {
             GVAR(lastUnitShooting) = _this select 0;
+            (_this select 0) setVariable [QGVAR(lastShot), time];
         }];
     };
 }] call CFUNC(addEventhandler);
