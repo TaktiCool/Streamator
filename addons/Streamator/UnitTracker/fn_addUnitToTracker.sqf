@@ -33,7 +33,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
 
 private _manIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa", [0.85,0.85,0,0.5], _newUnit, 25, 25, _newUnit, "", 1, 0.08, "RobotoCondensed", "right"];
 
-private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _newUnit, 22, 22, 0, name _newUnit, 2];
+private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _newUnit, 22, 22, 0, _newUnit call CFUNC(name), 2];
 
 [_iconId, [_manIcon]] call CFUNC(addMapGraphicsGroup);
 [_iconId, [_manIcon, _manIconHover, _manDescription], "hover"] call CFUNC(addMapGraphicsGroup);
