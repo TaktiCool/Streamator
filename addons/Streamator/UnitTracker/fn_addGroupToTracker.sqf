@@ -17,7 +17,7 @@ params ["_group", "_groupIconId", ["_attachTo", [0, -20]]];
 
 private _color = EGVAR(Spectator,SideColorsArray) getVariable [str side _group, [1, 1, 1, 1]];
 
-private _groupMapIcon = "\A3\ui_f\data\map\markers\nato\b_inf.paa";
+private _groupMapIcon = (side _group) call EFUNC(Spectator,getDefaultIcon);
 
 private _iconPos = [vehicle leader _group, _attachTo];
 
