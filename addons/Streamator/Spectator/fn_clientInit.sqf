@@ -103,8 +103,6 @@ DFUNC(restorePosition) = {
     };
 };
 
-
-
 // small helper function
 DFUNC(getDefaultIcon) = {
     params ["_side"];
@@ -441,7 +439,25 @@ DFUNC(setVisionMode) = {
         _ctrl ctrlSetStructuredText parseText _str;
         _ctrl ctrlCommit 0;
     }] call CFUNC(addEventhandler);
+    [QGVAR(hightlightModeChanged), {
+        (_this select 1) params ["_ctrlFOVLabel", "_ctrlMouseSmoothingLabel", "_ctrlMouseSpeedLabel"];
 
+        if (GVAR(CameraSpeedMode)) then {
+            _ctrlMouseSpeedBar ctrlSetTextColor [0, 1, 0, 1];
+        } else {
+            _ctrlMouseSpeedBar ctrlSetTextColor [1, 1, 1, 1];
+        };
+        if (GVAR(CameraSmoothingMode)) then {
+            _ctrlMouseSmoothingLabel ctrlSetTextColor [0, 1, 0, 1];
+        } else {
+             _ctrlMouseSmoothingLabel ctrlSetTextColor [1, 1, 1, 1];
+        };
+        if (GVAR(CameraZoomMode)) then {
+            _ctrlFOVLabel ctrlSetTextColor [0, 1, 0, 1];
+        } else {
+            _ctrlFOVLabel ctrlSetTextColor [1, 1, 1, 1];
+        };
+    }, [_ctrlFOVLabel, _ctrlMouseSmoothingLabel, _ctrlMouseSpeedLabel]] call CFUNC(addEventhandler);
     [QGVAR(updateInput), {
         (_this select 1) params ["_ctrl"];
 

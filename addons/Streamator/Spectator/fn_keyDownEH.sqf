@@ -33,8 +33,6 @@ params [
     ["_alt", false, [true]]
 ];
 
-
-
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
         if (GVAR(InputMode) > 0) exitWith {false};
@@ -71,7 +69,7 @@ private _return = switch (_keyCode) do {
                         true;
                     };
                     default {
-                        false
+                        true;
                     };
                 };
             }];
@@ -142,16 +140,19 @@ private _return = switch (_keyCode) do {
     case DIK_LSHIFT: { // LShift
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraSpeedMode) = true;
+        QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraSmoothingMode) = true;
+        QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_LALT: { // LCTRL
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraZoomMode) = true;
+        QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_ESCAPE: { // ESC
@@ -222,6 +223,12 @@ private _return = switch (_keyCode) do {
     case DIK_0: {
         SAVERESTORE(_keyCode);
         true;
+    };
+
+    case (DIK_R): {
+        if !(isNull GVAR(CameraFollowTarget)) then {
+            GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
+        };
     };
 
     default {
