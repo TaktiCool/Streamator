@@ -53,7 +53,7 @@ if (GVAR(OverlayUnitMarker)) then {
 
                 private _scale = 1.4+0.4*(1-_shotFactor);
                 if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
-                    drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size*1.2, _size*1.2, 0];
+                    drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size*1.4, _size*1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size, _size, 0];
                 drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale, _size * _scale, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
@@ -63,7 +63,7 @@ if (GVAR(OverlayUnitMarker)) then {
                     private _scale = 1+0.4*(1-_shotFactor);
                     private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
                     if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
-                        drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_disabled_ca.paa", [1,1,1,1], _pos, _size*1.2, _size*1.2, 0];
+                        drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, 0.4*1.4, 0.4*1.4, 0];
                     };
                     drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4*_scale, 0.4*_scale, 0];
                 };
