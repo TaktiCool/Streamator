@@ -55,7 +55,7 @@ GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
 
-GVAR(PositionMemory) = [];
+GVAR(PositionMemory) = false call CFUNC(createNamespace);
 
 GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
@@ -75,15 +75,14 @@ DFUNC(savePosition) = {
         GVAR(CameraFOV),
         GVAR(CameraVision)
     ];
-    GVAR(PositionMemory) set [_slot, _element];
+    GVAR(PositionMemory) setVariable [str _slot, _element];
 };
 
 DFUNC(restorePosition) = {
     params ["_slot"];
 
-    if (_slot > count GVAR(PositionMemory)) exitWith {};
-
-    private _element = GVAR(PositionMemory) select _slot;
+    private _element = GVAR(PositionMemory) getVariable (str _slot);
+    if (isNil "_element") exitWith {};
 
     if (count _element != 8) exitWith {};
     private _lastCameraMode = GVAR(CameraMode);

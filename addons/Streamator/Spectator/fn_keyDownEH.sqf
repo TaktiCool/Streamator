@@ -23,7 +23,7 @@ if (_ctrl) then { \
 [slot] call FUNC(savePosition); \
 } else { \
 [slot] call FUNC(restorePosition); \
-}; \
+}
 
 params [
     ["_display", displayNull, [displayNull]],
@@ -91,7 +91,7 @@ private _return = switch (_keyCode) do {
 
             _map ctrlAddEventHandler ["MouseButtonClick", {
                 params ["_map", "_button", "_xPos", "_yPos"];
-                if (GVAR(teleportMode)) then {
+                if (GVAR(teleportMode) && _button == 0) then {
 
                     private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
                     _pos set [2, ((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos];
@@ -223,44 +223,18 @@ private _return = switch (_keyCode) do {
         };
     };
 
-    case DIK_1: {
-        SAVERESTORE(0)
-    };
-
-    case DIK_2: {
-        SAVERESTORE(1)
-    };
-
-    case DIK_3: {
-        SAVERESTORE(2)
-    };
-
-    case DIK_4: {
-        SAVERESTORE(3)
-    };
-
-    case DIK_5: {
-        SAVERESTORE(4)
-    };
-
-    case DIK_6: {
-        SAVERESTORE(5)
-    };
-
-    case DIK_7: {
-        SAVERESTORE(6)
-    };
-
-    case DIK_8: {
-        SAVERESTORE(7)
-    };
-
-    case DIK_9: {
-        SAVERESTORE(8)
-    };
-
+    case DIK_1;
+    case DIK_2;
+    case DIK_3;
+    case DIK_4;
+    case DIK_5;
+    case DIK_6;
+    case DIK_7;
+    case DIK_8;
+    case DIK_9;
     case DIK_0: {
-        SAVERESTORE(9)
+        SAVERESTORE(_keyCode);
+        true;
     };
 
     default {
