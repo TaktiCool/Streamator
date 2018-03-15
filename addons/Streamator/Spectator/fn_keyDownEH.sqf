@@ -59,6 +59,7 @@ private _return = switch (_keyCode) do {
             _mapDisplay displayAddEventHandler ["KeyDown", {
                 params ["_display", "_keyCode"];
                 switch (_keyCode) do {
+                    case DIK_ESCAPE;
                     case DIK_M: { // M
                         _display closeDisplay 1;
                         true
@@ -209,7 +210,7 @@ private _return = switch (_keyCode) do {
         true;
     };
 
-    case (DIK_R): {
+    case DIK_R: {
         if !(isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
             true

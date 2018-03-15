@@ -36,3 +36,6 @@ if (GVAR(CameraMode) != _lastCameraMode) then {
 if (GVAR(CameraFOV) != _lastCameraFOV) then {
     [QGVAR(CameraFOVChanged), GVAR(CameraFOV)] call CFUNC(localEvent);
 };
+if (GVAR(CameraFollowTarget) isKindOf "VirtualSpectator_F") then {
+    GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
+};
