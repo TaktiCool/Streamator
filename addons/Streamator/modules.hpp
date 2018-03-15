@@ -7,16 +7,22 @@ class CfgCLibModules {
         // Crates
         MODULE(Spectator) {
             dependency[] = {"CLib"};
+            FNC(buildSpectatorUI);
             APIFNC(addCustom3dIcon);
             FNC(clientInit);
+            FNC(dik2Char);
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);
+            FNC(getDefaultIcon);
             FNC(getUnitType);
-            FNC(setCameraTarget);
             FNC(keyDownEH);
             FNC(keyUpEH);
             FNC(mouseMovingEH);
             FNC(mouseWheelEH);
+            FNC(restorePosition);
+            FNC(savePosition);
+            FNC(setCameraTarget);
+            FNC(setVisionMode);
         };
 
         // UnitTracker

@@ -56,7 +56,6 @@ private _return = switch (_keyCode) do {
             ctrlMapAnimCommit _map;
 
             [_map] call CFUNC(registerMapControl);
-            GVAR(teleportMode) = false;
             _mapDisplay displayAddEventHandler ["KeyDown", {
                 params ["_display", "_keyCode"];
                 switch (_keyCode) do {
@@ -64,38 +63,19 @@ private _return = switch (_keyCode) do {
                         _display closeDisplay 1;
                         true
                     };
-                    case DIK_LCONTROL: {
-                        GVAR(teleportMode) = true;
-                        true;
-                    };
                     default {
                         true;
                     };
                 };
             }];
 
-            _mapDisplay displayAddEventHandler ["KeyUp", {
-                params ["", "_keyCode"];
-                switch (_keyCode) do {
-                    case DIK_LCONTROL: {
-                        GVAR(teleportMode) = false;
-                        true;
-                    };
-                    default {
-                        false
-                    };
-                };
-            }];
-
-            _map ctrlAddEventHandler ["MouseButtonClick", {
-                params ["_map", "_button", "_xPos", "_yPos"];
-                if (GVAR(teleportMode) && _button == 0) then {
-
-                    private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
+            addMissionEventHandler ["MapSingleClick", {
+                params ["", "_pos", "_alt"];
+                if (_alt) then {
                     _pos set [2, ((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos];
                     GVAR(CameraPos) = _pos;
-                };
-
+                    true;
+                } else {false};
             }];
 
             _map ctrlAddEventHandler ["Destroy", {
@@ -195,20 +175,24 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
+        QGVAR(updateInput) call CFUNC(localEvent);
         true
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
+        QGVAR(updateInput) call CFUNC(localEvent);
         true
     };
     case DIK_F3: { // F3
         GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
+        QGVAR(updateInput) call CFUNC(localEvent);
         true
     };
     case DIK_N: { // N
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
+        true
     };
 
     case DIK_1;
@@ -226,9 +210,11 @@ private _return = switch (_keyCode) do {
     };
 
     case (DIK_R): {
-        if !(isNull GVAR(CameraFollowTarget)) then {
+        if !(isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
+            true
         };
+        false
     };
 
     default {

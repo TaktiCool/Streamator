@@ -63,496 +63,23 @@ GVAR(InputGuessIndex) = 0;
 
 GVAR(allSpectators) = [];
 
-DFUNC(savePosition) = {
-    params ["_slot"];
+DFUNC(updateSpectatorArray) = {
+    GVAR(allSpectators) = ((entities "") select {(_x isKindOf "VirtualSpectator_F") && _x != CLib_player});
 
-    private _element = [
-        GVAR(CameraMode),
-        GVAR(CameraFollowTarget),
-        GVAR(CameraPos),
-        GVAR(CameraRelPos),
-        GVAR(CameraDir),
-        GVAR(CameraPitch),
-        GVAR(CameraFOV),
-        GVAR(CameraVision)
-    ];
-    GVAR(PositionMemory) setVariable [str _slot, _element];
-};
+    // hijack this for disabling the UI.
+    private _temp = shownHUD;
+    _temp set [6, false];
+    showHUD _temp;
 
-DFUNC(restorePosition) = {
-    params ["_slot"];
-
-    private _element = GVAR(PositionMemory) getVariable (str _slot);
-    if (isNil "_element") exitWith {};
-
-    if (count _element != 8) exitWith {};
-    private _lastCameraMode = GVAR(CameraMode);
-    GVAR(CameraMode) = _element select 0;
-    GVAR(CameraFollowTarget) = _element select 1;
-    GVAR(CameraPos) = _element select 2;
-    GVAR(CameraRelPos) = _element select 3;
-    GVAR(CameraDir) = _element select 4;
-    GVAR(CameraPitch) = _element select 5;
-    private _lastCameraFOV = GVAR(CameraMode);
-    GVAR(CameraFOV) = _element select 6;
-    GVAR(CameraVision) = _element select 7;
-    call FUNC(setVisionMode);
-    if (GVAR(CameraMode) != _lastCameraMode) then {
-        [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-    };
-    if (GVAR(CameraFOV) != _lastCameraFOV) then {
-        [QGVAR(CameraFOVChanged), GVAR(CameraFOV)] call CFUNC(localEvent);
-    };
-};
-
-// small helper function
-DFUNC(getDefaultIcon) = {
-    params ["_side"];
-    switch (_side) do {
-        case (west): {
-            "\A3\ui_f\data\map\markers\nato\b_inf.paa"
-        };
-        case (east): {
-            "\A3\ui_f\data\map\markers\nato\o_inf.paa"
-        };
-        case (independent): {
-            "\A3\ui_f\data\map\markers\nato\n_inf.paa"
-        };
-        case (civilian): {
-            "\A3\ui_f\data\map\markers\nato\n_unknown.paa"
-        };
-        default {
-            "\A3\ui_f\data\map\markers\nato\n_unknown.paa"
-         };
-    };
-};
-
-// Small helper functions
-DFUNC(dik2Char) = {
-    params ["_dik", "_shift"];
-
-    private _char = switch (_dik) do {
-        case DIK_A: {"a"};
-        case DIK_B: {"b"};
-        case DIK_C: {"c"};
-        case DIK_D: {"d"};
-        case DIK_E: {"e"};
-        case DIK_F: {"f"};
-        case DIK_G: {"g"};
-        case DIK_H: {"h"};
-        case DIK_I: {"i"};
-        case DIK_J: {"j"};
-        case DIK_K: {"k"};
-        case DIK_L: {"l"};
-        case DIK_M: {"m"};
-        case DIK_N: {"n"};
-        case DIK_O: {"o"};
-        case DIK_P: {"p"};
-        case DIK_Q: {"q"};
-        case DIK_R: {"r"};
-        case DIK_S: {"s"};
-        case DIK_T: {"t"};
-        case DIK_U: {"u"};
-        case DIK_V: {"v"};
-        case DIK_W: {"w"};
-        case DIK_X: {"x"};
-        case DIK_Y: {"y"};
-        case DIK_Z: {"z"};
-        case DIK_SPACE: {" "};
-        case DIK_0: {"0"};
-        case DIK_1: {"1"};
-        case DIK_2: {"2"};
-        case DIK_3: {"3"};
-        case DIK_4: {"4"};
-        case DIK_5: {"5"};
-        case DIK_6: {"6"};
-        case DIK_7: {"7"};
-        case DIK_8: {"8"};
-        case DIK_9: {"9"};
-        default {""};
-    };
-    [_char, toUpper _char] select _shift
-};
-
-DFUNC(setVisionMode) = {
-    switch (GVAR(CameraVision)) do {
-        case (9): {
-            camUseNVG false;
-            false setCamUseTi 0;
-        };
-        case (8): {
-            camUseNVG true;
-            false setCamUseTi 0;
-        };
-        default {
-            camUseNVG false;
-            true setCamUseTi GVAR(CameraVision);
-        };
-    };
+    [{
+        call FUNC(updateSpectatorArray);
+    }, 3] call CFUNC(wait);
 };
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
-
-[{
-    // Disable BI
-    ["Terminate"] call BIS_fnc_EGSpectator;
-
-    // Create Camera
-    ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
-    ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
-
-    GVAR(Camera) = "Camera" camCreate (eyePos CLib_player);
-    GVAR(Camera) cameraEffect ["internal", "back"];
-    CLib_player attachTo [GVAR(Camera), [0, 0, 0]];
-    GVAR(CameraPos) = (eyePos CLib_player) vectorAdd [0, 0, GVAR(CameraHeight)];
-    showCinemaBorder false;
-    cameraEffectEnableHUD true;
-
-    // Create On Screen Display
-    UIVAR(SpectatorScreen) cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
-    private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
-    if (isNull _display) exitWith {};
-
-    uiNamespace setVariable [QGVAR(SpectatorControlDisplay), _display];
-
-    (_display displayCtrl 1202) ctrlSetFade 1;
-    (_display displayCtrl 1202) ctrlShow false;
-    (_display displayCtrl 1202) ctrlCommit 0;
-
-    // Create Black Border
-    {
-        private _tempCtrl = _display ctrlCreate ["RscPicture", -1];
-        _tempCtrl ctrlSetPosition _x;
-        _tempCtrl ctrlSetText "#(argb,8,8,3)color(0,0,0,1)";
-        _tempCtrl ctrlCommit 0;
-    } count [
-        [safeZoneX, safeZoneY + PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
-        [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
-        [safeZoneX, safeZoneY, safeZoneW, PY(BORDERWIDTH)],
-        [safeZoneX, safeZoneY + safeZoneH - PY(BORDERWIDTH), safeZoneW, PY(BORDERWIDTH)]
-    ];
-
-    // Create Mode
-    private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1];
-    _ctrlInfo ctrlSetPosition [safeZoneX + PX(0.3 + BORDERWIDTH), safeZoneY + PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
-    _ctrlInfo ctrlSetFontHeight PY(1.5);
-    _ctrlInfo ctrlSetFont "RobotoCondensed";
-    _ctrlInfo ctrlSetText "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV";
-    _ctrlInfo ctrlCommit 0;
-
-    private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1];
-    _ctrlCameraMode ctrlSetPosition [safeZoneX + safeZoneW - PY(22), safeZoneY + PY(0.3), PX(20), PY(1.8)];
-    _ctrlCameraMode ctrlSetFontHeight PY(1.5);
-    _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
-    _ctrlCameraMode ctrlSetStructuredText parseText "<t align='right'>FREE</t>";
-    _ctrlCameraMode ctrlCommit 0;
-
-    private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1];
-    _ctrlTargetInfo ctrlSetPosition [safeZoneX, safeZoneY + safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
-    _ctrlTargetInfo ctrlSetFontHeight PY(1.5);
-    _ctrlTargetInfo ctrlSetFont "RobotoCondensedBold";
-    _ctrlTargetInfo ctrlSetText "Target Info";
-    _ctrlTargetInfo ctrlCommit 0;
-
-    private _ctrlMouseSpeedBarBg = _display ctrlCreate ["RscPicture", -1];
-    _ctrlMouseSpeedBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(2 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
-    _ctrlMouseSpeedBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
-    _ctrlMouseSpeedBarBg ctrlCommit 0;
-
-    private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
-    private _ctrlMouseSpeedBar = _display ctrlCreate ["RscPicture", -1];
-    _ctrlMouseSpeedBar ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-        PX(BORDERWIDTH / 2),
-        _relLength * PY(BORDERWIDTH * 4)
-    ];
-    _ctrlMouseSpeedBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
-    _ctrlMouseSpeedBar ctrlCommit 0;
-
-    private _ctrlMouseSpeedLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-    _ctrlMouseSpeedLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(6 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
-    _ctrlMouseSpeedLabel ctrlSetFontHeight PY(1.5);
-    _ctrlMouseSpeedLabel ctrlSetFont "RobotoCondensedBold";
-    _ctrlMouseSpeedLabel ctrlSetText "SPD";
-    _ctrlMouseSpeedLabel ctrlCommit 0;
-
-    private _ctrlMouseSmoothingBarBg = _display ctrlCreate ["RscPicture", -1];
-    _ctrlMouseSmoothingBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(8 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
-    _ctrlMouseSmoothingBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
-    _ctrlMouseSmoothingBarBg ctrlCommit 0;
-
-    private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
-    private _ctrlMouseSmoothingBar = _display ctrlCreate ["RscPicture", -1];
-    _ctrlMouseSmoothingBar ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-        PX(BORDERWIDTH / 2),
-        PY(BORDERWIDTH * 4) * _relLength
-    ];
-    _ctrlMouseSmoothingBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
-    _ctrlMouseSmoothingBar ctrlCommit 0;
-
-    private _ctrlMouseSmoothingLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-    _ctrlMouseSmoothingLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(12 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
-    _ctrlMouseSmoothingLabel ctrlSetFontHeight PY(1.2);
-    _ctrlMouseSmoothingLabel ctrlSetFont "RobotoCondensedBold";
-    _ctrlMouseSmoothingLabel ctrlSetText "SMTH";
-    _ctrlMouseSmoothingLabel ctrlCommit 0;
-
-    private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1];
-    _ctrlFOVBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
-    _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
-    _ctrlFOVBarBg ctrlCommit 0;
-
-    private _relLength = (2 - GVAR(CameraFOV)) / 2;
-    private _ctrlFOVBar = _display ctrlCreate ["RscPicture", -1];
-    _ctrlFOVBar ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-        PX(BORDERWIDTH / 2),
-        PY(BORDERWIDTH * 4) * _relLength
-    ];
-    _ctrlFOVBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
-    _ctrlFOVBar ctrlCommit 0;
-
-    private _ctrlFOVBarCurrent = _display ctrlCreate ["RscPicture", -1];
-    _ctrlFOVBarCurrent ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-        PX(BORDERWIDTH / 8),
-        PY(BORDERWIDTH * 4) * _relLength
-    ];
-    _ctrlFOVBarCurrent ctrlSetText "#(argb,8,8,3)color(0,0,1,1)";
-    _ctrlFOVBarCurrent ctrlCommit 0;
-
-    private _ctrlFOVLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-    _ctrlFOVLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(18 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
-    _ctrlFOVLabel ctrlSetFontHeight PY(1.2);
-    _ctrlFOVLabel ctrlSetFont "RobotoCondensedBold";
-    _ctrlFOVLabel ctrlSetText "FOV";
-    _ctrlFOVLabel ctrlCommit 0;
-
-    private _ctrlFOVDefaultLine = _display ctrlCreate ["RscPicture", -1];
-    _ctrlFOVDefaultLine ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-        PX(BORDERWIDTH / 2),
-        PY(0.2)
-    ];
-    _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(0,1,0,1)";
-    _ctrlFOVDefaultLine ctrlCommit 0;
-
-    [QGVAR(CameraSpeedChanged), {
-        (_this select 1) params ["_ctrl"];
-        private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
-        _ctrl ctrlSetPosition [
-            safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-            safeZoneY + PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-            PX(BORDERWIDTH / 2),
-            _relLength * PY(BORDERWIDTH * 4)
-        ];
-        _ctrl ctrlCommit 0;
-    }, _ctrlMouseSpeedBar] call CFUNC(addEventhandler);
-
-    [QGVAR(CameraSmoothingChanged), {
-        (_this select 1) params ["_ctrl"];
-        private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
-        _ctrl ctrlSetPosition [
-            safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-            safeZoneY + PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-            PX(BORDERWIDTH / 2),
-            PY(BORDERWIDTH * 4) * _relLength
-        ];
-        _ctrl ctrlCommit 0;
-    }, _ctrlMouseSmoothingBar] call CFUNC(addEventhandler);
-
-    [QGVAR(CameraFOVChanged), {
-        (_this select 1) params ["_ctrl"];
-        private _relLength = (2 - GVAR(CameraFOV)) / 2;
-        _ctrl ctrlSetPosition [
-            safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-            safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-            PX(BORDERWIDTH / 2),
-            PY(BORDERWIDTH * 4) * _relLength
-        ];
-        _ctrl ctrlCommit 0;
-    }, _ctrlFOVBar] call CFUNC(addEventhandler);
-
-
-    [QGVAR(CursorTargetChanged), {
-        (_this select 0) params ["_target"];
-        (_this select 1) params ["_ctrl"];
-        _ctrl ctrlSetText format ["%1 [%2]", str _target, _target call CFUNC(name)];
-        _ctrl ctrlCommit 0;
-    }, _ctrlTargetInfo] call CFUNC(addEventhandler);
-
-    [QGVAR(CameraModeChanged), {
-        (_this select 0) params ["_mode"];
-        (_this select 1) params ["_ctrl"];
-
-        private _textMode = ["FREE", format ["FOLLOW [%1]", GVAR(CameraFollowTarget) call CFUNC(name)]] select (_mode - 1);
-
-        _ctrl ctrlSetStructuredText parseText format ["<t align='right'>%1</t>", _textMode];
-        _ctrl ctrlCommit 0;
-    }, _ctrlCameraMode] call CFUNC(addEventhandler);
-
-    [QGVAR(updateGuess), {
-        (_this select 1) params ["_ctrl"];
-
-        private _str = switch (GVAR(InputMode)) do {
-            case 1: { // Search FOLLOW Target
-                private _searchStr = GVAR(InputScratchpad);
-                GVAR(InputGuessIndex) = 0;
-                if (_searchStr != "") then {
-                    _searchStr = toLower _searchStr;
-                    private _guess = [];
-                    private _searchableUnits = allUnits;
-                    _searchableUnits append GVAR(allSpectators);
-                    _searchableUnits = _searchableUnits arrayIntersect _searchableUnits;
-                    {
-                        if (alive _x) then {
-                            private _name = (_x call CFUNC(name));
-                            private _index = toLower _name find _searchStr;
-                            if (_index >= 0) then {
-                                _guess pushBack [_index, _x, _name];
-                            };
-                            if (leader group _x == _x) then {
-                                private _name = groupId group _x;
-                                private _index = toLower _name find _searchStr;
-                                if (_index >= 0) then {
-                                    _guess pushBack [_index, _x, _name];
-                                };
-                            };
-                        };
-                        false;
-                    } count _searchableUnits;
-
-                    if !(_guess isEqualTo []) then {
-                        _guess sort true;
-                    };
-
-                    GVAR(InputGuess) = _guess;
-                };
-            };
-            default {};
-        };
-
-        _ctrl ctrlSetStructuredText parseText _str;
-        _ctrl ctrlCommit 0;
-    }] call CFUNC(addEventhandler);
-    [QGVAR(hightlightModeChanged), {
-        (_this select 1) params ["_ctrlFOVLabel", "_ctrlMouseSmoothingLabel", "_ctrlMouseSpeedLabel"];
-
-        if (GVAR(CameraSpeedMode)) then {
-            _ctrlMouseSpeedLabel ctrlSetTextColor [0, 1, 0, 1];
-        } else {
-            _ctrlMouseSpeedLabel ctrlSetTextColor [1, 1, 1, 1];
-        };
-        if (GVAR(CameraSmoothingMode)) then {
-            _ctrlMouseSmoothingLabel ctrlSetTextColor [0, 1, 0, 1];
-        } else {
-             _ctrlMouseSmoothingLabel ctrlSetTextColor [1, 1, 1, 1];
-        };
-        if (GVAR(CameraZoomMode)) then {
-            _ctrlFOVLabel ctrlSetTextColor [0, 1, 0, 1];
-        } else {
-            _ctrlFOVLabel ctrlSetTextColor [1, 1, 1, 1];
-        };
-    }, [_ctrlFOVLabel, _ctrlMouseSmoothingLabel, _ctrlMouseSpeedLabel]] call CFUNC(addEventhandler);
-    [QGVAR(updateInput), {
-        (_this select 1) params ["_ctrl"];
-
-        private _str = switch (GVAR(InputMode)) do {
-            case 1: { // Search FOLLOW Target
-                private _searchStr = GVAR(InputScratchpad);
-                private _temp = "<t color='#cccccc'>Search for Target: </t>";
-                if (_searchStr != "") then {
-                    private _guess = +GVAR(InputGuess);
-                    if !(_guess isEqualTo []) then {
-                        if (GVAR(InputGuessIndex) >= count _guess) then {
-                            GVAR(InputGuessIndex) = 0;
-                        };
-
-                        _guess = _guess select [GVAR(InputGuessIndex), count _guess];
-                        private _bestGuess = _guess select 0;
-                        private _guessStr = _guess apply {
-                            format [
-                                "<t color='%1'>%2</t>",
-                                GVAR(SideColorsString) getVariable [str side group (_x select 1), "#ffffff"],
-                                (_x select 2)
-                            ]
-                        };
-                        _guessStr deleteAt 0;
-
-                        if (GVAR(InputGuessIndex) > 0) then {
-                            _temp = _temp + "<img size='0.5' image='\A3\ui_f\data\gui\rsccommon\rschtml\arrow_left_ca.paa'/>";
-                        };
-                        private _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
-
-                        _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
-                        _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
-                        _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr])];
-                        if (!(_guessStr isEqualTo [])) then {
-                            _temp = _temp + "<t color='#cccccc'> | " + (_guessStr joinString " | ") + "</t>";
-                        };
-                    } else {
-                        _temp = _temp + _searchStr + "| <t color='#cccccc'>NO RESULT</t>";
-                    };
-                } else {
-                    _temp = _temp + _searchStr + "| ";
-                };
-
-                _temp
-            };
-            default {
-                if (GVAR(MapOpen)) then {
-                    "[CTRL+LMB] Teleport  [M] Close Map"
-                } else {
-                    "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV"
-                }
-            };
-        };
-
-        _ctrl ctrlSetStructuredText parseText _str;
-        _ctrl ctrlCommit 0;
-    }, _ctrlInfo] call CFUNC(addEventhandler);
-
-    [{
-        (_this select 0) params ["_ctrl"];
-        private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
-        _ctrl ctrlSetPosition [
-            safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-            safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
-            PX(BORDERWIDTH / 8),
-            PY(BORDERWIDTH * 4) * _relLength
-        ];
-        _ctrl ctrlCommit 0;
-    }, 0, _ctrlFOVBarCurrent] call CFUNC(addPerFrameHandler);
-
-    [QGVAR(updateInput)] call CFUNC(localEvent);
-
-    (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
-    (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
-    (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
-    (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
-    [
-        "SpectatorCamera", [["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [0.5,0.5,1,1], GVAR(Camera), 20, 20, GVAR(Camera), "", 1, 0.08, "RobotoCondensed", "right", {
-            _position = getPos GVAR(Camera);
-            _angle = getDirVisual GVAR(Camera);
-        }]]
-    ] call CFUNC(addMapGraphicsGroup);
-
-    // Camera Update PFH
-    addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
-
-    [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
-}, {
-    (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
-}] call CFUNC(waitUntil);
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
@@ -563,10 +90,6 @@ DFUNC(setVisionMode) = {
         }];
     };
 }] call CFUNC(addEventhandler);
-
-[{
-    GVAR(allSpectators) = ((entities "") select {(_x isKindOf "VirtualSpectator_F") && _x != CLib_player});
-}, 3] call CFUNC(addPerFrameHandler);
 
 [QGVAR(RequestCameraState), {
     (_this select 0) params ["_unit"];
@@ -583,3 +106,34 @@ DFUNC(setVisionMode) = {
         GVAR(CameraSmoothingTime)
     ], true];
 }] call CFUNC(addEventhandler);
+
+[{
+    call FUNC(buildSpectatorUI);
+
+    QGVAR(updateInput) call CFUNC(localEvent);
+
+    (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
+    (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
+    (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
+    (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
+    (findDisplay 46) displayAddEventHandler ["MouseButtonDown", {
+
+    }];
+    (findDisplay 46) displayAddEventHandler ["MouseButtonUp", {
+
+    }];
+    [
+        "SpectatorCamera", [["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [0.5,0.5,1,1], GVAR(Camera), 20, 20, GVAR(Camera), "", 1, 0.08, "RobotoCondensed", "right", {
+            _position = getPos GVAR(Camera);
+            _angle = getDirVisual GVAR(Camera);
+        }]]
+    ] call CFUNC(addMapGraphicsGroup);
+
+    // Camera Update PFH
+    addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
+
+    [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+
+}, {
+    (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
+}] call CFUNC(waitUntil);
