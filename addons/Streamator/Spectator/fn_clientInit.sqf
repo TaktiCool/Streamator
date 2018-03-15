@@ -61,6 +61,8 @@ GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
 
+GVAR(allSpectators) = [];
+
 DFUNC(savePosition) = {
     params ["_slot"];
 
@@ -408,6 +410,9 @@ DFUNC(setVisionMode) = {
                 if (_searchStr != "") then {
                     _searchStr = toLower _searchStr;
                     private _guess = [];
+                    private _searchableUnits = allUnits;
+                    _searchableUnits append GVAR(allSpectators);
+                    _searchableUnits = _searchableUnits arrayIntersect _searchableUnits;
                     {
                         if (alive _x) then {
                             private _name = (_x call CFUNC(name));
@@ -424,7 +429,7 @@ DFUNC(setVisionMode) = {
                             };
                         };
                         false;
-                    } count allUnits;
+                    } count _searchableUnits;
 
                     if !(_guess isEqualTo []) then {
                         _guess sort true;
@@ -557,4 +562,24 @@ DFUNC(setVisionMode) = {
             (_this select 0) setVariable [QGVAR(lastShot), time];
         }];
     };
+}] call CFUNC(addEventhandler);
+
+[{
+    GVAR(allSpectators) = ((entities "") select {(_x isKindOf "VirtualSpectator_F") && _x != CLib_player});
+}, 3] call CFUNC(addPerFrameHandler);
+
+[QGVAR(RequestCameraState), {
+    (_this select 0) params ["_unit"];
+
+    CLib_player setVariable [QGVAR(State), [
+        GVAR(CameraMode),
+        GVAR(CameraFollowTarget),
+        GVAR(CameraPos),
+        GVAR(CameraRelPos),
+        GVAR(CameraDir),
+        GVAR(CameraPitch),
+        GVAR(CameraFOV),
+        GVAR(CameraVision),
+        GVAR(CameraSmoothingTime)
+    ], true];
 }] call CFUNC(addEventhandler);

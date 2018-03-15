@@ -13,9 +13,10 @@
     Returns:
     None
 */
-
+if (GVAR(CameraMode) == 3) exitWith {};
 private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
 private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
+private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
 // Calculate velocity
 private _velocity = [0, 0, 0];
 if (GVAR(InputMode) == 0) then {
@@ -55,8 +56,33 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
-        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
-        GVAR(CameraPos) = getPosASLVisual GVAR(CameraFollowTarget) vectorAdd GVAR(CameraRelPos);
+
+        if (side GVAR(CameraFollowTarget) == sideLogic && {GVAR(CameraFollowTarget) isKindOf "VirtualSpectator_F"}) then {
+            private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
+            if (count _state > 0) then {
+                _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime"];
+
+                GVAR(CameraDir) = _dir;
+                GVAR(CameraPitch) = _pitch;
+                GVAR(CameraFov) = _fov;
+                GVAR(CameraVision) = _vision;
+                _cameraSmoothingTime = _smoothingTime max 0.2;
+
+                switch (_mode) do {
+                    case 1: { // FREE
+                        GVAR(CameraPos) = _pos;
+                    };
+                    case 2: { // FOLLOW
+                        GVAR(CameraRelPos) = _relPos;
+                        GVAR(CameraPos) = getPosASLVisual _rfollowTarget vectorAdd _relPos;
+                    };
+                };
+            }
+        } else {
+            GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+            GVAR(CameraPos) = getPosASLVisual GVAR(CameraFollowTarget) vectorAdd GVAR(CameraRelPos);
+        };
+
     };
 };
 
@@ -68,7 +94,7 @@ private _pitch = GVAR(CameraPitch) + GVAR(CameraPitchOffset);
 private _fov = GVAR(CameraFOV);
 
 // Smoothing
-if (GVAR(CameraSmoothingTime) > 0) then {
+if (_cameraSmoothingTime > 0) then {
     GVAR(CameraPreviousState) params [
         ["_lastTime", time - 0.1],
         ["_lastPosition", _position],
@@ -77,7 +103,7 @@ if (GVAR(CameraSmoothingTime) > 0) then {
         ["_lastFov", _fov]
     ];
 
-    private _smoothingAmount = GVAR(CameraSmoothingTime) / ((time - _lastTime) max 0.001);
+    private _smoothingAmount = _cameraSmoothingTime / ((time - _lastTime) max 0.001);
     _position = (_lastPosition vectorMultiply _smoothingAmount vectorAdd _position) vectorMultiply (1 / (1 + _smoothingAmount));
 
     private _sinDirection = ((sin _lastDirection) * _smoothingAmount + sin _direction) / (1 + _smoothingAmount);
