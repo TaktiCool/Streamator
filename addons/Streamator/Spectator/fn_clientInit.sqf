@@ -68,38 +68,6 @@ GVAR(allSpectators) = [];
 DFUNC(updateSpectatorArray) = {
     GVAR(allSpectators) = ((entities "") select {(_x isKindOf "VirtualSpectator_F") && _x != CLib_player});
 
-    {
-        [_x] call CFUNC(removeMapGraphicsGroup);
-    } count GVAR(spectatorIcons);
-
-    {
-        private _id = toLower format [QGVAR(IconId_Player_%1_%2), _x, (group _x) isEqualTo (group CLib_Player)];
-        private _icon = ["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [1, 0.5, 0.5,1], _x, 20, 20, _x, "", 1, 0.08, "RobotoCondensed", "right", {
-            if (_position isEqualTo CLib_Player) then {
-                _position = getPos GVAR(Camera);
-                _angle = getDirVisual GVAR(Camera);
-                _color = [0.5,0.5,1,1];
-            };
-        }];
-        private _iconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa", [0.85,0.85,0,0.5], _x, 25, 25, _x, "", 1, 0.08, "RobotoCondensed", "right"];
-
-        [
-            _id, [_icon]
-        ] call CFUNC(addMapGraphicsGroup);
-
-        if !(_x isEqualTo CLib_player) then {
-            [
-                _id, [_icon, _iconHover], "hover"
-            ] call CFUNC(addMapGraphicsGroup);
-            [_id, "dblclicked", {
-                (_this select 1) params ["_unit"];
-                _unit call EFUNC(Spectator,setCameraTarget);
-            }, _x] call CFUNC(addMapGraphicsEventHandler);
-        };
-
-        GVAR(spectatorIcons) pushBack _id;
-        nil
-    } count GVAR(allSpectators) + [CLib_player];
     // hijack this for disabling the UI.
     private _temp = shownHUD;
     _temp set [6, false];
@@ -157,7 +125,12 @@ DFUNC(updateSpectatorArray) = {
     [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
     call FUNC(updateSpectatorArray);
-
+    [
+        "SpectatorCamera", [["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [0.5,0.5,1,1], GVAR(Camera), 20, 20, GVAR(Camera), "", 1, 0.08, "RobotoCondensed", "right", {
+            _position = getPos GVAR(Camera);
+            _angle = getDirVisual GVAR(Camera);
+        }]]
+    ] call CFUNC(addMapGraphicsGroup);
 }, {
     (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
 }] call CFUNC(waitUntil);
