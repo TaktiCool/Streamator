@@ -46,8 +46,6 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
     GVAR(lastProcessedIcons) = (CGVAR(MapGraphics_MapGraphicsGroup) call CFUNC(allVariables)) select {(_x find toLower QGVAR(IconId)) == 0};
     {
         DUMP("ICON REMOVED: " + _x);
-        [_x, "hoverin"] call CFUNC(removeMapGraphicsEventHandler);
-        [_x, "hoverout"] call CFUNC(removeMapGraphicsEventHandler);
         [_x] call CFUNC(removeMapGraphicsGroup);
     } count (GVAR(lastProcessedIcons) - GVAR(processedIcons));
     GVAR(processedIcons) = [];
