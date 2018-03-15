@@ -45,6 +45,7 @@ GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraFollowTarget) = objNull;
 GVAR(CursorTarget) = objNull;
+GVAR(lastCursorTarget) = time;
 GVAR(lastUnitShooting) = objNull;
 GVAR(CameraPreviousState) = [];
 GVAR(CameraSmoothingTime) = 0.2;

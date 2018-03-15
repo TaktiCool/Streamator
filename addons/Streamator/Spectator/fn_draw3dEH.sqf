@@ -33,8 +33,11 @@ if !(_object isEqualTo []) then {
 };
 
 if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
-    GVAR(CursorTarget) = _nextTarget;
-    [QGVAR(CursorTargetChanged), _nextTarget] call CFUNC(localEvent);
+    if (!(isNull _nextTarget) || (time - GVAR(lastCursorTarget)) >= 1) then {
+        GVAR(CursorTarget) = _nextTarget;
+        [QGVAR(CursorTargetChanged), _nextTarget] call CFUNC(localEvent);
+        GVAR(lastCursorTarget) = time;
+    };
 };
 
 //HUD
