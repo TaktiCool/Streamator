@@ -93,9 +93,10 @@ DFUNC(updateSpectatorArray) = {
     };
 }] call CFUNC(addEventhandler);
 
+GVAR(lastFrameDataUpdate) = diag_frameNo;
 [QGVAR(RequestCameraState), {
     (_this select 0) params ["_unit"];
-
+    if (GVAR(lastFrameDataUpdate) == diag_frameNo) exitWith {};
     CLib_player setVariable [QGVAR(State), [
         GVAR(CameraMode),
         GVAR(CameraFollowTarget),
@@ -107,6 +108,7 @@ DFUNC(updateSpectatorArray) = {
         GVAR(CameraVision),
         GVAR(CameraSmoothingTime)
     ], true];
+    GVAR(lastFrameDataUpdate) = diag_frameNo;
 }] call CFUNC(addEventhandler);
 
 [{
