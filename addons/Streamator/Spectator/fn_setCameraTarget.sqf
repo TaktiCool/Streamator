@@ -17,7 +17,7 @@ params ["_unit"];
 GVAR(CameraFollowTarget) = _unit;
 if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
     GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
-    GVAR(CameraRelPos) set [2, (GVAR(CameraRelPos) select 2) + 1.5];
+    GVAR(CameraRelPos) set [2, 3];
 };
 if (speed GVAR(CameraFollowTarget) > 20 && {vectorMagnitude GVAR(CameraRelPos) < 30}) then {
     GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply 30;
