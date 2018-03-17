@@ -70,11 +70,15 @@ private _return = switch (_keyCode) do {
                 };
             }];
 
-            addMissionEventHandler ["MapSingleClick", {
-                params ["", "_pos", "_alt"];
+            _map ctrlAddEventHandler ["MouseButtonClick", {
+                params ["_map", "_btn", "_xpos", "_ypos", "_shift", "_ctrl", "_alt"];
                 if (_alt) then {
-                    _pos set [2, ((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos];
+                    private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+                    _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
+                    GVAR(CameraFollowTarget) = objNull;
+                    GVAR(CameraMode) = 1;
                     GVAR(CameraPos) = _pos;
+                    [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
                     true;
                 } else {false};
             }];
