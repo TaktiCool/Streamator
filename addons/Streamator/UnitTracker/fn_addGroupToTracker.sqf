@@ -121,6 +121,8 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
             nil;
         } count [_ctrlGrp, _ctrlSquadName, _ctrlBgBottom, _ctrlMemberList];
 
+        ctrlSetFocus _ctrlGrp;
+
         if (GVAR(groupInfoPFH) != -1) then {
             GVAR(groupInfoPFH) call CFUNC(removePerFrameHandler);
         };

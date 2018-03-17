@@ -129,6 +129,8 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
             nil;
         } count [_ctrlGrp, _ctrlVehicleName, _ctrlTotalSeats, _ctrlBgBottom, _ctrlMemberList];
 
+        ctrlSetFocus _ctrlGrp;
+
         if (GVAR(VehicleInfoPFH) != -1) then {
             GVAR(VehicleInfoPFH) call CFUNC(removePerFrameHandler);
         };
