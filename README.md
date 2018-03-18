@@ -17,7 +17,7 @@ Key Binding | Short Description | Remarks
 **`Q` `Y`** | Vert. movement |
 **`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focussed object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
 **`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focussed object in FOLLOW mode.
-**`ALF`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
+**`ALT`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
 **`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focussed object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera.
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.
 **`CTRL`** + **`Scrollwheel`** | Change Smoothing | Changes the camera smoothing coefficient.
