@@ -47,7 +47,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
         if (_group isEqualTo GVAR(currentHoverGroup)) exitWith {};
         GVAR(currentHoverGroup) = _group;
-
+        _group setVariable [QGVAR(isHoveredOn), true];
         private _pos = _map ctrlMapWorldToScreen getPosVisual (vehicle leader _group);
         _pos set [0, (_pos select 0) + 15 / 640];
         _pos set [1, (_pos select 1) + (((_attachTo) select 1) + 5) / 480];
@@ -155,13 +155,13 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
     _groupIconId,
     "hoverout",
     {
-        (_this select 0) params ["_map", "_xPos", "_yPos"];
+        (_this select 0) params ["_map"];
         (_this select 1) params ["_group"];
 
         if (GVAR(currentHoverGroup) isEqualTo _group) then {
             GVAR(currentHoverGroup) = grpNull;
         };
-
+        _group setVariable [QGVAR(isHoveredOn), false];
         private _grp = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_Group), ctrlIDD ctrlParent _map], controlNull];
         if (!isNull _grp) then {
             _grp ctrlShow false;
