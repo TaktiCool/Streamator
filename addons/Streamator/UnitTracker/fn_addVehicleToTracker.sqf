@@ -13,7 +13,7 @@
     Returns:
     0: Return Id <STRING>
 */
-params ["_vehicle", "_vehicleIconId", ["_inGroup", false], ["_isEmpty", false]];
+params ["_vehicle", "_vehicleIconId", ["_isEmpty", false]];
 
 private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _vehicle)), [0.5, 0.5, 0.5, 1]];
 if (_isEmpty) then {
@@ -164,7 +164,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
     _vehicleIconId,
     "hoverout",
     {
-        (_this select 0) params ["_map", "_xPos", "_yPos"];
+        (_this select 0) params ["_map"];
         (_this select 1) params ["_vehicle"];
 
         if (GVAR(currentHoverVehicle) isEqualTo _vehicle) then {

@@ -29,12 +29,18 @@ GVAR(lastProcessedIcons) = [];
 
 DFUNC(isValidUnit) = {
     params [["_unit", objNull]];
-    !isNull _unit && simulationEnabled _unit;
+    !isNull _unit
+     && simulationEnabled _unit
+     && !isObjectHidden _unit;
 };
 
 DFUNC(isValidVehicle) = {
     params[ ["_vehicle", objNull]];
-    !isNull _vehicle && (({alive _x} count crew _vehicle) == 0) && (damage _vehicle < 1) && _vehicle isKindOf "AllVehicles"
+    !isNull _vehicle
+     && (({alive _x} count crew _vehicle) == 0)
+     && (damage _vehicle < 1)
+     && _vehicle isKindOf "AllVehicles"
+     && !isObjectHidden _unit
 };
 
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);
@@ -118,7 +124,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
             GVAR(processedIcons) pushBack _iconId;
             if !(_iconId in GVAR(lastProcessedIcons)) then {
                 DUMP("EMPTY VEHICLE ADDED: " + _iconId);
-                [_vehicle, _iconId, false, true] call FUNC(addVehicleToTracker);
+                [_vehicle, _iconId, true] call FUNC(addVehicleToTracker);
             };
         };
     };

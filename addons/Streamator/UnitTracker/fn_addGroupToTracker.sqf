@@ -42,7 +42,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
     _groupIconId,
     "hoverin",
     {
-        (_this select 0) params ["_map", "_xPos", "_yPos"];
+        (_this select 0) params ["_map"];
         (_this select 1) params ["_group", "_attachTo"];
 
         if (_group isEqualTo GVAR(currentHoverGroup)) exitWith {};

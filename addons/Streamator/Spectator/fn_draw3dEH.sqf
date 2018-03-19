@@ -44,7 +44,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
-        if (!(side _x in [sideLogic, sideUnknown]) && alive _x && simulationEnabled _x) then {
+        if (!(side _x in [sideLogic, sideUnknown]) && alive _x && simulationEnabled _x && !isObjectHidden _x) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
@@ -79,12 +79,13 @@ if (GVAR(OverlayUnitMarker)) then {
 // GROUPS
 if (GVAR(OverlayGroupMarker)) then {
     {
-        if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled (leader _x) && alive (leader _x)) then {
+        private _leader = leader _x;
+        if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled _leader && alive _leader && && !isObjectHidden _leader) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
-            private _distance = GVAR(Camera) distance leader _x;
+            private _distance = GVAR(Camera) distance _leader;
             private _groupMapIcon = _x getVariable [QGVAR(GroupIcon), [side _x] call FUNC(getDefaultIcon)];
-            private _pos = (leader _x modelToWorldVisual (leader _x selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
+            private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
 
             drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
