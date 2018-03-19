@@ -167,7 +167,9 @@ private _return = switch (_keyCode) do {
     case DIK_RETURN: { // RETURN
         if (GVAR(InputMode) == 1) exitWith {
             if !(GVAR(InputGuess) isEqualTo []) then {
-                ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1) call FUNC(setCameraTarget);
+                private _target = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
+                private _distance = _target distance ([getPos GVAR(Camera), getPos GVAR(CameraFollowTarget)] select (isNull GVAR(CameraFollowTarget)));
+                [_target, _distance > 300] call FUNC(setCameraTarget);
             };
 
             GVAR(InputMode) = 0;

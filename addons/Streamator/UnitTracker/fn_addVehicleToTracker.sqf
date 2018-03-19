@@ -29,7 +29,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
 
 [_vehicleIconId, "dblclicked", {
     (_this select 1) params ["_vehicle"];
-    _vehicle call EFUNC(Spectator,setCameraTarget);
+    [_vehicle, true] call EFUNC(Spectator,setCameraTarget);
 }, _vehicle] call CFUNC(addMapGraphicsEventHandler);
 
 

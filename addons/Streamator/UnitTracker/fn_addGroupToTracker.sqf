@@ -35,7 +35,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
 [_groupIconId, "dblclicked", {
     (_this select 1) params ["_unit"];
-    _unit call EFUNC(Spectator,setCameraTarget);
+    [_unit, true] call EFUNC(Spectator,setCameraTarget);
 }, leader _group] call CFUNC(addMapGraphicsEventHandler);
 
 [
