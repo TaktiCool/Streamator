@@ -37,5 +37,11 @@ if (GVAR(CameraFOV) != _lastCameraFOV) then {
     [QGVAR(CameraFOVChanged), GVAR(CameraFOV)] call CFUNC(localEvent);
 };
 if (GVAR(CameraFollowTarget) isKindOf "VirtualSpectator_F") then {
-    GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
+    [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
+} else {
+    private _distance = (getPos GVAR(Camera)) distance ([GVAR(CameraPos), (getPos GVAR(CameraFollowTarget)) vectorAdd GVAR(CameraRelPos)] select (isNull GVAR(CameraFollowTarget)));
+
+    if (_distance > 300) then {
+        GVAR(CameraPreviousState) = [];
+    };
 };
