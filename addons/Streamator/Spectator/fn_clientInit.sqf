@@ -14,7 +14,7 @@
     None
 */
 
-if !(side CLib_player == sideLogic && {player isKindOf "VirtualSpectator_F"}) exitWith {};
+if !(CLib_player call Streamator_fnc_isSpectator) exitWith {};
 
 GVAR(SideColorsArray) = false call CFUNC(createNamespace);
 GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
@@ -66,7 +66,7 @@ GVAR(spectatorIcons) = [];
 GVAR(allSpectators) = [];
 
 DFUNC(updateSpectatorArray) = {
-    GVAR(allSpectators) = ((entities "") select {(_x isKindOf "VirtualSpectator_F") && _x != CLib_player});
+    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
@@ -95,7 +95,6 @@ DFUNC(updateSpectatorArray) = {
 
 GVAR(lastFrameDataUpdate) = diag_frameNo;
 [QGVAR(RequestCameraState), {
-    (_this select 0) params ["_unit"];
     if (GVAR(lastFrameDataUpdate) == diag_frameNo) exitWith {};
     CLib_player setVariable [QGVAR(State), [
         GVAR(CameraMode),

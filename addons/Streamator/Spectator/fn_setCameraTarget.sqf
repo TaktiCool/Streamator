@@ -23,7 +23,7 @@ if (speed GVAR(CameraFollowTarget) > 20 && {vectorMagnitude GVAR(CameraRelPos) <
     GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply 30;
 };
 
-if (side GVAR(CameraFollowTarget) == sideLogic && {GVAR(CameraFollowTarget) isKindOf "VirtualSpectator_F"}) then {
+if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
     [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_player]] call CFUNC(targetEvent);
 };
 

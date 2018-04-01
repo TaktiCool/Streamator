@@ -80,7 +80,7 @@ if (GVAR(OverlayUnitMarker)) then {
 if (GVAR(OverlayGroupMarker)) then {
     {
         private _leader = leader _x;
-        if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled _leader && alive _leader && && !isObjectHidden _leader) then {
+        if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled _leader && alive _leader && !(isObjectHidden _leader)) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _leader;

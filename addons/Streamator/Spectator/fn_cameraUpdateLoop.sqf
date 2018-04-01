@@ -57,7 +57,7 @@ switch (GVAR(CameraMode)) do {
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
 
-        if (side GVAR(CameraFollowTarget) == sideLogic && {GVAR(CameraFollowTarget) isKindOf "VirtualSpectator_F"}) then {
+        if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
             private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
             if (count _state > 0) then {
                 _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime"];

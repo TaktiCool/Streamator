@@ -15,6 +15,7 @@ class CfgCLibModules {
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
+            APIFNC(isSpectator);
             FNC(keyDownEH);
             FNC(keyUpEH);
             FNC(mouseMovingEH);

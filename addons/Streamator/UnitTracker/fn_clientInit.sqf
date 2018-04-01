@@ -14,7 +14,7 @@
     None
 */
 
-if !(side CLib_player == sideLogic && {player isKindOf "VirtualSpectator_F"}) exitWith {};
+if !(CLib_Player call Streamator_fnc_isSpectator) exitWith {};
 GVAR(playerCounter) = 0;
 GVAR(currentIcons) = [];
 GVAR(blockUpdate) = false;
