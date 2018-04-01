@@ -33,8 +33,5 @@ GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) sele
 GVAR(CameraMode) = 2;
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 if (_instant) then {
-    [{
-        GVAR(CameraSmoothingTime) = _this;
-    }, GVAR(CameraSmoothingTime)] call CFUNC(execNextFrame);
-    GVAR(CameraSmoothingTime) = 0;
+    GVAR(CameraPreviousState) = [];
 };

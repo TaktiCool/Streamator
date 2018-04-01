@@ -77,6 +77,12 @@ switch (GVAR(CameraMode)) do {
                         GVAR(CameraPos) = getPosASLVisual _rfollowTarget vectorAdd _relPos;
                     };
                 };
+
+                private _distance = GVAR(CameraPos) distance (getPos GVAR(Camera));
+
+                if (_distance > 500) then {
+                    GVAR(CameraPreviousState) = [];
+                };
             }
         } else {
             GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
