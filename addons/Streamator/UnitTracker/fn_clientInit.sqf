@@ -40,7 +40,7 @@ DFUNC(isValidVehicle) = {
      && (({alive _x} count crew _vehicle) == 0)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
-     && !isObjectHidden _unit
+     && !isObjectHidden _vehicle
 };
 
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);
