@@ -15,6 +15,7 @@ class CfgCLibModules {
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
+            FNC(initializeSpectator);
             APIFNC(isSpectator);
             FNC(keyDownEH);
             FNC(keyUpEH);
@@ -24,6 +25,7 @@ class CfgCLibModules {
             FNC(savePosition);
             FNC(setCameraTarget);
             FNC(setVisionMode);
+            FNC(terminateSpectator);
         };
 
         // UnitTracker
