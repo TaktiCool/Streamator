@@ -22,7 +22,7 @@ if (_unit getUnitTrait "medic") exitWith {
     "\a3\ui_f\data\igui\cfg\holdactions\holdaction_revive_ca.paa";
 };
 if (_unit getUnitTrait "engineer" || _unit getUnitTrait "explosiveSpecialist") exitWith {
-    "\a3\ui_f\data\gui\cfg\respawnroles\support_ca.paa";
+    "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
 };
 if ((secondaryWeapon _unit) find "launch" != -1) exitWith {
     "\a3\ui_f\data\igui\cfg\weaponicons\at_ca.paa";
