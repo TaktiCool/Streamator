@@ -16,7 +16,7 @@
 */
 
 params [
-    ["_display", displayNull, [displayNull]],
+    "",
     ["_keyCode", 0, [0]]
 ];
 

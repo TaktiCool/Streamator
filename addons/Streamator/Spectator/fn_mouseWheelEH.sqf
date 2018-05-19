@@ -16,7 +16,7 @@
 */
 
 params [
-    ["_display", displayNull, [displayNull]],
+    "",
     ["_delta", 0, [0]]
 ];
 

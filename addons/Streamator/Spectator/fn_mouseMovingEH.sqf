@@ -17,12 +17,11 @@
 */
 
 params [
-    ["_display", displayNull, [displayNull]],
+    "",
     ["_deltaX", 0, [0]],
     ["_deltaY", 0, [0]]
 ];
 private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;
-private _pitch = GVAR(CameraPreviousState) param [3, GVAR(CameraPitch) ];
 private _dir = GVAR(CameraPreviousState) param [2, GVAR(CameraDir)];
 
 GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5 * _fov_factor;
