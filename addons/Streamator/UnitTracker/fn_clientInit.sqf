@@ -60,7 +60,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
 }] call CFUNC(addStatemachineState);
 
 [GVAR(ProcessingSM), "addIcons", {
-    params ["_dummy", "_data"];
+    params ["", "_data"];
     _data params ["_units", "_vehicles"];
     if (!(_units isEqualTo [])) then {
         private _unit = _units deleteAt 0;

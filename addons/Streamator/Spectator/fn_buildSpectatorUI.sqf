@@ -14,9 +14,6 @@
     None
 */
 
-// Disable BI
-["Terminate"] call BIS_fnc_EGSpectator;
-
 ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
 ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
@@ -39,125 +36,133 @@ uiNamespace setVariable [QGVAR(SpectatorControlDisplay), _display];
 (_display displayCtrl 1202) ctrlShow false;
 (_display displayCtrl 1202) ctrlCommit 0;
 
+private _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1];
+_ctrlGrp ctrlSetPosition [safeZoneX, safeZoneY, safeZoneW, safeZoneH];
+_ctrlGrp ctrlCommit 0;
 
 // Create Black Border
 {
-    private _tempCtrl = _display ctrlCreate ["RscPicture", -1];
+    private _tempCtrl = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
     _tempCtrl ctrlSetPosition _x;
     _tempCtrl ctrlSetText "#(argb,8,8,3)color(0,0,0,1)";
     _tempCtrl ctrlCommit 0;
 } count [
-    [safeZoneX, safeZoneY + PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
-    [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
-    [safeZoneX, safeZoneY, safeZoneW, PY(BORDERWIDTH)],
-    [safeZoneX, safeZoneY + safeZoneH - PY(BORDERWIDTH), safeZoneW, PY(BORDERWIDTH)]
+    [0,  PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
+    [safeZoneW - PX(BORDERWIDTH), 0 + PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
+    [0, 0, safeZoneW, PY(BORDERWIDTH)],
+    [0, 0 + safeZoneH - PY(BORDERWIDTH), safeZoneW, PY(BORDERWIDTH)]
 ];
 
 // Create Mode
-private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1];
-_ctrlInfo ctrlSetPosition [safeZoneX + PX(0.3 + BORDERWIDTH), safeZoneY + PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
+private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlInfo ctrlSetPosition [PX(0.3 + BORDERWIDTH), PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
 _ctrlInfo ctrlSetFontHeight PY(1.5);
 _ctrlInfo ctrlSetFont "RobotoCondensed";
 _ctrlInfo ctrlSetText "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV";
 _ctrlInfo ctrlCommit 0;
 
-private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1];
-_ctrlCameraMode ctrlSetPosition [safeZoneX + safeZoneW - PY(22), safeZoneY + PY(0.3), PX(20), PY(1.8)];
+private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlCameraMode ctrlSetPosition [safeZoneW - PY(22),  PY(0.3), PX(20), PY(1.8)];
 _ctrlCameraMode ctrlSetFontHeight PY(1.5);
 _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
 _ctrlCameraMode ctrlSetStructuredText parseText "<t align='right'>FREE</t>";
 _ctrlCameraMode ctrlCommit 0;
 
-private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1];
-_ctrlTargetInfo ctrlSetPosition [safeZoneX, safeZoneY + safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
+private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlTargetInfo ctrlSetPosition [0, safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
 _ctrlTargetInfo ctrlSetFontHeight PY(1.5);
 _ctrlTargetInfo ctrlSetFont "RobotoCondensedBold";
 _ctrlTargetInfo ctrlSetText "Target Info";
 _ctrlTargetInfo ctrlCommit 0;
 
-private _ctrlMouseSpeedBarBg = _display ctrlCreate ["RscPicture", -1];
-_ctrlMouseSpeedBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(2 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
+private _ctrlMouseSpeedBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
+_ctrlMouseSpeedBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(2 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlMouseSpeedBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
 _ctrlMouseSpeedBarBg ctrlCommit 0;
 
 private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
-private _ctrlMouseSpeedBar = _display ctrlCreate ["RscPicture", -1];
+private _ctrlMouseSpeedBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlMouseSpeedBar ctrlSetPosition [
-    safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-    safeZoneY + PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+    PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 2),
     _relLength * PY(BORDERWIDTH * 4)
 ];
 _ctrlMouseSpeedBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
 _ctrlMouseSpeedBar ctrlCommit 0;
 
-private _ctrlMouseSpeedLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-_ctrlMouseSpeedLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(6 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
+private _ctrlMouseSpeedLabel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlMouseSpeedLabel ctrlSetPosition [safeZoneW - PX(BORDERWIDTH), PY(6 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
 _ctrlMouseSpeedLabel ctrlSetFontHeight PY(1.5);
 _ctrlMouseSpeedLabel ctrlSetFont "RobotoCondensedBold";
 _ctrlMouseSpeedLabel ctrlSetText "SPD";
 _ctrlMouseSpeedLabel ctrlCommit 0;
 
-private _ctrlMouseSmoothingBarBg = _display ctrlCreate ["RscPicture", -1];
-_ctrlMouseSmoothingBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(8 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
+private _ctrlMouseSmoothingBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
+_ctrlMouseSmoothingBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(8 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlMouseSmoothingBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
 _ctrlMouseSmoothingBarBg ctrlCommit 0;
 
 private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
-private _ctrlMouseSmoothingBar = _display ctrlCreate ["RscPicture", -1];
+private _ctrlMouseSmoothingBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlMouseSmoothingBar ctrlSetPosition [
-    safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-    safeZoneY + PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+    PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 2),
     PY(BORDERWIDTH * 4) * _relLength
 ];
 _ctrlMouseSmoothingBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
 _ctrlMouseSmoothingBar ctrlCommit 0;
 
-private _ctrlMouseSmoothingLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-_ctrlMouseSmoothingLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(12 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
+private _ctrlMouseSmoothingLabel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlMouseSmoothingLabel ctrlSetPosition [safeZoneW - PX(BORDERWIDTH), PY(12 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
 _ctrlMouseSmoothingLabel ctrlSetFontHeight PY(1.2);
 _ctrlMouseSmoothingLabel ctrlSetFont "RobotoCondensedBold";
 _ctrlMouseSmoothingLabel ctrlSetText "SMTH";
 _ctrlMouseSmoothingLabel ctrlCommit 0;
 
-private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1];
-_ctrlFOVBarBg ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4), safeZoneY + PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
+private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
+_ctrlFOVBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
 _ctrlFOVBarBg ctrlCommit 0;
 
 private _relLength = (2 - GVAR(CameraFOV)) / 2;
-private _ctrlFOVBar = _display ctrlCreate ["RscPicture", -1];
+private _ctrlFOVBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBar ctrlSetPosition [
-    safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-    safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+    PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 2),
     PY(BORDERWIDTH * 4) * _relLength
 ];
 _ctrlFOVBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
 _ctrlFOVBar ctrlCommit 0;
 
-private _ctrlFOVBarCurrent = _display ctrlCreate ["RscPicture", -1];
+private _ctrlFOVBarCurrent = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBarCurrent ctrlSetPosition [
-    safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-    safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+    PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 8),
     PY(BORDERWIDTH * 4) * _relLength
 ];
 _ctrlFOVBarCurrent ctrlSetText "#(argb,8,8,3)color(0,0,1,1)";
 _ctrlFOVBarCurrent ctrlCommit 0;
 
-private _ctrlFOVLabel = _display ctrlCreate ["RscTextNoShadow", -1];
-_ctrlFOVLabel ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH), safeZoneY + PY(18 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
+private _ctrlFOVLabel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlFOVLabel ctrlSetPosition [
+    safeZoneW - PX(BORDERWIDTH),
+    PY(18 * BORDERWIDTH),
+    PX(BORDERWIDTH),
+    PY(BORDERWIDTH)
+];
 _ctrlFOVLabel ctrlSetFontHeight PY(1.2);
 _ctrlFOVLabel ctrlSetFont "RobotoCondensedBold";
 _ctrlFOVLabel ctrlSetText "FOV";
 _ctrlFOVLabel ctrlCommit 0;
 
-private _ctrlFOVDefaultLine = _display ctrlCreate ["RscPicture", -1];
+private _ctrlFOVDefaultLine = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVDefaultLine ctrlSetPosition [
-    safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-    safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+     PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 2),
     PY(0.2)
 ];
@@ -168,8 +173,8 @@ _ctrlFOVDefaultLine ctrlCommit 0;
     (_this select 1) params ["_ctrl"];
     private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
     _ctrl ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 2),
         _relLength * PY(BORDERWIDTH * 4)
     ];
@@ -180,8 +185,8 @@ _ctrlFOVDefaultLine ctrlCommit 0;
     (_this select 1) params ["_ctrl"];
     private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
     _ctrl ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 2),
         PY(BORDERWIDTH * 4) * _relLength
     ];
@@ -192,8 +197,8 @@ _ctrlFOVDefaultLine ctrlCommit 0;
     (_this select 1) params ["_ctrl"];
     private _relLength = (2 - GVAR(CameraFOV)) / 2;
     _ctrl ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 2),
         PY(BORDERWIDTH * 4) * _relLength
     ];
@@ -344,13 +349,19 @@ _ctrlFOVDefaultLine ctrlCommit 0;
     _ctrl ctrlSetStructuredText parseText _str;
     _ctrl ctrlCommit 0;
 }, _ctrlInfo] call CFUNC(addEventhandler);
+JK_TestGroup = _ctrlGrp;
+[QGVAR(toggleUI), {
+    (_this select 1) params ["_ctrlGrp"];
+    GVAR(hideUI) = !GVAR(hideUI);
+    _ctrlGrp ctrlShow !GVAR(hideUI);
+}, _ctrlGrp] call CFUNC(addEventhandler);
 
 [{
     (_this select 0) params ["_ctrl"];
     private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
     _ctrl ctrlSetPosition [
-        safeZoneX + safeZoneW - PX(BORDERWIDTH * 3 / 4),
-        safeZoneY + PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 8),
         PY(BORDERWIDTH * 4) * _relLength
     ];

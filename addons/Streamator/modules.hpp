@@ -10,22 +10,22 @@ class CfgCLibModules {
             FNC(buildSpectatorUI);
             APIFNC(addCustom3dIcon);
             FNC(clientInit);
+            FNC(closeSpectator);
             FNC(dik2Char);
             FNC(cameraUpdateLoop);
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
-            FNC(initializeSpectator);
             APIFNC(isSpectator);
             FNC(keyDownEH);
             FNC(keyUpEH);
             FNC(mouseMovingEH);
             FNC(mouseWheelEH);
+            FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
             FNC(setCameraTarget);
             FNC(setVisionMode);
-            FNC(terminateSpectator);
         };
 
         // UnitTracker

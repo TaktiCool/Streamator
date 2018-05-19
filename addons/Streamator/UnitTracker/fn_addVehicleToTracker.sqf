@@ -37,7 +37,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
     _vehicleIconId,
     "hoverin",
     {
-        (_this select 0) params ["_map", "_xPos", "_yPos"];
+        (_this select 0) params ["_map"];
         (_this select 1) params ["_vehicle"];
 
         if (_vehicle isEqualTo GVAR(currentHoverVehicle)) exitWith {};

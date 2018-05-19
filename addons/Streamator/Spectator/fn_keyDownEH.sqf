@@ -26,7 +26,7 @@ if (_ctrl) then { \
 }
 
 params [
-    ["_display", displayNull, [displayNull]],
+    "",
     ["_keyCode", 0, [0]],
     ["_shift", false, [true]],
     ["_ctrl", false, [true]],
@@ -71,7 +71,7 @@ private _return = switch (_keyCode) do {
             }];
 
             _map ctrlAddEventHandler ["MouseButtonClick", {
-                params ["_map", "_btn", "_xpos", "_ypos", "_shift", "_ctrl", "_alt"];
+                params ["_map", "", "_xpos", "_ypos", "", "", "_alt"];
                 if (_alt) then {
                     private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
@@ -107,7 +107,7 @@ private _return = switch (_keyCode) do {
             true
         };
         if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
-            GVAR(lastUnitShooting) call FUNC(setCameraTarget);
+            [GVAR(lastUnitShooting), true] call FUNC(setCameraTarget);
             true
         };
         if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
@@ -178,7 +178,9 @@ private _return = switch (_keyCode) do {
         };
     };
     case DIK_BACKSPACE: { // BACKSPACE
-        GVAR(InputMode) == 0
+        if (GVAR(InputMode) > 0) exitWith {GVAR(InputMode) == 0};
+        QGVAR(toggleUI) call CFUNC(localEvent);
+        true;
     };
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
@@ -218,7 +220,8 @@ private _return = switch (_keyCode) do {
 
     case DIK_R: {
         if !(isNull GVAR(CameraFollowTarget)) exitWith {
-            GVAR(CameraFollowTarget) call FUNC(setCameraTarget);
+            private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
+            [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
             true
         };
         false

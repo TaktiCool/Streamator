@@ -21,9 +21,9 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
 };
 
 ["terminateSpectator", {
-    call FUNC(terminateSpectator);
+    call FUNC(closeSpectator);
 }] call CFUNC(addEventhandler);
 
 ["initializeSpectator", {
-    call FUNC(initializeSpectator);
+    call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);

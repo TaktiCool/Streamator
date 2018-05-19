@@ -56,6 +56,7 @@ GVAR(CameraPreviousState) = [];
 GVAR(CameraSmoothingTime) = 0.2;
 GVAR(MapState) = [];
 GVAR(MapOpen) = false;
+GVAR(hideUI) = false;
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
@@ -72,6 +73,16 @@ GVAR(allSpectators) = [];
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
+
+
+{
+    if (_x isKindOf "CAManBase") then {
+        _x addEventHandler ["FiredMan", {
+            GVAR(lastUnitShooting) = _this select 0;
+            (_this select 0) setVariable [QGVAR(lastShot), time];
+        }];
+    };
+} count CLib_Events_entitiesCached;
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
@@ -113,19 +124,32 @@ DFUNC(updateSpectatorArray) = {
     }, 3] call CFUNC(wait);
 };
 
-call FUNC(buildSpectatorUI);
 
-QGVAR(updateInput) call CFUNC(localEvent);
+private _fnc_init = {
+    // Disable BI
+    ["Terminate"] call BIS_fnc_EGSpectator;
+    (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
+    (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
+    (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
+    (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
 
-(findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
-(findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
-(findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
-(findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
+    call FUNC(buildSpectatorUI);
+
+    QGVAR(updateInput) call CFUNC(localEvent);
+
+    [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+};
+
+if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo sideLogic) then {
+    [_fnc_init, {
+        (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
+    }] call CFUNC(waitUntil);
+} else {
+    call _fnc_init;
+};
 
 // Camera Update PFH
 addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
-
-[DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
 call FUNC(updateSpectatorArray);
 [

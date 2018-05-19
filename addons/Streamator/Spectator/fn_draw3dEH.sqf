@@ -39,7 +39,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
         GVAR(lastCursorTarget) = time;
     };
 };
-
+if (GVAR(hideUI)) exitWith {};
 //HUD
 //Units
 if (GVAR(OverlayUnitMarker)) then {
