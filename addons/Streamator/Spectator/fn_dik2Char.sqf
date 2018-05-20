@@ -15,6 +15,12 @@
 */
 params ["_dik", "_shift"];
 
+private _char = call compile keyName _dik;
+DUMP("Pressed Char: " + _char + " " + str toArray _char + " " + str (count (toArray _char)));
+if ((count (toArray _char)) != 1) then {
+    _char = "";
+};
+/*
 private _char = switch (_dik) do {
     case DIK_A: {"a"};
     case DIK_B: {"b"};
@@ -71,4 +77,5 @@ private _char = switch (_dik) do {
     case DIK_MINUS: {"-"};
     default {""};
 };
+*/
 [_char, toUpper _char] select _shift;

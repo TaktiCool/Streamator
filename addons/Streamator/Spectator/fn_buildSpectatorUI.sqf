@@ -349,7 +349,7 @@ _ctrlFOVDefaultLine ctrlCommit 0;
     _ctrl ctrlSetStructuredText parseText _str;
     _ctrl ctrlCommit 0;
 }, _ctrlInfo] call CFUNC(addEventhandler);
-JK_TestGroup = _ctrlGrp;
+
 [QGVAR(toggleUI), {
     (_this select 1) params ["_ctrlGrp"];
     GVAR(hideUI) = !GVAR(hideUI);
