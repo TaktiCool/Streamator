@@ -15,7 +15,7 @@
 */
 params ["_dik", "_shift"];
 
-private _char = call compile keyName _dik;
+private _char = toLower call compile keyName _dik;
 DUMP("Pressed Char: " + _char + " " + str toArray _char + " " + str (count (toArray _char)));
 if ((count (toArray _char)) != 1) then {
     _char = "";
