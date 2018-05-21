@@ -74,16 +74,6 @@ GVAR(allSpectators) = [];
     [QGVAR(updateInput)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
 
-
-{
-    if (_x isKindOf "CAManBase") then {
-        _x addEventHandler ["FiredMan", {
-            GVAR(lastUnitShooting) = _this select 0;
-            (_this select 0) setVariable [QGVAR(lastShot), time];
-        }];
-    };
-} count CLib_Events_entitiesCached;
-
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
