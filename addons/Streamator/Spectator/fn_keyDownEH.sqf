@@ -197,6 +197,18 @@ private _return = switch (_keyCode) do {
         QGVAR(updateInput) call CFUNC(localEvent);
         true
     };
+    case DIK_F5: { // F3
+        if (!isNull GVAR(CameraFollowTarget)) then {
+            if (GVAR(UnitInfoOpen)) then {
+                [QGVAR(CloseUnitInfo)] call CFUNC(localEvent);
+            } else {
+                [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+            };
+
+        };
+
+        true
+    };
     case DIK_N: { // N
         if (GVAR(InputMode) > 0) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
