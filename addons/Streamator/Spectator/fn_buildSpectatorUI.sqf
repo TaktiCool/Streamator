@@ -515,6 +515,7 @@ private _unitInfoAllCtrls = [
             _ctrlMagInfo2 ctrlCommit 0;
         } else {
             _ctrlMagIcon ctrlSetText "\A3\ui_f\data\gui\rsc\rscdisplayarsenal\cargomagall_ca.paa";
+            _ctrlMagIcon ctrlSetTextColor _textColor;
             _ctrlMagIcon ctrlCommit 0;
 
             _ctrlMagInfo2 ctrlSetText (_magInfo2 select _forEachIndex);
