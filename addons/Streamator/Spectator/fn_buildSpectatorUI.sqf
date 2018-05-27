@@ -442,25 +442,25 @@ private _unitInfoAllCtrls = [
     private _nbrHandgunMags = 1;
 
 
-// TODO: add MagazineGroups/MagazineWells Compatibilty
     {
         _x params ["_class", "_ammo", "_loaded"];
+
         switch (true) do {
-            case (_class in ([(_cfgWeapons >> (primaryWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+            case (_class in ((primaryWeapon _unit) call FUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _primaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrPrimaryMags = _nbrPrimaryMags + 1;
                 };
             };
-            case (_class in ([(_cfgWeapons >> (handgunWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+            case (_class in ((handgunWeapon _unit) call FUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _handgunMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrHandgunMags = _nbrHandgunMags + 1;
                 };
             };
-            case (_class in ([(_cfgWeapons >> (secondaryWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+            case (_class in ((secondaryWeapon _unit) call FUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _secondaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
@@ -485,11 +485,7 @@ private _unitInfoAllCtrls = [
         _x params ["", "_ctrlPicture", "_ctrlName", "_ctrlMagInfo",
         "_ctrlMagInfo2", "_ctrlMagIcon"];
 
-        private _textColor = [1,1,1,1];
         private _thisWeaponClass = (_weaponclass select _forEachIndex);
-        if (_currentWeapon == _thisWeaponClass) then {
-            _textColor = [1,1,1,0.7];
-        };
 
         private _weaponName = "";
         private _picture = _emptyPicture select _forEachIndex;
@@ -501,7 +497,13 @@ private _unitInfoAllCtrls = [
         _ctrlPicture ctrlSetText _picture;
         _ctrlPicture ctrlCommit 0;
 
-        _ctrlName ctrlSetText _weaponName;
+        private _textColor = [1,1,1,1];
+        if (_currentWeapon == _thisWeaponClass && _thisWeaponClass != "") then {
+            _ctrlName ctrlSetText format ["[%1]", _weaponName];
+        } else {
+            _textColor = [1,1,1,0.6];
+            _ctrlName ctrlSetText _weaponName;
+        };
         _ctrlName ctrlCommit 0;
 
         _ctrlMagInfo ctrlSetText (_magInfo select _forEachIndex);
