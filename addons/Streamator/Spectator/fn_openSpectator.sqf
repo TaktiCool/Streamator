@@ -140,6 +140,9 @@ private _fnc_init = {
     (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
     (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
 
+    ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
+    ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
+
     call FUNC(buildSpectatorUI);
 
     QGVAR(updateInput) call CFUNC(localEvent);
@@ -165,47 +168,3 @@ call FUNC(updateSpectatorArray);
         _angle = getDirVisual GVAR(Camera);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
-
-DFUNC(compatibleMagazines) = {
-    params ["_weapon"];
-    private _varName = format ["%1_%2_%3", QGVAR(mags), _weapon];
-    private _comMags = GVAR(compatibleMagazinesNamespace) getVariable _varName;
-    if !(isNil "_comMags") exitWith { _comMags };
-    private _cfgWeapons = configFile >> "CfgWeapons" >> _weapon;
-    private _mags = getArray (_cfgWeapons >> "magazines");
-
-    private _cfgMagazineWells = configFile >> "CfgMagazineWells";
-
-    {
-        {
-            _mags append (getArray _x);
-            nil
-        } count configProperties [_cfgMagazineWells >> _x, "isArray _x", true];
-        nil
-    } count (getArray (_cfgWeapons >> "magazineWell"));
-
-
-/* TODO: find out how to read this out of config
-    {
-        scopeName "loop";
-        private _class = configName _x;
-        private _cfg = _x;
-        private _inGroup = false;
-        {
-            if (_class in (getArray (_cfg >> "magazineGroup"))) then {
-                _inGroup = true;
-                breakTo "loop";
-            };
-            nil
-        } count (getArray (_cfgWeapons >> "magazines"));
-
-        if (_inGroup) then {
-            _mags pushBackUnique _class;
-        };
-        nil
-    } count configProperties [configFile >> "CfgMagazines", "isClass _x", true];
-*/
-    _mags = _mags arrayIntersect _mags;
-    _mags = _mags - ["this"];
-    GVAR(compatibleMagazinesNamespace) setVariable [_varName, _mags];
-};

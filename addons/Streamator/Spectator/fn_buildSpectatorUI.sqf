@@ -14,9 +14,6 @@
     None
 */
 
-["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
-["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
-
 // Create Camera
 GVAR(Camera) = "Camera" camCreate (eyePos CLib_player);
 GVAR(Camera) cameraEffect ["internal", "back"];
@@ -369,7 +366,8 @@ private _unitInfoAllCtrls = [
     _ctrlShotsIcon,
     _ctrlShotsValue,
     _ctrlWeaponSlots,
-    _ctrlStats];
+    _ctrlStats
+];
 
 [QGVAR(UpdateUnitInfo), {
     (_this select 0) params ["_unit"];
@@ -435,12 +433,11 @@ private _unitInfoAllCtrls = [
     private _cfgWeapons = configFile >> "CfgWeapons";
     private _cfgMagazines = configFile >> "CfgMagazines";
     private _primaryMagLoaded = "";
-    private _nbrPrimaryMags = 1;
+    private _nbrPrimaryMags = 0;
     private _secondaryMagLoaded = "";
-    private _nbrSecondaryMags = 1;
+    private _nbrSecondaryMags = 0;
     private _handgunMagLoaded = "";
-    private _nbrHandgunMags = 1;
-
+    private _nbrHandgunMags = 0;
 
     {
         _x params ["_class", "_ammo", "_loaded"];
