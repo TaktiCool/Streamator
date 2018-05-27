@@ -309,9 +309,11 @@ private _xPosition = 41;
     _ctrlMagInfo2 ctrlCommit 0;
     _xPosition = _xPosition + 19.5;
     _ctrlWeaponSlots pushback [_ctrlGrp, _ctrlWeaponPicture, _ctrlWeaponName, _ctrlMagInfo, _ctrlMagInfo2, _ctrlMagIcon];
-} forEach [["MX 6.5MM", "\A3\weapons_F\Rifles\MX\data\UI\gear_mx_rifle_X_CA.paa"],
-["NLAW","\A3\weapons_f\launchers\nlaw\data\UI\gear_nlaw_ca.paa"],
-["P07 9MM","\A3\weapons_F\Pistols\P07\data\UI\gear_p07_x_ca.paa"]];
+} forEach [
+    ["MX 6.5MM", "\A3\weapons_F\Rifles\MX\data\UI\gear_mx_rifle_X_CA.paa"],
+    ["NLAW","\A3\weapons_f\launchers\nlaw\data\UI\gear_nlaw_ca.paa"],
+    ["P07 9MM","\A3\weapons_F\Pistols\P07\data\UI\gear_p07_x_ca.paa"]
+];
 
 private _xPosition = 38;
 private _ctrlStats = [];
@@ -336,12 +338,14 @@ private _ctrlStats = [];
 
     _ctrlStats pushBack [_grp, _picture, _text];
     _xPosition = _xPosition + 10;
-} forEach ["\A3\ui_f\data\igui\cfg\mptable\infantry_ca.paa",
-"\A3\ui_f\data\map\vehicleicons\icontruck_ca.paa",
-"\A3\ui_f\data\map\vehicleicons\icontank_ca.paa",
-"\A3\ui_f\data\map\vehicleicons\iconhelicopter_ca.paa",
-"\A3\ui_f_curator\data\cfgmarkers\kia_ca.paa",
-"\A3\ui_f\data\igui\cfg\mptable\total_ca.paa"];
+} forEach [
+    "\A3\ui_f\data\igui\cfg\mptable\infantry_ca.paa",
+    "\A3\ui_f\data\map\vehicleicons\icontruck_ca.paa",
+    "\A3\ui_f\data\map\vehicleicons\icontank_ca.paa",
+    "\A3\ui_f\data\map\vehicleicons\iconhelicopter_ca.paa",
+    "\A3\ui_f_curator\data\cfgmarkers\kia_ca.paa",
+    "\A3\ui_f\data\igui\cfg\mptable\total_ca.paa"
+];
 
 private _ctrlStatsTotalValue = (_ctrlStats select 5) select 2;
 _ctrlStatsTotalValue ctrlSetPosition [PX(3), PY(0), PX(8), PY(3)];
@@ -369,15 +373,15 @@ private _unitInfoAllCtrls = [
 
 [QGVAR(UpdateUnitInfo), {
     (_this select 0) params ["_unit"];
-    (_this select 1) params ["_ctrlGrp", "_ctrlGrpBg", "_ctrlUnitName",
-    "_ctrlRoleIconBackground", "_ctrlRoleIcon", "_ctrlGroupId",
-    "_ctrlGrpSquad","_ctrlSquadPicture", "_ctrlSquadName",
-    "_ctrlGrpHealth", "_ctrlHealthIcon", "_ctrlHealthRing", "_ctrlHealthValue",
-    "_ctrlGrpShots", "_ctrlShotsIcon", "_ctrlShotsValue",
+    (_this select 1) params ["_ctrlGrp", "", "_ctrlUnitName",
+    "_ctrlRoleIconBackground", "", "_ctrlGroupId",
+    "","_ctrlSquadPicture", "_ctrlSquadName",
+    "", "", "_ctrlHealthRing", "_ctrlHealthValue",
+    "", "", "_ctrlShotsValue",
     "_ctrlWeaponSlots", "_ctrlStats"];
 
     if (isNull _unit) then {
-        [QGVAR(CloseUnitInfo)] call CFUNC(localEvent);
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
     };
 
     // set unit name
@@ -389,6 +393,9 @@ private _unitInfoAllCtrls = [
     _ctrlRoleIconBackground ctrlSetText format ["#(argb,8,8,3)color(%1,%2,%3,1)", _color select 0, _color select 1, _color select 2];
     _ctrlRoleIconBackground ctrlCommit 0;
 
+    _ctrlUnitRoleIcon ctrlSetText (_unit call FUNC(getUnitType));
+    _ctrlUnitRoleIcon ctrlCommit 0;
+
     // set group id
     _ctrlGroupId ctrlSetText toUpper (groupId group _unit);
     _ctrlGroupId ctrlCommit 0;
@@ -399,7 +406,11 @@ private _unitInfoAllCtrls = [
         _ctrlSquadName ctrlSetText "";
         _ctrlSquadName ctrlCommit 0;
 
-        _ctrlSquadPicture ctrlSetText ([_unit] call BIS_fnc_getUnitInsignia);
+        private _squadImage = [_unit] call BIS_fnc_getUnitInsignia;
+        if (_squadImage == "") then {
+            _squadImage = "\A3\Ui_f\Data\GUI\Cfg\LoadingScreens\A3_LoadingLogo_ca.paa";
+        };
+        _ctrlSquadPicture ctrlSetText _squadImage;
         _ctrlSquadPicture ctrlCommit 0;
     } else {
         _ctrlSquadName ctrlSetText toUpper (_squadParams select 1);
@@ -411,43 +422,47 @@ private _unitInfoAllCtrls = [
 
     // set health
     private _health = 1 - damage _unit;
-    _ctrlHealthRing ctrlSetText format["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round (_health*24)];
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round (_health*24)];
     _ctrlHealthRing ctrlCommit 0;
-    _ctrlHealthValue ctrlSetText format["%1", round (_health*100)];
+    _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
 
     // set number of shots
-    //TODO
+    _ctrlShotsValue ctrlSetText format ["%1", _unit getVariable [QGVAR(shotCount), 0]];
+    _ctrlShotsValue ctrlCommit 0;
 
     // setup weapons
     private _cfgWeapons = configFile >> "CfgWeapons";
     private _cfgMagazines = configFile >> "CfgMagazines";
     private _primaryMagLoaded = "";
-    private _nbrPrimaryMags = 0;
+    private _nbrPrimaryMags = 1;
     private _secondaryMagLoaded = "";
-    private _nbrSecondaryMags = 0;
+    private _nbrSecondaryMags = 1;
     private _handgunMagLoaded = "";
-    private _nbrHandgunMags = 0;
+    private _nbrHandgunMags = 1;
 
+
+// TODO: add MagazineGroups/MagazineWells Compatibilty
     {
-        switch (_x select 3) do {
-            case (1): {
-                if (_x select 2) then {
-                    _primaryMagLoaded = format[ "%1 / %2", _x select 1, getNumber (_cfgMagazines >> (_x select 0) >> "count")];
+        _x params ["_class", "_ammo", "_loaded"];
+        switch (true) do {
+            case (_class in ([(_cfgWeapons >> (primaryWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+                if (_loaded) then {
+                    _primaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrPrimaryMags = _nbrPrimaryMags + 1;
                 };
             };
-            case (2): {
-                if (_x select 2) then {
-                    _handgunMagLoaded = format[ "%1 / %2", _x select 1, getNumber (_cfgMagazines >> (_x select 0) >> "count")];
+            case (_class in ([(_cfgWeapons >> (handgunWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+                if (_loaded) then {
+                    _handgunMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrHandgunMags = _nbrHandgunMags + 1;
                 };
             };
-            case (4): {
-                if (_x select 2) then {
-                    _secondaryMagLoaded = format[ "%1 / %2", _x select 1, getNumber (_cfgMagazines >> (_x select 0) >> "count")];
+            case (_class in ([(_cfgWeapons >> (secondaryWeapon _unit) >> "magazines"), [], true] call CFUNC(getConfigDataCached))): {
+                if (_loaded) then {
+                    _secondaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrSecondaryMags = _nbrSecondaryMags + 1;
                 };
@@ -459,13 +474,15 @@ private _unitInfoAllCtrls = [
     private _magInfo2 = [format ["%1", _nbrPrimaryMags], format ["%1", _nbrSecondaryMags], format ["%1", _nbrHandgunMags]];
     DUMP(_magInfo2);
     private _weaponclass = [primaryWeapon _unit, secondaryWeapon _unit, handgunWeapon _unit];
-    private _emptyPicture = ["A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_primary_gs.paa",
+    private _emptyPicture = [
+        "A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_primary_gs.paa",
         "A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_secondary_gs.paa",
-        "A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_hgun_gs.paa"];
+        "A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_hgun_gs.paa"
+    ];
 
     private _currentWeapon = currentWeapon _unit;
     {
-        _x params ["_ctrlGrp", "_ctrlPicture", "_ctrlName", "_ctrlMagInfo",
+        _x params ["", "_ctrlPicture", "_ctrlName", "_ctrlMagInfo",
         "_ctrlMagInfo2", "_ctrlMagIcon"];
 
         private _textColor = [1,1,1,1];
@@ -488,6 +505,7 @@ private _unitInfoAllCtrls = [
         _ctrlName ctrlCommit 0;
 
         _ctrlMagInfo ctrlSetText (_magInfo select _forEachIndex);
+        _ctrlMagInfo ctrlSetTextColor _textColor;
         _ctrlMagInfo ctrlCommit 0;
 
         if (_thisWeaponClass == "" || (_magInfo2 select _forEachIndex) == "0") then {
@@ -501,9 +519,9 @@ private _unitInfoAllCtrls = [
             _ctrlMagIcon ctrlCommit 0;
 
             _ctrlMagInfo2 ctrlSetText (_magInfo2 select _forEachIndex);
+            _ctrlMagInfo2 ctrlSetTextColor _textColor;
             _ctrlMagInfo2 ctrlCommit 0;
-        }
-
+        };
     } forEach _ctrlWeaponSlots;
 
     // set score
@@ -511,8 +529,9 @@ private _unitInfoAllCtrls = [
     if (_scores isEqualTo []) then {
         _scores = [0, 0, 0, 0, 0, 0];
     };
+
     {
-        _x params ["_ctrlGrp", "_ctrlPicture", "_ctrlValue"];
+        _x params ["", "", "_ctrlValue"];
         private _value = _scores select _forEachIndex;
         if (_value == 0) then {
             _ctrlValue ctrlSetTextColor [1,1,1,0.5];
@@ -524,23 +543,13 @@ private _unitInfoAllCtrls = [
         _ctrlValue ctrlCommit 0;
     } forEach _ctrlStats;
 
-
-
-
-
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
-
-GVAR(UnitInfoOpen) = false;
 
 [QGVAR(OpenUnitInfo), {
     (_this select 0) params ["_unit"];
-    (_this select 1) params ["_ctrlGrp", "_ctrlGrpBg", "_ctrlUnitName",
-    "_ctrlRoleIconBackground", "_ctrlRoleIcon", "_ctrlGroupId",
-    "_ctrlGrpSquad","_ctrlSquadPicture", "_ctrlSquadName",
-    "_ctrlGrpHealt", "_ctrlHealthIcon", "_ctrlHealthRing", "_ctrlHealthValue",
-    "_ctrlGrpShots", "_ctrlShotsIcon", "_ctrlShotsValue",
-    "_ctrlWeaponSlots", "_ctrlStats"];
+    (_this select 1) params ["_ctrlGrp"];
 
+    GVAR(unitInfoTarget) = _unit;
     if (GVAR(UnitInfoOpen)) exitWith {
         [QGVAR(UpdateUnitInfo), _unit] call CFUNC(localEvent);
     };
@@ -555,33 +564,25 @@ GVAR(UnitInfoOpen) = false;
     _ctrlGrp ctrlSetFade 0;
     _ctrlGrp ctrlCommit 0.3;
 
-
     [{
         _this ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];
         _this ctrlCommit 0.5;
     }, 0.5, _ctrlGrp] call CFUNC(wait);
 
     [{
-        params ["_params", "_id"];
-        _params params ["_unit"];
+        private _unit = GVAR(unitInfoTarget);
         if (GVAR(UnitInfoOpen)) then {
             [QGVAR(UpdateUnitInfo), _unit] call CFUNC(localEvent);
         } else {
-            [_id] call CFUNC(removePerFrameHandler);
-        }
-
-    }, 0.5, [_unit]] call CFUNC(addPerFrameHandler);
+            (_this select 1) call CFUNC(removePerFrameHandler);
+        };
+    }, 0.5] call CFUNC(addPerFrameHandler);
 
     GVAR(UnitInfoOpen) = true;
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
 
 [QGVAR(CloseUnitInfo), {
-    (_this select 1) params ["_ctrlGrp", "_ctrlGrpBg", "_ctrlUnitName",
-    "_ctrlRoleIconBackground", "_ctrlRoleIcon", "_ctrlGroupId",
-    "_ctrlGrpSquad","_ctrlSquadPicture", "_ctrlSquadName",
-    "_ctrlGrpHealt", "_ctrlHealthIcon", "_ctrlHealthRing", "_ctrlHealthValue",
-    "_ctrlGrpShots", "_ctrlShotsIcon", "_ctrlShotsValue",
-    "_ctrlWeaponSlots", "_ctrlStats"];
+    (_this select 1) params ["_ctrlGrp"];
 
     if (!GVAR(UnitInfoOpen)) exitWith {};
     _ctrlGrp ctrlSetFade 1;
@@ -594,7 +595,11 @@ GVAR(UnitInfoOpen) = false;
     GVAR(UnitInfoOpen) = false;
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
 
-
+[QGVAR(CameraTargetChanged), {
+    if (GVAR(UnitInfoOpen)) then {
+        [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+    };
+}] call CFUNC(addEventhandler);
 
 [QGVAR(CameraSpeedChanged), {
     (_this select 1) params ["_ctrl"];

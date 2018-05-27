@@ -14,6 +14,8 @@
     None
 */
 params ["_unit", ["_instant", false, [true]]];
+
+private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
     GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
@@ -32,6 +34,9 @@ GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) sele
 
 GVAR(CameraMode) = 2;
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+
+[QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);
+
 if (_instant) then {
     GVAR(CameraPreviousState) = [];
 };

@@ -34,6 +34,7 @@ if (isNil QGVAR(PositionMemory)) then {
 };
 
 GVAR(Camera) = objNull;
+
 GVAR(CameraPos) = [0, 0, 0];
 GVAR(CameraDir) = getDirVisual CLib_player;
 GVAR(CameraDirOffset) = 0;
@@ -48,15 +49,21 @@ GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
+
 GVAR(CameraFollowTarget) = objNull;
+
 GVAR(CursorTarget) = objNull;
 GVAR(lastCursorTarget) = time;
 GVAR(lastUnitShooting) = objNull;
+
 GVAR(CameraPreviousState) = [];
 GVAR(CameraSmoothingTime) = 0.2;
+
 GVAR(MapState) = [];
 GVAR(MapOpen) = false;
+
 GVAR(hideUI) = false;
+
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
@@ -69,6 +76,9 @@ GVAR(InputGuessIndex) = 0;
 GVAR(spectatorIcons) = [];
 GVAR(allSpectators) = [];
 
+GVAR(UnitInfoOpen) = false;
+GVAR(unitInfoTarget) = objNull;
+
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
@@ -78,8 +88,11 @@ GVAR(allSpectators) = [];
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
         _target addEventHandler ["FiredMan", {
-            GVAR(lastUnitShooting) = _this select 0;
-            (_this select 0) setVariable [QGVAR(lastShot), time];
+            params ["_unit"];
+            GVAR(lastUnitShooting) = _unit;
+            _unit setVariable [QGVAR(lastShot), time];
+            private _shots = _unit getVariable [QGVAR(shotCount), 0];
+            _unit setVariable [QGVAR(shotCount), _shots + 1];
         }];
     };
 }] call CFUNC(addEventhandler);
@@ -148,3 +161,8 @@ call FUNC(updateSpectatorArray);
         _angle = getDirVisual GVAR(Camera);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
+
+DFUNC(CompatibleMagazines) = {
+    params ["_weapon", "_muzzle"];
+
+};

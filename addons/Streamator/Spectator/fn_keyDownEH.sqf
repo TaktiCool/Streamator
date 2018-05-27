@@ -75,10 +75,12 @@ private _return = switch (_keyCode) do {
                 if (_alt) then {
                     private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
+                    private _prevUnit = GVAR(CameraFollowTarget);
                     GVAR(CameraFollowTarget) = objNull;
                     GVAR(CameraMode) = 1;
                     GVAR(CameraPos) = _pos;
                     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+                    [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
                     true;
                 } else {false};
             }];
@@ -111,13 +113,17 @@ private _return = switch (_keyCode) do {
             true
         };
         if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+            private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = GVAR(CursorTarget);
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
             GVAR(CameraMode) = 2;
+            [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
+            private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = objNull;
             GVAR(CameraMode) = 1;
+            [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
             true
         };
@@ -200,11 +206,12 @@ private _return = switch (_keyCode) do {
     case DIK_F5: { // F3
         if (!isNull GVAR(CameraFollowTarget)) then {
             if (GVAR(UnitInfoOpen)) then {
-                [QGVAR(CloseUnitInfo)] call CFUNC(localEvent);
+                QGVAR(CloseUnitInfo) call CFUNC(localEvent);
             } else {
                 [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
             };
-
+        } else {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
         };
 
         true
@@ -248,14 +255,14 @@ if (!_return && GVAR(InputMode) > 0) then {
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;
-        [QGVAR(updateGuess)] call CFUNC(localEvent);
-        [QGVAR(updateInput)] call CFUNC(localEvent);
+        QGVAR(updateGuess) call CFUNC(localEvent);
+        QGVAR(updateInput) call CFUNC(localEvent);
         _return = true;
     } else {
         if (_keyCode == DIK_BACKSPACE) then { // BACKSPACE
             GVAR(InputScratchpad) = GVAR(InputScratchpad) select [0, count GVAR(InputScratchpad) - 1];
-            [QGVAR(updateGuess)] call CFUNC(localEvent);
-            [QGVAR(updateInput)] call CFUNC(localEvent);
+            QGVAR(updateGuess) call CFUNC(localEvent);
+            QGVAR(updateInput) call CFUNC(localEvent);
             _return = true;
         };
     };
