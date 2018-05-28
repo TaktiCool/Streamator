@@ -375,7 +375,7 @@ private _unitInfoAllCtrls = [
     "_ctrlRoleIconBackground", "", "_ctrlGroupId",
     "","_ctrlSquadPicture", "_ctrlSquadName",
     "", "", "_ctrlHealthRing", "_ctrlHealthValue",
-    "", "", "_ctrlShotsValue",
+    "", "_ctrlShotsIcon", "_ctrlShotsValue",
     "_ctrlWeaponSlots", "_ctrlStats"];
 
     if (isNull _unit) then {
@@ -428,6 +428,13 @@ private _unitInfoAllCtrls = [
     // set number of shots
     _ctrlShotsValue ctrlSetText format ["%1", _unit getVariable [QGVAR(shotCount), 0]];
     _ctrlShotsValue ctrlCommit 0;
+    if ((time - (_unit getVariable [QGVAR(lastShot), 0])) <= 0.5) then {
+        _ctrlShotsIcon ctrlSetPosition [PX(0.5), PY(0.5), PX(5), PY(5)];
+        _ctrlShotsIcon ctrlCommit 0;
+        _ctrlShotsIcon ctrlSetPosition [PX(1), PY(1), PX(4), PY(4)];
+        _ctrlShotsIcon ctrlCommit 0.5;
+    };
+
 
     // setup weapons
     private _cfgWeapons = configFile >> "CfgWeapons";
@@ -491,14 +498,18 @@ private _unitInfoAllCtrls = [
             _picture = getText (_cfgWeapons >> _thisWeaponClass >> "picture");
         };
 
-        _ctrlPicture ctrlSetText _picture;
-        _ctrlPicture ctrlCommit 0;
-
         private _textColor = [1,1,1,0.5];
+        //private _weaponPictureSize = [PX(2), PY(4), PX(12), PY(6)];
+
         if (_currentWeapon == _thisWeaponClass && _thisWeaponClass != "") then {
             _textColor = [1,1,1,1];
+             //_weaponPictureSize = [PX(0), PY(3), PX(16), PY(8)];
 
         };
+        _ctrlPicture ctrlSetText _picture;
+        //_ctrlPicture ctrlSetPosition _weaponPictureSize;
+        _ctrlPicture ctrlCommit 0;
+
         _ctrlName ctrlSetText _weaponName;
         _ctrlName ctrlSetTextColor _textColor;
         _ctrlName ctrlCommit 0;
