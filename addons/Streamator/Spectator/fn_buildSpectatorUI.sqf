@@ -494,13 +494,13 @@ private _unitInfoAllCtrls = [
         _ctrlPicture ctrlSetText _picture;
         _ctrlPicture ctrlCommit 0;
 
-        private _textColor = [1,1,1,1];
+        private _textColor = [1,1,1,0.5];
         if (_currentWeapon == _thisWeaponClass && _thisWeaponClass != "") then {
-            _ctrlName ctrlSetText format ["[%1]", _weaponName];
-        } else {
-            _textColor = [1,1,1,0.6];
-            _ctrlName ctrlSetText _weaponName;
+            _textColor = [1,1,1,1];
+
         };
+        _ctrlName ctrlSetText _weaponName;
+        _ctrlName ctrlSetTextColor _textColor;
         _ctrlName ctrlCommit 0;
 
         _ctrlMagInfo ctrlSetText (_magInfo select _forEachIndex);
