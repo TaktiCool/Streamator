@@ -602,6 +602,7 @@ private _unitInfoAllCtrls = [
     (_this select 1) params ["_ctrlGrp"];
 
     if (!GVAR(UnitInfoOpen)) exitWith {};
+    _ctrlGrp ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(2), PX(100), 0];
     _ctrlGrp ctrlSetFade 1;
     _ctrlGrp ctrlCommit 0.3;
 
