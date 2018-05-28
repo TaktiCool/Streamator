@@ -558,7 +558,7 @@ private _unitInfoAllCtrls = [
 
 [QGVAR(OpenUnitInfo), {
     (_this select 0) params ["_unit"];
-    (_this select 1) params ["_ctrlGrp"];
+    (_this select 1) params ["_ctrlGrp","","","","","","","_ctrlSquadPicture"];
 
     GVAR(unitInfoTarget) = _unit;
     if (GVAR(UnitInfoOpen)) exitWith {
@@ -575,10 +575,16 @@ private _unitInfoAllCtrls = [
     _ctrlGrp ctrlSetFade 0;
     _ctrlGrp ctrlCommit 0.3;
 
+    _ctrlSquadPicture ctrlSetPosition [PX(11), PY(2), 0, PY(12)];
+    _ctrlSquadPicture ctrlCommit 0;
+
     [{
-        _this ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];
-        _this ctrlCommit 0.5;
-    }, 0.5, _ctrlGrp] call CFUNC(wait);
+        _this params ["_ctrlGrp","_ctrlSquadPicture"];
+        _ctrlGrp ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];
+        _ctrlGrp ctrlCommit 0.5;
+        _ctrlSquadPicture ctrlSetPosition [PX(5), PY(2), PX(12), PY(12)];
+        _ctrlSquadPicture ctrlCommit 0.5;
+    }, 0.5, [_ctrlGrp, _ctrlSquadPicture]] call CFUNC(wait);
 
     [{
         private _unit = GVAR(unitInfoTarget);
