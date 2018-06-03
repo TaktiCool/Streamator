@@ -17,7 +17,7 @@
 // Cursor Target
 private _nextTarget = objNull;
 private _intersectCam = AGLToASL positionCameraToWorld [0, 0, 0];
-private _intersectTarget = AGLToASL positionCameraToWorld [0, 0, 1000];
+private _intersectTarget = AGLToASL positionCameraToWorld [0, 0, 10000];
 private _object = lineIntersectsSurfaces [
     _intersectCam,
     _intersectTarget,
@@ -50,7 +50,14 @@ if (GVAR(OverlayUnitMarker)) then {
             _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = GVAR(Camera) distance _x;
             if (_distance < NAMETAGDIST) then {
-                private _icon = _x call FUNC(getUnitType);
+                private _iconType = _x getVariable QGVAR(unitType);
+                if (isNil "_iconType" || {(_iconType select 1) <= time}) then {
+                    private _icon = _x call FUNC(getUnitType);
+                    _iconType = [_icon, time + 60];
+                    _x setVariable [QGVAR(unitType), _iconType];
+                };
+                private _icon = _iconType select 0;
+
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
                 private _size = (0.4 max 2 / (sqrt _distance)) min 3;
 
@@ -84,7 +91,11 @@ if (GVAR(OverlayGroupMarker)) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
             private _distance = GVAR(Camera) distance _leader;
-            private _groupMapIcon = _x getVariable [QGVAR(GroupIcon), [side _x] call FUNC(getDefaultIcon)];
+            private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
+            if (isNil "_groupMapIcon") then {
+                _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
+                _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
+            };
             private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
 

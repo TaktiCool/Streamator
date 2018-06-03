@@ -704,22 +704,37 @@ private _unitInfoAllCtrls = [
                 private _guess = [];
                 private _searchableUnits = allUnits;
                 _searchableUnits append GVAR(allSpectators);
+                _searchableUnits append GVAR(CustomSearchItems);
                 _searchableUnits = _searchableUnits arrayIntersect _searchableUnits;
                 {
-                    if (alive _x) then {
-                        private _name = (_x call CFUNC(name));
-                        private _index = toLower _name find _searchStr;
-                        if (_index >= 0) then {
-                            _guess pushBack [_index, _x, _name];
+                    if (_x isEqualType []) then {
+                        _x params ["_name", "_data"];
+                        private _alive = true;
+                        if ((_data select 0) isEqualType objNull) then {
+                            _alive = alive (_data select 0);
                         };
-                        if (leader group _x == _x) then {
-                            private _name = groupId group _x;
-                            private _index = toLower _name find _searchStr;
+                        private _index = (toLower _name) find _searchStr;
+                        if (_index >= 0 && _alive) then {
+                            _guess pushBack [_index, _data, _name];
+                        };
+
+                    } else {
+                        if (alive _x) then {
+                            private _name = (_x call CFUNC(name));
+                            private _index = (toLower _name) find _searchStr;
                             if (_index >= 0) then {
                                 _guess pushBack [_index, _x, _name];
                             };
+                            if (leader group _x == _x) then {
+                                private _name = groupId group _x;
+                                private _index = (toLower _name) find _searchStr;
+                                if (_index >= 0) then {
+                                    _guess pushBack [_index, _x, _name];
+                                };
+                            };
                         };
                     };
+
                     false;
                 } count _searchableUnits;
 

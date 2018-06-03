@@ -8,6 +8,7 @@ class CfgCLibModules {
         MODULE(Spectator) {
             dependency[] = {"CLib"};
             APIFNC(addCustom3dIcon);
+            APIFNC(addSearchTarget);
             FNC(buildSpectatorUI);
             FNC(cameraUpdateLoop);
             FNC(clientInit);

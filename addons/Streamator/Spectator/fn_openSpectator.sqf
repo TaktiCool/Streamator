@@ -76,6 +76,7 @@ GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
+GVAR(CustomSearchItems) = [];
 
 GVAR(spectatorIcons) = [];
 GVAR(allSpectators) = [];
