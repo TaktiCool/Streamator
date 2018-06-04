@@ -192,6 +192,11 @@ private _return = switch (_keyCode) do {
                         if (_target isEqualType "") then {
                             _pos = AGLToASL getMarkerPos _target;
                         };
+
+                        if (_target isEqualType []) then {
+                            _pos = AGLToASL _target;
+                        };
+
                         private _diffVect = getPosASLVisual GVAR(Camera) vectorDiff _pos;
                         _diffVect set [2, 0];
                         GVAR(CameraPos) = _pos vectorAdd ((vectorNormalized _diffVect) vectorMultiply _targetDistance);
