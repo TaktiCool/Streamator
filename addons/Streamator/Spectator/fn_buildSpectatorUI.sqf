@@ -769,18 +769,29 @@ private _unitInfoAllCtrls = [
                     _guess = _guess select [GVAR(InputGuessIndex), count _guess];
                     private _bestGuess = _guess select 0;
                     private _guessStr = _guess apply {
-                        format [
+                        if (_x select 1 isEqualType objNull) then {
+                            format [
+                                "<t color='%1'>%2</t>",
+                                GVAR(SideColorsString) getVariable [str side group (_x select 1), "#ffffff"],
+                                (_x select 2)
+                            ]
+                        } else {
                             "<t color='%1'>%2</t>",
-                            GVAR(SideColorsString) getVariable [str side group (_x select 1), "#ffffff"],
+                            "#ffffff",
                             (_x select 2)
-                        ]
+                        }
+
                     };
                     _guessStr deleteAt 0;
 
                     if (GVAR(InputGuessIndex) > 0) then {
                         _temp = _temp + "<img size='0.5' image='\A3\ui_f\data\gui\rsccommon\rschtml\arrow_left_ca.paa'/>";
                     };
-                    private _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
+                    private _color =  "#ffffff";
+                    if (_x select 1 isEqualType objNull) then {
+                        _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
+                    };
+
 
                     _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
                     _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
