@@ -35,7 +35,7 @@ params [
 
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
-        if (GVAR(InputMode) != 2) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false};
 
         private _mapDisplay = uiNamespace getVariable [QGVAR(MapDisplay), displayNull];
         if (isNull _mapDisplay) then {
@@ -62,6 +62,18 @@ private _return = switch (_keyCode) do {
                     case DIK_ESCAPE;
                     case DIK_M: { // M
                         _display closeDisplay 1;
+                        true
+                    };
+                    case (DIK_E): { // E
+                        if !(_alt) exitWith {false};
+                        if (GVAR(InputMode) == 0) then {
+                            GVAR(InputMode) = 2;
+                            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                        } else {
+                            GVAR(InputMode) = 0;
+                            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                        };
+                        [CLib_Player, QGVAR(cursorPosition), nil, 0.2] call CFUNC(setVariablePublic);
                         true
                     };
                     default {
@@ -93,6 +105,7 @@ private _return = switch (_keyCode) do {
                     [CLib_Player, QGVAR(cursorPosition), [time, screenToWorld getMousePosition], 0.2] call CFUNC(setVariablePublic);
                 };
             }];
+
             _map ctrlAddEventHandler  ["MouseButtonDown", {
                 params ["", ["_button", -1, [0]]];
                 if (_button == 0) then {
@@ -142,6 +155,13 @@ private _return = switch (_keyCode) do {
                 GVAR(MapOpen) = false;
                 QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
 
+                [{
+                    if (GVAR(InputMode) == 2) then {
+                        if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
+                            uiNamespace setVariable [QGVAR(PlanningModeDisplay), (findDisplay 46) createDisplay "RscDisplayEmpty"];
+                        };
+                    };
+                }] call CFUNC(execNextFrame);
             }];
         } else {
             _mapDisplay closeDisplay 1;
@@ -324,11 +344,14 @@ private _return = switch (_keyCode) do {
         if !(_alt) exitWith {false};
         if (GVAR(InputMode) == 0) then {
             GVAR(InputMode) = 2;
-            if (isNil {uiNamespace getVariable QGVAR(PlanningModeDisplay)}) then {
+            GVAR(OverlayPlanningMode) = true;
+            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+            if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
                 uiNamespace setVariable [QGVAR(PlanningModeDisplay), (findDisplay 46) createDisplay "RscDisplayEmpty"];
             };
         } else {
             GVAR(InputMode) = 0;
+            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
         };
         [CLib_Player, QGVAR(cursorPosition), nil, 0.2] call CFUNC(setVariablePublic);
