@@ -115,3 +115,38 @@ if (GVAR(OverlayGroupMarker)) then {
         nil
     } count allGroups;
 };
+
+if (GVAR(OverlayPlanningMode)) then {
+
+    {
+        private _cursorPos = _x getVariable QGVAR(cursorPosition);
+        private _cursorHistory = _x getVariable [QGVAR(cursorPositionHistory), []];
+        if !(isNil "_cursorPos") then {
+            _cursorHistory pushBackUnique _cursorPos;
+        };
+        private _deleted = false;
+        {
+            _x params ["_time", "_pos"];
+            private _size = ((1.5 min (0.2 / ((GVAR(Camera) distance _pos) / 5000))) max 0.7)*2;
+            private _color = [1, 0, 1, 1];
+            private _alpha = 1 - (((serverTime - _time) - 1) max 0);
+            if !(_cursorPos isEqualTo _x) then {
+                _color = [1, 1, 0, _alpha];
+            };
+            if (_alpha == 0) then { // Check
+                _deleted = true;
+                _cursorHistory set [_forEachIndex, objNull];
+            } else {
+                drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, _x call CFUNC(name), 2, PY(2), "RobotoCondensedBold", "center"];
+            };
+
+        } forEach _cursorHistory;
+
+        if (_deleted) then {
+            _cursorHistory - [objNull];
+        };
+
+        _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
+        nil
+    } count GVAR(allSpectators) + [CLib_Player];
+};

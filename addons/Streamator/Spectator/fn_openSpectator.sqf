@@ -71,6 +71,7 @@ GVAR(hideUI) = false;
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
+GVAR(OverlayPlanningMode) = false;
 
 GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
@@ -78,9 +79,8 @@ GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
 GVAR(CustomSearchItems) = [];
 
-GVAR(spectatorIcons) = [];
 GVAR(allSpectators) = [];
-
+GVAR(PlanningModeIcons) = [];
 GVAR(UnitInfoOpen) = false;
 GVAR(unitInfoTarget) = objNull;
 
@@ -140,7 +140,18 @@ private _fnc_init = {
     (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
     (findDisplay 46) displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
-
+    (findDisplay 46) displayAddEventHandler ["MouseButtonDown", {
+        params ["", ["_button", -1, [0]]];
+        if (_button == 0) then {
+            GVAR(PlanningModeDrawing) = true;
+        };
+    }];
+    (findDisplay 46) displayAddEventHandler ["MouseButtonUp", {
+        params ["", ["_button", -1, [0]]];
+        if (_button == 0) then {
+            GVAR(PlanningModeDrawing) = false;
+        };
+    }];
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 

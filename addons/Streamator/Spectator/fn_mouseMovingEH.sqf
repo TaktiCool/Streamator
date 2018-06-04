@@ -28,3 +28,7 @@ GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5 * _fov_factor;
 GVAR(CameraPitch) = -89.0 max (89.9 min (GVAR(CameraPitch) - _deltaY * _fov_factor));
 
 GVAR(CameraDir) = ((((GVAR(CameraDir) - _dir) mod 360) min 90) max - 90) + _dir;
+
+if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
+    [CLib_Player, QGVAR(cursorPosition), [time, screenToWorld getMousePosition], 0.2] call CFUNC(setVariablePublic);
+};

@@ -18,7 +18,7 @@
     Event handled <Bool>
 */
 
-#define SAVERESTORE(slot) if (GVAR(InputMode) > 0) exitWith {false}; \
+#define SAVERESTORE(slot) if (GVAR(InputMode) == 1) exitWith {false}; \
 if (_ctrl) then { \
 [slot] call FUNC(savePosition); \
 } else { \
@@ -35,7 +35,7 @@ params [
 
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) != 2) exitWith {false};
 
         private _mapDisplay = uiNamespace getVariable [QGVAR(MapDisplay), displayNull];
         if (isNull _mapDisplay) then {
@@ -86,6 +86,53 @@ private _return = switch (_keyCode) do {
                 } else {false};
             }];
 
+            _map ctrlAddEventHandler ["MouseMoving", {
+                params ["_map", "_xPos", "_yPos"];
+                private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
+                if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
+                    [CLib_Player, QGVAR(cursorPosition), [time, screenToWorld getMousePosition], 0.2] call CFUNC(setVariablePublic);
+                };
+            }];
+            _map ctrlAddEventHandler  ["MouseButtonDown", {
+                params ["", ["_button", -1, [0]]];
+                if (_button == 0) then {
+                    GVAR(PlanningModeDrawing) = true;
+                };
+            }];
+            _map ctrlAddEventHandler  ["MouseButtonUp", {
+                params ["", ["_button", -1, [0]]];
+                if (_button == 0) then {
+                    GVAR(PlanningModeDrawing) = false;
+                };
+            }];
+            _map ctrlAddEventHandler ["Draw", {
+                {
+                    params [
+                        ["_map", controlNull, [controlNull]]
+                    ];
+                    private _cursorPos = _x getVariable QGVAR(cursorPosition);
+                    private _cursorHistory = _x getVariable [QGVAR(cursorPositionHistory), []];
+                    {
+                        _x params ["_time", "_pos"];
+                        private _color = [1, 0, 1, 1];
+                        private _alpha = 1 - (((serverTime - _time) - 1) max 0);
+                        if !(_cursorPos isEqualTo _x) then {
+                            _color = [1, 1, 0, _alpha];
+                        };
+                        if (_alpha != 0) then {
+                            private _mapScale = ctrlMapScale _map;
+                            private _textSize = PY(2);
+                            if (_mapScale < 0.1) then {
+                                _textSize = _textSize * ((_mapScale / 0.1) max 0.5);
+                            };
+
+                            _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, _x call CFUNC(name), 2, _textSize,  "RobotoCondensedBold", "right"];
+                        };
+
+                    } count _cursorHistory;
+                    nil
+                } count GVAR(allSpectators) + [CLib_Player];
+            }];
             _map ctrlAddEventHandler ["Destroy", {
                 params ["_map"];
                 [_map] call CFUNC(unregisterMapControl);
@@ -256,7 +303,7 @@ private _return = switch (_keyCode) do {
         QGVAR(updateInput) call CFUNC(localEvent);
         true
     };
-    case DIK_F5: { // F3
+    case DIK_F5: { // F5
         if (!isNull GVAR(CameraFollowTarget)) then {
             if (GVAR(UnitInfoOpen)) then {
                 QGVAR(CloseUnitInfo) call CFUNC(localEvent);
@@ -269,8 +316,25 @@ private _return = switch (_keyCode) do {
 
         true
     };
+    case DIK_F6: { // F6
+        GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
+        true
+    };
+    case DIK_E: {
+        if !(_alt) exitWith {false};
+        if (GVAR(InputMode) == 0) then {
+            GVAR(InputMode) = 2;
+            if (isNil {uiNamespace getVariable QGVAR(PlanningModeDisplay)}) then {
+                uiNamespace setVariable [QGVAR(PlanningModeDisplay), (findDisplay 46) createDisplay "RscDisplayEmpty"];
+            };
+        } else {
+            GVAR(InputMode) = 0;
+            (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
+        };
+        [CLib_Player, QGVAR(cursorPosition), nil, 0.2] call CFUNC(setVariablePublic);
+    };
     case DIK_N: { // N
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
         true

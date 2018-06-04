@@ -27,9 +27,12 @@ Key Binding | Short Description | Remarks
 **`F1`** | Toggle Group Markers | Toggles the visibility of group marker.
 **`F2`** | Toggle Unit Marker | Toggles the visibility of unit marker and names.
 **`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.
+**`F5`** | Toggle Unit Chyron | Toggles Chyron for the current Unit
+**`F6`** | Toggle Planing Mode Icons and Markers | Toggle Planing Mode Icons and Markers from other spectators
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
+**`ALT`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks
