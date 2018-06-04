@@ -401,6 +401,7 @@ private _unitInfoAllCtrls = [
     // set squad xml info /
     private _squadParams = squadParams _unit;
     if (_squadParams isEqualTo []) then {
+        _squadParams = _squadParams select 0;
         _ctrlSquadName ctrlSetText "";
         _ctrlSquadName ctrlCommit 0;
 
