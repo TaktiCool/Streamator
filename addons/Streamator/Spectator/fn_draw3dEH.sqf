@@ -41,6 +41,47 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 };
 if (GVAR(hideUI)) exitWith {};
 //HUD
+//PlanningMode
+if (GVAR(OverlayPlanningMode)) then {
+    {
+        private _unit = _x;
+        private _cursorPos = _unit getVariable QGVAR(cursorPosition);
+        private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
+        if !(isNil "_cursorPos") then {
+            _cursorHistory pushBackUnique _cursorPos;
+        };
+        private _deleted = false;
+        {
+            _x params ["_time", "_pos"];
+            private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
+            private _alpha = 1 - (serverTime - _time) max 0;
+            private _color = [1, 1, 1, _alpha];
+            private _text = "";
+            if (_cursorPos isEqualTo _x) then {
+                _color = [1, 1, 1, 1];
+                _text = _unit call CFUNC(name);
+            };
+            DUMP("Icon Size: " + str _size);
+            if (_alpha == 0) then {
+                _deleted = true;
+                _cursorHistory set [_forEachIndex, objNull];
+            } else {
+                drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, _text, 2, PY(2), "RobotoCondensedBold", "center"];
+            };
+        } forEach _cursorHistory;
+
+        if (_deleted) then {
+            _cursorHistory = _cursorHistory - [objNull];
+        };
+
+        _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
+        nil
+    } count ((GVAR(allSpectators) + [CLib_Player]) select {
+        (GVAR(PlanningModeChannel) == 0)
+         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+    });
+};
+
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
@@ -114,44 +155,4 @@ if (GVAR(OverlayGroupMarker)) then {
         };
         nil
     } count allGroups;
-};
-
-if (GVAR(OverlayPlanningMode)) then {
-    {
-        private _unit = _x;
-        private _cursorPos = _unit getVariable QGVAR(cursorPosition);
-        private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
-        if !(isNil "_cursorPos") then {
-            _cursorHistory pushBackUnique _cursorPos;
-        };
-        private _deleted = false;
-        {
-            _x params ["_time", "_pos"];
-            private _size = ((1.5 min (0.2 / ((GVAR(Camera) distance _pos) / 5000))) max 0.7);
-            private _alpha = linearConversion [0, 1, 1 - (serverTime - _time), 0, 1, true];
-            private _color = [1, 1, 1, _alpha];
-            private _text = "";
-            if (_cursorPos isEqualTo _x) then {
-                _color = [1, 1, 1, 1];
-                _text = _unit call CFUNC(name);
-            };
-
-            if (_alpha == 0) then {
-                _deleted = true;
-                _cursorHistory set [_forEachIndex, objNull];
-            } else {
-                drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, _text, 2, PY(2), "RobotoCondensedBold", "center"];
-            };
-        } forEach _cursorHistory;
-
-        if (_deleted) then {
-            _cursorHistory = _cursorHistory - [objNull];
-        };
-
-        _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
-        nil
-    } count ((GVAR(allSpectators) + [CLib_Player]) select {
-        (GVAR(PlanningModeChannel) == 0)
-         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
-    });
 };

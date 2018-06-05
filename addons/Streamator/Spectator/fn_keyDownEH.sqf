@@ -135,7 +135,7 @@ private _return = switch (_keyCode) do {
                     private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
                     {
                         _x params ["_time", "_pos"];
-                        private _alpha = linearConversion [0, 1, 1 - (serverTime - _time), 0, 1, true];
+                        private _alpha = 1 - (serverTime - _time) max 0;
                         private _color = [1, 1, 1, _alpha];
                         private _text = "";
                         if (_cursorPos isEqualTo _x) then {

@@ -565,7 +565,21 @@ _ctrlPlanningChannel ctrlCommit 0;
 [QGVAR(OpenUnitInfo), {
     (_this select 0) params ["_unit"];
     (_this select 1) params ["_ctrlGrp","","","","","","","_ctrlSquadPicture"];
-
+    if (isNull _unit) exitWith {
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+    };
+    if !(_unit isKindOf "CAManBase") then {
+        private _crew = crew _unit;
+        if !(_crew isEqualTo []) then {
+            _unit = _crew select 0;
+        };
+    };
+    if !(_unit isKindOf "CAManBase") exitWith {
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+    };
+    if (isNull _unit) exitWith {
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+    };
     GVAR(UnitInfoTarget) = _unit;
     if (GVAR(UnitInfoOpen)) exitWith {
         [QGVAR(UpdateUnitInfo), _unit] call CFUNC(localEvent);
@@ -631,7 +645,12 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(CameraTargetChanged), {
     if (GVAR(UnitInfoOpen)) then {
-        [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+        if (isNull GVAR(CameraFollowTarget)) then {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+        } else {
+            [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+        };
+
     };
 }] call CFUNC(addEventhandler);
 
@@ -769,7 +788,7 @@ _ctrlPlanningChannel ctrlCommit 0;
 }] call CFUNC(addEventhandler);
 
 [QGVAR(updateInput), {
-    (_this select 1) params ["_ctrl"];
+    (_this select 1) params ["_ctrl", "_ctrlPlanningChannel"];
 
     private _str = switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
@@ -852,7 +871,7 @@ _ctrlPlanningChannel ctrlCommit 0;
 
     _ctrl ctrlSetStructuredText parseText _str;
     _ctrl ctrlCommit 0;
-}, _ctrlInfo] call CFUNC(addEventhandler);
+}, [_ctrlInfo, _ctrlPlanningChannel]] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
     (_this select 1) params ["_ctrlGrp"];
