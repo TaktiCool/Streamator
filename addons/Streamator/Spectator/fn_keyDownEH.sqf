@@ -148,12 +148,10 @@ private _return = switch (_keyCode) do {
                             if (_cursorPos isEqualTo _x) then {
                                 _color set [3, 1];
                                 _text = _unit call CFUNC(name);
-
-                                    _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
-                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"];
-                                };
+                                _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
+                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"]
                             } else {
-                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"];
                             };
                         };
                     } count _cursorHistory;
