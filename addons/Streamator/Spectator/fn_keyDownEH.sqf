@@ -139,21 +139,23 @@ private _return = switch (_keyCode) do {
                         private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
                         _color set [3, _alpha];
                         private _text = "";
-                        if (_cursorPos isEqualTo _x) then {
-                            _color set [3, 1];
-                            _text = _unit call CFUNC(name);
+                        private _mapScale = ctrlMapScale _map;
+                        private _textSize = PY(4);
+                        if (_mapScale < 0.1) then {
+                            _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
                         };
-
                         if (_alpha != 0) then {
-                            private _mapScale = ctrlMapScale _map;
-                            private _textSize = PY(4);
-                            if (_mapScale < 0.1) then {
-                                _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
+                            if (_cursorPos isEqualTo _x) then {
+                                _color set [3, 1];
+                                _text = _unit call CFUNC(name);
+
+                                    _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
+                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"];
+                                };
+                            } else {
+                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
                             };
-
-                            _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
                         };
-
                     } count _cursorHistory;
                     nil
                 } count ((GVAR(allSpectators) + [CLib_Player]) select {
