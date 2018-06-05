@@ -79,9 +79,10 @@ GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
 
 GVAR(allSpectators) = [];
-GVAR(PlanningModeIcons) = [];
 GVAR(UnitInfoOpen) = false;
 GVAR(UnitInfoTarget) = objNull;
+
+GVAR(PlanningModeChannel) = 0;
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";

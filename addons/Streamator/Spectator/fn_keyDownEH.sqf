@@ -145,9 +145,9 @@ private _return = switch (_keyCode) do {
 
                         if (_alpha != 0) then {
                             private _mapScale = ctrlMapScale _map;
-                            private _textSize = PY(2);
+                            private _textSize = PY(4);
                             if (_mapScale < 0.1) then {
-                                _textSize = _textSize * ((_mapScale / 0.1) max 0.5);
+                                _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
                             };
 
                             _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
@@ -155,7 +155,10 @@ private _return = switch (_keyCode) do {
 
                     } count _cursorHistory;
                     nil
-                } count GVAR(allSpectators) + [CLib_Player];
+                } count ((GVAR(allSpectators) + [CLib_Player]) select {
+                    (GVAR(PlanningModeChannel) == 0)
+                     || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+                });
             }];
             _map ctrlAddEventHandler ["Destroy", {
                 params ["_map"];
@@ -349,7 +352,7 @@ private _return = switch (_keyCode) do {
         true
     };
     case DIK_E: { // E
-        if !(_alt) exitWith {false};
+        if !(_ctrl) exitWith {false};
         if (GVAR(InputMode) == 0) then {
             GVAR(InputMode) = 2;
             GVAR(OverlayPlanningMode) = true;
@@ -367,6 +370,18 @@ private _return = switch (_keyCode) do {
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
         true
+    };
+    case DIK_PGDN: { // Page Down
+        GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
+        CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+        QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+        true;
+    };
+    case DIK_PGUP: { // Page Up
+        GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
+        CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+        QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+        true;
     };
 
     case DIK_1;

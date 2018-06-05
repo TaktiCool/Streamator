@@ -369,6 +369,13 @@ private _unitInfoAllCtrls = [
     _ctrlStats
 ];
 
+private _ctrlPlanningChannel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlPlanningChannel ctrlSetPosition [safeZoneX, safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
+_ctrlPlanningChannel ctrlSetFontHeight PY(1.5);
+_ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
+_ctrlPlanningChannel ctrlSetText "Channel: All";
+_ctrlPlanningChannel ctrlCommit 0;
+
 [QGVAR(UpdateUnitInfo), {
     (_this select 0) params ["_unit"];
     (_this select 1) params ["_ctrlGrp", "", "_ctrlUnitName",
@@ -611,6 +618,16 @@ private _unitInfoAllCtrls = [
 
     GVAR(UnitInfoOpen) = false;
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
+
+[QGVAR(PlanningModeChannelChanged), {
+    (_this select 1) params ["_ctrl"];
+    if (GVAR(PlanningModeChannel) == 0) then {
+        _ctrl ctrlSetText format ["Channel: %1", "All"];
+    } else {
+        _ctrl ctrlSetText format ["Channel: %1", GVAR(PlanningModeChannel)];
+    };
+    _ctrl ctrlCommit 0;
+}, _ctrlPlanningChannel] call CFUNC(addEventhandler);
 
 [QGVAR(CameraTargetChanged), {
     if (GVAR(UnitInfoOpen)) then {

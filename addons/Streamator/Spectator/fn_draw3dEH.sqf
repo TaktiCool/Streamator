@@ -150,5 +150,8 @@ if (GVAR(OverlayPlanningMode)) then {
 
         _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
         nil
-    } count GVAR(allSpectators) + [CLib_Player];
+    } count ((GVAR(allSpectators) + [CLib_Player]) select {
+        (GVAR(PlanningModeChannel) == 0)
+         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+    });
 };
