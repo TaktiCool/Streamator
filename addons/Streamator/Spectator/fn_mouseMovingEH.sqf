@@ -23,7 +23,15 @@ params [
 
 if (GVAR(InputMode) == 2) then {
     if (GVAR(PlanningModeDrawing)) then {
-        [CLib_Player, QGVAR(cursorPosition), [serverTime, screenToWorld getMousePosition], 0.03] call CFUNC(setVariablePublic);
+        private _endPosition = screenToWorld getMousePosition;
+        private _startPosition = positionCameraToWorld [0, 0, 0];
+        private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
+        if !(_intersectArray isEqualTo []) then {
+            (_intersectArray select 0) params ["_intersectPosition"];
+            _endPosition = ASLtoAGL _intersectPosition;
+        };
+
+        [CLib_Player, QGVAR(cursorPosition), [serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
 } else {
     private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;

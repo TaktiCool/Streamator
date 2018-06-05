@@ -48,12 +48,36 @@ if (GVAR(OverlayPlanningMode)) then {
         private _cursorPos = _unit getVariable QGVAR(cursorPosition);
         private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
         if !(isNil "_cursorPos") then {
-            _cursorHistory pushBackUnique _cursorPos;
+            _cursorPos params ["_newtime", "_newpos"];
+            if (_cursorHistory isEqualTo []) then {
+                _cursorHistory pushBackUnique _cursorPos;
+            } else {
+                _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
+                if !(_lastPosition isEqualTo _cursorPos) then {
+                    _lastPosition params ["_lasttime", "_lastpos"];
+                    if ((_newtime - _lasttime) < 0.1) then {
+                        _lastpos = AGLtoASL _lastpos;
+                        _newpos = AGLtoASL _newpos;
+                        private _diffpos = _newpos vectorDiff _lastpos;
+                        private _dist = vectorMagnitude _diffpos;
+                        _diffpos = vectorNormalized _diffPos;
+                        private _stepSize = 5;
+                        private _nSteps = (round (_dist/5) min 20) max 2;
+                        private _tSteps = (_newtime - _lasttime)/_nSteps;
+                        private _sSteps = _dist/_nSteps;
+                        for "_cnt" from 1 to _nSteps do {
+                            _cursorHistory pushBackUnique [_lasttime + _tSteps*_cnt, ASLtoAGL (_lastpos vectorAdd (_diffPos vectorMultiply (_cnt*_sSteps)))];
+                        };
+                    };
+                    _cursorHistory pushBackUnique _cursorPos;
+                };
+            };
         };
         private _deleted = false;
         {
             _x params ["_time", "_pos"];
-            private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
+            //private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
+            private _size = (0.8 min (1 / (((GVAR(Camera) distance _pos) / 100)^0.5)) max 0.15);
             private _alpha = 1 - (serverTime - _time) max 0;
             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
             _color set [3, _alpha];
@@ -64,7 +88,7 @@ if (GVAR(OverlayPlanningMode)) then {
             } else {
                 if (_cursorPos isEqualTo _x) then {
                     _color set [3, 1];
-                    _text = _unit call CFUNC(name);
+                    _text = format ["[%1] %2", [GVAR(PlanningModeChannel), "All"] select (GVAR(PlanningModeChannel) == 0), (_unit call CFUNC(name))];
                     drawIcon3D ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, _size, _size, 0, _text, 2, PY(2), "RobotoCondensedBold", "center"];
                     drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 2, PY(2), "RobotoCondensedBold", "center"];
                 } else {
@@ -82,6 +106,7 @@ if (GVAR(OverlayPlanningMode)) then {
     } count ((GVAR(allSpectators) + [CLib_Player]) select {
         (GVAR(PlanningModeChannel) == 0)
          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
     });
 };
 

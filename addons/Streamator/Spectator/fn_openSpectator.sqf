@@ -88,7 +88,7 @@ GVAR(PlanningModeColorRGB) = [[1,0,0],[1,1,0],[0,0.2,1],[0.8,0.4,1],[0.4,1,0.4],
 GVAR(PlanningModeColor) = floor (random (count GVAR(PlanningModeColorRGB)));
 CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
 
-GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB)  apply {_x call BIS_fnc_colorRGBtoHTML;};
+GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_colorRGBtoHTML;};
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
@@ -157,7 +157,6 @@ DFUNC(createPlanningDisplay) = {
                 params ["", ["_button", -1, [0]]];
                 if (_button == 0) then {
                     GVAR(PlanningModeDrawing) = false;
-                    [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
                 };
             }];
             _display displayAddEventHandler ["Unload", {
@@ -192,7 +191,6 @@ private _fnc_init = {
         params ["", ["_button", -1, [0]]];
         if (_button == 0) then {
             GVAR(PlanningModeDrawing) = false;
-            [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
         };
     }];
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
