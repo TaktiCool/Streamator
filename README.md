@@ -35,6 +35,7 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
+**`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks
@@ -43,6 +44,10 @@ Key Binding | Short Description | Remarks
 **`ALT`** + **`LMB`** | Move camera | Moves the camera to the clicked position
 **`LMB`** (Dbl. Click) on Marker | Focus Unit/Vehicle | Focusses a unit or vehicle.
 Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups: ID and group members<br>Vehicles: type and units<br>
+**`CTRL`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
+**`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
+**`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
+**`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
 
 # Creators Manual
 TBD
