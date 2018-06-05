@@ -153,7 +153,7 @@ private _return = switch (_keyCode) do {
                                     _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"];
                                 };
                             } else {
-                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
                             };
                         };
                     } count _cursorHistory;
