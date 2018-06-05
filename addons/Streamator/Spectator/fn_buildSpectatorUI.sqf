@@ -222,7 +222,7 @@ _ctrlSquadName ctrlSetPosition [PX(0), PY(14.5), PX(22), PY(3)];
 _ctrlSquadName ctrlSetFontHeight PY(2.4);
 _ctrlSquadName ctrlSetFont "RobotoCondensedBold";
 _ctrlSquadName ctrlSetTextColor [1, 1, 1, 1];
-_ctrlSquadName ctrlSetText "TACTICAL TRAINING TEAM"; // Squad XML Name
+_ctrlSquadName ctrlSetText "ARMA AT WAR"; // Squad XML Name
 _ctrlSquadName ctrlCommit 0;
 
 private _ctrlGrpUnitInfoHealth= _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrpUnitInfo];
@@ -370,10 +370,10 @@ private _unitInfoAllCtrls = [
 ];
 
 private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-_ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW, PY(1.8)];
+_ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
 _ctrlPlanningChannel ctrlSetFontHeight PY(1.5);
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode)];
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t> <t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(UpdateUnitInfo), {
@@ -407,8 +407,8 @@ _ctrlPlanningChannel ctrlCommit 0;
 
     // set squad xml info /
     private _squadParams = squadParams _unit;
+    LOG("Squad Params: " + str _squadParams);
     if (_squadParams isEqualTo []) then {
-        _squadParams = _squadParams select 0;
         _ctrlSquadName ctrlSetText "";
         _ctrlSquadName ctrlCommit 0;
 
@@ -419,6 +419,7 @@ _ctrlPlanningChannel ctrlCommit 0;
         _ctrlSquadPicture ctrlSetText _squadImage;
         _ctrlSquadPicture ctrlCommit 0;
     } else {
+        _squadParams = _squadParams select 0;
         _ctrlSquadName ctrlSetText toUpper (_squadParams select 1);
         _ctrlSquadName ctrlCommit 0;
 
@@ -636,9 +637,9 @@ _ctrlPlanningChannel ctrlCommit 0;
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
     if (GVAR(PlanningModeChannel) == 0) then {
-        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", "All", ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode)];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t> <t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
     } else {
-        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode)];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>  <t color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
     };
     _ctrl ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
@@ -875,9 +876,10 @@ _ctrlPlanningChannel ctrlCommit 0;
 }, [_ctrlInfo, _ctrlPlanningChannel]] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
-    (_this select 1) params ["_ctrlGrp"];
+    (_this select 1) params ["_ctrlGrp", "_ctrlGrpUnitInfo"];
     GVAR(hideUI) = !GVAR(hideUI);
     _ctrlGrp ctrlShow !GVAR(hideUI);
+    QGVAR(CloseUnitInfo) call CFUNC(localEvent);
 }, _ctrlGrp] call CFUNC(addEventhandler);
 
 [{

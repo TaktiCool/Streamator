@@ -55,13 +55,13 @@ if (GVAR(OverlayPlanningMode)) then {
             _x params ["_time", "_pos"];
             private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
             private _alpha = 1 - (serverTime - _time) max 0;
-            private _color = [1, 1, 1, _alpha];
+            private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
+            _color set [3, _alpha];
             private _text = "";
             if (_cursorPos isEqualTo _x) then {
-                _color = [1, 1, 1, 1];
+                _color set [3, 1];
                 _text = _unit call CFUNC(name);
             };
-            DUMP("Icon Size: " + str _size);
             if (_alpha == 0) then {
                 _deleted = true;
                 _cursorHistory set [_forEachIndex, objNull];

@@ -83,6 +83,12 @@ GVAR(UnitInfoOpen) = false;
 GVAR(UnitInfoTarget) = objNull;
 
 GVAR(PlanningModeChannel) = 0;
+// ["#FF0000","#FFFF00","#0033FF","#CC66FF","#66FF66","#FF6600","#FFFFFF","#6699FF","#00FFFF","#99FF66","#339933","#FF0066","#CC3300","#0033CC"]
+GVAR(PlanningModeColorRGB) = [[1,0,0],[1,1,0],[0,0.2,1],[0.8,0.4,1],[0.4,1,0.4],[1,0.4,0],[1,1,1],[0.4,0.6,1],[0,1,1],[0.6,1,0.4],[0.2,0.6,0.2],[1,0,0.4],[0.8,0.2,0],[0,0.2,0.8]];
+GVAR(PlanningModeColor) = floor (random (count GVAR(PlanningModeColorRGB)));
+CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+
+GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB)  apply {_x call BIS_fnc_colorRGBtoHTML;};
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";

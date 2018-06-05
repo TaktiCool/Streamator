@@ -35,6 +35,8 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
+**`CTRL`** + **`PAGE UP`** | Change Planning Mode Color | Change Planning Mode Color
+**`CTRL`** + **`PAGE DOWN`** | Change Planning Mode Color | Change Planning Mode Color
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
 
 ## MAP VIEW
