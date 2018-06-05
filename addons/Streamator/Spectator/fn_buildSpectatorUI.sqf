@@ -369,11 +369,11 @@ private _unitInfoAllCtrls = [
     _ctrlStats
 ];
 
-private _ctrlPlanningChannel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
-_ctrlPlanningChannel ctrlSetPosition [safeZoneX, safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
+private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW, PY(1.8)];
 _ctrlPlanningChannel ctrlSetFontHeight PY(1.5);
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetText "Channel: All";
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode)];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(UpdateUnitInfo), {
@@ -636,9 +636,9 @@ _ctrlPlanningChannel ctrlCommit 0;
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
     if (GVAR(PlanningModeChannel) == 0) then {
-        _ctrl ctrlSetText format ["Channel: %1", "All"];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", "All", ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode)];
     } else {
-        _ctrl ctrlSetText format ["Channel: %1", GVAR(PlanningModeChannel)];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode)];
     };
     _ctrl ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
@@ -871,6 +871,7 @@ _ctrlPlanningChannel ctrlCommit 0;
 
     _ctrl ctrlSetStructuredText parseText _str;
     _ctrl ctrlCommit 0;
+    QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
 }, [_ctrlInfo, _ctrlPlanningChannel]] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
