@@ -71,18 +71,17 @@ GVAR(hideUI) = false;
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
-GVAR(OverlayPlanningMode) = false;
+GVAR(OverlayPlanningMode) = true;
 
 GVAR(InputMode) = 0;
 GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
-GVAR(CustomSearchItems) = [];
 
 GVAR(allSpectators) = [];
 GVAR(PlanningModeIcons) = [];
 GVAR(UnitInfoOpen) = false;
-GVAR(unitInfoTarget) = objNull;
+GVAR(UnitInfoTarget) = objNull;
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
@@ -132,6 +131,42 @@ DFUNC(updateSpectatorArray) = {
     }, 3] call CFUNC(wait);
 };
 
+DFUNC(createPlanningDisplay) = {
+    if (GVAR(InputMode) == 2) then {
+        if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
+            private _display = (findDisplay 46) createDisplay "RscDisplayEmpty";
+            uiNamespace setVariable [QGVAR(PlanningModeDisplay), _display];
+            _display displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
+            _display displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
+            _display displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
+            _display displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
+            _display displayAddEventHandler ["MouseButtonDown", {
+                params ["", ["_button", -1, [0]]];
+                if (_button == 0) then {
+                    GVAR(PlanningModeDrawing) = true;
+                };
+            }];
+            _display displayAddEventHandler ["MouseButtonUp", {
+                params ["", ["_button", -1, [0]]];
+                if (_button == 0) then {
+                    GVAR(PlanningModeDrawing) = false;
+                    [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
+                };
+            }];
+            _display displayAddEventHandler ["Unload", {
+                if (!GVAR(MapOpen)) then {
+                    GVAR(InputMode) = 0;
+                    [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                    [{
+                        (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
+                    }] call CFUNC(execNextFrame);
+                };
+            }];
+        };
+    } else {
+        (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
+    };
+};
 
 private _fnc_init = {
     // Disable BI
@@ -150,6 +185,7 @@ private _fnc_init = {
         params ["", ["_button", -1, [0]]];
         if (_button == 0) then {
             GVAR(PlanningModeDrawing) = false;
+            [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
         };
     }];
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);

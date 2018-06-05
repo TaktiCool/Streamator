@@ -49,6 +49,7 @@ private _return = switch (_keyCode) do {
             _map ctrlCommit 0;
 
             GVAR(MapOpen) = true;
+            (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
             QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
             GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_player]];
 
@@ -73,7 +74,11 @@ private _return = switch (_keyCode) do {
                             GVAR(InputMode) = 0;
                             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
                         };
-                        [CLib_Player, QGVAR(cursorPosition), nil, 0.2] call CFUNC(setVariablePublic);
+                        [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
+                        true
+                    };
+                    case DIK_F6: { // F6
+                        GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
                         true
                     };
                     default {
@@ -84,7 +89,7 @@ private _return = switch (_keyCode) do {
 
             _map ctrlAddEventHandler ["MouseButtonClick", {
                 params ["_map", "", "_xpos", "_ypos", "", "", "_alt"];
-                if (_alt) then {
+                if (_alt) exitWith {
                     private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
                     private _prevUnit = GVAR(CameraFollowTarget);
@@ -95,14 +100,14 @@ private _return = switch (_keyCode) do {
                     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
                     [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
                     true;
-                } else {false};
+                };
+                false;
             }];
 
             _map ctrlAddEventHandler ["MouseMoving", {
                 params ["_map", "_xPos", "_yPos"];
-                private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
                 if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
-                    [CLib_Player, QGVAR(cursorPosition), [time, screenToWorld getMousePosition], 0.2] call CFUNC(setVariablePublic);
+                    [CLib_Player, QGVAR(cursorPosition), [serverTime, _map ctrlMapScreenToWorld [_xPos, _yPos]], 0.03] call CFUNC(setVariablePublic);
                 };
             }];
 
@@ -116,22 +121,28 @@ private _return = switch (_keyCode) do {
                 params ["", ["_button", -1, [0]]];
                 if (_button == 0) then {
                     GVAR(PlanningModeDrawing) = false;
+                    [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
                 };
             }];
             _map ctrlAddEventHandler ["Draw", {
+                params [
+                    ["_map", controlNull, [controlNull]]
+                ];
+                if (!GVAR(OverlayPlanningMode)) exitWith {};
                 {
-                    params [
-                        ["_map", controlNull, [controlNull]]
-                    ];
-                    private _cursorPos = _x getVariable QGVAR(cursorPosition);
-                    private _cursorHistory = _x getVariable [QGVAR(cursorPositionHistory), []];
+                    private _unit = _x;
+                    private _cursorPos = _unit getVariable QGVAR(cursorPosition);
+                    private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
                     {
                         _x params ["_time", "_pos"];
-                        private _color = [1, 0, 1, 1];
-                        private _alpha = 1 - (((serverTime - _time) - 1) max 0);
-                        if !(_cursorPos isEqualTo _x) then {
-                            _color = [1, 1, 0, _alpha];
+                        private _alpha = linearConversion [0, 1, 1 - (serverTime - _time), 0, 1, true];
+                        private _color = [1, 1, 1, _alpha];
+                        private _text = "";
+                        if (_cursorPos isEqualTo _x) then {
+                            _color = [1, 1, 1, 1];
+                            _text = _unit call CFUNC(name);
                         };
+
                         if (_alpha != 0) then {
                             private _mapScale = ctrlMapScale _map;
                             private _textSize = PY(2);
@@ -139,7 +150,7 @@ private _return = switch (_keyCode) do {
                                 _textSize = _textSize * ((_mapScale / 0.1) max 0.5);
                             };
 
-                            _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, _x call CFUNC(name), 2, _textSize,  "RobotoCondensedBold", "right"];
+                            _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 25, 25, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
                         };
 
                     } count _cursorHistory;
@@ -156,11 +167,7 @@ private _return = switch (_keyCode) do {
                 QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
 
                 [{
-                    if (GVAR(InputMode) == 2) then {
-                        if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
-                            uiNamespace setVariable [QGVAR(PlanningModeDisplay), (findDisplay 46) createDisplay "RscDisplayEmpty"];
-                        };
-                    };
+                    call FUNC(createPlanningDisplay);
                 }] call CFUNC(execNextFrame);
             }];
         } else {
@@ -170,7 +177,7 @@ private _return = switch (_keyCode) do {
         true
     };
     case DIK_F: { // F
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) != 0) exitWith {false};
         if (_ctrl) exitWith {
             GVAR(InputMode) = 1;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
@@ -197,25 +204,25 @@ private _return = switch (_keyCode) do {
         };
     };
     case DIK_LSHIFT: { // LShift
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false};
         GVAR(CameraSpeedMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_LCONTROL: { // LCTRL
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false};
         GVAR(CameraSmoothingMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_LALT: { // LCTRL
-        if (GVAR(InputMode) > 0) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false};
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false
     };
     case DIK_ESCAPE: { // ESC
-        if (GVAR(InputMode) > 0) exitWith {
+        if (GVAR(InputMode) == 1) exitWith {
             GVAR(InputMode) = 0;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             true
@@ -223,7 +230,7 @@ private _return = switch (_keyCode) do {
         false
     };
     case DIK_TAB: { // TAB
-        if (GVAR(InputMode) > 0) exitWith {
+        if (GVAR(InputMode) == 1) exitWith {
             GVAR(InputGuessIndex) = GVAR(InputGuessIndex) + ([1, -1] select _shift);
             if (GVAR(InputGuessIndex) < 0) then {
                 GVAR(InputGuessIndex) = count GVAR(InputGuess) - 1;
@@ -302,9 +309,10 @@ private _return = switch (_keyCode) do {
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             true
         };
+        false;
     };
     case DIK_BACKSPACE: { // BACKSPACE
-        if (GVAR(InputMode) > 0) exitWith {GVAR(InputMode) == 0};
+        if (GVAR(InputMode) == 1) exitWith {GVAR(InputMode) == 0};
         QGVAR(toggleUI) call CFUNC(localEvent);
         true;
     };
@@ -340,21 +348,19 @@ private _return = switch (_keyCode) do {
         GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
         true
     };
-    case DIK_E: {
+    case DIK_E: { // E
         if !(_alt) exitWith {false};
         if (GVAR(InputMode) == 0) then {
             GVAR(InputMode) = 2;
             GVAR(OverlayPlanningMode) = true;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-            if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
-                uiNamespace setVariable [QGVAR(PlanningModeDisplay), (findDisplay 46) createDisplay "RscDisplayEmpty"];
-            };
+            call FUNC(createPlanningDisplay);
         } else {
             GVAR(InputMode) = 0;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
         };
-        [CLib_Player, QGVAR(cursorPosition), nil, 0.2] call CFUNC(setVariablePublic);
+        [CLib_Player, QGVAR(cursorPosition), nil, 0.03] call CFUNC(setVariablePublic);
     };
     case DIK_N: { // N
         if (GVAR(InputMode) == 1) exitWith {false};
@@ -377,7 +383,7 @@ private _return = switch (_keyCode) do {
         true;
     };
 
-    case DIK_R: {
+    case DIK_R: { // R
         if !(isNull GVAR(CameraFollowTarget)) exitWith {
             private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
             [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
@@ -391,7 +397,7 @@ private _return = switch (_keyCode) do {
     };
 };
 
-if (!_return && GVAR(InputMode) > 0) then {
+if (!_return && GVAR(InputMode) == 1) then {
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;

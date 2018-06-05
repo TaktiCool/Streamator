@@ -477,7 +477,6 @@ private _unitInfoAllCtrls = [
 
     private _magInfo = [_primaryMagLoaded, _secondaryMagLoaded, _handgunMagLoaded];
     private _magInfo2 = [format ["%1", _nbrPrimaryMags], format ["%1", _nbrSecondaryMags], format ["%1", _nbrHandgunMags]];
-    DUMP(_magInfo2);
     private _weaponclass = [primaryWeapon _unit, secondaryWeapon _unit, handgunWeapon _unit];
     private _emptyPicture = [
         "A3\ui_f\data\gui\rsc\rscdisplaygear\ui_gear_primary_gs.paa",
@@ -554,14 +553,13 @@ private _unitInfoAllCtrls = [
         _ctrlValue ctrlSetText format ["%1", _value];
         _ctrlValue ctrlCommit 0;
     } forEach _ctrlStats;
-
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
 
 [QGVAR(OpenUnitInfo), {
     (_this select 0) params ["_unit"];
     (_this select 1) params ["_ctrlGrp","","","","","","","_ctrlSquadPicture"];
 
-    GVAR(unitInfoTarget) = _unit;
+    GVAR(UnitInfoTarget) = _unit;
     if (GVAR(UnitInfoOpen)) exitWith {
         [QGVAR(UpdateUnitInfo), _unit] call CFUNC(localEvent);
     };
@@ -588,7 +586,7 @@ private _unitInfoAllCtrls = [
     }, 0.5, [_ctrlGrp, _ctrlSquadPicture]] call CFUNC(wait);
 
     [{
-        private _unit = GVAR(unitInfoTarget);
+        private _unit = GVAR(UnitInfoTarget);
         if (GVAR(UnitInfoOpen)) then {
             [QGVAR(UpdateUnitInfo), _unit] call CFUNC(localEvent);
         } else {
@@ -770,18 +768,30 @@ private _unitInfoAllCtrls = [
                     _guess = _guess select [GVAR(InputGuessIndex), count _guess];
                     private _bestGuess = _guess select 0;
                     private _guessStr = _guess apply {
-                        if (_x select 1 isEqualType objNull) then {
-                            format [
-                                "<t color='%1'>%2</t>",
-                                GVAR(SideColorsString) getVariable [str side group (_x select 1), "#ffffff"],
-                                (_x select 2)
-                            ]
-                        } else {
-                            "<t color='%1'>%2</t>",
-                            "#ffffff",
-                            (_x select 2)
-                        }
-
+                        _x params ["", "_target", "_name"];
+                        switch (typeName _target) do {
+                            case ("OBJECT"): {
+                                format [
+                                    "<t color='%1'>%2</t>",
+                                    GVAR(SideColorsString) getVariable [str side group _target, "#ffffff"],
+                                    _name
+                                ]
+                            };
+                            case ("GROUP"): {
+                                format [
+                                    "<t color='%1'>%2</t>",
+                                    GVAR(SideColorsString) getVariable [str side _target, "#ffffff"],
+                                    _name
+                                ]
+                            };
+                            default {
+                                format [
+                                    "<t color='%1'>%2</t>",
+                                    "#ffffff",
+                                    _name
+                                ]
+                            };
+                        };
                     };
                     _guessStr deleteAt 0;
 
@@ -789,7 +799,7 @@ private _unitInfoAllCtrls = [
                         _temp = _temp + "<img size='0.5' image='\A3\ui_f\data\gui\rsccommon\rschtml\arrow_left_ca.paa'/>";
                     };
                     private _color =  "#ffffff";
-                    if (_x select 1 isEqualType objNull) then {
+                    if ((_bestGuess select 1) isEqualType objNull) then {
                         _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
                     };
 
