@@ -142,16 +142,18 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
     _defaultState;
 }] call CFUNC(addStatemachineState);
 
-["DrawMapGraphics", {
-    if (GVAR(lastFrameTriggered) != diag_frameNo) then {
-        GVAR(ProcessingSM) call CFUNC(stepStatemachine);
-        GVAR(lastFrameTriggered) = diag_frameNo;
-    };
-}] call CFUNC(addEventhandler);
+["missionStarted", {
+    ["DrawMapGraphics", {
+        if (GVAR(lastFrameTriggered) != diag_frameNo) then {
+            GVAR(ProcessingSM) call CFUNC(stepStatemachine);
+            GVAR(lastFrameTriggered) = diag_frameNo;
+        };
+    }] call CFUNC(addEventhandler);
 
-[{
-    if (GVAR(lastFrameTriggered) != diag_frameNo) then {
-        GVAR(ProcessingSM) call CFUNC(stepStatemachine);
-        GVAR(lastFrameTriggered) = diag_frameNo;
-    };
-}, 0.25] call CFUNC(addPerFrameHandler);
+    [{
+        if (GVAR(lastFrameTriggered) != diag_frameNo) then {
+            GVAR(ProcessingSM) call CFUNC(stepStatemachine);
+            GVAR(lastFrameTriggered) = diag_frameNo;
+        };
+    }, 0.25] call CFUNC(addPerFrameHandler);
+}] call CFUNC(addEventhandler);

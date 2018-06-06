@@ -58,11 +58,12 @@ _ctrlInfo ctrlSetFont "RobotoCondensed";
 _ctrlInfo ctrlSetText "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV";
 _ctrlInfo ctrlCommit 0;
 
+private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
+
 private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlCameraMode ctrlSetPosition [safeZoneW - PY(22),  PY(0.3), PX(20), PY(1.8)];
-_ctrlCameraMode ctrlSetFontHeight PY(1.5);
 _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
-_ctrlCameraMode ctrlSetStructuredText parseText "<t align='right'>FREE</t>";
+_ctrlCameraMode ctrlSetStructuredText parseText format ["<t align='right' size='%1'>FREE</t>", _smallTextSize];
 _ctrlCameraMode ctrlCommit 0;
 
 private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
@@ -368,18 +369,16 @@ private _unitInfoAllCtrls = [
     _ctrlWeaponSlots,
     _ctrlStats
 ];
-
 private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
-_ctrlPlanningChannel ctrlSetFontHeight PY(1.5);
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t> | <t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(UpdateUnitInfo), {
     (_this select 0) params ["_unit"];
     (_this select 1) params ["_ctrlGrp", "", "_ctrlUnitName",
-    "_ctrlRoleIconBackground", "", "_ctrlGroupId",
+    "_ctrlRoleIconBackground", "_ctrlUnitRoleIcon", "_ctrlGroupId",
     "","_ctrlSquadPicture", "_ctrlSquadName",
     "", "", "_ctrlHealthRing", "_ctrlHealthValue",
     "", "_ctrlShotsIcon", "_ctrlShotsValue",
@@ -507,15 +506,11 @@ _ctrlPlanningChannel ctrlCommit 0;
         };
 
         private _textColor = [1,1,1,0.5];
-        //private _weaponPictureSize = [PX(2), PY(4), PX(12), PY(6)];
 
         if (_currentWeapon == _thisWeaponClass && _thisWeaponClass != "") then {
             _textColor = [1,1,1,1];
-             //_weaponPictureSize = [PX(0), PY(3), PX(16), PY(8)];
-
         };
         _ctrlPicture ctrlSetText _picture;
-        //_ctrlPicture ctrlSetPosition _weaponPictureSize;
         _ctrlPicture ctrlCommit 0;
 
         _ctrlName ctrlSetText _weaponName;
@@ -636,10 +631,11 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
+    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     if (GVAR(PlanningModeChannel) == 0) then {
-        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t> | <t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
     } else {
-        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1</t> |  <t color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
     };
     _ctrl ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
@@ -704,7 +700,8 @@ _ctrlPlanningChannel ctrlCommit 0;
 
     private _textMode = ["FREE", format ["FOLLOW [%1]", GVAR(CameraFollowTarget) call CFUNC(name)]] select (_mode - 1);
 
-    _ctrl ctrlSetStructuredText parseText format ["<t align='right'>%1</t>", _textMode];
+    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
+    _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
     _ctrl ctrlCommit 0;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
@@ -729,9 +726,7 @@ _ctrlPlanningChannel ctrlCommit 0;
 }, [_ctrlFOVLabel, _ctrlMouseSmoothingLabel, _ctrlMouseSpeedLabel]] call CFUNC(addEventhandler);
 
 [QGVAR(updateGuess), {
-    (_this select 1) params ["_ctrl"];
-
-    private _str = switch (GVAR(InputMode)) do {
+    switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
             private _searchStr = GVAR(InputScratchpad);
             GVAR(InputGuessIndex) = 0;
@@ -783,18 +778,15 @@ _ctrlPlanningChannel ctrlCommit 0;
         };
         default {};
     };
-
-    _ctrl ctrlSetStructuredText parseText _str;
-    _ctrl ctrlCommit 0;
 }] call CFUNC(addEventhandler);
 
 [QGVAR(updateInput), {
-    (_this select 1) params ["_ctrl", "_ctrlPlanningChannel"];
-
+    (_this select 1) params ["_ctrl"];
+    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     private _str = switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
             private _searchStr = GVAR(InputScratchpad);
-            private _temp = "<t color='#cccccc'>Search for Target: </t>";
+            private _temp = format ["<t size='%1' color='#cccccc'>Search for Target: </t>", _smallTextSize];
             if (_searchStr != "") then {
                 private _guess = +GVAR(InputGuess);
                 if !(_guess isEqualTo []) then {
@@ -809,23 +801,26 @@ _ctrlPlanningChannel ctrlCommit 0;
                         switch (typeName _target) do {
                             case ("OBJECT"): {
                                 format [
-                                    "<t color='%1'>%2</t>",
+                                    "<t size='%3' color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side group _target, "#ffffff"],
-                                    _name
+                                    _name,
+                                    _smallTextSize
                                 ]
                             };
                             case ("GROUP"): {
                                 format [
-                                    "<t color='%1'>%2</t>",
+                                    "<t size='%3' color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side _target, "#ffffff"],
-                                    _name
+                                    _name,
+                                    _smallTextSize
                                 ]
                             };
                             default {
                                 format [
-                                    "<t color='%1'>%2</t>",
+                                    "<t size='%3' color='%1'>%2</t>",
                                     "#ffffff",
-                                    _name
+                                    _name,
+                                    _smallTextSize
                                 ]
                             };
                         };
@@ -841,42 +836,44 @@ _ctrlPlanningChannel ctrlCommit 0;
                     };
 
 
-                    _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
-                    _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
-                    _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr])];
+                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0]), _smallTextSize];
+                    _temp = _temp + format ["<t size='%3' color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr]), _smallTextSize];
+                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr]), _smallTextSize];
                     if (!(_guessStr isEqualTo [])) then {
-                        _temp = _temp + "<t color='#cccccc'> | " + (_guessStr joinString " | ") + "</t>";
+                        _temp = _temp + (format ["<t size='%1' color='#cccccc'> | ", _smallTextSize]) + (_guessStr joinString " | ") + "</t>";
                     };
                 } else {
-                    _temp = _temp + _searchStr + "| <t color='#cccccc'>NO RESULT</t>";
+                    _temp = _temp + format ["<t size='%1'>%2</>| <t size='%1' color='#cccccc'>NO RESULT</t>", _smallTextSize, _searchStr];
                 };
             } else {
-                _temp = _temp + _searchStr + "| ";
+                _temp = _temp + format ["<t size='%1'>%2</>| ", _smallTextSize ,_searchStr];
             };
 
             _temp
         };
         default {
             if (GVAR(MapOpen)) then {
-                "[ALT+LMB] Teleport  [M] Close Map"
+                format ["<t size='%1'>[ALT+LMB] Teleport  [M] Close Map</t>", _smallTextSize]
             } else {
                 private _colors = ["#ffffff", "#3CB371"];
-                format ["[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  <t color='%1'>[F1] Toggle Group Overlay</t>  <t color='%2'>[F2] Toggle Unit Overlay</t>  <t color='%3'>[F3] Toggle Custom Overlay</t>  [TAB] Reset FOV",
-                _colors select GVAR(OverlayGroupMarker),
-                _colors select GVAR(OverlayUnitMarker),
-                _colors select GVAR(OverlayCustomMarker)
+                format [
+                    "<t size='%4'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [ALT + F] Follow Last Shooting Unit [M] Map </t><t size='%4' color='%1'>[F1] Toggle Group Overlay</t> <t size='%4' color='%2'>[F2] Toggle Unit Overlay</t> <t size='%4' color='%3'>[F3] Toggle Custom Overlay</t> <t size='%4'>[TAB] Reset FOV </t>",
+                    _colors select GVAR(OverlayGroupMarker),
+                    _colors select GVAR(OverlayUnitMarker),
+                    _colors select GVAR(OverlayCustomMarker),
+                    _smallTextSize
                 ]
-            }
+            };
         };
     };
 
     _ctrl ctrlSetStructuredText parseText _str;
     _ctrl ctrlCommit 0;
     QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-}, [_ctrlInfo, _ctrlPlanningChannel]] call CFUNC(addEventhandler);
+}, _ctrlInfo] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
-    (_this select 1) params ["_ctrlGrp", "_ctrlGrpUnitInfo"];
+    (_this select 1) params ["_ctrlGrp"];
     GVAR(hideUI) = !GVAR(hideUI);
     _ctrlGrp ctrlShow !GVAR(hideUI);
     QGVAR(CloseUnitInfo) call CFUNC(localEvent);
