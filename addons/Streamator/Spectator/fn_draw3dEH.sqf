@@ -52,16 +52,15 @@ if (GVAR(OverlayPlanningMode)) then {
             if (_cursorHistory isEqualTo []) then {
                 _cursorHistory pushBackUnique _cursorPos;
             } else {
-                _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
+                private _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
                 if !(_lastPosition isEqualTo _cursorPos) then {
                     _lastPosition params ["_lasttime", "_lastpos"];
-                    if ((_newtime - _lasttime) < 0.1) then {
+                    if ((_newtime - _lasttime) < 0.4) then {
                         _lastpos = AGLtoASL _lastpos;
                         _newpos = AGLtoASL _newpos;
                         private _diffpos = _newpos vectorDiff _lastpos;
                         private _dist = vectorMagnitude _diffpos;
                         _diffpos = vectorNormalized _diffPos;
-                        private _stepSize = 5;
                         private _nSteps = (round (_dist/5) min 20) max 2;
                         private _tSteps = (_newtime - _lasttime)/_nSteps;
                         private _sSteps = _dist/_nSteps;

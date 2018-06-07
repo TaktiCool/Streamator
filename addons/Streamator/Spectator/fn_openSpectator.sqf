@@ -174,7 +174,57 @@ DFUNC(createPlanningDisplay) = {
     };
 };
 
+DFUNC(TFARRadio) = {
+    if (GVAR(TFARRadioPFHId) == -1) then {
+        if !(alive GVAR(CameraFollowTarget)) exitWith {};
+        GVAR(TFARRadioPFHId) = [{
+            if !(alive GVAR(CameraFollowTarget)) exitWith {
+                GVAR(TFARRadioPFHId) call CFUNC(removePerFrameHandler);
+                GVAR(TFARRadioPFHId) = -1;
+                tf_lastFrequencyInfoTick = diag_tickTime - 1;
+            };
+            private _globalVolume = TFAR_currentUnit getVariable ["tf_globalVolume", 1.0];
+            private _receivingDistanceMultiplicator = TFAR_currentUnit getVariable ["tf_receivingDistanceMultiplicator", 1.0];
+            private _data = GVAR(CameraFollowTarget) getVariable [QGVAR(RadioInformations), [[],[],""]];
+            _data params ["_freqLR", "_freqSW", "_freqDD"];
+            private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), _freqDD, false, 0, TF_dd_volume_level, name CLib_Player, waves, 0, _globalVolume, 0, _receivingDistanceMultiplicator, TF_speakerDistance];
+            private _result = "task_force_radio_pipe" callExtension _request;
+            DUMP("Listen To Radio: " + _result + " " + _request);
+            tf_lastFrequencyInfoTick = diag_tickTime + 10;
+        }, 0.5] call CFUNC(addPerFrameHandler);
+        tf_lastFrequencyInfoTick = diag_tickTime + 10;
+    } else {
+        GVAR(TFARRadioPFHId) call CFUNC(removePerFrameHandler);
+        GVAR(TFARRadioPFHId) = -1;
+        tf_lastFrequencyInfoTick = diag_tickTime - 1;
+    };
+};
+
 private _fnc_init = {
+
+    if (GVAR(TFARLoaded)) then {
+        0 call TFAR_fnc_setVoiceVolume;
+        CLib_Player setVariable ["tf_unable_to_use_radio", true];
+        CLib_Player setVariable ["tf_forcedCurator", true];
+    };
+
+    if (GVAR(aceLoaded)) then {
+        [CLib_Player] call ace_hearing_fnc_putInEarplugs;
+    };
+
+    [{
+        if (GVAR(aceLoaded)) then {
+            CLib_Player getVariable ["ACE_Medical_allowDamage", false];
+            ACE_Hearing_deafnessDV = 0;
+            ACE_Hearing_volume = 1;
+        };
+        CLib_Player setDamage 0;
+    }, 0.5] call CFUNC(addPerFrameHandler);
+
+    ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
+    ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
+    CLib_Player allowDamage false;
+
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
     (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];

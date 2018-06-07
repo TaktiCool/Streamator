@@ -38,6 +38,7 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`PAGE UP`** | Change Planning Mode Color | Change Planning Mode Color
 **`CTRL`** + **`PAGE DOWN`** | Change Planning Mode Color | Change Planning Mode Color
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
+**`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks

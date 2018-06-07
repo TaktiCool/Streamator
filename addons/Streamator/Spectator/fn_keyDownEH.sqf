@@ -413,14 +413,20 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_F9: { // F9
-        if (GVAR(InputMode) != 0) exitWith {};
-
+        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(TFARLoaded)) exitWith {
+            call FUNC(TFARRadio);
+            true;
+        };
+        if (GVAR(ACRELoaded)) exitWith {
+            LOG("ACRE Radio is current not supported");
+        };
     };
     case DIK_N: { // N
-        if (GVAR(InputMode) == 1) exitWith {false};
+        if (GVAR(InputMode) == 1) exitWith {false;};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
-        true
+        true;
     };
 
     case DIK_1;
@@ -438,12 +444,10 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_R: { // R
-        if !(isNull GVAR(CameraFollowTarget)) exitWith {
-            private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
-            [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
-            true
-        };
-        false
+        if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
+        private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
+        [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
+        true;
     };
 
     default {
