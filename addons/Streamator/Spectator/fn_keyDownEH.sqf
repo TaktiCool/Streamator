@@ -421,6 +421,7 @@ private _return = switch (_keyCode) do {
         if (GVAR(ACRELoaded)) exitWith {
             LOG("ACRE Radio is current not supported");
         };
+        LOG("No Radio Mod Found");
     };
     case DIK_N: { // N
         if (GVAR(InputMode) == 1) exitWith {false;};

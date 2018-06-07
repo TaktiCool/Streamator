@@ -176,31 +176,6 @@ DFUNC(createPlanningDisplay) = {
     };
 };
 
-DFUNC(TFARRadio) = {
-    if (GVAR(TFARRadioPFHId) == -1) then {
-        if !(alive GVAR(CameraFollowTarget)) exitWith {};
-        GVAR(TFARRadioPFHId) = [{
-            if !(alive GVAR(CameraFollowTarget)) exitWith {
-                GVAR(TFARRadioPFHId) call CFUNC(removePerFrameHandler);
-                GVAR(TFARRadioPFHId) = -1;
-                tf_lastFrequencyInfoTick = diag_tickTime - 1;
-            };
-            private _data = GVAR(CameraFollowTarget) getVariable [QGVAR(RadioInformations), [["No_SW_Radio"],["No_LR_Radio"],"No_DD_Radio"]];
-            _data params ["_freqSW", "_freqLR", "_freqDD"];
-            TFAR_player_name = name CLib_player;
-            private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), _freqDD, false, 0, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, 0, 1.0, TF_speakerDistance];
-            private _result = "task_force_radio_pipe" callExtension _request;
-            DUMP("Listen To Radio: " + _result + " " + _request);
-            tf_lastFrequencyInfoTick = diag_tickTime + 10;
-        }, 0.5] call CFUNC(addPerFrameHandler);
-        tf_lastFrequencyInfoTick = diag_tickTime + 10;
-    } else {
-        GVAR(TFARRadioPFHId) call CFUNC(removePerFrameHandler);
-        GVAR(TFARRadioPFHId) = -1;
-        tf_lastFrequencyInfoTick = diag_tickTime - 1;
-    };
-};
-
 private _fnc_init = {
 
     if (GVAR(TFARLoaded)) then {
