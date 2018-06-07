@@ -36,9 +36,9 @@ params [
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
         if (GVAR(InputMode) == 1) exitWith {false};
-
         private _mapDisplay = uiNamespace getVariable [QGVAR(MapDisplay), displayNull];
         if (isNull _mapDisplay) then {
+            GVAR(PlanningModeDrawing) = false;
             _mapDisplay = (findDisplay 46) createDisplay "RscDisplayEmpty";
             uiNamespace setVariable [QGVAR(MapDisplay), _mapDisplay];
             (_mapDisplay displayCtrl 1202) ctrlSetFade 1;
@@ -192,7 +192,7 @@ private _return = switch (_keyCode) do {
                 GVAR(MapState) = [_zoom, _pos];
                 GVAR(MapOpen) = false;
                 QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
-
+                GVAR(PlanningModeDrawing) = false;
                 [{
                     call FUNC(createPlanningDisplay);
                 }] call CFUNC(execNextFrame);
