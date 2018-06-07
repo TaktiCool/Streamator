@@ -41,11 +41,11 @@ if (GVAR(TFARLoaded)) then {
         if (call TFAR_fnc_haveSWRadio) then {
             {
                 if ((_x call TFAR_fnc_getAdditionalSwChannel) == (_x call TFAR_fnc_getSwChannel)) then {
-                    _freqSW pushBack format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
+                    _freqSW pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
                 } else {
-                    _freqSW pushBack format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
+                    _freqSW pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
                     if ((_x call TFAR_fnc_getAdditionalSwChannel) > -1) then {
-                        _freqSW pushBack format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
+                        _freqSW pushBackUnique format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
                     };
                 };
                 nil;
@@ -55,11 +55,11 @@ if (GVAR(TFARLoaded)) then {
         if (call TFAR_fnc_haveLRRadio) then {
             {
                 if ((_x call TFAR_fnc_getAdditionalLrChannel) == (_x call TFAR_fnc_getLrChannel)) then {
-                    _freqLR pushBack format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
+                    _freqLR pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
                 } else {
-                    _freqLR pushBack format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
+                    _freqLR pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
                     if ((_x call TFAR_fnc_getAdditionalLrChannel) > -1) then {
-                        _freqLR pushBack format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
+                        _freqLR pushBackUnique format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
                     };
                 };
                 nil;
@@ -70,10 +70,10 @@ if (GVAR(TFARLoaded)) then {
             _freqDD = TF_dd_frequency;
         };
         if (_freqSW isEqualTo []) then {
-            _freqSW pushBack "No_SW_Radio";
+            _freqSW pushBackUnique "No_SW_Radio";
         };
         if (_freqLR isEqualTo []) then {
-            _freqLR pushBack "No_LR_Radio";
+            _freqLR pushBackUnique "No_LR_Radio";
         };
         CLib_Player setVariable [QGVAR(RadioInformations), [_freqSW, _freqLR, _freqDD], true];
     };
