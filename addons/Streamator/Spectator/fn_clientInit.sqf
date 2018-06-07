@@ -36,7 +36,7 @@ if (GVAR(TFARLoaded)) then {
     DFUNC(updateTFARFreq) = {
         private _freqSW = [];
         private _freqLR = [];
-        private _freqDD = "";
+        private _freqDD = "No_DD_Radio";
 
         if (call TFAR_fnc_haveSWRadio) then {
             {
@@ -69,7 +69,12 @@ if (GVAR(TFARLoaded)) then {
         if (call TFAR_fnc_haveDDRadio) then {
             _freqDD = TF_dd_frequency;
         };
-
+        if (_freqSW isEqualTo []) then {
+            _freqSW pushBack "No_SW_Radio";
+        };
+        if (_freqLR isEqualTo []) then {
+            _freqLR pushBack "No_LR_Radio";
+        };
         CLib_Player setVariable [QGVAR(RadioInformations), [_freqSW, _freqLR, _freqDD], true];
     };
 

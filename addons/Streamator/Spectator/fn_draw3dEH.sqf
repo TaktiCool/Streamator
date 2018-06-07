@@ -55,7 +55,7 @@ if (GVAR(OverlayPlanningMode)) then {
                 private _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
                 if !(_lastPosition isEqualTo _cursorPos) then {
                     _lastPosition params ["_lasttime", "_lastpos"];
-                    if ((_newtime - _lasttime) < 0.4) then {
+                    if ((_newtime - _lasttime) < 0.2) then {
                         _lastpos = AGLtoASL _lastpos;
                         _newpos = AGLtoASL _newpos;
                         private _diffpos = _newpos vectorDiff _lastpos;
