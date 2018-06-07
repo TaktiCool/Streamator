@@ -28,7 +28,6 @@ class CfgCLibModules {
             FNC(savePosition);
             FNC(setCameraTarget);
             FNC(setVisionMode);
-            FNC(TFARRadio);
         };
 
         // UnitTracker
