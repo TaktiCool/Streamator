@@ -14,7 +14,10 @@
 
 */
 params ["_unit"];
-
+private _customIcon = _unit getVariable "Spectator_CustomIcon";
+if !(isNil "_customIcon") exitWith {
+    _customIcon;
+};
 if (leader _unit == _unit) exitWith {
     "\a3\ui_f\data\igui\cfg\cursors\leader_ca.paa";
 };

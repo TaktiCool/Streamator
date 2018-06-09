@@ -26,6 +26,7 @@ class CfgCLibModules {
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
+            FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
         };

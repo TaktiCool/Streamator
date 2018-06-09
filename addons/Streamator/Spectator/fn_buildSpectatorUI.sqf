@@ -167,6 +167,149 @@ _ctrlFOVDefaultLine ctrlSetPosition [
 _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(0,1,0,1)";
 _ctrlFOVDefaultLine ctrlCommit 0;
 
+// Radio Information
+private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
+_ctrlRadioInfoGrp ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(0)];
+_ctrlRadioInfoGrp ctrlShow true;
+_ctrlRadioInfoGrp ctrlCommit 0;
+
+[QGVAR(onTangentPressed), {
+    (_this select 0) params ["_unit", "_freq"];
+    (_this select 1) params ["_ctrlGroup"];
+
+
+    private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
+    private _nbrElements = count _elements;
+
+    private _yPos = PY(4*_nbrElements);
+    private _height = PY(4*(_nbrElements+1));
+
+    GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
+
+    private _icon = "";
+    if (_freq in _swFreqs) then {
+        _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
+    };
+    if (_freq in _lrFreqs) then {
+        _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
+    };
+
+    if (_freq == "") exitWith {};
+
+    private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
+    _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
+    _ctrlElementGrp ctrlSetPosition [0, _yPos, PX(30), PY(4)];
+    _ctrlElementGrp ctrlShow true;
+    _ctrlElementGrp ctrlCommit 0;
+
+    private _ctrlIcon = _display ctrlCreate ["RscPictureKeepAspect", -1, _ctrlElementGrp];
+    _ctrlIcon ctrlSetPosition [PX(0.5), PY(0.5), PX(3), PY(3)];
+    _ctrlIcon ctrlSetText _icon;
+    _ctrlIcon ctrlCommit 0;
+
+    private _ctrlName = _display ctrlCreate ["RscText", -1, _ctrlElementGrp];
+    _ctrlName ctrlSetPosition [PX(4), 0, PX(26), PY(2)];
+    _ctrlName ctrlSetFontHeight PY(2);
+    _ctrlName ctrlSetFont "RobotoCondensedBold";
+    _ctrlName ctrlSetTextColor [1, 1, 1, 1];
+    _ctrlName ctrlSetText (_unit call CFUNC(name));
+    _ctrlName ctrlCommit 0;
+
+    private _ctrlSquad = _display ctrlCreate ["RscText", -1, _ctrlElementGrp];
+    _ctrlSquad ctrlSetPosition [PX(4), PY(2), PX(26), PY(2)];
+    _ctrlSquad ctrlSetFontHeight PY(1.4);
+    _ctrlSquad ctrlSetFont "RobotoCondensed";
+    _ctrlSquad ctrlSetTextColor [1, 1, 1, 1];
+    _ctrlSquad ctrlSetText toUpper (groupId group _unit); // Group Name
+    _ctrlSquad ctrlCommit 0;
+
+    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlShow true;
+    _ctrlGroup ctrlCommit 0.5;
+
+    _elements pushBack _ctrlElementGrp;
+
+    _ctrlGroup setVariable [QGVAR(elements), _elements];
+
+}, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
+
+[QGVAR(onTangentReleased), {
+    (_this select 0) params ["_unit", "_freq"];
+    (_this select 1) params ["_ctrlGroup"];
+
+    private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
+    private _elementFound = false;
+    private _element = controlNull;
+    private _nbrElements = {
+        private _data = _x getVariable [QGVAR(data), []];
+        if (_data isEqualTo []) exitWith {true};
+        if (_data isEqualTo [_unit, _freq]) exitWith {
+            _elementFound = true;
+            _element = _x;
+            false;
+        };
+        if (_elementFound) then {
+            private _pos = ctrlPosition _x;
+            _pos set [1, (_pos select 1) - PY(4)];
+            _x ctrlSetPosition _pos;
+            _x ctrlCommit 0.5;
+        };
+        true;
+    } count _elements;
+    if (_elementFound) then {
+        _elements = _elements - [_element];
+        ctrlDelete _element;
+    };
+
+    private _height = PY(4*_nbrElements);
+
+    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlShow true;
+    _ctrlGroup ctrlCommit 0.5;
+
+    _ctrlGroup setVariable [QGVAR(elements), _elements];
+}, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
+
+[QGVAR(RadioInformationChanged), {
+    (_this select 0) params ["_radioInformation"];
+    (_this select 1) params ["_ctrlGroup"];
+
+    _radioInformation = (_radioInformation select 1) + (_radioInformation select 1);
+    private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
+    private _elementFound = 0;
+    private _element = [];
+    private _nbrElements = {
+        private _data = _x getVariable [QGVAR(data), []];
+        if (_data isEqualTo []) exitWith {true};
+        if !((_data select 1) in _radioInformation) exitWith {
+            _elementFound = _elementFound + 1;
+            _element pushBack _x;
+            false;
+        };
+        if (_elementFound > 0) then {
+            private _pos = ctrlPosition _x;
+            _pos set [1, (_pos select 1) - PY(4*_elementFound)];
+            _x ctrlSetPosition _pos;
+            _x ctrlCommit 0.5;
+        };
+        true;
+    } count _elements;
+    if (_elementFound > 0) then {
+        _elements = _elements - _element;
+        {
+            ctrlDelete _x;
+        } count _element;
+    };
+
+    private _height = PY(4*(_nbrElements));
+
+    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlShow true;
+    _ctrlGroup ctrlCommit 0.5;
+
+    _ctrlGroup setVariable [QGVAR(elements), _elements];
+}, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
+
 // Unit Information Screen
 private _ctrlGrpUnitInfo = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlGrpUnitInfo ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];

@@ -411,7 +411,10 @@ private _return = switch (_keyCode) do {
         QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
         true;
     };
-
+    case DIK_F8: {
+        if (GVAR(InputMode) != 0) exitWith {false;};
+        
+    };
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
         if (GVAR(TFARLoaded)) exitWith {

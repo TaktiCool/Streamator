@@ -38,25 +38,21 @@ if (GVAR(TFARLoaded)) then {
         private _freqLR = [];
 
         {
-            if ((_x call TFAR_fnc_getAdditionalSwChannel) == (_x call TFAR_fnc_getSwChannel)) then {
-                _freqSW pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
-            } else {
-                _freqSW pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getSwFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
-                if ((_x call TFAR_fnc_getAdditionalSwChannel) > -1) then {
-                    _freqSW pushBackUnique format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getSwRadioCode, _x call TFAR_fnc_getSwVolume, 0];
-                };
+            private _adChannel = _x call TFAR_fnc_getAdditionalSwChannel;
+            private _rc = _x call TFAR_fnc_getSwRadioCode;
+            _freqSW pushBackUnique format ["%1%2", _x call TFAR_fnc_getSwFrequency, _rc];
+            if ( _adChannel > -1 && {_adChannel == (_x call TFAR_fnc_getSwChannel)}) then {
+                _freqSW pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
             };
             nil;
         } count (CLib_player call TFAR_fnc_radiosList);
 
         {
-            if ((_x call TFAR_fnc_getAdditionalLrChannel) == (_x call TFAR_fnc_getLrChannel)) then {
-                _freqLR pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
-            } else {
-                _freqLR pushBackUnique format ["%1%2|%3|%4", _x call TFAR_fnc_getLrFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
-                if ((_x call TFAR_fnc_getAdditionalLrChannel) > -1) then {
-                    _freqLR pushBackUnique format ["%1%2|%3|%4", [_x, (_x call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _x call TFAR_fnc_getLrRadioCode, _x call TFAR_fnc_getLrVolume, 0];
-                };
+            private _adChannel = _x call TFAR_fnc_getAdditionalLrChannel;
+            private _rc = _x call TFAR_fnc_getLrRadioCode;
+            _freqLR pushBackUnique format ["%1%2", _x call TFAR_fnc_getLrFrequency, _rc];
+            if (_adChannel > -1 && {_adChannel != (_x call TFAR_fnc_getLrChannel)}) then {
+                _freqLR pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
             };
             nil;
         } count (CLib_player call TFAR_fnc_lrRadiosList);
@@ -97,4 +93,34 @@ if (GVAR(TFARLoaded)) then {
         call FUNC(updateTFARFreq);
     }] call CFUNC(addEventhandler);
     call FUNC(updateTFARFreq);
+
+    [QGVAR(OnTangent), "OnTangent", {
+        params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
+
+        private _freq = switch (_radioType) do {
+            case (0): {
+                if (_additional) then {
+                    format ["%1%2", _radio call TFAR_fnc_getSwFrequency, _radio call TFAR_fnc_getSwRadioCode];
+                } else {
+                    format ["%1%2", [_radio, _radio call TFAR_fnc_getAdditionalSwChannel + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getSwRadioCode];
+                };
+            };
+            case (1): {
+                if (_additional) then {
+                    format ["%1%2", _radio call TFAR_fnc_getLrFrequency, _radio call TFAR_fnc_getLrRadioCode];
+                } else {
+                    format ["%1%2", [_radio, _radio call TFAR_fnc_getAdditionalLrChannel + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
+                };
+            };
+            case (2): {
+                DUMP("Magic you dont exist");
+                "";
+            };
+        };
+        if (_freq == "") exitWith {};
+        private _targets = GVAR(radioNamespace) getVariable [_freq, []];
+        if (_targets isEqualTo []) exitWith {};
+        [[QGVAR(tangentReleased), QGVAR(tangentPressed)] select _tangentPressed, _targets, [_unit, _freq]] call CFUNC(targetEvent);
+    }, CLib_Player] call TFAR_fnc_addEventHandler;
+
 };
