@@ -274,7 +274,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     (_this select 0) params ["_radioInformation"];
     (_this select 1) params ["_ctrlGroup"];
 
-    _radioInformation = (_radioInformation select 1) + (_radioInformation select 1);
+    _radioInformation = (_radioInformation select 0) + (_radioInformation select 1);
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = 0;
     private _element = [];
