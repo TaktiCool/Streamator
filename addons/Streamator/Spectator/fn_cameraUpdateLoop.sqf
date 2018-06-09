@@ -59,7 +59,7 @@ switch (GVAR(CameraMode)) do {
 
         if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
             private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
-            if (count _state > 0) then {
+            if !(_state isEqualTo []) then {
                 _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime"];
 
                 GVAR(CameraDir) = _dir;
@@ -90,6 +90,34 @@ switch (GVAR(CameraMode)) do {
         };
 
     };
+    case (3): { // Over Shoulder
+        if (isNull GVAR(CameraFollowTarget)) exitWith {
+            GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        if !(isNull objectParent GVAR(CameraFollowTarget)) exitWith {
+            GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        GVAR(CameraPos) = GVAR(CameraFollowTarget) modelToWorldWorld ((GVAR(CameraFollowTarget) selectionPosition "Spline3") vectorAdd [0.5,0.5,0.5]);
+        GVAR(CameraDir) = getDir GVAR(CameraFollowTarget);
+        GVAR(CameraDirOffset) = 0;
+    };
+
+    case (4): { // FPS
+        if (isNull GVAR(CameraFollowTarget)) exitWith {
+            GVAR(CameraMode) = 2;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        if !(isNull objectParent GVAR(CameraFollowTarget)) exitWith {
+            GVAR(CameraMode) = 2;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        GVAR(CameraPos) = eyePos GVAR(CameraFollowTarget);
+        GVAR(CameraDir) = eyeDirection GVAR(CameraFollowTarget);
+        _cameraSmoothingTime = 0;
+    };
+
 };
 
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];

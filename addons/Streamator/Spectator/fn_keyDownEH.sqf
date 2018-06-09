@@ -451,6 +451,29 @@ private _return = switch (_keyCode) do {
         true;
     };
 
+    case DIK_C: {
+        switch (GVAR(CameraMode)) do {
+            case (1): { // Free
+                false;
+            };
+            case (2): { // Follow
+                GVAR(CameraMode) = 3;
+                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+                true;
+            };
+            case (3): { // Shoulder
+                GVAR(CameraMode) = 4;
+                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+                true;
+            };
+            case (4): { // FPS View
+                GVAR(CameraMode) = 2;
+                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+                true;
+            };
+        };
+    };
+
     default {
         false
     };
