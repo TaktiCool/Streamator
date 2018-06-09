@@ -99,17 +99,17 @@ if (GVAR(TFARLoaded)) then {
 
         private _freq = switch (_radioType) do {
             case (0): {
-                if (_additional) then {
+                if !(_additional) then {
                     format ["%1%2", _radio call TFAR_fnc_getSwFrequency, _radio call TFAR_fnc_getSwRadioCode];
                 } else {
-                    format ["%1%2", [_radio, _radio call TFAR_fnc_getAdditionalSwChannel + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getSwRadioCode];
+                    format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getSwRadioCode];
                 };
             };
             case (1): {
-                if (_additional) then {
+                if !(_additional) then {
                     format ["%1%2", _radio call TFAR_fnc_getLrFrequency, _radio call TFAR_fnc_getLrRadioCode];
                 } else {
-                    format ["%1%2", [_radio, _radio call TFAR_fnc_getAdditionalLrChannel + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
+                    format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
                 };
             };
             case (2): {

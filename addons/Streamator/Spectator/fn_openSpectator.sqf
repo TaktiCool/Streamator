@@ -91,6 +91,8 @@ CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true
 
 GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_colorRGBtoHTML;};
 
+GVAR(RadioInformationPrev) = [];
+
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
@@ -250,28 +252,33 @@ DFUNC(TFARRadio) = {
 [{
     if !(alive GVAR(RadioFollowTarget)) exitWith {
         if !(GVAR(RadioInformationPrev) isEqualTo []) then {
-            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], GVAR(RadioInformationPrev)]] call CFUNC(serverEvent);
+            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
             [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
             GVAR(RadioInformationPrev) = [];
         };
     };
     private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
     if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
-        [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), GVAR(RadioInformationPrev)]] call CFUNC(serverEvent);
+        if (GVAR(RadioInformationPrev) isEqualTo []) then {
+            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
+        } else {
+            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+        };
+
         [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
-        GVAR(RadioInformationPrev) = _data;
+        GVAR(RadioInformationPrev) = +_data;
     };
     _data params ["_freqSW", "_freqLR"];
-    if (_freqSW isEqualTo ["No_SW_Radio"]) then {
+    if !("No_SW_Radio" in _freqSW) then {
         _freqSW = _freqSW apply {_x + "|7|0"};
     };
-    if (_freqLR isEqualTo ["No_LR_Radio"]) then {
+    if !("No_LR_Radio" in _freqLR) then {
         _freqLR = _freqLR apply {_x + "|7|0"};
     };
     TFAR_player_name = name CLib_player;
     private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", false, 0, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, 0, 1.0, TF_speakerDistance];
     private _result = "task_force_radio_pipe" callExtension _request;
-    DUMP("Listen To Radio: " + _result + " " + _request);
+    //DUMP("Listen To Radio: " + _result + " " + _request);
     tf_lastFrequencyInfoTick = diag_tickTime + 10;
 }, 0.5] call CFUNC(addPerFrameHandler);
 

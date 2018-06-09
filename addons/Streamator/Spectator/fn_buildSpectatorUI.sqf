@@ -169,11 +169,11 @@ _ctrlFOVDefaultLine ctrlCommit 0;
 
 // Radio Information
 private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlRadioInfoGrp ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(0)];
+_ctrlRadioInfoGrp ctrlSetPosition [PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(0)];
 _ctrlRadioInfoGrp ctrlShow true;
 _ctrlRadioInfoGrp ctrlCommit 0;
 
-[QGVAR(onTangentPressed), {
+[QGVAR(tangentPressed), {
     (_this select 0) params ["_unit", "_freq"];
     (_this select 1) params ["_ctrlGroup"];
 
@@ -183,7 +183,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
     private _yPos = PY(4*_nbrElements);
     private _height = PY(4*(_nbrElements+1));
-
+    DUMP("heigt" + str _height + " Y:" + str _yPos);
     GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
     private _icon = "";
@@ -193,8 +193,10 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     if (_freq in _lrFreqs) then {
         _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
     };
-
-    if (_freq == "") exitWith {};
+    DUMP("FREQS: " + str _swFreqs + " | " + str _lrFreqs);
+    if (_icon == "") exitWith {
+        DUMP("No Radio Found");
+    };
 
     private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
     _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
@@ -223,7 +225,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlSquad ctrlSetText toUpper (groupId group _unit); // Group Name
     _ctrlSquad ctrlCommit 0;
 
-    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.5;
 
@@ -233,7 +235,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
 }, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
-[QGVAR(onTangentReleased), {
+[QGVAR(tangentReleased), {
     (_this select 0) params ["_unit", "_freq"];
     (_this select 1) params ["_ctrlGroup"];
 
@@ -263,7 +265,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
     private _height = PY(4*_nbrElements);
 
-    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.5;
 
@@ -303,7 +305,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
     private _height = PY(4*(_nbrElements));
 
-    _ctrlGroup ctrlSetPosition [safeZoneX+PX(2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.5;
 

@@ -13,7 +13,7 @@
     Returns:
     None
 */
-if (GVAR(CameraMode) == 3) exitWith {};
+if (GVAR(CameraMode) == 5) exitWith {};
 private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
 private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
 private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
@@ -114,7 +114,11 @@ switch (GVAR(CameraMode)) do {
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(CameraPos) = eyePos GVAR(CameraFollowTarget);
-        GVAR(CameraDir) = eyeDirection GVAR(CameraFollowTarget);
+        private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
+        GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
+        GVAR(CameraDir) = -(_eyeDir select 0) atan2 -(_eyeDir select 1);
+        GVAR(CameraDirOffset) = 0;
+        GVAR(CameraPitchOffset) = 0;
         _cameraSmoothingTime = 0;
     };
 
