@@ -20,6 +20,7 @@ if (isNil "_element") exitWith {};
 
 if (count _element != 8) exitWith {};
 private _lastCameraMode = GVAR(CameraMode);
+GVAR(PrevCameraMode) = _lastCameraMode;
 GVAR(CameraMode) = _element select 0;
 GVAR(CameraFollowTarget) = _element select 1;
 GVAR(CameraPos) = _element select 2;

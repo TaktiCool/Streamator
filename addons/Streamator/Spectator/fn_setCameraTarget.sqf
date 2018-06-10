@@ -33,7 +33,7 @@ GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(Ca
 GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 
 if (GVAR(CameraMode) == 1) then {
-    GVAR(CameraMode) = 2;
+    GVAR(CameraMode) = GVAR(PrevCameraMode);
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 

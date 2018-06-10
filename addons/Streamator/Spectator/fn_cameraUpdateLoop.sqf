@@ -13,7 +13,6 @@
     Returns:
     None
 */
-if (GVAR(CameraMode) == 5) exitWith {};
 private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
 private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
 private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
@@ -94,12 +93,10 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
-        GVAR(CameraPos) = AGLToASL (GVAR(CameraFollowTarget) modelToWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
+        GVAR(CameraPos) = (GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
         private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
         GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
         GVAR(CameraDir) = getDirVisual GVAR(CameraFollowTarget);
-        GVAR(CameraDirOffset) = 0;
-        GVAR(CameraPitchOffset) = 0;
     };
 
     case 4: { // TOPDOWN
@@ -119,7 +116,7 @@ switch (GVAR(CameraMode)) do {
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         if !((vehicle GVAR(CameraFollowTarget)) isKindOf "CAManBase") exitWith {
-            GVAR(CameraMode) = 2;
+            GVAR(CameraMode) = GVAR(PrevCameraMode);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(CameraPos) = eyePos GVAR(CameraFollowTarget);

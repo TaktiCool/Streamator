@@ -29,6 +29,7 @@ Key Binding | Short Description | Remarks
 **`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.
 **`F5`** | Toggle Unit Chyron | Toggles Chyron for the current Unit
 **`F6`** | Toggle Planing Mode Icons and Markers | Toggle Planing Mode Icons and Markers from other spectators
+**`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
@@ -38,7 +39,12 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`PAGE UP`** | Change Planning Mode Color | Change Planning Mode Color
 **`CTRL`** + **`PAGE DOWN`** | Change Planning Mode Color | Change Planning Mode Color
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
-**`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
+**`NUMPAD 0`** | Free View | Toggles back to Free View
+**`NUMPAD 1`** | Follow View | Toggles to Follow Mode
+**`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
+**`NUMPAD 3`** | Topdown View | Toggles to TopDown View
+**`SPACE`** + **`Mouse Moving`** | Offset Camera in Shoulder View | Offsets the X and  Y Position of the Camera in Shoulder View
+**`SPACE`** + **`Scrollwheel`** | Offset Camera in Shoulder and TopDown View | Offsets the Z Position in Shoudler Postition and the Y Position in Topdown View
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks

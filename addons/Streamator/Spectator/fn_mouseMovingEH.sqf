@@ -42,7 +42,12 @@ if (GVAR(InputMode) == 2) then {
 } else {
     private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;
     private _dir = GVAR(CameraPreviousState) param [2, GVAR(CameraDir)];
+    if (GVAR(CameraMode) == 3) exitWith {
+        GVAR(CameraDirOffset) = GVAR(CameraDirOffset) + _deltaX * 0.5 * _fov_factor;
+        GVAR(CameraPitchOffset) = -89.0 max (89.9 min (GVAR(CameraPitchOffset) - _deltaY * _fov_factor));
 
+        GVAR(CameraDirOffset) = ((((GVAR(CameraDirOffset) - _dir) mod 360) min 90) max - 90) + _dir;
+    };
     GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5 * _fov_factor;
     GVAR(CameraPitch) = -89.0 max (89.9 min (GVAR(CameraPitch) - _deltaY * _fov_factor));
 

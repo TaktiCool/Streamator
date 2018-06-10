@@ -20,10 +20,16 @@
 
 #define SAVERESTORE(slot) if (GVAR(InputMode) == 1) exitWith {false}; \
 if (_ctrl) then { \
-[slot] call FUNC(savePosition); \
+    [slot] call FUNC(savePosition); \
 } else { \
-[slot] call FUNC(restorePosition); \
+    [slot] call FUNC(restorePosition); \
 }
+
+#define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; \
+GVAR(PrevCameraMode) = GVAR(CameraMode); \
+GVAR(CameraMode) = num; \
+[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent); \
+true;
 
 params [
     "",
@@ -115,6 +121,7 @@ private _return = switch (_keyCode) do {
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
                     private _prevUnit = GVAR(CameraFollowTarget);
                     GVAR(CameraFollowTarget) = objNull;
+                    GVAR(PrevCameraMode) = GVAR(CameraMode);
                     GVAR(CameraMode) = 1;
                     GVAR(CameraPos) = _pos;
                     GVAR(CameraPreviousState) = [];
@@ -218,7 +225,7 @@ private _return = switch (_keyCode) do {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = GVAR(CursorTarget);
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
-            GVAR(CameraMode) = 2;
+            GVAR(CameraMode) = GVAR(PrevCameraMode);
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
@@ -454,40 +461,11 @@ private _return = switch (_keyCode) do {
         [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
         true;
     };
-
-    case DIK_C: {
-        if (GVAR(InputMode) != 0) exitWith {false;};
-        switch (GVAR(CameraMode)) do {
-            case (1): { // Free
-                false;
-            };
-            case (2): { // Follow
-                GVAR(CameraMode) = 3;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-                true;
-            };
-            case (3): { // Shoulder
-                GVAR(CameraMode) = 4;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-                true;
-            };
-            case (4): { // TOPDOWN
-                GVAR(CameraMode) = 2;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-            };
-            case (5): { // FPS View
-                GVAR(CameraMode) = 2;
-                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-                true;
-            };
-        };
-    };
     case DIK_SPACE: {
         if (GVAR(InputMode) != 0) exitWith {false;};
         if (GVAR(CameraMode) == 1 || GVAR(CameraMode) == 2) exitWith {};
         GVAR(CameraEditMode) = true;
     };
-    #define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; GVAR(CameraMode) = num; [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);true;
     case DIK_NUMPAD0: { // FREE
         private _prevUnit = GVAR(CameraFollowTarget);
         GVAR(CameraFollowTarget) = objNull;
