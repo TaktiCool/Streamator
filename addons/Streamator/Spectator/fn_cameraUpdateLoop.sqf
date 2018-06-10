@@ -13,11 +13,15 @@
     Returns:
     None
 */
-private _forward = [sin GVAR(CameraDir), cos GVAR(CameraDir), 0];
-private _right = [cos GVAR(CameraDir), -sin GVAR(CameraDir), 0];
+
+private _tempDir = [GVAR(CameraDir), GVAR(CameraDirOffset)] select (GVAR(CameraMode) == 3);
+private _forward = [sin _tempDir, cos _tempDir, 0];
+private _right = [cos _tempDir, -sin _tempDir, 0];
+
 private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
 // Calculate velocity
 private _velocity = [0, 0, 0];
+private _velocityLocal = [0, 0, 0];
 if (GVAR(InputMode) == 0) then {
     if (inputAction "cameraMoveForward" > 0) then {
         _velocity = _velocity vectorAdd (_forward vectorMultiply (inputAction "cameraMoveForward"));
@@ -97,6 +101,7 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraMode) = 2;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
+        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * CGVAR(deltaTime)));
         GVAR(CameraPos) = (GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
         private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
         GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
@@ -112,6 +117,7 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraMode) = 2;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
+        GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
         GVAR(CameraPos) = (getPosASLVisual GVAR(CameraFollowTarget)) vectorAdd GVAR(TopDownOffset);
         GVAR(CameraDir) = 0;
         GVAR(CameraPitch) = -90;

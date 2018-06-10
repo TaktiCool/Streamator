@@ -21,12 +21,6 @@ params [
     ["_deltaY", 0, [0]]
 ];
 
-if (GVAR(CameraEditMode)) exitWith {
-    if (GVAR(CameraMode) == 3) then {
-        GVAR(ShoulderOffSet) set [0, (GVAR(ShoulderOffSet) select 0) + (_deltaX / 64)];
-        GVAR(ShoulderOffSet) set [2, (GVAR(ShoulderOffSet) select 2) - (_deltaY / 64)];
-    };
-};
 if (GVAR(InputMode) == 2) then {
     if (GVAR(PlanningModeDrawing)) then {
         private _endPosition = screenToWorld getMousePosition;
@@ -48,6 +42,9 @@ if (GVAR(InputMode) == 2) then {
 
         GVAR(CameraDirOffset) = ((((GVAR(CameraDirOffset) - _dir) mod 360) min 90) max - 90) + _dir;
     };
+    GVAR(CameraPitchOffset) = 0;
+    GVAR(CameraDirOffset) = 0;
+
     private _dir = GVAR(CameraPreviousState) param [2, GVAR(CameraDir)];
 
     GVAR(CameraDir) = GVAR(CameraDir) + _deltaX * 0.5 * _fov_factor;

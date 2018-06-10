@@ -462,11 +462,7 @@ private _return = switch (_keyCode) do {
         [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
         true;
     };
-    case DIK_SPACE: {
-        if (GVAR(InputMode) != 0) exitWith {false;};
-        if (GVAR(CameraMode) == 1 || GVAR(CameraMode) == 2) exitWith {};
-        GVAR(CameraEditMode) = true;
-    };
+
     case DIK_NUMPAD0: { // FREE
         private _prevUnit = GVAR(CameraFollowTarget);
         GVAR(CameraFollowTarget) = objNull;
