@@ -87,7 +87,7 @@ if (GVAR(OverlayPlanningMode)) then {
             } else {
                 if (_cursorPos isEqualTo _x) then {
                     _color set [3, 1];
-                    _text = format ["[%1] %2", [GVAR(PlanningModeChannel), "All"] select (GVAR(PlanningModeChannel) == 0), (_unit call CFUNC(name))];
+                    _text = format ["%1", (_unit call CFUNC(name))];
                     drawIcon3D ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, _size, _size, 0, _text, 2, PY(2), "RobotoCondensedBold", "center"];
                     drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 2, PY(2), "RobotoCondensedBold", "center"];
                 } else {

@@ -48,6 +48,7 @@ GVAR(CameraHeight) = 100;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
+GVAR(ShoulderCameraEdit) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
 GVAR(CameraFOV) = 0.75;
@@ -92,6 +93,8 @@ CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true
 GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_colorRGBtoHTML;};
 
 GVAR(RadioInformationPrev) = [];
+
+GVAR(ShoulderOffSet) = [0.6,-0.3,0.3];
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";

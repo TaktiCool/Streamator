@@ -90,36 +90,35 @@ switch (GVAR(CameraMode)) do {
         };
 
     };
-    case (3): { // Over Shoulder
+    case 3: { // Over Shoulder
         if (isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
-        if !(isNull objectParent GVAR(CameraFollowTarget)) exitWith {
-            GVAR(CameraMode) = 1;
-            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-        };
-        GVAR(CameraPos) = GVAR(CameraFollowTarget) modelToWorldWorld ((GVAR(CameraFollowTarget) selectionPosition "Spline3") vectorAdd [0.5,0.5,0.5]);
+        GVAR(CameraPos) = GVAR(CameraFollowTarget) modelToWorldWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet));
+        private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
+        GVAR(CameraPitch) = (_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
         GVAR(CameraDir) = getDir GVAR(CameraFollowTarget);
         GVAR(CameraDirOffset) = 0;
+        GVAR(CameraPitchOffset) = 0;
     };
 
-    case (4): { // FPS
+    case 4: { // FPS
         if (isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraMode) = 2;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
-        if !(isNull objectParent GVAR(CameraFollowTarget)) exitWith {
+        if !((vehicle GVAR(CameraFollowTarget)) isKindOf "CAManBase") exitWith {
             GVAR(CameraMode) = 2;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(CameraPos) = eyePos GVAR(CameraFollowTarget);
         private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
-        GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
-        GVAR(CameraDir) = -(_eyeDir select 0) atan2 -(_eyeDir select 1);
+        GVAR(CameraPitch) = (_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
+        GVAR(CameraDir) = (_eyeDir select 0) atan2 (_eyeDir select 1);
         GVAR(CameraDirOffset) = 0;
         GVAR(CameraPitchOffset) = 0;
-        _cameraSmoothingTime = 0;
+        //_cameraSmoothingTime = 0;
     };
 
 };

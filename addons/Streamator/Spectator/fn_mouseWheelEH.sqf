@@ -43,4 +43,9 @@ if (GVAR(CameraZoomMode)) exitWith {
     QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     true
 };
+
+if (GVAR(ShoulderCameraEdit)) exitWith {
+    GVAR(ShoulderOffSet) set [1, (GVAR(ShoulderOffSet) select 1) + (_delta / 64)];
+    true;
+};
 false

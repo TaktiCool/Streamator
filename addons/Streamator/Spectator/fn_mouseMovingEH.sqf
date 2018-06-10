@@ -21,6 +21,10 @@ params [
     ["_deltaY", 0, [0]]
 ];
 
+if (GVAR(ShoulderCameraEdit)) exitWith {
+    GVAR(ShoulderOffSet) set [0, (GVAR(ShoulderOffSet) select 0) + (_deltaX / 64)];
+    GVAR(ShoulderOffSet) set [2, (GVAR(ShoulderOffSet) select 2) - (_deltaY / 64)];
+};
 if (GVAR(InputMode) == 2) then {
     if (GVAR(PlanningModeDrawing)) then {
         private _endPosition = screenToWorld getMousePosition;

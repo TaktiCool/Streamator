@@ -169,7 +169,7 @@ private _return = switch (_keyCode) do {
                         if (_alpha != 0) then {
                             if (_cursorPos isEqualTo _x) then {
                                 _color set [3, 1];
-                                _text = format ["[%1] %2", [GVAR(PlanningModeChannel), "All"] select (GVAR(PlanningModeChannel) == 0), (_unit call CFUNC(name))];
+                                _text = format ["%1", (_unit call CFUNC(name))];
                                 _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 18, 18, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
                                 _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"]
                             } else {
@@ -413,7 +413,7 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F8: {
         if (GVAR(InputMode) != 0) exitWith {false;};
-        
+
     };
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
@@ -465,7 +465,7 @@ private _return = switch (_keyCode) do {
                 true;
             };
             case (3): { // Shoulder
-                GVAR(CameraMode) = 4;
+                GVAR(CameraMode) = 2;
                 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
                 true;
             };
@@ -476,7 +476,10 @@ private _return = switch (_keyCode) do {
             };
         };
     };
-
+    case (DIK_SPACE): {
+        if (GVAR(CameraMode) != 3) exitWith {};
+        GVAR(ShoulderCameraEdit) = true;
+    };
     default {
         false
     };
