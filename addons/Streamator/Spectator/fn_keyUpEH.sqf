@@ -34,7 +34,7 @@ switch (_keyCode) do {
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
     };
     case DIK_SPACE: { // SPACE
-        GVAR(ShoulderCameraEdit) = false;
+        GVAR(CameraEditMode) = false;
     };
 };
 

@@ -44,8 +44,14 @@ if (GVAR(CameraZoomMode)) exitWith {
     true
 };
 
-if (GVAR(ShoulderCameraEdit)) exitWith {
-    GVAR(ShoulderOffSet) set [1, (GVAR(ShoulderOffSet) select 1) + (_delta / 64)];
+if (GVAR(CameraEditMode)) exitWith {
+    if (GVAR(CameraMode) == 3) then {
+        GVAR(ShoulderOffSet) set [1, (GVAR(ShoulderOffSet) select 1) + (_delta / 64)];
+    };
+    if (GVAR(CameraMode) == 4) then {
+        private _value = 2 max (999999 min ((GVAR(TopDownOffset) select 2) * sqrt 2 ^ (_delta /4)));
+        GVAR(TopDownOffset) set [2, _value];
+    };
     true;
 };
 false

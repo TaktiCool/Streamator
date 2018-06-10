@@ -48,7 +48,7 @@ GVAR(CameraHeight) = 100;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
-GVAR(ShoulderCameraEdit) = false;
+GVAR(CameraEditMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW
 GVAR(CameraFOV) = 0.75;
@@ -95,7 +95,7 @@ GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_
 GVAR(RadioInformationPrev) = [];
 
 GVAR(ShoulderOffSet) = [0.6,-0.3,0.3];
-
+GVAR(TopDownOffset) = [0, 0, 100];
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);

@@ -448,6 +448,7 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_R: { // R
+        if (GVAR(InputMode) != 0) exitWith {false;};
         if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
         private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
         [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
@@ -455,6 +456,7 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_C: {
+        if (GVAR(InputMode) != 0) exitWith {false;};
         switch (GVAR(CameraMode)) do {
             case (1): { // Free
                 false;
@@ -465,20 +467,41 @@ private _return = switch (_keyCode) do {
                 true;
             };
             case (3): { // Shoulder
-                GVAR(CameraMode) = 2;
+                GVAR(CameraMode) = 4;
                 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
                 true;
             };
-            case (4): { // FPS View
+            case (4): { // TOPDOWN
+                GVAR(CameraMode) = 2;
+                [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+            };
+            case (5): { // FPS View
                 GVAR(CameraMode) = 2;
                 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
                 true;
             };
         };
     };
-    case (DIK_SPACE): {
-        if (GVAR(CameraMode) != 3) exitWith {};
-        GVAR(ShoulderCameraEdit) = true;
+    case DIK_SPACE: {
+        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(CameraMode) == 1 || GVAR(CameraMode) == 2) exitWith {};
+        GVAR(CameraEditMode) = true;
+    };
+    #define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; GVAR(CameraMode) = num; [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);true;
+    case DIK_NUMPAD0: { // FREE
+        private _prevUnit = GVAR(CameraFollowTarget);
+        GVAR(CameraFollowTarget) = objNull;
+        [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
+        TOGGLEVIEW(1);
+    };
+    case DIK_NUMPAD1: { // FOLLOW
+        TOGGLEVIEW(2);
+    };
+    case DIK_NUMPAD2: { // SHOULDER
+        TOGGLEVIEW(3);
+    };
+    case DIK_NUMPAD3: { // TOPDOWN
+        TOGGLEVIEW(4);
     };
     default {
         false

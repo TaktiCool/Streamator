@@ -88,24 +88,34 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
             GVAR(CameraPos) = getPosASLVisual GVAR(CameraFollowTarget) vectorAdd GVAR(CameraRelPos);
         };
-
     };
     case 3: { // Over Shoulder
         if (isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
-        GVAR(CameraPos) = GVAR(CameraFollowTarget) modelToWorldWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet));
+        GVAR(CameraPos) = AGLToASL (GVAR(CameraFollowTarget) modelToWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
         private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
-        GVAR(CameraPitch) = (_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
-        GVAR(CameraDir) = getDir GVAR(CameraFollowTarget);
+        GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
+        GVAR(CameraDir) = getDirVisual GVAR(CameraFollowTarget);
         GVAR(CameraDirOffset) = 0;
         GVAR(CameraPitchOffset) = 0;
     };
 
-    case 4: { // FPS
+    case 4: { // TOPDOWN
         if (isNull GVAR(CameraFollowTarget)) exitWith {
-            GVAR(CameraMode) = 2;
+            GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        GVAR(CameraPos) = (getPosASLVisual GVAR(CameraFollowTarget)) vectorAdd GVAR(TopDownOffset);
+        GVAR(CameraDir) = 0;
+        GVAR(CameraPitch) = -90;
+        _cameraSmoothingTime = 0.0757858;
+    };
+
+    case 5: { // FPS
+        if (isNull GVAR(CameraFollowTarget)) exitWith {
+            GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         if !((vehicle GVAR(CameraFollowTarget)) isKindOf "CAManBase") exitWith {
@@ -120,6 +130,7 @@ switch (GVAR(CameraMode)) do {
         GVAR(CameraPitchOffset) = 0;
         //_cameraSmoothingTime = 0;
     };
+
 
 };
 

@@ -32,8 +32,10 @@ if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
 GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(CameraRelPos);
 GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 
-GVAR(CameraMode) = 2;
-[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+if (GVAR(CameraMode) == 1) then {
+    GVAR(CameraMode) = 2;
+    [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+};
 
 [QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);
 
