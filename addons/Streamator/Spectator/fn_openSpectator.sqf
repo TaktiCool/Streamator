@@ -44,7 +44,7 @@ GVAR(CameraDir) = getDirVisual CLib_player;
 GVAR(CameraDirOffset) = 0;
 GVAR(CameraPitch) = -45;
 GVAR(CameraPitchOffset) = 0;
-GVAR(CameraHeight) = 100;
+GVAR(CameraHeight) = 10;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
@@ -95,7 +95,7 @@ GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_
 
 GVAR(RadioInformationPrev) = [];
 
-GVAR(ShoulderOffSet) = [0.6,-0.3,0.3];
+GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
@@ -242,49 +242,50 @@ if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo side
     call _fnc_init;
 };
 
-DFUNC(TFARRadio) = {
-    if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
-        GVAR(RadioFollowTarget) = objNull;
-    } else {
-        GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
-    };
-    if !(alive GVAR(RadioFollowTarget)) then {
-        tf_lastFrequencyInfoTick = diag_tickTime - 1;
-    };
-};
-
-[{
-    if !(alive GVAR(RadioFollowTarget)) exitWith {
-        if !(GVAR(RadioInformationPrev) isEqualTo []) then {
-            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
-            [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
-            GVAR(RadioInformationPrev) = [];
-        };
-    };
-    private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
-    if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
-        if (GVAR(RadioInformationPrev) isEqualTo []) then {
-            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
+if (GVAR(TFARLoaded)) then {
+    DFUNC(TFARRadio) = {
+        if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
+            GVAR(RadioFollowTarget) = objNull;
         } else {
-            [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+            GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
         };
+        if !(alive GVAR(RadioFollowTarget)) then {
+            tf_lastFrequencyInfoTick = diag_tickTime - 1;
+        };
+    };
 
-        [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
-        GVAR(RadioInformationPrev) = +_data;
-    };
-    _data params ["_freqSW", "_freqLR"];
-    if !("No_SW_Radio" in _freqSW) then {
-        _freqSW = _freqSW apply {_x + "|7|0"};
-    };
-    if !("No_LR_Radio" in _freqLR) then {
-        _freqLR = _freqLR apply {_x + "|7|0"};
-    };
-    TFAR_player_name = name CLib_player;
-    private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", false, 0, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, 0, 1.0, TF_speakerDistance];
-    private _result = "task_force_radio_pipe" callExtension _request;
-    //DUMP("Listen To Radio: " + _result + " " + _request);
-    tf_lastFrequencyInfoTick = diag_tickTime + 10;
-}, 0.5] call CFUNC(addPerFrameHandler);
+    [{
+        if !(alive GVAR(RadioFollowTarget)) exitWith {
+            if !(GVAR(RadioInformationPrev) isEqualTo []) then {
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+                [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
+                GVAR(RadioInformationPrev) = [];
+            };
+        };
+        private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
+        if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
+            if (GVAR(RadioInformationPrev) isEqualTo []) then {
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
+            } else {
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+            };
+            [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
+            GVAR(RadioInformationPrev) = +_data;
+        };
+        _data params ["_freqSW", "_freqLR"];
+        if !("No_SW_Radio" in _freqSW) then {
+            _freqSW = _freqSW apply {_x + "|7|0"};
+        };
+        if !("No_LR_Radio" in _freqLR) then {
+            _freqLR = _freqLR apply {_x + "|7|0"};
+        };
+        TFAR_player_name = name CLib_player;
+        private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", false, 0, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, 0, 1.0, TF_speakerDistance];
+        private _result = "task_force_radio_pipe" callExtension _request;
+        //DUMP("Listen To Radio: " + _result + " " + _request);
+        tf_lastFrequencyInfoTick = diag_tickTime + 10;
+    }, 0.5] call CFUNC(addPerFrameHandler);
+};
 
 // Camera Update PFH
 addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];

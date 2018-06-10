@@ -169,7 +169,7 @@ if (_cameraSmoothingTime > 0) then {
 
     _fov = (_lastFov * _smoothingAmount + _fov) / (1 + _smoothingAmount);
     _position set [2, (getTerrainHeightASL _position) max (_position select 2)];
-    GVAR(CameraPreviousState) = [time, _position, _direction, _pitch, _fov];
+    GVAR(CameraPreviousState) = [time, _position, _direction, _pitch, _fov, GVAR(CameraDirOffset), GVAR(CameraPitchOffset)];
 } else {
     _position set [2, (getTerrainHeightASL _position) max (_position select 2)];
     GVAR(CameraPreviousState) = [];

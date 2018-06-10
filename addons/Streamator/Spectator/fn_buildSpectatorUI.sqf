@@ -1018,11 +1018,12 @@ _ctrlPlanningChannel ctrlCommit 0;
 }, _ctrlInfo] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
-    (_this select 1) params ["_ctrlGrp"];
+    (_this select 1) params ["_ctrlGrp", "_ctrlGrpUnitInfo"];
     GVAR(hideUI) = !GVAR(hideUI);
     _ctrlGrp ctrlShow !GVAR(hideUI);
-    QGVAR(CloseUnitInfo) call CFUNC(localEvent);
-}, _ctrlGrp] call CFUNC(addEventhandler);
+    _ctrlGrpUnitInfo ctrlShow false;
+    GVAR(UnitInfoOpen) = false;
+}, [_ctrlGrp, _ctrlGrpUnitInfo]] call CFUNC(addEventhandler);
 
 [{
     (_this select 0) params ["_ctrl"];

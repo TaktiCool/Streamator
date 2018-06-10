@@ -231,6 +231,7 @@ private _return = switch (_keyCode) do {
         } else {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = objNull;
+            GVAR(PrevCameraMode) = GVAR(CameraMode);
             GVAR(CameraMode) = 1;
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);

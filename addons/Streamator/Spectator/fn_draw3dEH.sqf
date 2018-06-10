@@ -43,6 +43,20 @@ if (GVAR(hideUI)) exitWith {};
 //HUD
 //PlanningMode
 if (GVAR(OverlayPlanningMode)) then {
+    if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == 2) then {
+        (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
+        if (serverTime - _lastUpdate >= 0.2) then {
+            DUMP(str (serverTime - _lastUpdate));
+            private _endPosition = screenToWorld getMousePosition;
+            private _startPosition = positionCameraToWorld [0, 0, 0];
+            private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
+            if !(_intersectArray isEqualTo []) then {
+                (_intersectArray select 0) params ["_intersectPosition"];
+                _endPosition = ASLtoAGL _intersectPosition;
+            };
+            [CLib_Player, QGVAR(cursorPosition), [serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        };
+    };
     {
         private _unit = _x;
         private _cursorPos = _unit getVariable QGVAR(cursorPosition);
