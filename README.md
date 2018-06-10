@@ -9,6 +9,8 @@ Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
 **FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focussed object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focussed spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focussing. It can be refreshed by pressing the R key.
+**SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
+**Topdown [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
