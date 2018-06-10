@@ -169,7 +169,7 @@ _ctrlFOVDefaultLine ctrlCommit 0;
 
 // Radio Information
 private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlRadioInfoGrp ctrlSetPosition [PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(0)];
+_ctrlRadioInfoGrp ctrlSetPosition [PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(4)];
 _ctrlRadioInfoGrp ctrlShow true;
 _ctrlRadioInfoGrp ctrlCommit 0;
 
@@ -210,16 +210,16 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlIcon ctrlCommit 0;
 
     private _ctrlName = _display ctrlCreate ["RscText", -1, _ctrlElementGrp];
-    _ctrlName ctrlSetPosition [PX(4), 0, PX(26), PY(2)];
-    _ctrlName ctrlSetFontHeight PY(2);
-    _ctrlName ctrlSetFont "RobotoCondensedBold";
+    _ctrlName ctrlSetPosition [PX(4), 0, PX(26), PY(3)];
+    _ctrlName ctrlSetFontHeight PY(2.4);
+    _ctrlName ctrlSetFont "RobotoCondensed";
     _ctrlName ctrlSetTextColor [1, 1, 1, 1];
     _ctrlName ctrlSetText (_unit call CFUNC(name));
     _ctrlName ctrlCommit 0;
 
     private _ctrlSquad = _display ctrlCreate ["RscText", -1, _ctrlElementGrp];
-    _ctrlSquad ctrlSetPosition [PX(4), PY(2), PX(26), PY(2)];
-    _ctrlSquad ctrlSetFontHeight PY(1.4);
+    _ctrlSquad ctrlSetPosition [PX(4), PY(2.2), PX(26), PY(2)];
+    _ctrlSquad ctrlSetFontHeight PY(1.8);
     _ctrlSquad ctrlSetFont "RobotoCondensed";
     _ctrlSquad ctrlSetTextColor [1, 1, 1, 1];
     _ctrlSquad ctrlSetText toUpper (groupId group _unit); // Group Name
