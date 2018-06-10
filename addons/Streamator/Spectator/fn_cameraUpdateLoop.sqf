@@ -93,6 +93,10 @@ switch (GVAR(CameraMode)) do {
             GVAR(CameraMode) = 1;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
+        if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) exitWith {
+            GVAR(CameraMode) = 2;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
         GVAR(CameraPos) = (GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
         private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
         GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
@@ -102,6 +106,10 @@ switch (GVAR(CameraMode)) do {
     case 4: { // TOPDOWN
         if (isNull GVAR(CameraFollowTarget)) exitWith {
             GVAR(CameraMode) = 1;
+            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        };
+        if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) exitWith {
+            GVAR(CameraMode) = 2;
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(CameraPos) = (getPosASLVisual GVAR(CameraFollowTarget)) vectorAdd GVAR(TopDownOffset);
