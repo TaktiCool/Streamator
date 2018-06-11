@@ -27,19 +27,21 @@ if (GVAR(CameraSpeedMode)) exitWith {
 };
 
 if (GVAR(CameraSmoothingMode)) exitWith {
-    if (GVAR(CameraSmoothingTime) == 0) then {
+    if (GVAR(CameraSmoothingTime) == 0 && _delta > 0) then {
         GVAR(CameraSmoothingTime) = 0.05;
+    } else {
+        GVAR(CameraSmoothingTime) = 0.04 max (1.6 min (GVAR(CameraSmoothingTime) * sqrt 2 ^ _delta));
+        if (GVAR(CameraSmoothingTime) < 0.05) then {
+            GVAR(CameraSmoothingTime) = 0;
+        };
+
     };
-    GVAR(CameraSmoothingTime) = 0.05 max (1.6 min (GVAR(CameraSmoothingTime) * sqrt 2 ^ _delta));
-    if (GVAR(CameraSmoothingTime) <= 0.05) then {
-        GVAR(CameraSmoothingTime) = 0;
-    };
-    QGVAR(CameraSmoothingChanged) call CFUNC(localEvent);
+        QGVAR(CameraSmoothingChanged) call CFUNC(localEvent);
     true
 };
 
 if (GVAR(CameraZoomMode)) exitWith {
-    GVAR(CameraFOV) = 0.01 max (2 min (GVAR(CameraFOV) + ( (-_delta) / 30)));
+    GVAR(CameraFOV) = (sqrt(2)^-14) max (2 min (GVAR(CameraFOV) * sqrt 2 ^ (-_delta)));
     QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     true
 };

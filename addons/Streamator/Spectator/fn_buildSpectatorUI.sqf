@@ -143,7 +143,10 @@ _ctrlFOVBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(14 * BORD
 _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
 _ctrlFOVBarBg ctrlCommit 0;
 
-private _relLength = (2 - GVAR(CameraFOV)) / 2;
+private _logScale = (ln GVAR(CameraFOV)) / ln sqrt 2;
+private _logScaleMin = (ln (sqrt(2)^-14)) / ln sqrt 2;
+private _logScaleMax = (ln 2) / ln sqrt 2;
+private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
 private _ctrlFOVBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBar ctrlSetPosition [
     safeZoneW - PX(BORDERWIDTH * 3 / 4),
@@ -864,7 +867,11 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(CameraFOVChanged), {
     (_this select 1) params ["_ctrl"];
-    private _relLength = (2 - GVAR(CameraFOV)) / 2;
+    private _logScale = (ln GVAR(CameraFOV)) / ln sqrt 2;
+    private _logScaleMin = (ln (sqrt(2)^-14)) / ln sqrt 2;
+    private _logScaleMax = (ln 2) / ln sqrt 2;
+    private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
+    //private _relLength = (2 - GVAR(CameraFOV)) / 2;
     _ctrl ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
@@ -873,6 +880,8 @@ _ctrlPlanningChannel ctrlCommit 0;
     ];
     _ctrl ctrlCommit 0;
 }, _ctrlFOVBar] call CFUNC(addEventhandler);
+
+[QGVAR(CameraFOVChanged)] call CFUNC(localEvent);
 
 [QGVAR(CursorTargetChanged), {
     (_this select 0) params ["_target"];
@@ -895,7 +904,7 @@ _ctrlPlanningChannel ctrlCommit 0;
         GVAR(Camera) cameraEffect ["Terminate", "BACK"];
         GVAR(CameraFollowTarget) switchCamera "INTERNAL";
     } else {
-        switchCamera CLib_player; 
+        switchCamera CLib_player;
     };
     [{
         cameraEffectEnableHUD true;
@@ -1080,7 +1089,12 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [{
     (_this select 0) params ["_ctrl"];
-    private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
+    private _logScale = (ln (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / ln sqrt 2;
+    private _logScaleMin = (ln 0.01) / ln sqrt 2;
+    private _logScaleMax = (ln 2) / ln sqrt 2;
+    private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
+
+    //private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
     _ctrl ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
