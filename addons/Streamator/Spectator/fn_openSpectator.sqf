@@ -126,7 +126,11 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
         GVAR(CameraPitch),
         GVAR(CameraFOV),
         GVAR(CameraVision),
-        GVAR(CameraSmoothingTime)
+        GVAR(CameraSmoothingTime),
+        GVAR(ShoulderOffSet),
+        GVAR(CameraDirOffset),
+        GVAR(CameraPitchOffset),
+        GVAR(TopdownOffset)
     ], true];
     GVAR(lastFrameDataUpdate) = diag_frameNo;
 }] call CFUNC(addEventhandler);

@@ -119,13 +119,9 @@ private _return = switch (_keyCode) do {
                 if (_alt) exitWith {
                     private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
-                    private _prevUnit = GVAR(CameraFollowTarget);
-                    GVAR(CameraFollowTarget) = objNull;
-                    GVAR(CameraMode) = 1;
+                    [objNull, 1] call FUNC(setCameraTarget);
                     GVAR(CameraPos) = _pos;
                     GVAR(CameraPreviousState) = [];
-                    [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-                    [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
                     true;
                 };
                 false;
@@ -217,22 +213,14 @@ private _return = switch (_keyCode) do {
             true;
         };
         if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
-            [GVAR(lastUnitShooting), true] call FUNC(setCameraTarget);
+            [GVAR(lastUnitShooting)] call FUNC(setCameraTarget);
             true;
         };
         if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
-            private _prevUnit = GVAR(CameraFollowTarget);
-            GVAR(CameraFollowTarget) = GVAR(CursorTarget);
+            [GVAR(CursorTarget), 2] call FUNC(setCameraTarget);
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
-            GVAR(CameraMode) = 2;
-            [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
-            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
-            private _prevUnit = GVAR(CameraFollowTarget);
-            GVAR(CameraFollowTarget) = objNull;
-            GVAR(CameraMode) = 1;
-            [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
-            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+            [objNull, 1] call FUNC(setCameraTarget);
             true;
         };
     };
@@ -278,6 +266,7 @@ private _return = switch (_keyCode) do {
         QGVAR(CameraFOVChanged) call CFUNC(localEvent);
         true
     };
+    /*
     case DIK_RETURN: { // RETURN
         if (GVAR(InputMode) == 1) exitWith {
             if !(GVAR(InputGuess) isEqualTo []) then {
@@ -344,6 +333,7 @@ private _return = switch (_keyCode) do {
         };
         false;
     };
+    */
     case DIK_BACKSPACE: { // BACKSPACE
         if (GVAR(InputMode) == 1) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
@@ -458,39 +448,53 @@ private _return = switch (_keyCode) do {
         if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
         switch (GVAR(CameraMode)) do {
             case 2: {
-                private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
-                [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
+                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
                 true;
             };
             case 3: {
                 GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
+                true;
             };
             case 4: {
                 GVAR(TopDownOffset) = [0, 0, 100];
+                true;
             };
         };
 
     };
 
-    case DIK_NUMPAD0: { // FREE
-        private _prevUnit = GVAR(CameraFollowTarget);
-        GVAR(CameraFollowTarget) = objNull;
-        [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
-        TOGGLEVIEW(1);
-    };
-    case DIK_NUMPAD1: { // FOLLOW
-        TOGGLEVIEW(2);
-        private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
-        [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
-    };
-    case DIK_NUMPAD2: { // SHOULDER
-        TOGGLEVIEW(3);
-    };
-    case DIK_NUMPAD3: { // TOPDOWN
-        TOGGLEVIEW(5);
-    };
+    case DIK_RETURN;
+    case DIK_NUMPAD0;
+    case DIK_NUMPAD1;
+    case DIK_NUMPAD2;
+    case DIK_NUMPAD3;
     case DIK_NUMPAD4: {
-        TOGGLEVIEW(4);
+        private _newCameraTarget = GVAR(CameraFollowTarget);
+        if (GVAR(InputMode) == 0 && _keyCode == DIK_RETURN) exitWith {false};
+        if (GVAR(InputMode) == 1) then {
+            if !(GVAR(InputGuess) isEqualTo []) then {
+                _newCameraTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
+            };
+            GVAR(InputMode) = 0;
+            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+        };
+
+
+        if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
+
+        private _cameraMode = switch (_keyCode) do {
+            case DIK_RETURN: {2};
+            case DIK_NUMPAD0: {
+                    _newCameraTarget = objNull;
+                    1;
+                };
+            case DIK_NUMPAD1: {2};
+            case DIK_NUMPAD2: {3};
+            case DIK_NUMPAD3: {5};
+            case DIK_NUMPAD4: {4};
+        };
+        [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
+        true;
     };
     default {
         false
