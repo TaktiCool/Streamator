@@ -90,7 +90,7 @@ if (GVAR(OverlayPlanningMode)) then {
         {
             _x params ["_time", "_pos"];
             //private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
-            private _size = (0.8 min (1 / ((((positionCameraToWorld [0, 0, 0]) distance _pos) / 100)^0.5)) max 0.15);
+            private _size = (0.8 min (1 / ((((positionCameraToWorld [0, 0, 0]) distance _pos) / 100)^0.7)) max 0.15);
             private _alpha = 1 - (serverTime - _time) max 0;
             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
             _color set [3, _alpha];
