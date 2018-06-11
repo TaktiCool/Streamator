@@ -819,10 +819,6 @@ _ctrlPlanningChannel ctrlCommit 0;
             [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
         };
     };
-    if (GVAR(CameraMode) == 5 && cameraOn != GVAR(CameraFollowTarget)) then {
-        GVAR(CameraMode) = 2;
-        [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-    };
 }] call CFUNC(addEventhandler);
 
 [QGVAR(CameraSpeedChanged), {
@@ -894,22 +890,11 @@ _ctrlPlanningChannel ctrlCommit 0;
     (_this select 0) params ["_mode"];
     (_this select 1) params ["_ctrl"];
 
-    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]"]  select (_mode - 1);
+    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]"]  select (_mode - 1);
     _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name)];
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
     _ctrl ctrlCommit 0;
-    GVAR(Camera) cameraEffect ["internal", "back"];
-    if (_mode == 5) then {
-        GVAR(Camera) cameraEffect ["Terminate", "BACK"];
-        GVAR(CameraFollowTarget) switchCamera "INTERNAL";
-    } else {
-        switchCamera CLib_player;
-    };
-    [{
-        cameraEffectEnableHUD true;
-    }] call CFUNC(execNextFrame);
-    cameraEffectEnableHUD true;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
 [QGVAR(hightlightModeChanged), {

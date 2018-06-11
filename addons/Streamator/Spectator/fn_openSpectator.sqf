@@ -54,6 +54,7 @@ GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW | 3: SHOULDER | 4: TOPDOWN
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
+GVAR(CameraInFirstPerson) = false;
 
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;
@@ -100,7 +101,7 @@ GVAR(TopDownOffset) = [0, 0, 100];
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
-JK_test = objNull;
+
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {

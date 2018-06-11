@@ -81,9 +81,16 @@ if (_cameraMode == 2 && GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator
                 _cameraFollowTarget = _rfollowTarget;
                 GVAR(TopdownOffset) = _topdownOffset;
             };
+            case 5: { // FPS
+                _cameraFollowTarget = _rfollowTarget;
+            };
+            case 6: { // SHOULDER
+                _cameraFollowTarget = _rfollowTarget;
+                GVAR(CameraRelPos) = _relPos;
+                GVAR(CameraDirOffset) = _dirOffset;
+                GVAR(CameraPitchOffset) = _pitchOffset;
+            };
         };
-
-
     };
 };
 
@@ -92,11 +99,26 @@ if (_cameraMode > 1 && isNull _cameraFollowTarget) exitWith {
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
-if (_cameraFollowTarget call Streamator_fnc_isSpectator) exitWith {
+if (_cameraFollowTarget call Streamator_fnc_isSpectator && _cameraMode > 2) exitWith {
     GVAR(CameraMode) = 1;
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
+
+
+if (_cameraMode == 5 && !GVAR(CameraInFirstPerson)) exitWith {
+    GVAR(Camera) cameraEffect ["Terminate", "BACK"];
+    _cameraFollowTarget switchCamera "INTERNAL";
+    cameraEffectEnableHUD true;
+    GVAR(CameraInFirstPerson) = true;
+};
+
+if (_cameraMode != 5 && GVAR(CameraInFirstPerson)) then {
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    switchCamera CLib_player;
+    cameraEffectEnableHUD true;
+    GVAR(CameraInFirstPerson) = false;
+};
 
 switch (_cameraMode) do {
     case 1: { // FREE
@@ -132,12 +154,21 @@ switch (_cameraMode) do {
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
             };
-            
+
             _cameraFollowTarget switchCamera "INTERNAL";
 
         };
 
         breakOut SCRIPTSCOPENAME;
+    };
+    case 6: { // Orbit
+        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld (_cameraFollowTarget selectionPosition "Pelvis")) vectorAdd GVAR(CameraRelPos);
+        private _mag = vectorMagnitude GVAR(CameraRelPos);
+        private _norm = vectorNormalized GVAR(CameraRelPos);
+        GVAR(CameraRelPos) = _norm vectorMultiply (_mag max 0.5);
+        GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
+        GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     };
 };
 

@@ -25,7 +25,7 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraRelPos) set [2, 0];
         GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply _targetDistance;
         GVAR(CameraRelPos) set [2, _targetHeight];
-        GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(CameraRelPos);
+        GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     } else {
         private _pos = [0,0,0];
@@ -48,8 +48,7 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraPos) = AGLToASL GVAR(CameraPos);
 
         _diffVect =  getPosASL GVAR(Camera) vectorDiff _pos;
-
-        GVAR(CameraPitch) = -(_diffVect select 2) atan2 vectorMagnitude _diffVect;
+        GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect);
         GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
 
 
@@ -69,7 +68,7 @@ if (_unit isEqualType []) exitWith {
 private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 
-if (_cameraMode == 2) then {
+if (_cameraMode in [2, 6]) then {
     if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
         GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
         GVAR(CameraRelPos) set [2, 5];
@@ -81,8 +80,7 @@ if (_cameraMode == 2) then {
     if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
         [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_player]] call CFUNC(targetEvent);
     };
-
-    GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(CameraRelPos);
+    GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 };
 

@@ -459,6 +459,10 @@ private _return = switch (_keyCode) do {
                 GVAR(TopDownOffset) = [0, 0, 100];
                 true;
             };
+            case 6: {
+                GVAR(CameraRelPos) = [0, 10, 10];
+                true;
+            };
         };
 
     };
@@ -468,6 +472,7 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD1;
     case DIK_NUMPAD2;
     case DIK_NUMPAD3;
+    case DIK_NUMPAD5;
     case DIK_NUMPAD4: {
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == 0 && _keyCode == DIK_RETURN) exitWith {false};
@@ -483,15 +488,16 @@ private _return = switch (_keyCode) do {
         if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
 
         private _cameraMode = switch (_keyCode) do {
-            case DIK_RETURN: {2};
             case DIK_NUMPAD0: {
-                    _newCameraTarget = objNull;
-                    1;
-                };
+                _newCameraTarget = objNull;
+                1;
+            };
+            case DIK_RETURN;
             case DIK_NUMPAD1: {2};
             case DIK_NUMPAD2: {3};
             case DIK_NUMPAD3: {5};
             case DIK_NUMPAD4: {4};
+            case DIK_NUMPAD5: {6};
         };
         [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
         true;
