@@ -12,6 +12,7 @@ Mode | Description
 **FIRST PERSON [&lt;Object&gt;]** | First Persion View Mode to see what the player sees
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
 **TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
+**ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -47,6 +48,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
 **`NUMPAD 3`** | First Person View | Toggles to First Person View
 **`NUMPAD 4`** | Topdown View | Toggles to TopDown View
+**`NUMPAD 5`** | Orbit View | Toggles to Orbit View
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
 
 ## MAP VIEW
