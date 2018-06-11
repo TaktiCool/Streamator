@@ -875,7 +875,6 @@ _ctrlPlanningChannel ctrlCommit 0;
     _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
     _ctrl ctrlCommit 0;
     GVAR(Camera) cameraEffect ["internal", "back"];
-    private _temp = shownHUD;
     if (_mode == 5) then {
         GVAR(Camera) cameraEffect ["Terminate", "BACK"];
         GVAR(CameraFollowTarget) switchCamera "INTERNAL";
@@ -884,7 +883,6 @@ _ctrlPlanningChannel ctrlCommit 0;
         cameraEffectEnableHUD true;
     }] call CFUNC(execNextFrame);
     cameraEffectEnableHUD true;
-    showHud _temp;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
 [QGVAR(hightlightModeChanged), {
