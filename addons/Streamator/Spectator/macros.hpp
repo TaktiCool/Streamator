@@ -11,4 +11,4 @@
 #define UNITDOTDIST 1000
 #define PLANNINGMODEUPDATETIME 0.05
 
-#define LEFTBORDER ((safeZoneW/safeZoneH-16/9)/2 max 0)
+#define LEFTBORDER (((((getResolution select 4)-16/9)/2) max 0)*safeZoneH)
