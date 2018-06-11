@@ -13,21 +13,25 @@ class CfgCLibModules {
                 FNC(buildUnitInfoUI);
                 FNC(findInputEvents);
             };
-            APIFNC(addCustom3dIcon);
-            APIFNC(addSearchTarget);
+            MODULE(Input) {
+                FNC(dik2Char);
+                FNC(keyDownEH);
+                FNC(keyUpEH);
+                FNC(mouseMovingEH);
+                FNC(mouseWheelEH);
+            };
+            MODULE(User) {
+                APIFNC(addCustom3dIcon);
+                APIFNC(addSearchTarget);
+            };
             FNC(cameraUpdateLoop);
             FNC(clientInit);
             FNC(closeSpectator);
             FNC(compatibleMagazines);
-            FNC(dik2Char);
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
             APIFNC(isSpectator);
-            FNC(keyDownEH);
-            FNC(keyUpEH);
-            FNC(mouseMovingEH);
-            FNC(mouseWheelEH);
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
