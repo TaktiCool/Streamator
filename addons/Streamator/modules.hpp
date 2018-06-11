@@ -15,7 +15,6 @@ class CfgCLibModules {
             };
             APIFNC(addCustom3dIcon);
             APIFNC(addSearchTarget);
-            FNC(buildSpectatorUI);
             FNC(cameraUpdateLoop);
             FNC(clientInit);
             FNC(closeSpectator);
