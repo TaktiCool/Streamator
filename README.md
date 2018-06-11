@@ -9,8 +9,9 @@ Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
 **FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focussed object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focussed spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focussing. It can be refreshed by pressing the R key.
+**FIRST PERSON [&lt;Object&gt;]** | First Persion View Mode to see what the player sees
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
-**Topdown [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
+**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -44,7 +45,8 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 0`** | Free View | Toggles back to Free View
 **`NUMPAD 1`** | Follow View | Toggles to Follow Mode
 **`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
-**`NUMPAD 3`** | Topdown View | Toggles to TopDown View
+**`NUMPAD 3`** | First Person View | Toggles to First Person View
+**`NUMPAD 4`** | Topdown View | Toggles to TopDown View
 **`SPACE`** + **`Mouse Moving`** | Offset Camera in Shoulder View | Offsets the X and  Y Position of the Camera in Shoulder View
 **`SPACE`** + **`Scrollwheel`** | Offset Camera in Shoulder and TopDown View | Offsets the Z Position in Shoudler Postition and the Y Position in Topdown View
 
