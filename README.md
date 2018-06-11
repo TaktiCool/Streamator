@@ -47,7 +47,6 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
 **`NUMPAD 3`** | First Person View | Toggles to First Person View
 **`NUMPAD 4`** | Topdown View | Toggles to TopDown View
-**`SPACE`** + **`Mouse Moving`** | Offset Camera in Shoulder View | Offsets the X and  Y Position of the Camera in Shoulder View
 **`SPACE`** + **`Scrollwheel`** | Offset Camera in Shoulder and TopDown View | Offsets the Z Position in Shoudler Postition and the Y Position in Topdown View
 
 ## MAP VIEW
