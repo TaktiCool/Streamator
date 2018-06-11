@@ -26,7 +26,7 @@ if (_ctrl) then { \
 }
 
 #define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; \
-GVAR(PrevCameraMode) = GVAR(CameraMode); \
+if (isNull GVAR(CameraFollowTarget)) exitWith {false;};\
 GVAR(CameraMode) = num; \
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent); \
 true;
@@ -121,7 +121,6 @@ private _return = switch (_keyCode) do {
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
                     private _prevUnit = GVAR(CameraFollowTarget);
                     GVAR(CameraFollowTarget) = objNull;
-                    GVAR(PrevCameraMode) = GVAR(CameraMode);
                     GVAR(CameraMode) = 1;
                     GVAR(CameraPos) = _pos;
                     GVAR(CameraPreviousState) = [];
@@ -225,13 +224,12 @@ private _return = switch (_keyCode) do {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = GVAR(CursorTarget);
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
-            GVAR(CameraMode) = GVAR(PrevCameraMode);
+            GVAR(CameraMode) = 2;
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         } else {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = objNull;
-            GVAR(PrevCameraMode) = GVAR(CameraMode);
             GVAR(CameraMode) = 1;
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
@@ -458,9 +456,20 @@ private _return = switch (_keyCode) do {
     case DIK_R: { // R
         if (GVAR(InputMode) != 0) exitWith {false;};
         if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
-        private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
-        [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
-        true;
+        switch (GVAR(CameraMode)) do {
+            case 2: {
+                private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
+                [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
+                true;
+            };
+            case 3: {
+                GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
+            };
+            case 4: {
+                GVAR(TopDownOffset) = [0, 0, 100];
+            };
+        };
+
     };
 
     case DIK_NUMPAD0: { // FREE
@@ -471,11 +480,16 @@ private _return = switch (_keyCode) do {
     };
     case DIK_NUMPAD1: { // FOLLOW
         TOGGLEVIEW(2);
+        private _distance = (GVAR(CameraFollowTarget) distance getPos GVAR(Camera));
+        [GVAR(CameraFollowTarget), _distance > 300] call FUNC(setCameraTarget);
     };
     case DIK_NUMPAD2: { // SHOULDER
         TOGGLEVIEW(3);
     };
     case DIK_NUMPAD3: { // TOPDOWN
+        TOGGLEVIEW(5);
+    };
+    case DIK_NUMPAD4: {
         TOGGLEVIEW(4);
     };
     default {

@@ -51,7 +51,6 @@ GVAR(CameraZoomMode) = false;
 GVAR(CameraEditMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW | 3: SHOULDER | 4: TOPDOWN
-GVAR(PrevCameraMode) = 2;
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
@@ -95,13 +94,13 @@ GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_
 
 GVAR(RadioInformationPrev) = [];
 
-GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
+GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
-
+JK_test = objNull;
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
@@ -137,7 +136,9 @@ DFUNC(updateSpectatorArray) = {
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
+    _temp set [1, false];
     _temp set [6, false];
+    _temp set [7, true];
     showHUD _temp;
 
     [{
@@ -249,6 +250,7 @@ if (GVAR(TFARLoaded)) then {
         } else {
             GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
         };
+        [QGVAR(radioFollowTargetChanged), [GVAR(RadioFollowTarget)]] call CFUNC(localEvent);
         if !(alive GVAR(RadioFollowTarget)) then {
             tf_lastFrequencyInfoTick = diag_tickTime - 1;
         };

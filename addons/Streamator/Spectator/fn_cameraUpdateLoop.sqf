@@ -21,7 +21,6 @@ private _right = [cos _tempDir, -sin _tempDir, 0];
 private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
 // Calculate velocity
 private _velocity = [0, 0, 0];
-private _velocityLocal = [0, 0, 0];
 if (GVAR(InputMode) == 0) then {
     if (inputAction "cameraMoveForward" > 0) then {
         _velocity = _velocity vectorAdd (_forward vectorMultiply (inputAction "cameraMoveForward"));
@@ -102,9 +101,15 @@ switch (GVAR(CameraMode)) do {
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * CGVAR(deltaTime)));
-        GVAR(CameraPos) = (GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "spine3") vectorAdd GVAR(ShoulderOffSet)));
-        private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
-        GVAR(CameraPitch) = -(_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
+        GVAR(CameraPitch) = -(asin ([0, 1, 0] vectorDotProduct (vectorNormalized ((GVAR(CameraFollowTarget) selectionPosition "camera") vectorDiff (GVAR(CameraFollowTarget) selectionPosition "pelvis")))));
+        private _offset = +GVAR(ShoulderOffSet);
+        _offset set [1, (_offset select 1) * cos GVAR(CameraPitch) - (_offset select 2) * sin GVAR(CameraPitch)];
+        _offset set [2, (_offset select 1) * sin GVAR(CameraPitch) + (_offset select 2) * cos GVAR(CameraPitch)];
+        GVAR(CameraPos) = (GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "camera") vectorAdd _offset));
+
+
+        //GVAR(CameraPitch) = (_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
+        //GVAR(CameraDir) = (_eyeDir select 0) atan2 (_eyeDir select 1);
         GVAR(CameraDir) = getDirVisual GVAR(CameraFollowTarget);
     };
 
@@ -118,31 +123,29 @@ switch (GVAR(CameraMode)) do {
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
         GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
-        GVAR(CameraPos) = (getPosASLVisual GVAR(CameraFollowTarget)) vectorAdd GVAR(TopDownOffset);
+        GVAR(CameraPos) = GVAR(CameraFollowTarget) modelToWorldVisualWorld ((GVAR(CameraFollowTarget) selectionPosition "head") vectorAdd GVAR(TopDownOffset));
         GVAR(CameraDir) = 0;
         GVAR(CameraPitch) = -90;
         _cameraSmoothingTime = 0.0757858;
     };
 
     case 5: { // FPS
-        if (isNull GVAR(CameraFollowTarget)) exitWith {
-            GVAR(CameraMode) = 1;
-            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+        if !(cameraOn in [CLib_player, GVAR(Camera)]) then {
+
+            if (GVAR(CameraFollowTarget) != cameraOn) then {
+                GVAR(CameraFollowTarget) = cameraOn;
+                [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+                [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
+            };
+
+            //GVAR(Camera) cameraEffect ["internal", "back"];
+            //GVAR(Camera) cameraEffect ["Terminate", "BACK"];
+            GVAR(CameraFollowTarget) switchCamera "INTERNAL";
+
         };
-        if !((vehicle GVAR(CameraFollowTarget)) isKindOf "CAManBase") exitWith {
-            GVAR(CameraMode) = GVAR(PrevCameraMode);
-            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-        };
-        GVAR(CameraPos) = eyePos GVAR(CameraFollowTarget);
-        private _eyeDir = eyeDirection GVAR(CameraFollowTarget);
-        GVAR(CameraPitch) = (_eyeDir select 2) atan2 vectorMagnitude _eyeDir;
-        GVAR(CameraDir) = (_eyeDir select 0) atan2 (_eyeDir select 1);
-        GVAR(CameraDirOffset) = 0;
-        GVAR(CameraPitchOffset) = 0;
-        //_cameraSmoothingTime = 0;
+
+        breakOut SCRIPTSCOPENAME;
     };
-
-
 };
 
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];

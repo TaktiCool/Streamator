@@ -90,7 +90,7 @@ if (GVAR(OverlayPlanningMode)) then {
         {
             _x params ["_time", "_pos"];
             //private _size = ((1 min (0.2 / ((GVAR(Camera) distance _pos) / 10000)^0.7)) max 0.2);
-            private _size = (0.8 min (1 / (((GVAR(Camera) distance _pos) / 100)^0.5)) max 0.15);
+            private _size = (0.8 min (1 / ((((positionCameraToWorld [0, 0, 0]) distance _pos) / 100)^0.5)) max 0.15);
             private _alpha = 1 - (serverTime - _time) max 0;
             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
             _color set [3, _alpha];
@@ -130,7 +130,7 @@ if (GVAR(OverlayUnitMarker)) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
-            private _distance = GVAR(Camera) distance _x;
+            private _distance = (positionCameraToWorld [0, 0, 0]) distance _x;
             if (_distance < NAMETAGDIST) then {
                 private _iconType = _x getVariable QGVAR(unitType);
                 if (isNil "_iconType" || {(_iconType select 1) <= time}) then {
@@ -172,7 +172,7 @@ if (GVAR(OverlayGroupMarker)) then {
         if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled _leader && alive _leader && !(isObjectHidden _leader)) then {
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             _sideColor set [3, 0.7];
-            private _distance = GVAR(Camera) distance _leader;
+            private _distance = (positionCameraToWorld [0, 0, 0]) distance _leader;
             private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
             if (isNil "_groupMapIcon") then {
                 _groupMapIcon = [side _x] call FUNC(getDefaultIcon);

@@ -55,16 +55,35 @@ private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlInfo ctrlSetPosition [PX(0.3 + BORDERWIDTH), PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
 _ctrlInfo ctrlSetFontHeight PY(1.5);
 _ctrlInfo ctrlSetFont "RobotoCondensed";
-_ctrlInfo ctrlSetText "[F] Follow Cursor Target  [CTRL + F] Follow Unit/Squad/Objective  [ALT + F] Follow Last Shooting Unit  [M] Map  [F1] Toggle Group Overlay  [F2] Toggle Unit Overlay  [F3] Toggle Custom Overlay  [TAB] Reset FOV";
+_ctrlInfo ctrlSetText "[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map [F1] Toggle Group Overlay [F2] Toggle Unit Overlay [F3] Toggle Custom Overlay";
 _ctrlInfo ctrlCommit 0;
 
 private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
 
 private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-_ctrlCameraMode ctrlSetPosition [safeZoneW - PY(22),  PY(0.3), PX(20), PY(1.8)];
+_ctrlCameraMode ctrlSetPosition [safeZoneW - PX(21),  PY(0.3), PX(20), PY(1.8)];
 _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
 _ctrlCameraMode ctrlSetStructuredText parseText format ["<t align='right' size='%1'>FREE</t>", _smallTextSize];
 _ctrlCameraMode ctrlCommit 0;
+
+private _ctrlRadioFollowUnit = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlRadioFollowUnit ctrlSetPosition [safeZoneW - PX(21),  safeZoneH - PY(BORDERWIDTH), PX(20), PY(BORDERWIDTH)];
+_ctrlRadioFollowUnit ctrlSetFont "RobotoCondensed";
+_ctrlRadioFollowUnit ctrlSetStructuredText parseText format ["<t align='right' size='%1'></t>", _smallTextSize];
+_ctrlRadioFollowUnit ctrlCommit 0;
+
+[QGVAR(radioFollowTargetChanged), {
+    (_this select 1) params ["_ctrl"];
+    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
+    if !(GVAR(RadioFollowTarget) isEqualTo objNull) then {
+        _ctrl ctrlSetStructuredText parseText format ["<t align='right' color='#ffffff' size='%1'><img image='A3\ui_f\data\gui\cfg\communicationmenu\call_ca.paa' /> %2</t>", _smallTextSize, GVAR(RadioFollowTarget) call CFUNC(name)];
+        _ctrl ctrlCommit 0;
+    } else {
+        _ctrl ctrlSetStructuredText parseText "";
+        _ctrl ctrlCommit 0;
+    };
+
+}, [_ctrlRadioFollowUnit]] call CFUNC(addEventhandler);
 
 private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
 _ctrlTargetInfo ctrlSetPosition [0, safeZoneH + PY(0.3 - BORDERWIDTH), safeZoneW, PY(1.8)];
@@ -169,7 +188,7 @@ _ctrlFOVDefaultLine ctrlCommit 0;
 
 // Radio Information
 private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlRadioInfoGrp ctrlSetPosition [PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH) - PY(32), PX(30), PY(4)];
+_ctrlRadioInfoGrp ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH + 32), PX(30), PY(4)];
 _ctrlRadioInfoGrp ctrlShow true;
 _ctrlRadioInfoGrp ctrlCommit 0;
 
@@ -177,6 +196,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     (_this select 0) params ["_unit", "_freq"];
     (_this select 1) params ["_ctrlGroup"];
 
+    private _display = ctrlParent _ctrlGroup;
 
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _nbrElements = count _elements;
@@ -225,9 +245,9 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlSquad ctrlSetText toUpper (groupId group _unit); // Group Name
     _ctrlSquad ctrlCommit 0;
 
-    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
-    _ctrlGroup ctrlCommit 0.5;
+    _ctrlGroup ctrlCommit 0.2;
 
     _elements pushBack _ctrlElementGrp;
 
@@ -242,7 +262,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = false;
     private _element = controlNull;
-    private _nbrElements = {
+    {
         private _data = _x getVariable [QGVAR(data), []];
         if (_data isEqualTo []) exitWith {true};
         if (_data isEqualTo [_unit, _freq]) exitWith {
@@ -254,7 +274,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
             private _pos = ctrlPosition _x;
             _pos set [1, (_pos select 1) - PY(4)];
             _x ctrlSetPosition _pos;
-            _x ctrlCommit 0.5;
+            _x ctrlCommit 0.2;
         };
         true;
     } count _elements;
@@ -263,24 +283,26 @@ _ctrlRadioInfoGrp ctrlCommit 0;
         ctrlDelete _element;
     };
 
-    private _height = PY(4*_nbrElements);
+    private _height = PY(4 * count _elements);
 
-    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
-    _ctrlGroup ctrlCommit 0.5;
+    _ctrlGroup ctrlCommit 0.2;
 
     _ctrlGroup setVariable [QGVAR(elements), _elements];
 }, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
 [QGVAR(RadioInformationChanged), {
-    (_this select 0) params ["_radioInformation"];
+    private _radioInformation = _this select 0;
     (_this select 1) params ["_ctrlGroup"];
+    if !(_radioInformation isEqualTo []) then {
+        _radioInformation = (_radioInformation select 0) + (_radioInformation select 1);
+    };
 
-    _radioInformation = (_radioInformation select 0) + (_radioInformation select 1);
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = 0;
     private _element = [];
-    private _nbrElements = {
+    {
         private _data = _x getVariable [QGVAR(data), []];
         if (_data isEqualTo []) exitWith {true};
         if !((_data select 1) in _radioInformation) exitWith {
@@ -292,7 +314,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
             private _pos = ctrlPosition _x;
             _pos set [1, (_pos select 1) - PY(4*_elementFound)];
             _x ctrlSetPosition _pos;
-            _x ctrlCommit 0.5;
+            _x ctrlCommit 0.2;
         };
         true;
     } count _elements;
@@ -303,11 +325,11 @@ _ctrlRadioInfoGrp ctrlCommit 0;
         } count _element;
     };
 
-    private _height = PY(4*(_nbrElements));
+    private _height = PY(4 * count _elements);
 
-    _ctrlGroup ctrlSetPosition [PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH) - PY(28) - _height, PX(30), _height];
+    _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
     _ctrlGroup ctrlShow true;
-    _ctrlGroup ctrlCommit 0.5;
+    _ctrlGroup ctrlCommit 0.2;
 
     _ctrlGroup setVariable [QGVAR(elements), _elements];
 }, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
@@ -413,7 +435,7 @@ _ctrlShotsValue ctrlCommit 0;
 private _ctrlWeaponSlots = [];
 private _xPosition = 41;
 {
-    private _ctrlGrp= _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrpUnitInfo];
+    private _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrpUnitInfo];
     _ctrlGrp ctrlSetPosition [PX(_xPosition), PY(8), PX(16), PY(14)];
     _ctrlGrp ctrlCommit 0;
 
@@ -786,13 +808,17 @@ _ctrlPlanningChannel ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
 
 [QGVAR(CameraTargetChanged), {
+    JK_test = GVAR(CameraFollowTarget);
     if (GVAR(UnitInfoOpen)) then {
         if (isNull GVAR(CameraFollowTarget)) then {
             QGVAR(CloseUnitInfo) call CFUNC(localEvent);
         } else {
             [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
         };
-
+    };
+    if (GVAR(CameraMode) == 5 && cameraOn != GVAR(CameraFollowTarget)) then {
+        GVAR(CameraMode) = 2;
+        [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
     };
 }] call CFUNC(addEventhandler);
 
@@ -848,6 +874,17 @@ _ctrlPlanningChannel ctrlCommit 0;
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
     _ctrl ctrlCommit 0;
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    private _temp = shownHUD;
+    if (_mode == 5) then {
+        GVAR(Camera) cameraEffect ["Terminate", "BACK"];
+        GVAR(CameraFollowTarget) switchCamera "INTERNAL";
+    };
+    [{
+        cameraEffectEnableHUD true;
+    }] call CFUNC(execNextFrame);
+    cameraEffectEnableHUD true;
+    showHud _temp;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
 [QGVAR(hightlightModeChanged), {
@@ -998,11 +1035,11 @@ _ctrlPlanningChannel ctrlCommit 0;
         };
         default {
             if (GVAR(MapOpen)) then {
-                format ["<t size='%1'>[ALT+LMB] Teleport  [M] Close Map</t>", _smallTextSize]
+                format ["<t size='%1'>[ALT+LMB] Teleport [M] Close Map</t>", _smallTextSize]
             } else {
                 private _colors = ["#ffffff", "#3CB371"];
                 format [
-                    "<t size='%4'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [ALT + F] Follow Last Shooting Unit [M] Map </t><t size='%4' color='%1'>[F1] Toggle Group Overlay</t> <t size='%4' color='%2'>[F2] Toggle Unit Overlay</t> <t size='%4' color='%3'>[F3] Toggle Custom Overlay</t> <t size='%4'>[TAB] Reset FOV </t>",
+                    "<t size='%4'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t><t size='%4' color='%1'>[F1] Toggle Group Overlay</t> <t size='%4' color='%2'>[F2] Toggle Unit Overlay</t> <t size='%4' color='%3'>[F3] Toggle Custom Overlay</t>",
                     _colors select GVAR(OverlayGroupMarker),
                     _colors select GVAR(OverlayUnitMarker),
                     _colors select GVAR(OverlayCustomMarker),

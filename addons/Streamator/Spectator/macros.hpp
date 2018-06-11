@@ -10,3 +10,5 @@
 #define NAMETAGDIST 200
 #define UNITDOTDIST 1000
 #define PLANNINGMODEUPDATETIME 0.05
+
+#define LEFTBORDER ((safeZoneW/safeZoneH-16/9)/2 max 0)
