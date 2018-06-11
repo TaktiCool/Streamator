@@ -9,8 +9,9 @@ Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
 **FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focussed object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focussed spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focussing. It can be refreshed by pressing the R key.
+**FIRST PERSON [&lt;Object&gt;]** | First Persion View Mode to see what the player sees
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
-**Topdown [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
+**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -35,7 +36,7 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
-**`CTRL`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
+**`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`CTRL`** + **`PAGE UP`** | Change Planning Mode Color | Change Planning Mode Color
@@ -44,8 +45,8 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 0`** | Free View | Toggles back to Free View
 **`NUMPAD 1`** | Follow View | Toggles to Follow Mode
 **`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
-**`NUMPAD 3`** | Topdown View | Toggles to TopDown View
-**`SPACE`** + **`Mouse Moving`** | Offset Camera in Shoulder View | Offsets the X and  Y Position of the Camera in Shoulder View
+**`NUMPAD 3`** | First Person View | Toggles to First Person View
+**`NUMPAD 4`** | Topdown View | Toggles to TopDown View
 **`SPACE`** + **`Scrollwheel`** | Offset Camera in Shoulder and TopDown View | Offsets the Z Position in Shoudler Postition and the Y Position in Topdown View
 
 ## MAP VIEW
@@ -55,7 +56,7 @@ Key Binding | Short Description | Remarks
 **`ALT`** + **`LMB`** | Move camera | Moves the camera to the clicked position
 **`LMB`** (Dbl. Click) on Marker | Focus Unit/Vehicle | Focusses a unit or vehicle.
 Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups: ID and group members<br>Vehicles: type and units<br>
-**`CTRL`** + **`E`** | Toggle Planing Mode | Toggles Planing Mode and shows Cursor
+**`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
