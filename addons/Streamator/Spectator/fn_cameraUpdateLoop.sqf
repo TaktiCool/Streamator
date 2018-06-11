@@ -175,7 +175,8 @@ switch (_cameraMode) do {
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];
 
 private _distance = GVAR(CameraPos) distance (getPosASL GVAR(Camera));
-if (_distance > ((vectorMagnitude _velocity) * GVAR(CameraSpeed))) then {
+private _velBasedDistance = (vectorMagnitude _velocity) * GVAR(CameraSpeed) max 300;
+if (_distance > _velBasedDistance) then {
     GVAR(CameraPreviousState) = [];
 };
 

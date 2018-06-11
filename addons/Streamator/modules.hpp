@@ -23,6 +23,7 @@ class CfgCLibModules {
             MODULE(User) {
                 APIFNC(addCustom3dIcon);
                 APIFNC(addSearchTarget);
+                APIFNC(isSpectator);
             };
             FNC(cameraUpdateLoop);
             FNC(clientInit);
@@ -31,7 +32,6 @@ class CfgCLibModules {
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
-            APIFNC(isSpectator);
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
