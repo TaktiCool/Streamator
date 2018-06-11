@@ -894,6 +894,8 @@ _ctrlPlanningChannel ctrlCommit 0;
     if (_mode == 5) then {
         GVAR(Camera) cameraEffect ["Terminate", "BACK"];
         GVAR(CameraFollowTarget) switchCamera "INTERNAL";
+    } else {
+        switchCamera CLib_player; 
     };
     [{
         cameraEffectEnableHUD true;
