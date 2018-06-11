@@ -107,7 +107,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
         private _squadUnits = "";
         private _unitCount = {
             private _kitIcon = _x call EFUNC(Spectator,getUnitType);
-            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
+            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon select 0, [_x] call CFUNC(name)];
             true;
         } count _units;
 

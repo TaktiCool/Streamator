@@ -109,7 +109,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
         private _unitCount = {
             if (alive _x) then {
                 private _kitIcon = _x call EFUNC(Spectator,getUnitType);
-                _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon, [_x] call CFUNC(name)];
+                _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon select 0, [_x] call CFUNC(name)];
                 true;
             } else {
                 false;
