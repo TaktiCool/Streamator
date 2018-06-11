@@ -564,7 +564,7 @@ _ctrlPlanningChannel ctrlCommit 0;
     _ctrlRoleIconBackground ctrlSetText format ["#(argb,8,8,3)color(%1,%2,%3,1)", _color select 0, _color select 1, _color select 2];
     _ctrlRoleIconBackground ctrlCommit 0;
 
-    _ctrlUnitRoleIcon ctrlSetText (_unit call FUNC(getUnitType));
+    _ctrlUnitRoleIcon ctrlSetText ((_unit call FUNC(getUnitType)) select 0);
     _ctrlUnitRoleIcon ctrlCommit 0;
 
     // set group id

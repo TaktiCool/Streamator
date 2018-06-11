@@ -138,17 +138,21 @@ if (GVAR(OverlayUnitMarker)) then {
                     _iconType = [_icon, time + 60];
                     _x setVariable [QGVAR(unitType), _iconType];
                 };
-                private _icon = _iconType select 0;
+                (_iconType select 0) params ["_icon", "_iconRelSize"];
 
-                private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, 0.5 max (_distance * 8 / 300)];
-                private _size = (0.4 max 2 / (sqrt _distance)) min 3;
+
+
+                private _pos = (_x modelToWorldVisual (_x selectionPosition "Head")) vectorAdd [0, 0, (0.4 max 0.25*((_distance/2)^0.8)) min 1.5];
+                private _size = (0.4 max (0.5 / ((_distance/30)^0.8))) min 1;
 
                 private _scale = 1 + 0.4 * (1 - _shotFactor);
                 if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
                     drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
-                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * 1.4, _size * 1.4, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
+                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size*0.75*_iconRelSize*_scale, _size*0.75*_iconRelSize*_scale, 0];
+                drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, 1], _pos, _size*1.4, _size*1.4, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
+
             } else {
                 if (_distance < UNITDOTDIST) then {
                     _sideColor set [3, 0.5];
@@ -178,7 +182,7 @@ if (GVAR(OverlayGroupMarker)) then {
                 _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
                 _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
             };
-            private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 25 min (1 max (_distance * 30 / 300))];
+            private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 10 min (2 max (_distance * 30 / 150)^0.8)];
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
 
             drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
