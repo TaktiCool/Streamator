@@ -824,7 +824,11 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(CameraSpeedChanged), {
     (_this select 1) params ["_ctrl"];
-    private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
+    private _logScale = (ln GVAR(CameraSpeed)) / ln sqrt 2;
+    private _logScaleMin = (ln CAMERAMINSPEED) / ln sqrt 2;
+    private _logScaleMax = (ln CAMERAMAXSPEED) / ln sqrt 2;
+    private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
+    //private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
     _ctrl ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(2 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
@@ -834,9 +838,19 @@ _ctrlPlanningChannel ctrlCommit 0;
     _ctrl ctrlCommit 0;
 }, _ctrlMouseSpeedBar] call CFUNC(addEventhandler);
 
+[QGVAR(CameraSpeedChanged)] call CFUNC(localEvent);
+
 [QGVAR(CameraSmoothingChanged), {
     (_this select 1) params ["_ctrl"];
-    private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
+    private _relLength = 0;
+    if (GVAR(CameraSmoothingTime) > 0) then {
+        private _logScale = (ln GVAR(CameraSmoothingTime)) / ln sqrt 2;
+        private _logScaleMin = (ln 0.05) / ln sqrt 2;
+        private _logScaleMax = (ln 1.6) / ln sqrt 2;
+        _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0.1, 1];
+    };
+
+    //private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
     _ctrl ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(8 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
@@ -845,6 +859,8 @@ _ctrlPlanningChannel ctrlCommit 0;
     ];
     _ctrl ctrlCommit 0;
 }, _ctrlMouseSmoothingBar] call CFUNC(addEventhandler);
+
+[QGVAR(CameraSmoothingChanged)] call CFUNC(localEvent);
 
 [QGVAR(CameraFOVChanged), {
     (_this select 1) params ["_ctrl"];
