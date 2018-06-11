@@ -148,7 +148,7 @@ if (GVAR(OverlayUnitMarker)) then {
                     drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
-                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
+                drawIcon3D [_icon, [1, 1, 1, 1], _pos, _size * 1.4, _size * 1.4, 0, format ["%1", _x call CFUNC(name)], 0, PY(1.8), "RobotoCondensed", "center"];
             } else {
                 if (_distance < UNITDOTDIST) then {
                     _sideColor set [3, 0.5];
