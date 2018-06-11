@@ -25,7 +25,7 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraRelPos) set [2, 0];
         GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply _targetDistance;
         GVAR(CameraRelPos) set [2, _targetHeight];
-        GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
+        GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos) min 1);
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     } else {
         private _pos = [0,0,0];
@@ -48,7 +48,7 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraPos) = AGLToASL GVAR(CameraPos);
 
         _diffVect =  getPosASL GVAR(Camera) vectorDiff _pos;
-        GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect);
+        GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect  min 1);
         GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
 
 
@@ -80,7 +80,7 @@ if (_cameraMode in [2, 6]) then {
     if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
         [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_player]] call CFUNC(targetEvent);
     };
-    GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
+    GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos) min 1);
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 };
 

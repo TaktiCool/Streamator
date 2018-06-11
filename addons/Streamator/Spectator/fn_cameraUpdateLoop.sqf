@@ -167,7 +167,7 @@ switch (_cameraMode) do {
         private _mag = vectorMagnitude GVAR(CameraRelPos);
         private _norm = vectorNormalized GVAR(CameraRelPos);
         GVAR(CameraRelPos) = _norm vectorMultiply (_mag max 0.5);
-        GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos));
+        GVAR(CameraPitch) = -asin (((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos)) min 1);
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     };
 };
