@@ -233,7 +233,7 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
-    call FUNC(buildSpectatorUI);
+    call FUNC(buildUI);
 
     QGVAR(updateInput) call CFUNC(localEvent);
 
