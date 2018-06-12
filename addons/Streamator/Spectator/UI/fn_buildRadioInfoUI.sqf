@@ -52,7 +52,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
     private _yPos = PY(4*_nbrElements);
     private _height = PY(4*(_nbrElements+1));
-    DUMP("heigt" + str _height + " Y:" + str _yPos);
+
     GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
     private _icon = "";
@@ -62,15 +62,14 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     if (_freq in _lrFreqs) then {
         _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
     };
-    DUMP("FREQS: " + str _swFreqs + " | " + str _lrFreqs);
+
     if (_icon == "") exitWith {
-        DUMP("No Radio Found");
     };
 
     private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
     _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
     _ctrlElementGrp ctrlSetPosition [0, _yPos, PX(30), PY(4)];
-    _ctrlElementGrp ctrlShow true;
+    _ctrlElementGrp ctrlSetFade 1;
     _ctrlElementGrp ctrlCommit 0;
 
     private _ctrlIcon = _display ctrlCreate ["RscPictureKeepAspect", -1, _ctrlElementGrp];
@@ -98,6 +97,9 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.2;
 
+    _ctrlElementGrp ctrlSetFade 0;
+    _ctrlElementGrp ctrlCommit 0.2;
+
     _elements pushBack _ctrlElementGrp;
 
     _ctrlGroup setVariable [QGVAR(elements), _elements];
@@ -112,23 +114,31 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _element = controlNull;
     {
         private _data = _x getVariable [QGVAR(data), []];
-        if (_data isEqualTo []) exitWith {true};
-        if (_data isEqualTo [_unit, _freq]) exitWith {
-            _elementFound = true;
-            _element = _x;
-            false;
+        if !(_data isEqualTo []) then {
+            if (_data isEqualTo [_unit, _freq]) then {
+                _elementFound = true;
+                _element = _x;
+                private _pos = ctrlPosition _x;
+                _pos set [3, 0];
+                _x ctrlSetPosition _pos;
+                _x ctrlSetFade 1;
+                _x ctrlCommit 0.2;
+                [{
+                    ctrlDelete _this;
+                }, 0.2, _x] call CFUNC(wait);
+            } else {
+                if (_elementFound) then {
+                    private _pos = ctrlPosition _x;
+                    _pos set [1, (_pos select 1) - PY(4)];
+                    _x ctrlSetPosition _pos;
+                    _x ctrlCommit 0.2;
+                };
+            };
         };
-        if (_elementFound) then {
-            private _pos = ctrlPosition _x;
-            _pos set [1, (_pos select 1) - PY(4)];
-            _x ctrlSetPosition _pos;
-            _x ctrlCommit 0.2;
-        };
-        true;
+        nil;
     } count _elements;
     if (_elementFound) then {
         _elements = _elements - [_element];
-        ctrlDelete _element;
     };
 
     private _height = PY(4 * count _elements);
@@ -152,25 +162,32 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _element = [];
     {
         private _data = _x getVariable [QGVAR(data), []];
-        if (_data isEqualTo []) exitWith {true};
-        if !((_data select 1) in _radioInformation) exitWith {
-            _elementFound = _elementFound + 1;
-            _element pushBack _x;
-            false;
+        if (_data isEqualTo []) then {
+            if !((_data select 1) in _radioInformation) then {
+                private _pos = ctrlPosition _x;
+                _pos set [1, (_pos select 1) - PY(4*_elementFound)];
+                _pos set [3, 0];
+                _x ctrlSetPosition _pos;
+                _x ctrlSetFade 1;
+                _x ctrlCommit 0.2;
+                [{
+                    ctrlDelete _this;
+                }, 0.2, _x] call CFUNC(wait);
+                _elementFound = _elementFound + 1;
+                _element pushBack _x;
+            } else {
+                if (_elementFound > 0) then {
+                    private _pos = ctrlPosition _x;
+                    _pos set [1, (_pos select 1) - PY(4*_elementFound)];
+                    _x ctrlSetPosition _pos;
+                    _x ctrlCommit 0.2;
+                };
+            };
         };
-        if (_elementFound > 0) then {
-            private _pos = ctrlPosition _x;
-            _pos set [1, (_pos select 1) - PY(4*_elementFound)];
-            _x ctrlSetPosition _pos;
-            _x ctrlCommit 0.2;
-        };
-        true;
+        nil;
     } count _elements;
     if (_elementFound > 0) then {
         _elements = _elements - _element;
-        {
-            ctrlDelete _x;
-        } count _element;
     };
 
     private _height = PY(4 * count _elements);
