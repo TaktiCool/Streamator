@@ -136,7 +136,7 @@ if (GVAR(OverlayUnitMarker)) then {
             private _distance = _cameraPosition distance _x;
 
             _distance = _distance / _fov;
-            if (_distance < NAMETAGDIST) then {
+            if (_distance < NAMETAGDIST && {_distance < getObjectViewDistance}) then {
                 private _headPosition = _x modelToWorldVisual (_x selectionPosition "Head");
                 private _screenPos = worldToScreen _headPosition;
                 if (_screenPos isEqualTo []) exitWith {nil};
