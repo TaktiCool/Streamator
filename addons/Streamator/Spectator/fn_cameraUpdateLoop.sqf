@@ -140,10 +140,10 @@ switch (_cameraMode) do {
 
     case 4: { // TOPDOWN
         GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
-        GVAR(CameraPos) = _cameraFollowTarget modelToWorldVisualWorld ((_cameraFollowTarget selectionPosition "head") vectorAdd GVAR(TopDownOffset));
+        GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld (_cameraFollowTarget selectionPosition "head")) vectorAdd GVAR(TopDownOffset);
         GVAR(CameraDir) = 0;
         GVAR(CameraPitch) = -90;
-        _cameraSmoothingTime = 0.0757858;
+        _cameraSmoothingTime = _cameraSmoothingTime max 0.0757858;
     };
 
     case 5: { // FPS
