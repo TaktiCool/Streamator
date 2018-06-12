@@ -303,8 +303,8 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
 }, _ctrlGrp] call CFUNC(addEventhandler);
 
-[_ctrlGrp, _display] call FUNC(buildRadioInfoUI);
-[_ctrlGrp, _display] call FUNC(buildUnitInfoUI);
+[_ctrlGrp] call FUNC(buildRadioInfoUI);
+[_ctrlGrp] call FUNC(buildUnitInfoUI);
 _ctrlInfo call FUNC(findInputEvents);
 
 [{

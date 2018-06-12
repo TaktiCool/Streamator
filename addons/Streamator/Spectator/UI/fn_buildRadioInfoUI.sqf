@@ -13,7 +13,8 @@
     Returns:
     None
 */
-params ["_ctrlGrp", "_display"];
+params ["_ctrlGrp"];
+private _display = ctrlParent _ctrlGrp;
 private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
 
 private _ctrlRadioFollowUnit = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];

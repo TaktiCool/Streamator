@@ -13,7 +13,9 @@
     Returns:
     None
 */
-params ["_ctrlGrp", "_display"];
+params ["_ctrlGrp"];
+private _display = ctrlParent _ctrlGrp;
+
 // Unit Information Screen
 private _ctrlGrpUnitInfo = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlGrpUnitInfo ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];
