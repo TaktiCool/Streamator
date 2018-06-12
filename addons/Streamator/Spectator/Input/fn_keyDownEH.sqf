@@ -266,74 +266,6 @@ private _return = switch (_keyCode) do {
         QGVAR(CameraFOVChanged) call CFUNC(localEvent);
         true
     };
-    /*
-    case DIK_RETURN: { // RETURN
-        if (GVAR(InputMode) == 1) exitWith {
-            if !(GVAR(InputGuess) isEqualTo []) then {
-                private _target = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
-                if (_target isEqualType []) then {
-                    _target params ["_target", "_targetDistance", "_targetHeight"];
-
-                    if (_target isEqualType objNull) then {
-                        private _distance = _target distance ([getPos GVAR(Camera), getPos GVAR(CameraFollowTarget)] select (isNull GVAR(CameraFollowTarget)));
-                        [_target, (_distance-_targetDistance) > 300] call FUNC(setCameraTarget);
-
-                        GVAR(CameraRelPos) set [2, 0];
-                        GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply _targetDistance;
-                        GVAR(CameraRelPos) set [2, _targetHeight];
-                        GVAR(CameraPitch) = -(GVAR(CameraRelPos) select 2) atan2 vectorMagnitude GVAR(CameraRelPos);
-                        GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
-                    } else {
-                        private _pos = [0,0,0];
-                        if (_target isEqualType "") then {
-                            _pos = AGLToASL getMarkerPos _target;
-                        };
-
-                        if (_target isEqualType []) then {
-                            _pos = AGLToASL _target;
-                        };
-
-                        private _diffVect = getPosASLVisual GVAR(Camera) vectorDiff _pos;
-                        _diffVect set [2, 0];
-                        GVAR(CameraPos) = _pos vectorAdd ((vectorNormalized _diffVect) vectorMultiply _targetDistance);
-                        GVAR(CameraPos) set [2, _targetHeight];
-                        if ((GVAR(CameraPos) distance getPos GVAR(Camera)) > 300) then {
-                            GVAR(CameraPreviousState) = [];
-                        };
-
-                        GVAR(CameraPos) = AGLToASL GVAR(CameraPos);
-
-                        _diffVect =  getPosASL GVAR(Camera) vectorDiff _pos;
-
-                        GVAR(CameraPitch) = -(_diffVect select 2) atan2 vectorMagnitude _diffVect;
-                        GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
-
-
-
-                        if (GVAR(CameraMode) != 1) then {
-                            private _prevUnit = GVAR(CameraFollowTarget);
-                            GVAR(CameraFollowTarget) = objNull;
-                            GVAR(CameraMode) = 1;
-                            [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
-                            [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-                        };
-
-                    };
-
-                } else {
-                    private _distance = _target distance ([getPos GVAR(Camera), getPos GVAR(CameraFollowTarget)] select (isNull GVAR(CameraFollowTarget)));
-                    [_target, _distance > 300] call FUNC(setCameraTarget);
-                }
-
-            };
-
-            GVAR(InputMode) = 0;
-            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-            true
-        };
-        false;
-    };
-    */
     case DIK_BACKSPACE: { // BACKSPACE
         if (GVAR(InputMode) == 1) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
@@ -409,7 +341,8 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F8: {
         if (GVAR(InputMode) != 0) exitWith {false;};
-
+        QGVAR(toggleRadioUI) call CFUNC(localEvent);
+        true;
     };
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
