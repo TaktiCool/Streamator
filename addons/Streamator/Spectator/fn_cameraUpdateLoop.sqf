@@ -163,7 +163,7 @@ switch (_cameraMode) do {
     };
     case 6: { // Orbit
         GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
-        GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld (_cameraFollowTarget selectionPosition "Pelvis")) vectorAdd GVAR(CameraRelPos);
+        GVAR(CameraPos) = (getPosASLVisual _cameraFollowTarget vectorAdd [0, 0, 0.8]) vectorAdd GVAR(CameraRelPos);
         private _mag = vectorMagnitude GVAR(CameraRelPos);
         private _norm = vectorNormalized GVAR(CameraRelPos);
         GVAR(CameraRelPos) = _norm vectorMultiply (_mag max 0.5);
