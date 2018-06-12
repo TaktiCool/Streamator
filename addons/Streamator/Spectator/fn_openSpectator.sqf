@@ -40,6 +40,7 @@ if (isNil QGVAR(compatibleMagazinesNamespace)) then {
 GVAR(Camera) = objNull;
 
 GVAR(CameraPos) = [0, 0, 0];
+GVAR(CameraPosPrev) = [0, 0, 0];
 GVAR(CameraDir) = getDirVisual CLib_player;
 GVAR(CameraDirOffset) = 0;
 GVAR(CameraPitch) = -45;

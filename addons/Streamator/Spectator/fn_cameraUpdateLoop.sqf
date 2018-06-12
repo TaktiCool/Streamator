@@ -175,7 +175,7 @@ switch (_cameraMode) do {
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];
 
 private _distance = GVAR(CameraPos) distance (getPosASL GVAR(Camera));
-private _velBasedDistance = (vectorMagnitude _velocity) * GVAR(CameraSpeed) max 300;
+private _velBasedDistance = (vectorMagnitude (GVAR(CameraPosPrev) vectorDiff (getPosASL GVAR(Camera)))) * GVAR(CameraSpeed) max 300;
 if (_distance > _velBasedDistance) then {
     GVAR(CameraPreviousState) = [];
 };
@@ -214,7 +214,7 @@ if (_cameraSmoothingTime > 0) then {
     GVAR(CameraPreviousState) = [];
 };
 
-
+GVAR(CameraPosPrev) = getPosASL GVAR(Camera);
 GVAR(Camera) setPosASL _position;
 GVAR(Camera) setVectorDirAndUp [[sin _direction * cos _pitch, cos _direction * cos _pitch, sin _pitch], [0, 0, cos _pitch]];
 GVAR(Camera) camSetFov _fov;

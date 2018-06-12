@@ -38,8 +38,12 @@ _ctrlRadioFollowUnit ctrlCommit 0;
 // Radio Information
 private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlRadioInfoGrp ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH + 32), PX(30), PY(4)];
-_ctrlRadioInfoGrp ctrlShow true;
 _ctrlRadioInfoGrp ctrlCommit 0;
+
+[QGVAR(toggleRadioUI), {
+    (_this select 1) params ["_ctrlGroup"];
+    _ctrlGroup ctrlShow !(ctrlShown _ctrlGroup);
+}, _ctrlRadioInfoGrp] call CFUNC(addEventhandler);
 
 [QGVAR(tangentPressed), {
     (_this select 0) params ["_unit", "_freq"];
@@ -63,8 +67,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
         _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
     };
 
-    if (_icon == "") exitWith {
-    };
+    if (_icon == "") exitWith {};
 
     private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
     _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
@@ -94,7 +97,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlSquad ctrlCommit 0;
 
     _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
-    _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.2;
 
     _ctrlElementGrp ctrlSetFade 0;
@@ -144,7 +146,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _height = PY(4 * count _elements);
 
     _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
-    _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.2;
 
     _ctrlGroup setVariable [QGVAR(elements), _elements];
@@ -193,7 +194,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _height = PY(4 * count _elements);
 
     _ctrlGroup ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH+2), safeZoneH - PY(BORDERWIDTH + 32) - _height, PX(30), _height];
-    _ctrlGroup ctrlShow true;
     _ctrlGroup ctrlCommit 0.2;
 
     _ctrlGroup setVariable [QGVAR(elements), _elements];
