@@ -19,7 +19,6 @@ if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
 
     if (_target isEqualType objNull) then {
-        private _distance = _target distance ([getPos GVAR(Camera), getPos GVAR(CameraFollowTarget)] select (isNull GVAR(CameraFollowTarget)));
         [_target] call FUNC(setCameraTarget);
 
         GVAR(CameraRelPos) set [2, 0];

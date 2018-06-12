@@ -170,6 +170,11 @@ _ctrlFOVDefaultLine ctrlSetPosition [
 _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(0,1,0,1)";
 _ctrlFOVDefaultLine ctrlCommit 0;
 
+private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
+_ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
+_ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
@@ -298,8 +303,8 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
 }, _ctrlGrp] call CFUNC(addEventhandler);
 
-_ctrlGrp call FUNC(buildRadioInfoUI);
-_ctrlGrp call FUNC(buildUnitInfoUI);
+[_ctrlGrp, _display] call FUNC(buildRadioInfoUI);
+[_ctrlGrp, _display] call FUNC(buildUnitInfoUI);
 _ctrlInfo call FUNC(findInputEvents);
 
 [{

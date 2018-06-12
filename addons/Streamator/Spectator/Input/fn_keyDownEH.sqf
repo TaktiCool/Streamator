@@ -23,7 +23,7 @@ if (_ctrl) then { \
     [slot] call FUNC(savePosition); \
 } else { \
     [slot] call FUNC(restorePosition); \
-}
+};
 
 #define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; \
 if (isNull GVAR(CameraFollowTarget)) exitWith {false;};\

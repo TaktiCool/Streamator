@@ -13,7 +13,7 @@
     Returns:
     None
 */
-params ["_ctrlGrp"];
+params ["_ctrlGrp", "_display"];
 // Unit Information Screen
 private _ctrlGrpUnitInfo = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlGrpUnitInfo ctrlSetPosition [safeZoneW/2-PX(50), safeZoneH - PY(BORDERWIDTH) - PY(26), PX(100), PY(24)];
@@ -216,11 +216,6 @@ private _unitInfoAllCtrls = [
     _ctrlWeaponSlots,
     _ctrlStats
 ];
-private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-_ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
-_ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
-_ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(UpdateUnitInfo), {
     (_this select 0) params ["_unit"];
