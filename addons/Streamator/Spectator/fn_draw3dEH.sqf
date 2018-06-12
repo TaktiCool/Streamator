@@ -192,8 +192,8 @@ if (GVAR(OverlayGroupMarker)) then {
 
             private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 10 min (2 max (_distance * 30 / 150)^0.8)];
             private _screenPos = worldToScreen _pos;
-
             if (_screenPos isEqualTo []) exitWith {nil};
+
             private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
             private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
             if (isNil "_groupMapIcon") then {
@@ -202,8 +202,8 @@ if (GVAR(OverlayGroupMarker)) then {
             };
 
             private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
-            private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _pos, _leader, objNull, true, 1, "GEOM", "NONE"];
-            private _alpha =  0.5+0.5*_visibility;
+            private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _pos, _leader, objNull, true, 1, "NONE", "NONE"];
+            private _alpha =  0.5 + 0.5 * _visibility;
             _sideColor set [3, 0.7*_alpha];
             drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
             if (_distance < 4 * UNITDOTDIST) then {
