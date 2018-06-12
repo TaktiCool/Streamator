@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=117;
+		nextID=179;
 	};
 	class Camera
 	{
-		pos[]={4032.7085,312.22916,6453.6338};
-		dir[]={-0.16107786,-0.6042251,0.78036702};
-		up[]={-0.1221453,0.79681379,0.59175128};
-		aside[]={0.97935838,7.5320713e-008,0.20215282};
+		pos[]={3997.3672,211.13203,3449.0176};
+		dir[]={-0.72339737,-0.55112529,-0.41593263};
+		up[]={-0.47779977,0.83440542,-0.27472058};
+		aside[]={-0.49846554,3.9499719e-007,0.86693752};
 	};
 };
 binarizationWanted=0;
@@ -24,13 +24,16 @@ addons[]=
 	"A3_Characters_F",
 	"A3_Characters_F_Exp_Civil",
 	"A3_Data_F_Exp_A_Virtual",
-	"A3_Soft_F_Beta_Truck_01"
+	"A3_Soft_F_Beta_Truck_01",
+	"ace_realisticnames",
+	"ace_cargo",
+	"ace_explosives"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=4;
+		items=6;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -58,6 +61,20 @@ class AddonsMetaData
 			name="Arma 3 Beta - Unarmored Land Vehicles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
+		};
+		class Item4
+		{
+			className="ace_cargo";
+			name="ACE3 - Cargo";
+			author="ACE-Team";
+			url="http://ace3mod.com/";
+		};
+		class Item5
+		{
+			className="ace_explosives";
+			name="ACE3 - Explosives";
+			author="ACE-Team";
+			url="http://ace3mod.com/";
 		};
 	};
 };
@@ -91,7 +108,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=27;
+		items=29;
 		class Item0
 		{
 			dataType="Group";
@@ -3477,6 +3494,162 @@ class Mission
 				};
 			};
 			id=104;
+		};
+		class Item27
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=4;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3981.0723,198.00098,3446.45};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						rank="SERGEANT";
+					};
+					id=170;
+					type="B_Soldier_TL_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3986.0723,198.0081,3441.45};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.44999999;
+						rank="CORPORAL";
+					};
+					id=171;
+					type="B_engineer_F";
+				};
+				class Item2
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3976.0723,197.72865,3441.45};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=172;
+					type="B_engineer_F";
+				};
+				class Item3
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3991.0723,197.93225,3441.45};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=173;
+					type="B_soldier_repair_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=169;
+		};
+		class Item28
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=4;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3962.9841,197.21216,3440.3921};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						rank="SERGEANT";
+					};
+					id=175;
+					type="B_Soldier_TL_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3967.9841,197.31937,3435.3921};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.44999999;
+						rank="CORPORAL";
+					};
+					id=176;
+					type="B_engineer_F";
+				};
+				class Item2
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3957.9841,196.83403,3435.3921};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=177;
+					type="B_soldier_exp_F";
+				};
+				class Item3
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3972.9841,197.34586,3430.3921};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=178;
+					type="B_soldier_exp_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=174;
 		};
 	};
 };

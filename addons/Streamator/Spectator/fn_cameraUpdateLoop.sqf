@@ -155,7 +155,9 @@ switch (_cameraMode) do {
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
                 _cameraFollowTarget = cameraOn;
             };
-
+            if !(_cameraFollowTarget isKindOf "CAManBase") then {
+                [QGVAR(CameraModeChanged), 2] call CFUNC(localEvent);
+            };
             _cameraFollowTarget switchCamera "INTERNAL";
 
         };
@@ -175,11 +177,7 @@ switch (_cameraMode) do {
 
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];
 
-private _distance = GVAR(CameraPos) distance (getPosASL GVAR(Camera));
-private _velBasedDistance = (vectorMagnitude (GVAR(CameraPosPrev) vectorDiff (getPosASL GVAR(Camera)))) * GVAR(CameraSpeed) max 300;
-if (_distance > _velBasedDistance) then {
-    GVAR(CameraPreviousState) = [];
-};
+
 
 private _position = GVAR(CameraPos);
 private _direction = GVAR(CameraDir) + GVAR(CameraDirOffset);
@@ -210,12 +208,20 @@ if (_cameraSmoothingTime > 0) then {
     _fov = (_lastFov * _smoothingAmount + _fov) / (1 + _smoothingAmount);
     _position set [2, (getTerrainHeightASL _position) max (_position select 2)];
     GVAR(CameraPreviousState) = [time, _position, _direction, _pitch, _fov, GVAR(CameraDirOffset), GVAR(CameraPitchOffset)];
+
+    private _distance = _position distance (getPosASL GVAR(Camera));
+    private _velBase = (vectorMagnitude _velocity) * GVAR(CameraSpeed);
+    private _camVel = (vectorMagnitude (_lastPosition vectorDiff (getPosASL GVAR(Camera))));
+    private _velBasedDistance = (_camVel + _velBase) max 300;
+    if (_distance > _velBasedDistance) then {
+        GVAR(CameraPreviousState) = [];
+    };
+
 } else {
     _position set [2, (getTerrainHeightASL _position) max (_position select 2)];
     GVAR(CameraPreviousState) = [];
 };
 
-GVAR(CameraPosPrev) = getPosASL GVAR(Camera);
 GVAR(Camera) setPosASL _position;
 GVAR(Camera) setVectorDirAndUp [[sin _direction * cos _pitch, cos _direction * cos _pitch, sin _pitch], [0, 0, cos _pitch]];
 GVAR(Camera) camSetFov _fov;
