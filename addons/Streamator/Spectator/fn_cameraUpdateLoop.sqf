@@ -153,6 +153,7 @@ switch (_cameraMode) do {
                 GVAR(CameraFollowTarget) = cameraOn;
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
+                _cameraFollowTarget = cameraOn;
             };
 
             _cameraFollowTarget switchCamera "INTERNAL";
