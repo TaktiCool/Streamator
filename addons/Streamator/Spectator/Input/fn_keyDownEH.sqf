@@ -217,8 +217,8 @@ private _return = switch (_keyCode) do {
             true;
         };
         if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
             [GVAR(CursorTarget), 2] call FUNC(setCameraTarget);
-            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget);
         } else {
             [objNull, 1] call FUNC(setCameraTarget);
             true;
