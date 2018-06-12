@@ -39,9 +39,9 @@ if (GVAR(CameraMode) == 4) then {
     GVAR(TopDownOffset) = _element select 11;
 };
 call FUNC(setVisionMode);
-if (GVAR(CameraMode) != _lastCameraMode) then {
-    [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-};
+
+[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
+
 if (GVAR(CameraFOV) != _lastCameraFOV) then {
     [QGVAR(CameraFOVChanged), GVAR(CameraFOV)] call CFUNC(localEvent);
 };

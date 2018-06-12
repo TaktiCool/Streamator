@@ -85,10 +85,9 @@ if (_cameraMode in [2, 6]) then {
 
 
 
-if (GVAR(CameraMode) != _cameraMode) then {
-    GVAR(CameraMode) = _cameraMode;
-    [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
-};
+
+GVAR(CameraMode) = _cameraMode;
+[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 
 [QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);
 if (!isNull GVAR(CameraFollowTarget)) then {
