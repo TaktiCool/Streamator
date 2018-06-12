@@ -130,7 +130,7 @@ if (GVAR(OverlayPlanningMode)) then {
 if (GVAR(OverlayUnitMarker)) then {
     {
         if (!(side _x in [sideLogic, sideUnknown]) && alive _x && simulationEnabled _x && !isObjectHidden _x) then {
-            private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
+            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = _cameraPosition distance _x;
@@ -194,7 +194,7 @@ if (GVAR(OverlayGroupMarker)) then {
             private _screenPos = worldToScreen _pos;
             if (_screenPos isEqualTo []) exitWith {nil};
 
-            private _sideColor = GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]];
+            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
             if (isNil "_groupMapIcon") then {
                 _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
