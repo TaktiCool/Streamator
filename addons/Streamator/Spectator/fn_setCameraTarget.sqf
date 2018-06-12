@@ -40,17 +40,12 @@ if (_unit isEqualType []) exitWith {
         _diffVect set [2, 0];
         GVAR(CameraPos) = _pos vectorAdd ((vectorNormalized _diffVect) vectorMultiply _targetDistance);
         GVAR(CameraPos) set [2, _targetHeight];
-        if ((GVAR(CameraPos) distance getPosASL GVAR(Camera)) > 300) then {
-            GVAR(CameraPreviousState) = [];
-        };
-
         GVAR(CameraPos) = AGLToASL GVAR(CameraPos);
 
-        _diffVect =  getPosASL GVAR(Camera) vectorDiff _pos;
+        _diffVect = GVAR(CameraPos) vectorDiff _pos;
+
         GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect  min 1);
         GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
-
-
 
         if (GVAR(CameraMode) != 1) then {
             private _prevUnit = GVAR(CameraFollowTarget);

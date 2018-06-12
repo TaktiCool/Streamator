@@ -33,12 +33,12 @@ if (_unit getUnitTrait "medic") exitWith {
 
 if (_unit getUnitTrait "explosiveSpecialist") exitWith {
     //"\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
-    ["\A3\ui_f\data\igui\cfg\simpletasks\types\", 1];
+    ["\A3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa", 1];
 };
 
-if (_unit getUnitTrait "engineer" || _unit getUnitTrait "explosiveSpecialist") exitWith {
+if (_unit getUnitTrait "engineer") exitWith {
     //"\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
-    ["\A3\ui_f\data\gui\cfg\respawnroles\destroy_ca.paa", 1];
+    ["\A3\ui_f\data\gui\cfg\respawnroles\support_ca.paa", 1];
 };
 if ((secondaryWeapon _unit) find "launch" != -1) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\at_ca.paa";
