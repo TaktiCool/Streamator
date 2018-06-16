@@ -211,6 +211,7 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
+    CLib_Player getVariable ["ACE_Medical_allowDamage", false];
 
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
@@ -287,9 +288,9 @@ if (GVAR(TFARLoaded)) then {
             _freqLR = _freqLR apply {_x + "|7|0"};
         };
         TFAR_player_name = name CLib_player;
-        private _request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", false, 0, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, 0, 1.0, TF_speakerDistance];
+        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
         private _result = "task_force_radio_pipe" callExtension _request;
-        //DUMP("Listen To Radio: " + _result + " " + _request);
+        DUMP("Listen To Radio: " + _result + " " + _request);
         tf_lastFrequencyInfoTick = diag_tickTime + 10;
     }, 0.5] call CFUNC(addPerFrameHandler);
 };

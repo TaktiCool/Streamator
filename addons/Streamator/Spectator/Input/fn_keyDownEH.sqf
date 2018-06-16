@@ -236,7 +236,7 @@ private _return = switch (_keyCode) do {
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false;
     };
-    case DIK_LALT: { // LCTRL
+    case DIK_LALT: { // LALT
         if (GVAR(InputMode) == 1) exitWith {false;};
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
@@ -339,7 +339,7 @@ private _return = switch (_keyCode) do {
         QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
         true;
     };
-    case DIK_F8: {
+    case DIK_F8: { // F8
         if (GVAR(InputMode) != 0) exitWith {false;};
         QGVAR(toggleRadioUI) call CFUNC(localEvent);
         true;
