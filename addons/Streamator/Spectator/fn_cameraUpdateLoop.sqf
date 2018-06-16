@@ -160,6 +160,8 @@ switch (_cameraMode) do {
             };
             _cameraFollowTarget switchCamera "INTERNAL";
 
+            CLib_Player setPos (_cameraFollowTarget modelToWorld [0, 0, -3]);
+            CLib_Player setVectorDirAndUp [vectorDir _cameraFollowTarget, vectorUp _cameraFollowTarget];
         };
 
         breakOut SCRIPTSCOPENAME;

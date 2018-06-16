@@ -78,9 +78,6 @@ if (_cameraMode in [2, 6]) then {
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 };
 
-
-
-
 GVAR(CameraMode) = _cameraMode;
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 
