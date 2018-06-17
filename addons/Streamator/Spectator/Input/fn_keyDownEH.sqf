@@ -117,11 +117,11 @@ private _return = switch (_keyCode) do {
             _map ctrlAddEventHandler ["MouseButtonClick", {
                 params ["_map", "", "_xpos", "_ypos", "", "", "_alt"];
                 if (_alt) exitWith {
+                    GVAR(CameraPreviousState) = [];
                     private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                     _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
                     [objNull, 1] call FUNC(setCameraTarget);
                     GVAR(CameraPos) = _pos;
-                    GVAR(CameraPreviousState) = [];
                     true;
                 };
                 false;

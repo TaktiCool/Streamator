@@ -48,7 +48,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 [QGVAR(tangentPressed), {
     (_this select 0) params ["_unit", "_freq"];
     (_this select 1) params ["_ctrlGroup"];
-    if !(ctrlShown _ctrlGroup) exitWith {};
     private _display = ctrlParent _ctrlGroup;
 
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
@@ -111,7 +110,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     (_this select 0) params ["_unit", "_freq"];
     (_this select 1) params ["_ctrlGroup"];
 
-    if !(ctrlShown _ctrlGroup) exitWith {};
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = false;
     private _element = controlNull;
@@ -165,7 +163,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _element = [];
     {
         private _data = _x getVariable [QGVAR(data), []];
-        if (_data isEqualTo []) then {
+        if !(_data isEqualTo []) then {
             if !((_data select 1) in _radioInformation) then {
                 private _pos = ctrlPosition _x;
                 _pos set [1, (_pos select 1) - PY(4*_elementFound)];

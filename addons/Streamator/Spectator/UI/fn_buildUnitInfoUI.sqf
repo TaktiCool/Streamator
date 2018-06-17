@@ -270,8 +270,16 @@ private _unitInfoAllCtrls = [
     };
 
     // set health
-    private _health = 1 - damage _unit;
-    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round (_health*24)];
+    private _health = damage _unit;
+    if (GVAR(aceLoaded)) then {
+        _health = 0;
+        private _c = {
+            _health = _health + _x;
+            true
+        } count ((getAllHitPointsDamage _unit) select 2);
+        _health = _health/_c;
+    };
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
     _ctrlHealthRing ctrlCommit 0;
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
