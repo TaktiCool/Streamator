@@ -33,10 +33,6 @@ if (isNil QGVAR(PositionMemory)) then {
     GVAR(PositionMemory) = false call CFUNC(createNamespace);
 };
 
-if (isNil QGVAR(compatibleMagazinesNamespace)) then {
-    GVAR(compatibleMagazinesNamespace) = false call CFUNC(createNamespace);
-};
-
 GVAR(Camera) = objNull;
 
 GVAR(CameraPos) = [0, 0, 0];

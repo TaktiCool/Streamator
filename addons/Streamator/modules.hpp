@@ -28,7 +28,6 @@ class CfgCLibModules {
             FNC(cameraUpdateLoop);
             FNC(clientInit);
             FNC(closeSpectator);
-            FNC(compatibleMagazines);
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);

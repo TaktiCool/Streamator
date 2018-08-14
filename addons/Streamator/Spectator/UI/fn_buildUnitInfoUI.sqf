@@ -309,21 +309,21 @@ private _unitInfoAllCtrls = [
         _x params ["_class", "_ammo", "_loaded"];
 
         switch (true) do {
-            case (_class in ((primaryWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((primaryWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _primaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrPrimaryMags = _nbrPrimaryMags + 1;
                 };
             };
-            case (_class in ((handgunWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((handgunWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _handgunMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrHandgunMags = _nbrHandgunMags + 1;
                 };
             };
-            case (_class in ((secondaryWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((secondaryWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _secondaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
