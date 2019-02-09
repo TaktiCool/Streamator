@@ -32,7 +32,7 @@ Key Binding | Short Description | Remarks
 **`F2`** | Toggle Unit Marker | Toggles the visibility of unit marker and names.
 **`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.
 **`F5`** | Toggle Unit Chyron | Toggles Chyron for the current Unit
-**`F6`** | Toggle Planing Mode Icons and Markers | Toggle Planing Mode Icons and Markers from other spectators
+**`F6`** | Toggle Planning Mode Icons and Markers | Toggle Planning Mode Icons and Markers from other spectators
 **`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
