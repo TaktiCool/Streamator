@@ -197,7 +197,7 @@ private _fnc_init = {
 
     [{
         if (GVAR(aceLoaded)) then {
-            CLib_Player getVariable ["ACE_Medical_allowDamage", false];
+            CLib_Player setVariable ["ACE_Medical_allowDamage", false];
             ACE_Hearing_deafnessDV = 0;
             ACE_Hearing_volume = 1;
         };
@@ -207,7 +207,7 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
-    CLib_Player getVariable ["ACE_Medical_allowDamage", false];
+    CLib_Player setVariable ["ACE_Medical_allowDamage", false];
 
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
