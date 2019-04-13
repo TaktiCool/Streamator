@@ -24,16 +24,29 @@ _ctrlRadioFollowUnit ctrlSetStructuredText parseText format ["<t align='right' s
 _ctrlRadioFollowUnit ctrlCommit 0;
 
 [QGVAR(radioFollowTargetChanged), {
-    (_this select 1) params ["_ctrl"];
+    (_this select 1) params ["_ctrl", "_ctrlGroup"];
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
-    if !(GVAR(RadioFollowTarget) isEqualTo objNull) then {
-        _ctrl ctrlSetStructuredText parseText format ["<t align='right' color='#ffffff' size='%1'><img image='A3\ui_f\data\gui\cfg\communicationmenu\call_ca.paa' /> %2</t>", _smallTextSize, GVAR(RadioFollowTarget) call CFUNC(name)];
-        _ctrl ctrlCommit 0;
-    } else {
+    if (GVAR(RadioFollowTarget) isEqualTo objNull) then {
         _ctrl ctrlSetStructuredText parseText "";
         _ctrl ctrlCommit 0;
+    } else {
+        _ctrl ctrlSetStructuredText parseText format ["<t align='right' color='#ffffff' size='%1'><img image='A3\ui_f\data\gui\cfg\communicationmenu\call_ca.paa' /> %2</t>", _smallTextSize, GVAR(RadioFollowTarget) call CFUNC(name)];
+        _ctrl ctrlCommit 0;
     };
-}, [_ctrlRadioFollowUnit]] call CFUNC(addEventhandler);
+    private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
+    {
+        private _pos = ctrlPosition _x;
+        _pos set [3, 0];
+        _x ctrlSetPosition _pos;
+        _x ctrlSetFade 1;
+        _x ctrlCommit 0.2;
+        [{
+            ctrlDelete _this;
+        }, 0.2, _x] call CFUNC(wait);
+        nil;
+    } count _elements;
+    _ctrlGroup setVariable [QGVAR(elements), []];
+}, [_ctrlRadioFollowUnit, _ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
 // Radio Information
 private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
