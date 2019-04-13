@@ -50,6 +50,9 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 4`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
+**`F8`** | Toggle Radio UI | Toggles Radio Information UI
+**`F9`** | Toggle Radio System | Toggles Radio lissening System
+
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks
