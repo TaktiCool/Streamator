@@ -34,6 +34,13 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
 
 if (GVAR(TFARLoaded)) then {
     DFUNC(updateTFARFreq) = {
+		// disable the caching for TFAR_fnc_radiosList by hacking into TFAR internals 
+		TFAR_Core_VehicleConfigCacheNamespace setVariable ["TFAR_fnc_radiosList_lastCache", 0];
+		
+		// diag_log "Updating TFAR Frequencies...";
+		// diag_log str (CLib_player call TFAR_fnc_radiosList);
+		// diag_log str (CLib_player call TFAR_fnc_lrRadiosList apply {typeof (_x select 0)});
+		
         private _freqSW = [];
         private _freqLR = [];
 
@@ -43,7 +50,7 @@ if (GVAR(TFARLoaded)) then {
 		// the radio code and the class name of the used radio for the set channels
 		
 		// Process SW radios
-        {						
+        {					
             private _adChannel = _x call TFAR_fnc_getAdditionalSwChannel;
             private _rc = _x call TFAR_fnc_getSwRadioCode;
 			
@@ -72,7 +79,7 @@ if (GVAR(TFARLoaded)) then {
             _freqLR pushBackUnique format ["%1%2|%3",
 				_x call TFAR_fnc_getLrFrequency,
 				_rc,
-				_x
+				typeOf (_x select 0) // LR radio is an array whose first entry is the radio object
 			];
 			
 			// Check if there is an additional channel and if so add it as well
@@ -80,7 +87,7 @@ if (GVAR(TFARLoaded)) then {
                 _freqLR pushBackUnique format ["%1%2|%3",
 					[_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency,
 					_rc,
-					_x
+					typeOf (_x select 0)  // LR radio is an array whose first entry is the radio object
 				];
             };
             nil;
@@ -99,25 +106,34 @@ if (GVAR(TFARLoaded)) then {
         CLib_player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];
     };
 	
+	
 	// Set up EventHandler for updating the stored TFAR frequencies on the following TFAR-events
     [QGVAR(OnRadiosReceived), "OnRadiosReceived", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+		// diag_log "RadiosReceived";
+		// diag_log _this;
+		
+		// TODO: is waiting that extra frame necessary?
+        [{call FUNC(updateTFARFreq);}] call CFUNC(execNextFrame);
+    }] call TFAR_fnc_addEventHandler;
     [QGVAR(OnRadioOwnerSet), "OnRadioOwnerSet", {
         call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+    }] call TFAR_fnc_addEventHandler;
     [QGVAR(OnLRChange), "OnLRChange", {
         call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+    }] call TFAR_fnc_addEventHandler;
     [QGVAR(OnSWChange), "OnSWChange", {
         call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+    }] call TFAR_fnc_addEventHandler;
     [QGVAR(OnLRchannelSet), "OnLRchannelSet", {
         call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+    }] call TFAR_fnc_addEventHandler;
     [QGVAR(OnSWchannelSet), "OnSWchannelSet", {
         call FUNC(updateTFARFreq);
     }, CLib_Player] call TFAR_fnc_addEventHandler;
+	[QGVAR(OnFrequencyChangedFromUI), "OnFrequencyChangedFromUI", {
+		call FUNC(updateTFARFreq);
+	}] call TFAR_fnc_addEventHandler;
+	
 	
 	// Set up EventHandler for updating the stored TFAR frequencies on the following CLib-events
     ["vehicleChanged", {
@@ -129,11 +145,15 @@ if (GVAR(TFARLoaded)) then {
     ["Respawn", {
         call FUNC(updateTFARFreq);
     }] call CFUNC(addEventhandler);
+	
+	
+	// aklso set infor right away
     call FUNC(updateTFARFreq);
 
 
 	// add EH for whenever the player presses/releases the radio button (capslock for SW by default)
     [QGVAR(OnTangent), "OnTangent", {
+		hint "Tangent";
         params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
 
 		// The _freq variable misses the information about the radio class name on purpose
@@ -171,6 +191,6 @@ if (GVAR(TFARLoaded)) then {
         if (_targets isEqualTo []) exitWith {};
 		
         [[QGVAR(tangentReleased), QGVAR(tangentPressed)] select _tangentPressed, _targets, [_unit, _freq]] call CFUNC(targetEvent);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
+    }] call TFAR_fnc_addEventHandler;
 
 };
