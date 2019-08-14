@@ -187,9 +187,7 @@ private _fnc_init = {
 
     if (GVAR(TFARLoaded)) then {
         0 call TFAR_fnc_setVoiceVolume;
-		// tf_unable_to_use_radio exists in 1.0
         CLib_Player setVariable ["tf_unable_to_use_radio", true];
-		// tf_forcedCurator exists in 1.0
         CLib_Player setVariable ["tf_forcedCurator", true];
     };
 
