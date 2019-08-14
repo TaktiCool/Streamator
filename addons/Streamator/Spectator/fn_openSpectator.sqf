@@ -295,25 +295,6 @@ if (GVAR(TFARLoaded)) then {
         };
 		
         TFAR_player_name = name CLib_player;
-		_request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
-		str(_freq),
-		str(_freq_lr),
-		_freq_dd, _alive,
-		TF_speak_volume_meters min TF_max_voice_volume,
-		TF_dd_volume_level,
-		_nickname,
-		waves,
-		TF_terrain_interception_coefficient,
-		_globalVolume,
-		_voiceVolume,
-		_receivingDistanceMultiplicator,
-		TF_speakerDistance];
-		
-		//FREQ, str(_freq), str(_freq_lr)
-        //_alive, speakVolume, _nickname, 
-        //waves, TF_terrain_interception_coefficient, _globalVolume,
-        //_receivingDistanceMultiplicator, TF_speakerDistance
-
 
 /** TFAR pre-1.0
         private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
