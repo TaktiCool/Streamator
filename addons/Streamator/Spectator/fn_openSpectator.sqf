@@ -2,7 +2,7 @@
 /*
     Streamator
 
-    Author: BadGuy
+    Author: BadGuy, Raven
 
     Description:
     Initialize Spectator
@@ -187,7 +187,9 @@ private _fnc_init = {
 
     if (GVAR(TFARLoaded)) then {
         0 call TFAR_fnc_setVoiceVolume;
+		// tf_unable_to_use_radio exists in 1.0
         CLib_Player setVariable ["tf_unable_to_use_radio", true];
+		// tf_forcedCurator exists in 1.0
         CLib_Player setVariable ["tf_forcedCurator", true];
     };
 
@@ -268,6 +270,7 @@ if (GVAR(TFARLoaded)) then {
                 GVAR(RadioInformationPrev) = [];
             };
         };
+		
         private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
         if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
             if (GVAR(RadioInformationPrev) isEqualTo []) then {
@@ -278,16 +281,83 @@ if (GVAR(TFARLoaded)) then {
             [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
             GVAR(RadioInformationPrev) = +_data;
         };
+		
+		
         _data params ["_freqSW", "_freqLR"];
+		
+		// Set the radio volume to 7 and let it play over both speakers (left+right) for all radios (SW + LR)
+		// but only do that if there are radios present which is indicated by the lack of an "No_SW_Radio" or
+		// "No_LR_Radio" entry respectively
         if !("No_SW_Radio" in _freqSW) then {
             _freqSW = _freqSW apply {_x + "|7|0"};
         };
+		
         if !("No_LR_Radio" in _freqLR) then {
             _freqLR = _freqLR apply {_x + "|7|0"};
         };
+		
         TFAR_player_name = name CLib_player;
-        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
+		_request = format["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
+		str(_freq),
+		str(_freq_lr),
+		_freq_dd, _alive,
+		TF_speak_volume_meters min TF_max_voice_volume,
+		TF_dd_volume_level,
+		_nickname,
+		waves,
+		TF_terrain_interception_coefficient,
+		_globalVolume,
+		_voiceVolume,
+		_receivingDistanceMultiplicator,
+		TF_speakerDistance];
+		
+		//FREQ, str(_freq), str(_freq_lr)
+        //_alive, speakVolume, _nickname, 
+        //waves, TF_terrain_interception_coefficient, _globalVolume,
+        //_receivingDistanceMultiplicator, TF_speakerDistance
+
+
+/** TFAR pre-1.0
+        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
+			str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
+			str(_freqLR), // list of long range frequencies to set (including volume and stero info)
+			// -- No longer used in 1.0 -- "No_DD_Radio", // Don't use a diver radio
+			true, // Set player's state to "alive"
+			TF_speak_volume_meters min TF_max_voice_volume, // set player's voice volume
+			// -- No longer used in 1.0 -- TF_dd_volume_level, // Set player's dive volume
+			TFAR_player_name, // The player's nickname
+			waves, // The waves level
+			0, // The terrainIntersectionCoefficient
+			1.0, // The global volume
+			// -- No longer used in 1.0 -- CLib_player getVariable ["tf_voiceVolume", 1.0], // voice volume
+			1.0, // receivingDistanceMultiplicator 
+			TF_speakerDistance // speakerDistance 
+		];
+*/
+		
+		// _freqSW and _freqLR have entries in the format %1%2|%3|%4|%5
+		// %1 The frequency of the current channel (e.g. 310.4)
+		// %2 The radio code
+		// %3 The set volume for that radio
+		// %4 The set stereo setting for that radio (Range (0,2) (0 - Both, 1 - Left, 2 - Right))
+		// %5 The radio's classname (optional)
+		
+		private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
+			str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
+			str(_freqLR), // list of long range frequencies to set (including volume and stero info)
+			true, // Set player's state to "alive"
+			TF_speak_volume_meters min TF_max_voice_volume, // set player's voice volume
+			TFAR_player_name, // The player's nickname
+			waves, // The waves level
+			0, // The terrainIntersectionCoefficient
+			1.0, // The global volume
+			1.0, // receivingDistanceMultiplicator 
+			TF_speakerDistance // speakerDistance 
+		];
+		
+		//Async call will always return "OK"
         private _result = "task_force_radio_pipe" callExtension _request;
+		
         DUMP("Listen To Radio: " + _result + " " + _request);
         tf_lastFrequencyInfoTick = diag_tickTime + 10;
     }, 0.5] call CFUNC(addPerFrameHandler);
