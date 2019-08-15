@@ -57,6 +57,9 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _height = PY(4*(_nbrElements+1));
 
     GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
+	
+	DUMP("Processing incoming radio call on frequency " + str _freq);
+	DUMP("Listening to frequencies " + str _swFreqs + " (SW) and " + str _lrFreqs + " (LR)");
 
     private _icon = "";
     if (_freq in _swFreqs) then {
@@ -66,7 +69,8 @@ _ctrlRadioInfoGrp ctrlCommit 0;
         _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
     };
 
-    if (_icon == "") exitWith {};
+    if (_icon == "") exitWith {DUMP("End of radio call processing as the incoming frequency doesn't match - No icon shown in UI");};
+	DUMP("Frequency matches - Showing radio icon " + str _icon);
 
     private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
     _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
