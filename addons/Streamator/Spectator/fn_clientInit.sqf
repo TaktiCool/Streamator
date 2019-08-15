@@ -153,7 +153,6 @@ if (GVAR(TFARLoaded)) then {
 
 	// add EH for whenever the player presses/releases the radio button (capslock for SW by default)
     [QGVAR(OnTangent), "OnTangent", {
-		hint "Tangent";
         params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
 
 		// The _freq variable misses the information about the radio class name on purpose
@@ -188,8 +187,9 @@ if (GVAR(TFARLoaded)) then {
 		
         private _targets = GVAR(radioNamespace) getVariable [_freq, []];
 		
-        if (_targets isEqualTo []) exitWith {};
+        if (_targets isEqualTo []) exitWith {DUMP("Cancelling tangent send on frequency " + str _freq + " as there are no targets for it");};
 		
+		DUMP("Sending tangent event from " + str _unit + " to " + str _targets + " on frequency " + str _freq);
         [[QGVAR(tangentReleased), QGVAR(tangentPressed)] select _tangentPressed, _targets, [_unit, _freq]] call CFUNC(targetEvent);
     }] call TFAR_fnc_addEventHandler;
 
