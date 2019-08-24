@@ -58,6 +58,12 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
     GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 	
+	// As the goal is to create a list of units that are reachable on a certain
+	// frequency given a certain radio code, the class name of the used radio is
+	// irrelevant -> remove it from the data
+	_swFreqs = _swFreqs apply {[_x] call EFUNC(Spectator,getTFARFrequency)};
+	_lrFreqs = _lrFreqs apply {[_x] call EFUNC(Spectator,getTFARFrequency)};
+	
 	DUMP("Processing incoming radio call on frequency " + str _freq);
 	DUMP("Listening to frequencies " + str _swFreqs + " (SW) and " + str _lrFreqs + " (LR)");
 

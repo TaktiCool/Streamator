@@ -26,26 +26,8 @@ publicVariable QGVAR(radioNamespace);
 	// As the goal is to create a list of units that are reachable on a certain
 	// frequency given a certain radio code, the class name of the used radio is
 	// irrelevant -> remove it from the data
-	_filterCode = {
-		if (_x isEqualTo "") exitWith {
-			ERROR_LOG("Empty radio data element encountered");
-		};
-		
-		private _elements = _x splitString "|";
-		
-		if (count _elements == 1) then {
-			// This doesn't contain the class name in the first place -> return element as is
-			_x
-		} else {
-			// The important information is in the first element -> return just this one
-			// If nothing goes wrong there should only be 2 elements here anyways where the
-			// second one is the unneeded class name
-			_elements select 0
-		};
-	};
-	
-	_data = _data apply _filterCode;
-	_oldData = _oldData apply _filterCode;
+	_data = _data apply {[_x] call FUNC(getTFARFrequency)};
+	_oldData = _oldData apply {[_x] call FUNC(getTFARFrequency)};
 	
 	
 	// The elements that are the same in both data sets are the elements that did not change

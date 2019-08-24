@@ -34,6 +34,7 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
 
 if (GVAR(TFARLoaded)) then {
     DFUNC(updateTFARFreq) = {
+		DUMP("Updating TFAR frequencies...");
 		// disable the caching for TFAR_fnc_radiosList by hacking into TFAR internals 
 		TFAR_Core_VehicleConfigCacheNamespace setVariable ["TFAR_fnc_radiosList_lastCache", 0];
 		
@@ -104,6 +105,8 @@ if (GVAR(TFARLoaded)) then {
 		
 		// Set the variable to the player object in order to be able to access it later on
         CLib_player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];
+		
+		DUMP("TFAR freuencies set to" + str _freqSW + " (SW) " + str _freqLR + " (LR)");
     };
 	
 	
