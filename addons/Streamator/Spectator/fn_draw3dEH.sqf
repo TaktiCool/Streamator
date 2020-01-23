@@ -129,6 +129,7 @@ if (GVAR(OverlayPlanningMode)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
+        if !(isPlayer _x || GVAR(RenderAIUnits)) exitWith {};
         if (!(side _x in [sideLogic, sideUnknown]) && alive _x && simulationEnabled _x && !isObjectHidden _x) then {
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
@@ -186,6 +187,7 @@ if (GVAR(OverlayUnitMarker)) then {
 if (GVAR(OverlayGroupMarker)) then {
     {
         private _leader = leader _x;
+        if !(isPlayer _leader || GVAR(RenderAIUnits)) exitWith {};
         if (!(side _x in [sideLogic, sideUnknown]) && simulationEnabled _leader && alive _leader && !(isObjectHidden _leader)) then {
             private _distance = _cameraPosition distance _leader;
             _distance = _distance / _fov;

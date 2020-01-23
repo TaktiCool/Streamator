@@ -22,17 +22,20 @@ Key Binding | Short Description | Remarks
 **`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focussed object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
 **`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focussed object in FOLLOW mode. With **`NUMPAD 1-4`** the selected unit will be focussed with the selected camera mode (see **`NUMPAD 1-4`**).
 **`ALT`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
-**`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focussed object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera.
+**`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focussed object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera. if in SHOULDER, TOPDOWN or ORBIT Mode it resets Camera to Default Values
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.
 **`CTRL`** + **`Scrollwheel`** | Change Smoothing | Changes the camera smoothing coefficient.
 **`ALT`** + **`Scrollwheel`** | Change FOV | Changes the field of view (zoom).
 **`TAB`** | Resets FOV | Resets the field of View
 **`N`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
+**`B`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
 **`F1`** | Toggle Group Markers | Toggles the visibility of group marker.
 **`F2`** | Toggle Unit Marker | Toggles the visibility of unit marker and names.
 **`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.
 **`F5`** | Toggle Unit Chyron | Toggles Chyron for the current Unit
 **`F6`** | Toggle Planning Mode Icons and Markers | Toggle Planning Mode Icons and Markers from other spectators
+**`F7`** |  |
+**`F8`** | Toggle Radio Coms UI | Toggles Radio Coms Information UI
 **`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
@@ -50,8 +53,6 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 4`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
-**`F8`** | Toggle Radio UI | Toggles Radio Information UI
-**`F9`** | Toggle Radio System | Toggles Radio lissening System
 
 
 ## MAP VIEW

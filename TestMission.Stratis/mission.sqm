@@ -25,6 +25,7 @@ addons[]=
 	"A3_Characters_F_Exp_Civil",
 	"A3_Data_F_Exp_A_Virtual",
 	"A3_Soft_F_Beta_Truck_01",
+	"A3_Soft_F_Exp_Truck_01",
 	"ace_realisticnames",
 	"ace_cargo",
 	"ace_explosives"
@@ -33,7 +34,7 @@ class AddonsMetaData
 {
 	class List
 	{
-		items=6;
+		items=7;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -64,12 +65,19 @@ class AddonsMetaData
 		};
 		class Item4
 		{
+			className="A3_Soft_F_Exp";
+			name="Arma 3 Apex - Unarmored Land Vehicles";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item5
+		{
 			className="ace_cargo";
 			name="ACE3 - Cargo";
 			author="ACE-Team";
 			url="http://ace3mod.com/";
 		};
-		class Item5
+		class Item6
 		{
 			className="ace_explosives";
 			name="ACE3 - Explosives";

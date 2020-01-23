@@ -71,41 +71,56 @@ private _return = switch (_keyCode) do {
                         _display closeDisplay 1;
                         true;
                     };
-                    case (DIK_E): { // E
+                    case DIK_E: { // E
                         if !(_alt) exitWith {false};
-                        if (GVAR(InputMode) == 0) then {
-                            GVAR(InputMode) = 2;
-                            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-                        } else {
-                            GVAR(InputMode) = 0;
-                            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                        with missionNamespace do {
+                            if (GVAR(InputMode) == 0) then {
+                                GVAR(InputMode) = 2;
+                                [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                            } else {
+                                GVAR(InputMode) = 0;
+                                [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                            };
                         };
                         true;
                     };
                     case DIK_F6: { // F6
-                        GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
+                        with missionNamespace do {
+                            GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
+                        };
                         true
                     };
-                    case DIK_PGDN: { // Page Down
-                        if (_ctrl) then {
-                            GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
-                            CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-                        } else {
-                            GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
-                            CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                    case DIK_F7: { // F7
+                        with missionNamespace do {
+                            GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
                         };
-                        QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
                         true;
                     };
-                    case DIK_PGUP: { // Page Up
-                        if (_ctrl) then {
-                            GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
-                            CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-                        } else {
-                            GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
-                            CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                    case DIK_PGDN: { // Page Down
+                        with missionNamespace do {
+                            if (_ctrl) then {
+                                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
+                                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+                            } else {
+                                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
+                                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                            };
+                            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
                         };
-                        QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+                        true;
+
+                    };
+                    case DIK_PGUP: { // Page Up
+                        with missionNamespace do {
+                            if (_ctrl) then {
+                                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
+                                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+                            } else {
+                                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
+                                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                            };
+                            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+                        };
                         true;
                     };
                     default {
@@ -117,11 +132,13 @@ private _return = switch (_keyCode) do {
             _map ctrlAddEventHandler ["MouseButtonClick", {
                 params ["_map", "", "_xpos", "_ypos", "", "", "_alt"];
                 if (_alt) exitWith {
-                    GVAR(CameraPreviousState) = [];
-                    private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
-                    _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
-                    [objNull, 1] call FUNC(setCameraTarget);
-                    GVAR(CameraPos) = _pos;
+                    with missionNamespace do {
+                        GVAR(CameraPreviousState) = [];
+                        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+                        _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
+                        [objNull, 1] call FUNC(setCameraTarget);
+                        GVAR(CameraPos) = _pos;
+                    };
                     true;
                 };
                 false;
@@ -129,80 +146,89 @@ private _return = switch (_keyCode) do {
 
             _map ctrlAddEventHandler ["MouseMoving", {
                 params ["_map", "_xPos", "_yPos"];
-                if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
-                    private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
-                    _pos set [2, 0];
-                    [CLib_Player, QGVAR(cursorPosition), [serverTime, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+                with missionNamespace do {
+                    if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
+                        private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
+                        _pos set [2, 0];
+                        [CLib_Player, QGVAR(cursorPosition), [serverTime, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+                    };
                 };
             }];
 
             _map ctrlAddEventHandler  ["MouseButtonDown", {
                 params ["", ["_button", -1, [0]]];
-                if (_button == 0) then {
-                    GVAR(PlanningModeDrawing) = true;
+                with missionNamespace do {
+                    if (_button == 0) then {
+                        GVAR(PlanningModeDrawing) = true;
+                    };
                 };
             }];
             _map ctrlAddEventHandler  ["MouseButtonUp", {
                 params ["", ["_button", -1, [0]]];
-                if (_button == 0) then {
-                    GVAR(PlanningModeDrawing) = false;
+                with missionNamespace do {
+                    if (_button == 0) then {
+                        GVAR(PlanningModeDrawing) = false;
+                    };
                 };
             }];
             _map ctrlAddEventHandler ["Draw", {
                 params [
                     ["_map", controlNull, [controlNull]]
                 ];
-                if (!GVAR(OverlayPlanningMode)) exitWith {};
-                {
-                    private _unit = _x;
-                    private _cursorPos = _unit getVariable QGVAR(cursorPosition);
-                    private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
+                with missionNamespace do {
+                    if (!GVAR(OverlayPlanningMode)) exitWith {};
                     {
-                        _x params ["_time", "_pos"];
-                        private _alpha = 1 - (serverTime - _time) max 0;
-                        private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
-                        _color set [3, _alpha];
-                        private _text = "";
-                        private _mapScale = ctrlMapScale _map;
-                        private _textSize = PY(4);
-                        if (_mapScale < 0.1) then {
-                            _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
-                        };
-                        if (_alpha != 0) then {
-                            if (_cursorPos isEqualTo _x) then {
-                                _color set [3, 1];
-                                _text = format ["%1", (_unit call CFUNC(name))];
-                                _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 18, 18, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
-                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"]
-                            } else {
-                                _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+                        private _unit = _x;
+                        private _cursorPos = _unit getVariable QGVAR(cursorPosition);
+                        private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
+                        {
+                            _x params ["_time", "_pos"];
+                            private _alpha = 1 - (serverTime - _time) max 0;
+                            private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
+                            _color set [3, _alpha];
+                            private _text = "";
+                            private _mapScale = ctrlMapScale _map;
+                            private _textSize = PY(4);
+                            if (_mapScale < 0.1) then {
+                                _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
                             };
-                        };
-                    } count _cursorHistory;
-                    nil
-                } count ((GVAR(allSpectators) + [CLib_Player]) select {
-                    (GVAR(PlanningModeChannel) == 0)
-                     || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
-                     || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
-                });
+                            if (_alpha != 0) then {
+                                if (_cursorPos isEqualTo _x) then {
+                                    _color set [3, 1];
+                                    _text = format ["%1", (_unit call CFUNC(name))];
+                                    _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 18, 18, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
+                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"]
+                                } else {
+                                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+                                };
+                            };
+                        } count _cursorHistory;
+                        nil
+                    } count ((GVAR(allSpectators) + [CLib_Player]) select {
+                        (GVAR(PlanningModeChannel) == 0)
+                         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+                         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
+                    });
+                };
             }];
             _map ctrlAddEventHandler ["Destroy", {
                 params ["_map"];
-                [_map] call CFUNC(unregisterMapControl);
-                private _pos = _map ctrlMapScreenToWorld [0.5, 0.5];
-                private _zoom = ctrlMapScale _map;
-                GVAR(MapState) = [_zoom, _pos];
-                GVAR(MapOpen) = false;
-                QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
-                GVAR(PlanningModeDrawing) = false;
-                [{
-                    call FUNC(createPlanningDisplay);
-                }] call CFUNC(execNextFrame);
+                with missionNamespace do {
+                    [_map] call CFUNC(unregisterMapControl);
+                    private _pos = _map ctrlMapScreenToWorld [0.5, 0.5];
+                    private _zoom = ctrlMapScale _map;
+                    GVAR(MapState) = [_zoom, _pos];
+                    GVAR(MapOpen) = false;
+                    QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
+                    GVAR(PlanningModeDrawing) = false;
+                    [{
+                        call FUNC(createPlanningDisplay);
+                    }] call CFUNC(execNextFrame);
+                };
             }];
         } else {
             _mapDisplay closeDisplay 1;
         };
-
         true
     };
     case DIK_F: { // F
@@ -303,6 +329,26 @@ private _return = switch (_keyCode) do {
         GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
         true
     };
+    case DIK_F7: { // F7
+        GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
+        true;
+    };
+    case DIK_F8: { // F8
+        if (GVAR(InputMode) != 0) exitWith {false;};
+        QGVAR(toggleRadioUI) call CFUNC(localEvent);
+        true;
+    };
+    case DIK_F9: { // F9
+        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(TFARLoaded)) exitWith {
+            call FUNC(TFARRadio);
+            true;
+        };
+        if (GVAR(ACRELoaded)) exitWith {
+            LOG("ACRE Radio is current not supported");
+        };
+        LOG("No Radio Mod Found");
+    };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
         if (GVAR(InputMode) == 0) then {
@@ -315,6 +361,21 @@ private _return = switch (_keyCode) do {
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
         };
+        true;
+    };
+    case DIK_N: { // N
+        if (GVAR(InputMode) == 1) exitWith {false};
+        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
+        call FUNC(setVisionMode);
+        true;
+    };
+    case DIK_B: { // B
+        if (GVAR(InputMode) == 1) exitWith {false};
+        GVAR(CameraVision) = (GVAR(CameraVision) - 1);
+        if (GVAR(CameraVision) == -1) then {
+            GVAR(CameraVision) = 10;
+        };
+        call FUNC(setVisionMode);
         true;
     };
     case DIK_PGDN: { // Page Down
@@ -337,28 +398,6 @@ private _return = switch (_keyCode) do {
             CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
         };
         QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-        true;
-    };
-    case DIK_F8: { // F8
-        if (GVAR(InputMode) != 0) exitWith {false;};
-        QGVAR(toggleRadioUI) call CFUNC(localEvent);
-        true;
-    };
-    case DIK_F9: { // F9
-        if (GVAR(InputMode) != 0) exitWith {false;};
-        if (GVAR(TFARLoaded)) exitWith {
-            call FUNC(TFARRadio);
-            true;
-        };
-        if (GVAR(ACRELoaded)) exitWith {
-            LOG("ACRE Radio is current not supported");
-        };
-        LOG("No Radio Mod Found");
-    };
-    case DIK_N: { // N
-        if (GVAR(InputMode) == 1) exitWith {false;};
-        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
-        call FUNC(setVisionMode);
         true;
     };
 

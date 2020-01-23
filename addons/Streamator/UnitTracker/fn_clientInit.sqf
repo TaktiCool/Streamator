@@ -29,6 +29,7 @@ GVAR(lastProcessedIcons) = [];
 
 DFUNC(isValidUnit) = {
     params [["_unit", objNull]];
+    if !(isPlayer _unit || EGVAR(Spectator,RenderAIUnits)) exitWith { false };
     !isNull _unit
      && simulationEnabled _unit
      && !isObjectHidden _unit;

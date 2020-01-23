@@ -14,6 +14,12 @@
     None
 */
 params ["_ctrlInfo"];
+
+DFUNC(isValidSearchableUnit) = {
+    if !(isPlayer _this || GVAR(RenderAIUnits)) exitWith { false };
+    alive _this
+};
+
 [QGVAR(updateGuess), {
     switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
@@ -31,7 +37,7 @@ params ["_ctrlInfo"];
                         _x params ["_name", "_data"];
                         private _alive = true;
                         if ((_data select 0) isEqualType objNull) then {
-                            _alive = alive (_data select 0);
+                            _alive = (_data select 0) call FUNC(isValidSearchableUnit)
                         };
                         private _index = (toLower _name) find _searchStr;
                         if (_index >= 0 && _alive) then {
@@ -39,7 +45,7 @@ params ["_ctrlInfo"];
                         };
 
                     } else {
-                        if (alive _x) then {
+                        if (_x call FUNC(isValidSearchableUnit)) then {
                             private _name = (_x call CFUNC(name));
                             private _index = (toLower _name) find _searchStr;
                             if (_index >= 0) then {
@@ -55,8 +61,7 @@ params ["_ctrlInfo"];
                         };
                     };
 
-                    false;
-                } count _searchableUnits;
+                } forEach _searchableUnits;
 
                 if !(_guess isEqualTo []) then {
                     _guess sort true;
