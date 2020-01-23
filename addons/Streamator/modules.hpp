@@ -7,10 +7,22 @@ class CfgCLibModules {
         // Crates
         MODULE(Spectator) {
             dependency[] = {"CLib"};
+            MODULE(ACRE) {
+                FNC(clientInitACRE);
+            };
+            MODULE(TFAR) {
+                FNC(clientInitTFAR);
+                FNC(updateTFARFreq);
+            };
+            MODULE(Radio) {
+                FNC(setRadioFollowTarget);
+            };
+            
             MODULE(UI) {
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
                 FNC(buildUnitInfoUI);
+                FNC(createPlanningDisplay);
                 FNC(findInputEvents);
             };
             MODULE(Input) {

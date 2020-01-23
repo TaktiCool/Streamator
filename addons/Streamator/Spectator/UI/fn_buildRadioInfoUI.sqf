@@ -58,8 +58,8 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlGroup ctrlShow !(ctrlShown _ctrlGroup);
 }, _ctrlRadioInfoGrp] call CFUNC(addEventhandler);
 
-[QGVAR(tangentPressed), {
-    (_this select 0) params ["_unit", "_freq"];
+[QGVAR(ShowIcon), {
+    (_this select 0) params ["_unit", "_icon", "_uid"]; // UID is in case of TFAR the Freq and in case of ACRE the Radio Item
     (_this select 1) params ["_ctrlGroup"];
     private _display = ctrlParent _ctrlGroup;
 
@@ -69,20 +69,12 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _yPos = PY(4*_nbrElements);
     private _height = PY(4*(_nbrElements+1));
 
-    GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
-
-    private _icon = "";
-    if (_freq in _swFreqs) then {
-        _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
-    };
-    if (_freq in _lrFreqs) then {
-        _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
-    };
-
     if (_icon == "") exitWith {};
 
     private _ctrlElementGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGroup];
-    _ctrlElementGrp setVariable [QGVAR(data), [_unit, _freq]];
+
+    _ctrlElementGrp setVariable [QGVAR(data), [_unit, _uid]];
+
     _ctrlElementGrp ctrlSetPosition [0, _yPos, PX(30), PY(4)];
     _ctrlElementGrp ctrlSetFade 1;
     _ctrlElementGrp ctrlCommit 0;
@@ -119,8 +111,8 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlGroup setVariable [QGVAR(elements), _elements];
 }, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
-[QGVAR(tangentReleased), {
-    (_this select 0) params ["_unit", "_freq"];
+[QGVAR(HideIcon), {
+    (_this select 0) params ["_unit", "_uid"];
     (_this select 1) params ["_ctrlGroup"];
 
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
@@ -129,7 +121,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     {
         private _data = _x getVariable [QGVAR(data), []];
         if !(_data isEqualTo []) then {
-            if (_data isEqualTo [_unit, _freq]) then {
+            if (_data isEqualTo [_unit, _uid]) then {
                 _elementFound = true;
                 _element = _x;
                 private _pos = ctrlPosition _x;
@@ -163,7 +155,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     _ctrlGroup setVariable [QGVAR(elements), _elements];
 }, [_ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
-[QGVAR(RadioInformationChanged), {
+[QGVAR(radioInformationChanged), {
     private _radioInformation = _this select 0;
     (_this select 1) params ["_ctrlGroup"];
     if !(ctrlShown _ctrlGroup) exitWith {};

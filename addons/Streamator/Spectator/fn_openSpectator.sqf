@@ -151,64 +151,10 @@ DFUNC(updateSpectatorArray) = {
     }, 3] call CFUNC(wait);
 };
 
-DFUNC(createPlanningDisplay) = {
-    if (GVAR(InputMode) == 2) then {
-        if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
-            private _display = (findDisplay 46) createDisplay "RscDisplayEmpty";
-            uiNamespace setVariable [QGVAR(PlanningModeDisplay), _display];
-            _display displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
-            _display displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
-            _display displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
-            _display displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
-            _display displayAddEventHandler ["MouseButtonDown", {
-                params ["", ["_button", -1, [0]]];
-                if (_button == 0) then {
-                    GVAR(PlanningModeDrawing) = true;
-                };
-            }];
-            _display displayAddEventHandler ["MouseButtonUp", {
-                params ["", ["_button", -1, [0]]];
-                if (_button == 0) then {
-                    GVAR(PlanningModeDrawing) = false;
-                };
-            }];
-            _display displayAddEventHandler ["Unload", {
-                if (!GVAR(MapOpen)) then {
-                    GVAR(InputMode) = 0;
-                    [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-                    [{
-                        (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
-                    }] call CFUNC(execNextFrame);
-                };
-            }];
-        };
-    } else {
-        (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
-    };
-};
-
 private _fnc_init = {
 
-    if (GVAR(ACRELoaded)) then {
-        [true] call acre_api_fnc_setSpectator;
-        [{
-            private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
-            if (_targetRadios isEqualTo GVAR(CurrentRadioList)) exitWith {};
-            {
-                [CLib_Player, _x] call acre_api_fnc_removeSpectatorRadio
-            } forEach GVAR(CurrentRadioList);
-            {
-                [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio
-            } forEach _targetRadios;
-            GVAR(CurrentRadioList) = _targetRadios;
-        }, 1] call CFUNC(addPerFrameHandler);
-    };
 
-    if (GVAR(TFARLoaded)) then {
-        0 call TFAR_fnc_setVoiceVolume;
-        CLib_Player setVariable ["tf_unable_to_use_radio", true];
-        CLib_Player setVariable ["tf_forcedCurator", true];
-    };
+
 
     if (GVAR(aceLoaded)) then {
         [CLib_Player] call ace_hearing_fnc_putInEarplugs;
@@ -256,6 +202,8 @@ private _fnc_init = {
     QGVAR(updateInput) call CFUNC(localEvent);
 
     [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+
+    QGVAR(spectatorOpened) call CFUNC(localEvent);
 };
 
 if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo sideLogic) then {
@@ -279,37 +227,6 @@ if (GVAR(TFARLoaded)) then {
         };
     };
 
-    [{
-        if !(alive GVAR(RadioFollowTarget)) exitWith {
-            if !(GVAR(RadioInformationPrev) isEqualTo []) then {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
-                [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
-                GVAR(RadioInformationPrev) = [];
-            };
-        };
-        private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
-        if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
-            if (GVAR(RadioInformationPrev) isEqualTo []) then {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
-            } else {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
-            };
-            [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
-            GVAR(RadioInformationPrev) = +_data;
-        };
-        _data params ["_freqSW", "_freqLR"];
-        if !("No_SW_Radio" in _freqSW) then {
-            _freqSW = _freqSW apply {_x + "|7|0"};
-        };
-        if !("No_LR_Radio" in _freqLR) then {
-            _freqLR = _freqLR apply {_x + "|7|0"};
-        };
-        TFAR_player_name = name CLib_player;
-        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
-        private _result = "task_force_radio_pipe" callExtension _request;
-        DUMP("Listen To Radio: " + _result + " " + _request);
-        tf_lastFrequencyInfoTick = diag_tickTime + 10;
-    }, 0.5] call CFUNC(addPerFrameHandler);
 };
 
 if (GVAR(ACRELoaded)) then {
