@@ -54,6 +54,7 @@ GVAR(CameraInFirstPerson) = false;
 
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;
+GVAR(CurrentRadioList) = [];
 
 GVAR(CursorTarget) = objNull;
 GVAR(lastCursorTarget) = time;
@@ -190,6 +191,17 @@ private _fnc_init = {
 
     if (GVAR(ACRELoaded)) then {
         [true] call acre_api_fnc_setSpectator;
+        [{
+            private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
+            if (_targetRadios isEqualTo GVAR(CurrentRadioList)) exitWith {};
+            {
+                [CLib_Player, _x] call acre_api_fnc_removeSpectatorRadio
+            } forEach GVAR(CurrentRadioList);
+            {
+                [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio
+            } forEach _targetRadios;
+            GVAR(CurrentRadioList) = _targetRadios;
+        }, 1] call CFUNC(addPerFrameHandler);
     };
 
     if (GVAR(TFARLoaded)) then {
@@ -300,6 +312,16 @@ if (GVAR(TFARLoaded)) then {
     }, 0.5] call CFUNC(addPerFrameHandler);
 };
 
+if (GVAR(ACRELoaded)) then {
+    DFUNC(ACRE_Radio) = {
+        if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
+            GVAR(RadioFollowTarget) = objNull;
+        } else {
+            GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
+        };
+        // [QGVAR(radioFollowTargetChanged), [GVAR(RadioFollowTarget)]] call CFUNC(localEvent); // TODO
+    };
+};
 // Camera Update PFH
 addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
 

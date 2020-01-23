@@ -124,3 +124,13 @@ if (GVAR(TFARLoaded)) then {
     }, CLib_Player] call TFAR_fnc_addEventHandler;
 
 };
+if (GVAR(ACRELoaded)) then {
+    [{
+        private _newRadios = call acre_api_fnc_getCurrentRadioList;
+        private _oldRadios = CLib_Player getVariable [QGVAR(ACRE_Radios), []];
+        if !(_newRadios isEqualTo _oldRadios) then {
+            CLib_Player setVariable [QGVAR(ACRE_Radios), _newRadios, true];
+        };
+    }, 1] call CFUNC(addPerFrameHandler); // see how high freqency we need to send this maybe lower it
+
+}
