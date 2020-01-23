@@ -36,6 +36,8 @@ if !(GVAR(ACRELoaded)) exitWith {};
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "_onradio", "_radioID"];
+
+        if !([GVAR(CurrentRadioList), [_radioID], true] call acre_sys_modes_fnc_checkAvailability) exitWith {};
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];
         _usedRadios pushBack _radioID;
         _unit setVariable [QGVAR(SpeaksOnRadios), _usedRadios];
