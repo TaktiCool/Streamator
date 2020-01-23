@@ -122,8 +122,8 @@ if (GVAR(TFARLoaded)) then {
         if (_targets isEqualTo []) exitWith {};
         [[QGVAR(tangentReleased), QGVAR(tangentPressed)] select _tangentPressed, _targets, [_unit, _freq]] call CFUNC(targetEvent);
     }, CLib_Player] call TFAR_fnc_addEventHandler;
-
 };
+
 if (GVAR(ACRELoaded)) then {
     [{
         private _newRadios = call acre_api_fnc_getCurrentRadioList;
@@ -132,5 +132,4 @@ if (GVAR(ACRELoaded)) then {
             CLib_Player setVariable [QGVAR(ACRE_Radios), _newRadios, true];
         };
     }, 1] call CFUNC(addPerFrameHandler); // see how high freqency we need to send this maybe lower it
-
-}
+};

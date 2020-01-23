@@ -313,7 +313,7 @@ if (GVAR(TFARLoaded)) then {
 };
 
 if (GVAR(ACRELoaded)) then {
-    DFUNC(ACRE_Radio) = {
+    DFUNC(ACRERadio) = {
         if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
             GVAR(RadioFollowTarget) = objNull;
         } else {

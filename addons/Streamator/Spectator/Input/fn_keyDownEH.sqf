@@ -345,7 +345,7 @@ private _return = switch (_keyCode) do {
             true;
         };
         if (GVAR(ACRELoaded)) exitWith {
-            LOG("ACRE Radio is current not supported");
+            call FUNC(ACRERadio)
         };
         LOG("No Radio Mod Found");
     };
