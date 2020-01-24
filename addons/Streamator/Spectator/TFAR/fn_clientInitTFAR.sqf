@@ -55,6 +55,13 @@ if (!GVAR(TFARLoaded)) exitWith {};
         tf_lastFrequencyInfoTick = diag_tickTime + 10;
     }, 0.5] call CFUNC(addPerFrameHandler);
 
+    [QGVAR(radioFollowTargetChanged), {
+        (_this select 0) params ["_unit"];
+        if !(alive _unit) then {
+            tf_lastFrequencyInfoTick = diag_tickTime - 1;
+        };
+    }] call CFUNC(addEventhandler);
+
 }] call CFUNC(addEventhandler);
 
 {
@@ -62,6 +69,7 @@ if (!GVAR(TFARLoaded)) exitWith {};
         call FUNC(updateTFARFreq);
     }, CLib_Player] call TFAR_fnc_addEventHandler;
 } forEach ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet"];
+
 {
     [_x, {
         call FUNC(updateTFARFreq);
