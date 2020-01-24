@@ -23,6 +23,11 @@ _ctrlRadioFollowUnit ctrlSetFont "RobotoCondensed";
 _ctrlRadioFollowUnit ctrlSetStructuredText parseText format ["<t align='right' size='%1'></t>", _smallTextSize];
 _ctrlRadioFollowUnit ctrlCommit 0;
 
+// Radio Information
+private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
+_ctrlRadioInfoGrp ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH + 32), PX(30), PY(4)];
+_ctrlRadioInfoGrp ctrlCommit 0;
+
 [QGVAR(radioFollowTargetChanged), {
     (_this select 1) params ["_ctrl", "_ctrlGroup"];
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
@@ -47,11 +52,6 @@ _ctrlRadioFollowUnit ctrlCommit 0;
     } count _elements;
     _ctrlGroup setVariable [QGVAR(elements), []];
 }, [_ctrlRadioFollowUnit, _ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
-
-// Radio Information
-private _ctrlRadioInfoGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlRadioInfoGrp ctrlSetPosition [LEFTBORDER + PX(BORDERWIDTH + 2), safeZoneH - PY(BORDERWIDTH + 32), PX(30), PY(4)];
-_ctrlRadioInfoGrp ctrlCommit 0;
 
 [QGVAR(toggleRadioUI), {
     (_this select 1) params ["_ctrlGroup"];

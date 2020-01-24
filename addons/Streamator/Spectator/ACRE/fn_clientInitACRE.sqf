@@ -35,7 +35,7 @@ if !(GVAR(ACRELoaded)) exitWith {};
     }, 1] call CFUNC(addPerFrameHandler);
 
     ["acre_remoteStartedSpeaking", {
-        params ["_unit", "_onradio", "_radioID"];
+        params ["_unit", "", "_radioID"];
 
         if !([GVAR(CurrentRadioList), [_radioID], true] call acre_sys_modes_fnc_checkAvailability) exitWith {};
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];

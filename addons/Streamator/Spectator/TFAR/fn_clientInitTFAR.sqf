@@ -102,11 +102,11 @@ if (!GVAR(TFARLoaded)) exitWith {};
     if (_freq == "") exitWith {};
     private _targets = GVAR(radioNamespace) getVariable [_freq, []];
     if (_targets isEqualTo []) exitWith {};
-    [QGVAR(TangentChanged), [_freq, _tangentPressed]] call CFUNC(targetEvent);
+    [QGVAR(TangentChanged), [_freq, _tangentPressed, CLib_Player]] call CFUNC(targetEvent);
 }, CLib_Player] call TFAR_fnc_addEventHandler;
 
 [QGVAR(TangentChanged), {
-    (_thi select 0) params ["_freq", "_tangentPressed"];
+    (_this select 0) params ["_freq", "_tangentPressed", "_unit"];
     GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
     private _icon = "";
@@ -118,8 +118,8 @@ if (!GVAR(TFARLoaded)) exitWith {};
     };
 
     if (_tangentPressed) then {
-        [QGVAR(ShowIcon), _[unit, _icon, _freq]] call CFUNC(localEvent);
+        [QGVAR(ShowIcon), [_unit, _icon, _freq]] call CFUNC(localEvent);
     } else {
-        [QGVAR(HideIcon) , [_unit, _freq]] call CFUNC(localEvent);
+        [QGVAR(HideIcon), [_unit, _freq]] call CFUNC(localEvent);
     };
 }] call CFUNC(addEventHandler);
