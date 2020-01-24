@@ -12,12 +12,13 @@ class CfgCLibModules {
             };
             MODULE(TFAR) {
                 FNC(clientInitTFAR);
+                FNC(serverInitTFAR);
                 FNC(updateTFARFreq);
             };
             MODULE(Radio) {
                 FNC(setRadioFollowTarget);
             };
-            
+
             MODULE(UI) {
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
@@ -46,7 +47,6 @@ class CfgCLibModules {
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
-            FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
         };

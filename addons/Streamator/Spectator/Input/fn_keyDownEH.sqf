@@ -18,19 +18,6 @@
     Event handled <Bool>
 */
 
-#define SAVERESTORE(slot) if (GVAR(InputMode) == 1) exitWith {false}; \
-if (_ctrl) then { \
-    [slot] call FUNC(savePosition); \
-} else { \
-    [slot] call FUNC(restorePosition); \
-};
-
-#define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; \
-if (isNull GVAR(CameraFollowTarget)) exitWith {false;};\
-GVAR(CameraMode) = num; \
-[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent); \
-true;
-
 params [
     "",
     ["_keyCode", 0, [0]],
@@ -340,13 +327,7 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
-        if (GVAR(TFARLoaded)) exitWith {
-            call FUNC(TFARRadio);
-            true;
-        };
-        if (GVAR(ACRELoaded)) exitWith {
-            call FUNC(ACRERadio)
-        };
+        call FUNC(setRadioFollowTarget);
         LOG("No Radio Mod Found");
     };
     case DIK_E: { // E
@@ -411,7 +392,12 @@ private _return = switch (_keyCode) do {
     case DIK_8;
     case DIK_9;
     case DIK_0: {
-        SAVERESTORE(_keyCode);
+        if (GVAR(InputMode) == 1) exitWith {false};
+        if (_ctrl) then {
+            [_keyCode] call FUNC(savePosition);
+        } else {
+            [_keyCode] call FUNC(restorePosition);
+        };
         true;
     };
 

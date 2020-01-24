@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-    Client Init for Spectator
+    Server Init for Spectator
 
     Parameter(s):
     None
