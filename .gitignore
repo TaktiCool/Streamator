@@ -52,4 +52,8 @@ Temporary Items
 
 # ArmA Files
 *.pbo
-build.bat
+*.bat
+releases/*
+*.biprivatekey
+keys/*
+Missions/*

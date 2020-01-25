@@ -31,12 +31,13 @@ if !(GVAR(ACRELoaded)) exitWith {};
         {
             [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio;
         } forEach _targetRadios;
+        [QGVAR(radioInformationChanged), _targetRadios] call CFUNC(localEvent);
         GVAR(CurrentRadioList) = _targetRadios;
     }, 1] call CFUNC(addPerFrameHandler);
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "", "_radioID"];
-
+        if (isNil GVAR(RadioFollowTarget)) exitWith {}; // early Exit
         if !([GVAR(CurrentRadioList), [_radioID], true] call acre_sys_modes_fnc_checkAvailability) exitWith {};
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];
         _usedRadios pushBack _radioID;
@@ -47,11 +48,19 @@ if !(GVAR(ACRELoaded)) exitWith {};
 
     ["acre_remoteStoppedSpeaking", {
         params ["_unit"];
+        if (isNil GVAR(RadioFollowTarget)) exitWith {}; // early Exit
         {
             [QGVAR(HideIcon), [_unit, _x]] call CFUNC(localEvent);
         } forEach (_unit getVariable [QGVAR(SpeaksOnRadios), []]);
     }] call CBA_fnc_addEventHandler;
 
+    [QGVAR(radioFollowTargetChanged), {
+        (_this select 0) params ["_unit"];
+        {
+            [QGVAR(HideIcon), [_unit, _x]] call CFUNC(localEvent);
+        } forEach (_unit getVariable [QGVAR(SpeaksOnRadios), []]);
+
+    }] call CFUNC(addEventhandler);
 }] call CFUNC(addEventhandler);
 
 [{

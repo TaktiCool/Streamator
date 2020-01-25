@@ -328,7 +328,6 @@ private _return = switch (_keyCode) do {
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
         call FUNC(setRadioFollowTarget);
-        LOG("No Radio Mod Found");
     };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
@@ -410,7 +409,7 @@ private _return = switch (_keyCode) do {
                 true;
             };
             case 3: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
+                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
                 true;
             };
             case 4: {
@@ -420,6 +419,9 @@ private _return = switch (_keyCode) do {
             case 6: {
                 GVAR(CameraRelPos) = [0, 10, 10];
                 true;
+            };
+            default {
+                false;
             };
         };
 
