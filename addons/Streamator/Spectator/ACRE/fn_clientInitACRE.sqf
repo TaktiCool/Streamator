@@ -38,12 +38,19 @@ if !(GVAR(ACRELoaded)) exitWith {};
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "", "_radioID"];
         if (isNil GVAR(RadioFollowTarget)) exitWith {}; // early Exit
-        if !([GVAR(CurrentRadioList), [_radioID], true] call acre_sys_modes_fnc_checkAvailability) exitWith {};
+        private _availability = [[_radioID], GVAR(CurrentRadioList), true] call acre_sys_modes_fnc_checkAvailability;
+        if (_availability isEqualTo []) exitWith {};
+        private _radioIDLocal = ((_availability select 1) select 0);
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];
-        _usedRadios pushBack _radioID;
+        _usedRadios pushBack _radioIDLocal;
         _unit setVariable [QGVAR(SpeaksOnRadios), _usedRadios];
-        private _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa"; // TODO: Diff between different Radios
-        [QGVAR(ShowIcon), [_unit, _icon, _radioID]] call CFUNC(localEvent);
+
+        private _radio = [_radioIDLocal] call acre_api_fnc_getBaseRadio;
+        private _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
+        if (_radio in ["ACRE_PRC77", "ACRE_PRC117F", ]) then {
+            _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
+        };
+        [QGVAR(ShowIcon), [_unit, _icon, _radioIDLocal]] call CFUNC(localEvent);
     }] call CBA_fnc_addEventHandler;
 
     ["acre_remoteStoppedSpeaking", {
