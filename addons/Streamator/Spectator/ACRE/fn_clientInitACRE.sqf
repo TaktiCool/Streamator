@@ -37,7 +37,7 @@ if !(GVAR(ACRELoaded)) exitWith {};
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "", "_radioID"];
-        if (isNil GVAR(RadioFollowTarget)) exitWith {}; // early Exit
+        if (isNull GVAR(RadioFollowTarget)) exitWith {}; // early Exit
         private _availability = [[_radioID], GVAR(CurrentRadioList), true] call acre_sys_modes_fnc_checkAvailability;
         if (_availability isEqualTo []) exitWith {};
         private _radioIDLocal = ((_availability select 1) select 0);
@@ -47,7 +47,7 @@ if !(GVAR(ACRELoaded)) exitWith {};
 
         private _radio = [_radioIDLocal] call acre_api_fnc_getBaseRadio;
         private _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
-        if (_radio in ["ACRE_PRC77", "ACRE_PRC117F", ]) then {
+        if (_radio in ["ACRE_PRC77", "ACRE_PRC117F"]) then {
             _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
         };
         [QGVAR(ShowIcon), [_unit, _icon, _radioIDLocal]] call CFUNC(localEvent);
@@ -55,7 +55,7 @@ if !(GVAR(ACRELoaded)) exitWith {};
 
     ["acre_remoteStoppedSpeaking", {
         params ["_unit"];
-        if (isNil GVAR(RadioFollowTarget)) exitWith {}; // early Exit
+        if (isNull GVAR(RadioFollowTarget)) exitWith {}; // early Exit
         {
             [QGVAR(HideIcon), [_unit, _x]] call CFUNC(localEvent);
         } forEach (_unit getVariable [QGVAR(SpeaksOnRadios), []]);
