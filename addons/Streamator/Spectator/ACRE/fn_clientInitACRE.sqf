@@ -14,8 +14,8 @@
     None
 */
 GVAR(ACRELoaded) = isClass (configFile >> "CfgPatches" >> "acre_main");
-
 if !(GVAR(ACRELoaded)) exitWith {};
+LOG("ACRE2 Detected");
 [QGVAR(spectatorOpened), {
     [true] call acre_api_fnc_setSpectator;
 

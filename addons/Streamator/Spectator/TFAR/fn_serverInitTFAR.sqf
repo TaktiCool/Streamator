@@ -17,6 +17,7 @@
 GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio");
 
 if !(GVAR(TFARLoaded)) exitWith {};
+LOG("TFAR Stable Detected");
 GVAR(radioNamespace) = true call CFUNC(createNamespace);
 publicVariable QGVAR(radioNamespace);
 [QGVAR(spectatorRadioInformationChanged), {

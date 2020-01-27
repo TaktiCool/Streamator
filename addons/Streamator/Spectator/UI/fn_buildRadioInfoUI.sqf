@@ -159,9 +159,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _radioInformation = _this select 0;
     (_this select 1) params ["_ctrlGroup"];
     if !(ctrlShown _ctrlGroup) exitWith {};
-    if !(_radioInformation isEqualTo []) then {
-        _radioInformation = (_radioInformation select 0) + (_radioInformation select 1);
-    };
 
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = 0;

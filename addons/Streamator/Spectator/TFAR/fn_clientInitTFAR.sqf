@@ -17,6 +17,7 @@
 GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio");
 
 if (!GVAR(TFARLoaded)) exitWith {};
+LOG("TFAR Stable Detected");
 
 [QGVAR(spectatorOpened), {
     0 call TFAR_fnc_setVoiceVolume;
@@ -38,7 +39,7 @@ if (!GVAR(TFARLoaded)) exitWith {};
             } else {
                 [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
             };
-            [QGVAR(radioInformationChanged), _data] call CFUNC(localEvent);
+            [QGVAR(radioInformationChanged), (_data select 0) + (_data select 1)] call CFUNC(localEvent);
             GVAR(RadioInformationPrev) = +_data;
         };
         _data params ["_freqSW", "_freqLR"];
