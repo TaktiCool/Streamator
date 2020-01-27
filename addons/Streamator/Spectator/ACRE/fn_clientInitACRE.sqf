@@ -25,9 +25,14 @@ LOG("ACRE2 Detected");
 
     [{
         private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
+
+        if (!(isNull GVAR(RadioFollowTarget))&& {!(GVAR(RadioFollowTarget) isKindOf "CAManBase")}) then {
+            {
+                _targetRadios pushBackUnique ([_x] call acre_api_fnc_getMountedRackRadio);
+            } forEach ([GVAR(RadioFollowTarget)] call acre_api_fnc_getVehicleRacks);
+        };
         if (_targetRadios isEqualTo GVAR(CurrentRadioList)) exitWith {};
         [CLIb_Player] call acre_api_fnc_removeAllSpectatorRadios;
-
         {
             [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio;
         } forEach _targetRadios;
@@ -36,15 +41,18 @@ LOG("ACRE2 Detected");
     }, 1] call CFUNC(addPerFrameHandler);
 
     ["acre_remoteStartedSpeaking", {
-        params ["_unit", "", "_radioID"];
+        params ["_unit", "_isRadio", "_radioID"];
+        if (_unit == CLib_Player) exitWith {};
+        if (_isRadio == 0) exitWith {};
         if (isNull GVAR(RadioFollowTarget)) exitWith {}; // early Exit
         private _availability = [[_radioID], GVAR(CurrentRadioList), true] call acre_sys_modes_fnc_checkAvailability;
-        if (_availability isEqualTo []) exitWith {};
-        private _radioIDLocal = ((_availability select 1) select 0);
+        if (((_availability select 0) select 1) isEqualTo []) exitWith {};
+        private _radioIDLocal = (((_availability select 0) select 1) select 0);
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];
         _usedRadios pushBack _radioIDLocal;
         _unit setVariable [QGVAR(SpeaksOnRadios), _usedRadios];
-
+        private _debug = format ["Radio used Local : %1  Radio Remote: %2 Radio CheckAvailability: %3", _radioIDLocal, _radioID, _availability];
+        DUMP(_debug);
         private _radio = [_radioIDLocal] call acre_api_fnc_getBaseRadio;
         private _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
         if (_radio in ["ACRE_PRC77", "ACRE_PRC117F"]) then {
@@ -59,6 +67,7 @@ LOG("ACRE2 Detected");
         {
             [QGVAR(HideIcon), [_unit, _x]] call CFUNC(localEvent);
         } forEach (_unit getVariable [QGVAR(SpeaksOnRadios), []]);
+        _unit setVariable [QGVAR(SpeaksOnRadios), []];
     }] call CBA_fnc_addEventHandler;
 
     [QGVAR(radioFollowTargetChanged), {
