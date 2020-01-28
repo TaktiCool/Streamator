@@ -14,8 +14,8 @@
     None
 */
 
-GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "tfar_core");
-
+GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio");
+GVAR(TFARLegacy) = !isClass (configFile >> "CfgPatches" >> "tfar_core");
 if (!GVAR(TFARLoaded)) exitWith {};
 LOG("TFAR Stable Detected");
 
@@ -50,21 +50,27 @@ LOG("TFAR Stable Detected");
             _freqLR = _freqLR apply {_x + "|7|0"};
         };
         TFAR_player_name = name CLib_player;
-        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
-            str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
-            str(_freqLR), // list of long range frequencies to set (including volume and stero info)
-            true, // Set player's state to "alive"
-            TF_speak_volume_meters min TF_max_voice_volume, // set player's voice volume
-            TFAR_player_name, // The player's nickname
-            waves, // The waves level
-            0, // The terrainIntersectionCoefficient
-            1.0, // The global volume
-            1.0, // receivingDistanceMultiplicator
-            TF_speakerDistance // speakerDistance
-        ];
+        private _request = "";
+        if (GVAR(TFARLegacy)) then {
+            _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
+        } else {
+            _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
+                str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
+                str(_freqLR), // list of long range frequencies to set (including volume and stero info)
+                true, // Set player's state to "alive"
+                TF_speak_volume_meters min TF_max_voice_volume, // set player's voice volume
+                TFAR_player_name, // The player's nickname
+                waves, // The waves level
+                0, // The terrainIntersectionCoefficient
+                1.0, // The global volume
+                1.0, // receivingDistanceMultiplicator
+                TF_speakerDistance // speakerDistance
+            ];
+        };
+
         private _result = "task_force_radio_pipe" callExtension _request;
         DUMP("Listen To Radio: " + _result + " " + _request);
-        tf_lastFrequencyInfoTick = diag_tickTime + 10;
+        tf_lastFrequencyInfoTick = diag_tickTime + 20;
     }, 0.5] call CFUNC(addPerFrameHandler);
 
     [QGVAR(radioFollowTargetChanged), {
@@ -78,8 +84,10 @@ LOG("TFAR Stable Detected");
         (_this select 0) params ["_freq", "_tangentPressed", "_unit"];
         GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
-        _swFreqs = _swFreqs apply {[_x] call FUNC(getTFARFrequency)};
-        _lrFreqs = _lrFreqs apply {[_x] call FUNC(getTFARFrequency)};
+        if !(GVAR(TFARLegacy)) then {
+            _swFreqs = _swFreqs apply {[_x] call FUNC(getTFARFrequency)};
+            _lrFreqs = _lrFreqs apply {[_x] call FUNC(getTFARFrequency)};
+        };
 
         private _icon = "";
         if (_freq in _swFreqs) then {
@@ -97,11 +105,16 @@ LOG("TFAR Stable Detected");
     }] call CFUNC(addEventHandler);
 }] call CFUNC(addEventhandler);
 
+private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet"];
+if !(GVAR(TFARLegacy)) then {
+    _events pushBack "OnFrequencyChangedFromUI";
+};
+
 {
     [format [QGVAR(%1), _x], _x, {
         call FUNC(updateTFARFreq);
-    }] call TFAR_fnc_addEventHandler;
-} forEach ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet", "OnFrequencyChangedFromUI"];
+    }, CLib_Player] call TFAR_fnc_addEventHandler;
+} forEach _events;
 
 {
     [_x, {
@@ -136,4 +149,4 @@ LOG("TFAR Stable Detected");
     private _targets = GVAR(radioNamespace) getVariable [_freq, []];
     if (_targets isEqualTo []) exitWith {};
     [QGVAR(TangentChanged), _targets, [_freq, _tangentPressed, CLib_Player]] call CFUNC(targetEvent);
-}] call TFAR_fnc_addEventHandler;
+}, CLib_Player] call TFAR_fnc_addEventHandler;

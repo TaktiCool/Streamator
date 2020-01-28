@@ -13,6 +13,10 @@
     Returns:
     None
 */
+
+if !(GVAR(TFARLegacy)) then {
+    TFAR_Core_VehicleConfigCacheNamespace setVariable ["TFAR_fnc_radiosList_lastCache", 0];
+};
 private _freqSW = [];
 private _freqLR = [];
 

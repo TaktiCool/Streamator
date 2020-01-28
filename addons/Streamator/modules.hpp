@@ -16,11 +16,6 @@ class CfgCLibModules {
                 FNC(serverInitTFAR);
                 FNC(updateTFARFreq);
             };
-            MODULE(TFARLegacy) {
-                FNC(clientInitTFARLegacy);
-                FNC(serverInitTFARLegacy);
-                FNC(updateTFARLegacyFreq);
-            };
             MODULE(Radio) {
                 FNC(setRadioFollowTarget);
             };
