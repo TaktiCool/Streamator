@@ -12,3 +12,13 @@ files = [
     "LICENSE"
 ]
 include = ["./include"]
+
+keyname = "{{prefix}}_{{version}}"
+signame = "{{prefix}}_{{version}}-{{git \"id 8\"}}"
+
+releasebuild = [
+    "@zip @Streamator"
+]
+
+[header_exts]
+version= "{{git \"id 8\"}}"
