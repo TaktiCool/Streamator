@@ -1,4 +1,4 @@
-TFAR#include "macros.hpp"
+#include "macros.hpp"
 /*
     Streamator
 
@@ -14,10 +14,10 @@ TFAR#include "macros.hpp"
     None
 */
 
-GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "tfar_core");
+GVAR(TFARLegacyLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio") && !isClass (configFile >> "CfgPatches" >> "tfar_core");
 
-if (!GVAR(TFARLoaded)) exitWith {};
-LOG("TFAR Stable Detected");
+if (!GVAR(TFARLegacyLoaded)) exitWith {};
+LOG("TFAR Legacy Detected");
 
 [QGVAR(spectatorOpened), {
     0 call TFAR_fnc_setVoiceVolume;
@@ -50,18 +50,7 @@ LOG("TFAR Stable Detected");
             _freqLR = _freqLR apply {_x + "|7|0"};
         };
         TFAR_player_name = name CLib_player;
-        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
-            str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
-            str(_freqLR), // list of long range frequencies to set (including volume and stero info)
-            true, // Set player's state to "alive"
-            TF_speak_volume_meters min TF_max_voice_volume, // set player's voice volume
-            TFAR_player_name, // The player's nickname
-            waves, // The waves level
-            0, // The terrainIntersectionCoefficient
-            1.0, // The global volume
-            1.0, // receivingDistanceMultiplicator
-            TF_speakerDistance // speakerDistance
-        ];
+        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
         private _result = "task_force_radio_pipe" callExtension _request;
         DUMP("Listen To Radio: " + _result + " " + _request);
         tf_lastFrequencyInfoTick = diag_tickTime + 10;
@@ -77,9 +66,6 @@ LOG("TFAR Stable Detected");
     [QGVAR(TangentChanged), {
         (_this select 0) params ["_freq", "_tangentPressed", "_unit"];
         GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
-
-        _swFreqs = _swFreqs apply {[_x] call FUNC(getTFARFrequency)};
-        _lrFreqs = _lrFreqs apply {[_x] call FUNC(getTFARFrequency)};
 
         private _icon = "";
         if (_freq in _swFreqs) then {
@@ -99,13 +85,13 @@ LOG("TFAR Stable Detected");
 
 {
     [format [QGVAR(%1), _x], _x, {
-        call FUNC(updateTFARFreq);
+        call FUNC(updateTFARLegacyFreq);
     }] call TFAR_fnc_addEventHandler;
-} forEach ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet", "OnFrequencyChangedFromUI"];
+} forEach ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet"];
 
 {
     [_x, {
-        call FUNC(updateTFARFreq);
+        call FUNC(updateTFARLegacyFreq);
     }] call CFUNC(addEventhandler);
 } forEach ["vehicleChanged", "playerChanged", "Respawn"];
 
@@ -127,9 +113,9 @@ LOG("TFAR Stable Detected");
                 format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
             };
         };
-        default {
+        case (2): {
             DUMP("Magic you dont exist");
-            ""
+            "";
         };
     };
     if (_freq == "") exitWith {};

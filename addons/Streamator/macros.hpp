@@ -25,3 +25,5 @@
 // #define DISABLECOMPRESSION
 
 #include "\tc\CLib\addons\CLib\macros.hpp"
+
+#define ERROR_LOG(var) SYSLOGGING("Error", var)

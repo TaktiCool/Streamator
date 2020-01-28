@@ -14,18 +14,14 @@
     None
 */
 
-GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "tfar_core");
+GVAR(TFARLegacyLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio") && !isClass (configFile >> "CfgPatches" >> "tfar_core");
 
-if !(GVAR(TFARLoaded)) exitWith {};
-LOG("TFAR Stable Detected");
+if !(GVAR(TFARLegacyLoaded)) exitWith {};
+LOG("TFAR Legacy Detected");
 GVAR(radioNamespace) = true call CFUNC(createNamespace);
 publicVariable QGVAR(radioNamespace);
 [QGVAR(spectatorRadioInformationChanged), {
     (_this select 0) params ["_unit", "_data", "_oldData"];
-
-    _data = _data apply {[_x] call FUNC(getTFARFrequency)};
-    _oldData = _oldData apply {[_x] call FUNC(getTFARFrequency)};
-
     private _notChanged = _data arrayIntersect _oldData;
     _notChanged append ["No_SW_Radio", "No_LR_Radio"];
     {

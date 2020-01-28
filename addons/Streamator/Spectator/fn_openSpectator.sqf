@@ -214,31 +214,6 @@ if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo side
     call _fnc_init;
 };
 
-if (GVAR(TFARLoaded)) then {
-    DFUNC(TFARRadio) = {
-        if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
-            GVAR(RadioFollowTarget) = objNull;
-        } else {
-            GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
-        };
-        [QGVAR(radioFollowTargetChanged), [GVAR(RadioFollowTarget)]] call CFUNC(localEvent);
-        if !(alive GVAR(RadioFollowTarget)) then {
-            tf_lastFrequencyInfoTick = diag_tickTime - 1;
-        };
-    };
-
-};
-
-if (GVAR(ACRELoaded)) then {
-    DFUNC(ACRERadio) = {
-        if (GVAR(RadioFollowTarget) == GVAR(CameraFollowTarget)) then {
-            GVAR(RadioFollowTarget) = objNull;
-        } else {
-            GVAR(RadioFollowTarget) = GVAR(CameraFollowTarget);
-        };
-        // [QGVAR(radioFollowTargetChanged), [GVAR(RadioFollowTarget)]] call CFUNC(localEvent); // TODO
-    };
-};
 // Camera Update PFH
 addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
 
