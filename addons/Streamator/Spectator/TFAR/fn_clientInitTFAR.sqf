@@ -1,4 +1,4 @@
-TFAR#include "macros.hpp"
+#include "macros.hpp"
 /*
     Streamator
 
@@ -110,7 +110,7 @@ LOG("TFAR Stable Detected");
 } forEach ["vehicleChanged", "playerChanged", "Respawn"];
 
 [QGVAR(OnTangent), "OnTangent", {
-    params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
+    params ["", "_radio", "_radioType", "_additional", "_tangentPressed"];
 
     private _freq = switch (_radioType) do {
         case (0): {

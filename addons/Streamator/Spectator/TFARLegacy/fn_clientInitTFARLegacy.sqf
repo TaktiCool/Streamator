@@ -96,7 +96,7 @@ LOG("TFAR Legacy Detected");
 } forEach ["vehicleChanged", "playerChanged", "Respawn"];
 
 [QGVAR(OnTangent), "OnTangent", {
-    params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
+    params ["", "_radio", "_radioType", "_additional", "_tangentPressed"];
 
     private _freq = switch (_radioType) do {
         case (0): {
