@@ -16,10 +16,4 @@ if (_input isEqualTo "") exitWith {
     ERROR_LOG("Empty radio data element encountered");
 };
 private _elements = _input splitString "|";
-if (count _elements == 1) then {
-    // This doesn't contain the class name to begin with -> return element as is
-    _input;
-} else {
-    // The important information is in the first element which by definition contains the needed frequency string
-    _elements select 0;
-};
+_elements select 0;
