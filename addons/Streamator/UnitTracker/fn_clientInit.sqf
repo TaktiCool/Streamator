@@ -38,7 +38,7 @@ DFUNC(isValidUnit) = {
 DFUNC(isValidVehicle) = {
     params[ ["_vehicle", objNull]];
     !isNull _vehicle
-     && (({alive _x} count crew _vehicle) == 0)
+     && (((crew _vehicle) findIf {_x call FUNC(isValidUnit)}) == -1)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
      && !isObjectHidden _vehicle
