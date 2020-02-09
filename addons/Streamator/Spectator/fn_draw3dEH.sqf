@@ -42,6 +42,16 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
     };
 };
 if (GVAR(hideUI)) exitWith {};
+
+private _fnc_isValidUnit = {
+    params ["_unit"];
+    if !(isPlayer _unit || GVAR(RenderAIUnits)) exitWith { false };
+    !(side _unit in [sideLogic, sideUnknown])
+    && alive _unit
+    && simulationEnabled _unit
+    && !isObjectHidden _unit
+};
+
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
 //HUD
@@ -129,12 +139,7 @@ if (GVAR(OverlayPlanningMode)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
-        if (!(side _x in [sideLogic, sideUnknown])
-            && alive _x
-            && simulationEnabled _x
-            && !isObjectHidden _x
-            && (isPlayer _x || GVAR(RenderAIUnits))
-        ) then {
+        if (_x call _fnc_isValidUnit) then {
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
@@ -191,12 +196,7 @@ if (GVAR(OverlayUnitMarker)) then {
 if (GVAR(OverlayGroupMarker)) then {
     {
         private _leader = leader _x;
-        if (!(side _x in [sideLogic, sideUnknown])
-            && simulationEnabled _leader
-            && alive _leader
-            && !(isObjectHidden _leader)
-            && (isPlayer _leader || GVAR(RenderAIUnits))
-        ) then {
+        if (_leader call _fnc_isValidUnit) then {
             private _distance = _cameraPosition distance _leader;
             _distance = _distance / _fov;
 

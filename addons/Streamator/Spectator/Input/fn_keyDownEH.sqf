@@ -328,6 +328,7 @@ private _return = switch (_keyCode) do {
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
         call FUNC(setRadioFollowTarget);
+        true;
     };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
