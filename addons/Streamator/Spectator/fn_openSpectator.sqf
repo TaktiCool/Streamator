@@ -153,9 +153,6 @@ DFUNC(updateSpectatorArray) = {
 
 private _fnc_init = {
 
-
-
-
     if (GVAR(aceLoaded)) then {
         [CLib_Player] call ace_hearing_fnc_putInEarplugs;
         CLib_Player setVariable ["ACE_Medical_allowDamage", false];
@@ -178,6 +175,7 @@ private _fnc_init = {
 
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
+
     (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
@@ -197,13 +195,18 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
-    call FUNC(buildUI);
+    [{
+        call FUNC(buildUI);
 
-    QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateInput) call CFUNC(localEvent);
 
-    [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+        [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
-    QGVAR(spectatorOpened) call CFUNC(localEvent);
+        QGVAR(spectatorOpened) call CFUNC(localEvent);
+    }, {
+        isNull (["GetCamera"] call BIS_fnc_EGSpectatorCamera)
+    }] call CFUNC(waitUntil);
+
 };
 
 if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo sideLogic) then {
