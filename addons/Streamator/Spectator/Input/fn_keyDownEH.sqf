@@ -330,6 +330,10 @@ private _return = switch (_keyCode) do {
         call FUNC(setRadioFollowTarget);
         true;
     };
+    case DIK_F10: {
+        GVAR(Camera) cameraEffect ["internal", "back"];
+        true;
+    };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
         if (GVAR(InputMode) == 0) then {
