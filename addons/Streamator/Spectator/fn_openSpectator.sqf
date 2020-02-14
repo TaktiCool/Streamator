@@ -154,18 +154,32 @@ private _fnc_init = {
 
     if (GVAR(aceLoaded)) then {
         [CLib_Player] call ace_hearing_fnc_putInEarplugs;
+
         CLib_Player setVariable ["ace_medical_allowdamage", false];
         ACE_Hearing_deafnessDV = 0;
         ACE_Hearing_volume = 1;
+        call ace_goggles_fnc_removeGlassesEffect;
+        CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
+        ace_goggles_PostProcess ppEffectEnable false;
+        ace_goggles_PostProcessEyes ppEffectEnable false;
+    };
+
+    if (goggles CLib_Player != "") then {
+        removeGoggles CLib_Player;
     };
 
     [{
+        if (goggles CLib_Player != "") then {
+            removeGoggles CLib_Player;
+        };
         if (GVAR(aceLoaded)) then {
             CLib_Player setVariable ["ace_medical_allowdamage", false];
             ACE_Hearing_deafnessDV = 0;
             ACE_Hearing_volume = 1;
             call ace_goggles_fnc_removeGlassesEffect;
             CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
+            ace_goggles_PostProcess ppEffectEnable false;
+            ace_goggles_PostProcessEyes ppEffectEnable false;
         };
         CLib_Player setDamage 0;
     }, 0] call CFUNC(addPerFrameHandler);

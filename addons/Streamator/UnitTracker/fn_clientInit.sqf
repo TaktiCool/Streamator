@@ -31,7 +31,7 @@ GVAR(lastProcessedIcons) = [];
 DFUNC(isValidVehicle) = {
     params[["_vehicle", objNull]];
     !isNull _vehicle
-     && (((crew _vehicle) findIf {_x call EFUNC(Stremator,isValidUnit)}) == -1)
+     && (((crew _vehicle) findIf {_x call EFUNC(Spectator,isValidUnit)}) == -1)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
      && !isObjectHidden _vehicle
@@ -40,8 +40,8 @@ DFUNC(isValidVehicle) = {
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);
 
 [GVAR(ProcessingSM), "init", {
-    private _units = +(allUnits select {[_x] call FUNC(isValidUnit)});
-    _units append (allDead select {[_x] call FUNC(isValidUnit) && _x isKindOf "CAManBase"});
+    private _units = +(allUnits select {[_x] call EFUNC(Spectator,isValidUnit)});
+    _units append (allDead select {[_x] call EFUNC(Spectator,isValidUnit) && _x isKindOf "CAManBase"});
     private _vehicles = (vehicles select {[_x] call FUNC(isValidVehicle)});
     GVAR(lastProcessedIcons) = (CGVAR(MapGraphics_MapGraphicsGroup) call CFUNC(allVariables)) select {(_x find toLower QGVAR(IconId)) == 0};
     {
@@ -59,11 +59,11 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
     if (!(_units isEqualTo [])) then {
         private _unit = _units deleteAt 0;
 
-        while {!([_unit] call EFUNC(Stremator,isValidUnit)) && {!(_units isEqualTo [])}} do {
+        while {!([_unit] call EFUNC(Spectator,isValidUnit)) && {!(_units isEqualTo [])}} do {
             _unit = _units deleteAt 0;
         };
 
-        if ([_unit] call EFUNC(Stremator,isValidUnit)) then {
+        if ([_unit] call EFUNC(Spectator,isValidUnit)) then {
             if (isNull objectParent _unit) then { // Infantry
                 private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _unit, group _unit isEqualTo group CLib_Player];
                 GVAR(processedIcons) pushBack _iconId;
