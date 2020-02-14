@@ -31,7 +31,7 @@ if (GVAR(InputMode) == 2) then {
             _endPosition = ASLtoAGL _intersectPosition;
         };
 
-        [CLib_Player, QGVAR(cursorPosition), [serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
 } else {
     private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;

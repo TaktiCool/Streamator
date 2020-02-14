@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-    Client Init for TFAR Radio Plugin
+    Client Init for TFAR Radio Coms Plugin
 
     Parameter(s):
     None

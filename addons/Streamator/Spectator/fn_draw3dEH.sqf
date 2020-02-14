@@ -43,31 +43,22 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
 };
 if (GVAR(hideUI)) exitWith {};
 
-private _fnc_isValidUnit = {
-    params ["_unit"];
-    if !(isPlayer _unit || GVAR(RenderAIUnits)) exitWith { false };
-    !(side _unit in [sideLogic, sideUnknown])
-    && alive _unit
-    && simulationEnabled _unit
-    && !isObjectHidden _unit
-};
-
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
 //HUD
 //PlanningMode
+private _serverTime = [time, serverTime] select isMultiplayer;
 if (GVAR(OverlayPlanningMode)) then {
     if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == 2) then {
         (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
-        if (serverTime - _lastUpdate >= 0.2) then {
-            DUMP(str (serverTime - _lastUpdate));
+        if (_serverTime - _lastUpdate >= 0.2) then {
             private _endPosition = screenToWorld getMousePosition;
             private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _endPosition, objNull, objNull, true, 1, "GEOM", "NONE", false];
             if !(_intersectArray isEqualTo []) then {
                 (_intersectArray select 0) params ["_intersectPosition"];
                 _endPosition = ASLtoAGL _intersectPosition;
             };
-            [CLib_Player, QGVAR(cursorPosition), [serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+            [CLib_Player, QGVAR(cursorPosition), [_serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
         };
     };
     {
@@ -104,7 +95,7 @@ if (GVAR(OverlayPlanningMode)) then {
             _x params ["_time", "_pos"];
 
             private _size = (0.8 min (1 / (((_cameraPosition distance _pos) / 100)^0.7)) max 0.15)*sqrt(_fov);
-            private _alpha = 1 - (serverTime - _time) max 0;
+            private _alpha = 1 - (_serverTime - _time) max 0;
             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
             _color set [3, _alpha];
             private _text = "";
@@ -139,7 +130,7 @@ if (GVAR(OverlayPlanningMode)) then {
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     {
-        if (_x call _fnc_isValidUnit) then {
+        if (_x call FUNC(isValidUnit)) then {
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
@@ -196,7 +187,7 @@ if (GVAR(OverlayUnitMarker)) then {
 if (GVAR(OverlayGroupMarker)) then {
     {
         private _leader = leader _x;
-        if (_leader call _fnc_isValidUnit) then {
+        if (_leader call FUNC(isValidUnit)) then {
             private _distance = _cameraPosition distance _leader;
             _distance = _distance / _fov;
 

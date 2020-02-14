@@ -5,10 +5,10 @@
     Author: BadGuy
 
     Description:
-
+    Registers Find Input Events and checks if a Unit is Searchable
 
     Parameter(s):
-    None
+    0: Info ctrl <Control>
 
     Returns:
     None

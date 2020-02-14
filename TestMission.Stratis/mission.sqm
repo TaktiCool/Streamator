@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=179;
+		nextID=221;
 	};
 	class Camera
 	{
-		pos[]={3997.3672,211.13203,3449.0176};
-		dir[]={-0.72339737,-0.55112529,-0.41593263};
-		up[]={-0.47779977,0.83440542,-0.27472058};
-		aside[]={-0.49846554,3.9499719e-007,0.86693752};
+		pos[]={813.51984,1952.0656,695.5412};
+		dir[]={0.31641525,-0.46445337,0.82714367};
+		up[]={0.16594477,0.88559753,0.43379793};
+		aside[]={0.93399608,-4.9825758e-008,-0.35729027};
 	};
 };
 binarizationWanted=0;
@@ -28,13 +28,18 @@ addons[]=
 	"A3_Soft_F_Exp_Truck_01",
 	"ace_realisticnames",
 	"ace_cargo",
-	"ace_explosives"
+	"ace_explosives",
+	"A3_Armor_F_Tank_AFV_Wheeled_01",
+	"A3_Air_F_Heli_Light_01",
+	"A3_Characters_F_Jets",
+	"A3_Air_F_EPC_Plane_CAS_01",
+	"A3_Air_F_Jets_Plane_Fighter_01"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=7;
+		items=12;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -84,6 +89,41 @@ class AddonsMetaData
 			author="ACE-Team";
 			url="http://ace3mod.com/";
 		};
+		class Item7
+		{
+			className="A3_Armor_F_Tank";
+			name="Arma 3 Tank - Armored Land Vehicles";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item8
+		{
+			className="A3_Air_F";
+			name="Arma 3 Alpha - Aircraft";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item9
+		{
+			className="A3_Characters_F_Jets";
+			name="Arma 3 Jets - Characters and Clothing";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item10
+		{
+			className="A3_Air_F_EPC";
+			name="Arma 3 Win Episode - Aircraft";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item11
+		{
+			className="A3_Air_F_Jets";
+			name="Arma 3 Jets - Aircraft";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
 	};
 };
 randomSeed=10366851;
@@ -116,7 +156,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=29;
+		items=37;
 		class Item0
 		{
 			dataType="Group";
@@ -1051,12 +1091,14 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4262.8818,214.28822,3577.2959};
+				angles[]={0.0075049158,0,6.2581921};
 			};
+			isPlayer=1;
 			isPlayable=1;
 			id=55;
 			type="VirtualSpectator_F";
+			atlOffset=-1.5258789e-005;
 			class CustomAttributes
 			{
 				class Attribute0
@@ -1175,6 +1217,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=57;
 					type="B_Soldier_SL_F";
@@ -1191,6 +1234,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=58;
 					type="B_soldier_AR_F";
@@ -1208,6 +1252,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=59;
 					type="B_Soldier_GL_F";
@@ -1224,6 +1269,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=60;
 					type="B_soldier_M_F";
@@ -1241,6 +1287,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=61;
 					type="B_soldier_AT_F";
@@ -1257,6 +1304,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=62;
 					type="B_soldier_AAT_F";
@@ -1273,6 +1321,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=63;
 					type="B_Soldier_A_F";
@@ -1289,6 +1338,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=64;
 					type="B_medic_F";
@@ -1350,7 +1400,7 @@ class Mission
 				class Item9
 				{
 					dataType="Waypoint";
-					position[]={1503.8069,5.5,4970.167};
+					position[]={1503.807,5.5,4970.167};
 					type="Cycle";
 					class Effects
 					{
@@ -1369,8 +1419,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4269.5117,214.33275,3580.1753};
+				angles[]={0.022495884,0,0.03748076};
 			};
 			isPlayable=1;
 			id=67;
@@ -1479,8 +1529,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4265.0254,214.25049,3579.9077};
+				angles[]={0.0024897563,0,0.0099949092};
 			};
 			isPlayable=1;
 			id=68;
@@ -1589,8 +1639,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4263.8198,214.2486,3574.2158};
+				angles[]={6.270689,0,6.278194};
 			};
 			isPlayable=1;
 			id=69;
@@ -1699,8 +1749,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4267.5698,214.24815,3574.0151};
+				angles[]={6.2631927,0,0.0050033992};
 			};
 			isPlayable=1;
 			id=70;
@@ -1809,8 +1859,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4266.2134,214.27719,3576.5176};
-				angles[]={0.0075011365,0,0.0049914722};
+				position[]={4271.1187,214.34729,3577.1621};
+				angles[]={6.2656889,0,0.03748076};
 			};
 			isPlayable=1;
 			id=71;
@@ -1933,6 +1983,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=73;
 					type="B_Soldier_SL_F";
@@ -1991,6 +2042,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=74;
 					type="B_soldier_AR_F";
@@ -2050,6 +2102,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=75;
 					type="B_Soldier_GL_F";
@@ -2108,6 +2161,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=76;
 					type="B_soldier_M_F";
@@ -2167,6 +2221,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=77;
 					type="B_soldier_AT_F";
@@ -2225,6 +2280,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=78;
 					type="B_soldier_AAT_F";
@@ -2283,6 +2339,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=79;
 					type="B_Soldier_A_F";
@@ -2341,6 +2398,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=80;
 					type="B_medic_F";
@@ -2424,6 +2482,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=82;
 					type="O_Soldier_SL_F";
@@ -2483,6 +2542,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=83;
 					type="O_Soldier_AR_F";
@@ -2543,6 +2603,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=84;
 					type="O_Soldier_GL_F";
@@ -2602,6 +2663,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=85;
 					type="O_soldier_M_F";
@@ -2662,6 +2724,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=86;
 					type="O_Soldier_AT_F";
@@ -2722,6 +2785,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=87;
 					type="O_Soldier_AAT_F";
@@ -2781,6 +2845,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=88;
 					type="O_Soldier_A_F";
@@ -2840,6 +2905,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=89;
 					type="O_medic_F";
@@ -2921,10 +2987,52 @@ class Mission
 					flags=6;
 					class Attributes
 					{
-						isPlayer=1;
+						isPlayable=1;
 					};
 					id=94;
 					type="B_Soldier_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"STRING"
+										};
+									};
+									value="Male11ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"SCALAR"
+										};
+									};
+									value=1.03;
+								};
+							};
+						};
+						nAttributes=2;
+					};
 				};
 				class Item1
 				{
@@ -2990,6 +3098,29 @@ class Mission
 			};
 			id=93;
 			type="B_Truck_01_covered_F";
+			class CustomAttributes
+			{
+				class Attribute0
+				{
+					property="ammoBox";
+					expression="[_this,_value] call bis_fnc_initAmmoBox;";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="[[[[],[]],[[],[]],[[],[]],[[],[]]],false]";
+						};
+					};
+				};
+				nAttributes=1;
+			};
 		};
 		class Item25
 		{
@@ -3010,6 +3141,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=96;
 					type="B_Soldier_SL_F";
@@ -3026,6 +3158,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=97;
 					type="B_soldier_AR_F";
@@ -3044,6 +3177,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=98;
 					type="B_Soldier_GL_F";
@@ -3060,6 +3194,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=99;
 					type="B_soldier_M_F";
@@ -3078,6 +3213,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=100;
 					type="B_soldier_AT_F";
@@ -3094,6 +3230,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=101;
 					type="B_soldier_AAT_F";
@@ -3110,6 +3247,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=102;
 					type="B_Soldier_A_F";
@@ -3126,6 +3264,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=103;
 					type="B_medic_F";
@@ -3255,6 +3394,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=105;
 					type="B_Soldier_SL_F";
@@ -3272,6 +3412,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=106;
 					type="B_Soldier_F";
@@ -3290,6 +3431,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=107;
 					type="B_soldier_LAT_F";
@@ -3306,6 +3448,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=108;
 					type="B_soldier_M_F";
@@ -3322,6 +3465,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=109;
 					type="B_Soldier_TL_F";
@@ -3339,6 +3483,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=110;
 					type="B_soldier_AR_F";
@@ -3355,6 +3500,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=111;
 					type="B_Soldier_A_F";
@@ -3371,6 +3517,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=112;
 					type="B_medic_F";
@@ -3522,6 +3669,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=170;
 					type="B_Soldier_TL_F";
@@ -3539,6 +3687,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=171;
 					type="B_engineer_F";
@@ -3555,6 +3704,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=172;
 					type="B_engineer_F";
@@ -3571,6 +3721,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=173;
 					type="B_soldier_repair_F";
@@ -3600,6 +3751,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayable=1;
 					};
 					id=175;
 					type="B_Soldier_TL_F";
@@ -3617,6 +3769,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						isPlayable=1;
 					};
 					id=176;
 					type="B_engineer_F";
@@ -3633,6 +3786,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=177;
 					type="B_soldier_exp_F";
@@ -3649,6 +3803,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						isPlayable=1;
 					};
 					id=178;
 					type="B_soldier_exp_F";
@@ -3658,6 +3813,702 @@ class Mission
 			{
 			};
 			id=174;
+		};
+		class Item29
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=5;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1665.838,5.5014391,5119.5435};
+					};
+					side="West";
+					flags=4;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=181;
+					type="B_crew_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1665.838,7.7653866,5119.5435};
+					};
+					side="West";
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=182;
+					type="B_crew_F";
+					atlOffset=2.2639475;
+				};
+				class Item2
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1665.838,7.7653866,5119.5435};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=183;
+					type="B_crew_F";
+					atlOffset=2.2639475;
+				};
+				class Item3
+				{
+					dataType="Waypoint";
+					position[]={1813.7881,5.5,5651.9619};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=184;
+					type="Move";
+				};
+				class Item4
+				{
+					dataType="Waypoint";
+					position[]={1617.548,4.8516645,4926.3062};
+					type="Cycle";
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=185;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=3;
+				};
+				class Links
+				{
+					items=3;
+					class Item0
+					{
+						linkID=0;
+						item0=181;
+						item1=180;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+					class Item1
+					{
+						linkID=1;
+						item0=182;
+						item1=180;
+						class CustomData
+						{
+							role=2;
+							turretPath[]={0};
+						};
+					};
+					class Item2
+					{
+						linkID=2;
+						item0=183;
+						item1=180;
+						class CustomData
+						{
+							role=2;
+							turretPath[]={0,0};
+						};
+					};
+				};
+			};
+			id=179;
+		};
+		class Item30
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1665.838,7.7639475,5119.4937};
+			};
+			side="West";
+			flags=6;
+			class Attributes
+			{
+				reportRemoteTargets=1;
+				receiveRemoteTargets=1;
+				reportOwnPosition=1;
+			};
+			id=180;
+			type="B_AFV_Wheeled_01_up_cannon_F";
+		};
+		class Item31
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=7;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1572.9164,5.5014391,4949.3496};
+					};
+					side="West";
+					flags=6;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=189;
+					type="B_Helipilot_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1572.9164,7.2805834,4949.3506};
+					};
+					side="West";
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=190;
+					type="B_Helipilot_F";
+					atlOffset=1.7791443;
+				};
+				class Item2
+				{
+					dataType="Waypoint";
+					position[]={1858.5251,5.5,5836.4351};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=191;
+					type="Move";
+				};
+				class Item3
+				{
+					dataType="Waypoint";
+					position[]={3714.9746,27.935268,7503.5972};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=192;
+					type="Move";
+				};
+				class Item4
+				{
+					dataType="Waypoint";
+					position[]={6621.479,77.638512,5176.3242};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=193;
+					type="Move";
+				};
+				class Item5
+				{
+					dataType="Waypoint";
+					position[]={2577.1968,29.344982,511.43359};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=194;
+					type="Move";
+				};
+				class Item6
+				{
+					dataType="Waypoint";
+					position[]={1577.901,5.5,4935.8999};
+					type="Cycle";
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=195;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=2;
+				};
+				class Links
+				{
+					items=2;
+					class Item0
+					{
+						linkID=0;
+						item0=189;
+						item1=188;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+					class Item1
+					{
+						linkID=1;
+						item0=190;
+						item1=188;
+						class CustomData
+						{
+							role=2;
+							turretPath[]={0};
+						};
+					};
+				};
+			};
+			id=187;
+		};
+		class Item32
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1572.9164,7.2791443,4949.3008};
+			};
+			side="West";
+			flags=6;
+			class Attributes
+			{
+			};
+			id=188;
+			type="B_Heli_Light_01_dynamicLoadout_F";
+		};
+		class Item33
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=15;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1532.433,5.5014391,4998.1997};
+					};
+					side="West";
+					flags=6;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=198;
+					type="B_Fighter_Pilot_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"STRING"
+										};
+									};
+									value="Male11ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"SCALAR"
+										};
+									};
+									value=1.03;
+								};
+							};
+						};
+						nAttributes=2;
+					};
+				};
+				class Item1
+				{
+					dataType="Waypoint";
+					position[]={1863.8398,-0.074576214,6763.5073};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=207;
+					type="Move";
+					atlOffset=34.719681;
+				};
+				class Item2
+				{
+					dataType="Waypoint";
+					position[]={4304.8896,0.076302439,7342.7397};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=208;
+					type="Move";
+					atlOffset=13.399918;
+				};
+				class Item3
+				{
+					dataType="Waypoint";
+					position[]={6932.1221,0.012935011,4477.6084};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=209;
+					type="Move";
+					atlOffset=22.052095;
+				};
+				class Item4
+				{
+					dataType="Waypoint";
+					position[]={6311.5156,-0.012377121,1271.1426};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=210;
+					type="Move";
+					atlOffset=118.0563;
+				};
+				class Item5
+				{
+					dataType="Waypoint";
+					position[]={3787.7188,0.040977575,-238.99805};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=211;
+					type="Move";
+					atlOffset=117.40488;
+				};
+				class Item6
+				{
+					dataType="Waypoint";
+					position[]={1843.1526,-0.0082306182,60.960938};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=212;
+					type="Move";
+					atlOffset=102.93126;
+				};
+				class Item7
+				{
+					dataType="Waypoint";
+					position[]={1646.6274,0.0088791372,2481.3252};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=213;
+					type="Move";
+					atlOffset=28.493998;
+				};
+				class Item8
+				{
+					dataType="Waypoint";
+					position[]={1946.5872,36.898323,3681.1641};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=214;
+					type="Move";
+				};
+				class Item9
+				{
+					dataType="Waypoint";
+					position[]={3074.0215,84.892448,4177.6484};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=215;
+					type="Move";
+				};
+				class Item10
+				{
+					dataType="Waypoint";
+					position[]={5370.2637,0.011530172,2512.3555};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=216;
+					type="Move";
+					atlOffset=55.10017;
+				};
+				class Item11
+				{
+					dataType="Waypoint";
+					position[]={4335.9209,-0.067676485,764.31494};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=217;
+					type="Move";
+					atlOffset=45.52224;
+				};
+				class Item12
+				{
+					dataType="Waypoint";
+					position[]={2215.5166,53.261757,1581.4458};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=218;
+					type="Move";
+				};
+				class Item13
+				{
+					dataType="Waypoint";
+					position[]={1377.6987,0.072126999,3484.6387};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=219;
+					type="Move";
+					atlOffset=26.037601;
+				};
+				class Item14
+				{
+					dataType="Waypoint";
+					position[]={1005.335,-0.05532074,5511.9521};
+					type="Cycle";
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=220;
+					atlOffset=74.99601;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=1;
+				};
+				class Links
+				{
+					items=1;
+					class Item0
+					{
+						linkID=0;
+						item0=198;
+						item1=197;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+				};
+			};
+			id=196;
+		};
+		class Item34
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1532.4329,7.880455,4998.1787};
+			};
+			side="West";
+			flags=6;
+			class Attributes
+			{
+			};
+			id=197;
+			type="B_Plane_CAS_01_dynamicLoadout_F";
+		};
+		class Item35
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=6;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1554.488,359.8132,4970.6787};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=201;
+					type="B_Fighter_Pilot_F";
+					atlOffset=354.30896;
+				};
+				class Item1
+				{
+					dataType="Waypoint";
+					position[]={1519.0291,-3.0517578e-005,6949.9688};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=202;
+					type="Move";
+					atlOffset=42.285095;
+				};
+				class Item2
+				{
+					dataType="Waypoint";
+					position[]={3760.3931,0,7900.5605};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=203;
+					type="Move";
+					atlOffset=0.56135368;
+				};
+				class Item3
+				{
+					dataType="Waypoint";
+					position[]={7225.4429,-0.04237118,5283.6709};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=204;
+					type="Move";
+					atlOffset=33.663902;
+				};
+				class Item4
+				{
+					dataType="Waypoint";
+					position[]={3108.7563,0.033187602,184.35693};
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=205;
+					type="Move";
+					atlOffset=54.794735;
+				};
+				class Item5
+				{
+					dataType="Waypoint";
+					position[]={1277.968,0.01591301,4756.1548};
+					type="Cycle";
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=206;
+					atlOffset=12.368;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=1;
+				};
+				class Links
+				{
+					items=1;
+					class Item0
+					{
+						linkID=0;
+						item0=201;
+						item1=200;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+				};
+			};
+			id=199;
+			atlOffset=354.30896;
+		};
+		class Item36
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1554.4818,362.30692,4970.6689};
+			};
+			side="West";
+			flags=2;
+			class Attributes
+			{
+				reportRemoteTargets=1;
+				receiveRemoteTargets=1;
+				reportOwnPosition=1;
+				aiRadarUsage=1;
+			};
+			id=200;
+			type="B_Plane_Fighter_01_F";
+			atlOffset=354.30896;
 		};
 	};
 };

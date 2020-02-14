@@ -17,5 +17,8 @@ releasebuild = [
     "@zip @Streamator"
 ]
 
+keyname = "Streamator_{{version}}"
+signame = "Streamator_{{version}}-{{git \"id 8\"}}"
+
 [header_exts]
 version= "{{git \"id 8\"}}"

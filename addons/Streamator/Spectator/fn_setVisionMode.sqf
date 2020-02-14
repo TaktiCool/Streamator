@@ -2,10 +2,10 @@
 /*
     Streamator
 
-    Author: BadGuy
+    Author: Badguy
 
     Description:
-
+    Sets Camera Vision Mode
 
     Parameter(s):
     None

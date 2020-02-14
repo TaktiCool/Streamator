@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Loads and Restores Position from Position Memory
 
     Parameter(s):
     None

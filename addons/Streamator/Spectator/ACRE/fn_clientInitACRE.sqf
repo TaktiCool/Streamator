@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-    Client Init for ACRE Radio Plugin
+    Client Init for ACRE Radio Coms Plugin
 
     Parameter(s):
     None

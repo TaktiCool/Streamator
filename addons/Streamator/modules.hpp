@@ -45,6 +45,7 @@ class CfgCLibModules {
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
+            FNC(isValidUnit);
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);

@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Update TFAR Frequencys
 
     Parameter(s):
     None

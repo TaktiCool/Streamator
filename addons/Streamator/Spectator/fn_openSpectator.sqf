@@ -84,7 +84,6 @@ GVAR(UnitInfoTarget) = objNull;
 
 GVAR(RenderAIUnits) = false;
 
-
 GVAR(PlanningModeChannel) = 0;
 // ["#FF0000","#FFFF00","#0033FF","#CC66FF","#66FF66","#FF6600","#FFFFFF","#6699FF","#00FFFF","#99FF66","#339933","#FF0066","#CC3300","#0033CC"]
 GVAR(PlanningModeColorRGB) = [[1,0,0],[1,1,0],[0,0.2,1],[0.8,0.4,1],[0.4,1,0.4],[1,0.4,0],[1,1,1],[0.4,0.6,1],[0,1,1],[0.6,1,0.4],[0.2,0.6,0.2],[1,0,0.4],[0.8,0.2,0],[0,0.2,0.8]];
@@ -155,19 +154,21 @@ private _fnc_init = {
 
     if (GVAR(aceLoaded)) then {
         [CLib_Player] call ace_hearing_fnc_putInEarplugs;
-        CLib_Player setVariable ["ACE_Medical_allowDamage", false];
+        CLib_Player setVariable ["ace_medical_allowdamage", false];
         ACE_Hearing_deafnessDV = 0;
         ACE_Hearing_volume = 1;
     };
 
     [{
         if (GVAR(aceLoaded)) then {
-            CLib_Player setVariable ["ACE_Medical_allowDamage", false];
+            CLib_Player setVariable ["ace_medical_allowdamage", false];
             ACE_Hearing_deafnessDV = 0;
             ACE_Hearing_volume = 1;
+            call ace_goggles_fnc_removeGlassesEffect;
+            CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
         };
         CLib_Player setDamage 0;
-    }, 0.5] call CFUNC(addPerFrameHandler);
+    }, 0] call CFUNC(addPerFrameHandler);
 
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);

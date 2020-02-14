@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-    Initialize Spectator
+    Sets Radio Follow Target
 
     Parameter(s):
     None

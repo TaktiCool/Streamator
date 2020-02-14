@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Builds Radio Info UI
 
     Parameter(s):
     None

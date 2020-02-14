@@ -1,6 +1,6 @@
 #include "macros.hpp"
 /*
-    Arma At War - AAW
+    Stremator
 
     Author: BadGuy
 
@@ -27,18 +27,11 @@ GVAR(lastFrameTriggered) = diag_frameNo;
 GVAR(processedIcons) = [];
 GVAR(lastProcessedIcons) = [];
 
-DFUNC(isValidUnit) = {
-    params [["_unit", objNull]];
-    if !(isPlayer _unit || EGVAR(Spectator,RenderAIUnits)) exitWith { false };
-    !isNull _unit
-     && simulationEnabled _unit
-     && !isObjectHidden _unit;
-};
 
 DFUNC(isValidVehicle) = {
-    params[ ["_vehicle", objNull]];
+    params[["_vehicle", objNull]];
     !isNull _vehicle
-     && (((crew _vehicle) findIf {_x call FUNC(isValidUnit)}) == -1)
+     && (((crew _vehicle) findIf {_x call EFUNC(Stremator,isValidUnit)}) == -1)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
      && !isObjectHidden _vehicle
@@ -66,11 +59,11 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
     if (!(_units isEqualTo [])) then {
         private _unit = _units deleteAt 0;
 
-        while {!([_unit] call FUNC(isValidUnit)) && {!(_units isEqualTo [])}} do {
+        while {!([_unit] call EFUNC(Stremator,isValidUnit)) && {!(_units isEqualTo [])}} do {
             _unit = _units deleteAt 0;
         };
 
-        if ([_unit] call FUNC(isValidUnit)) then {
+        if ([_unit] call EFUNC(Stremator,isValidUnit)) then {
             if (isNull objectParent _unit) then { // Infantry
                 private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _unit, group _unit isEqualTo group CLib_Player];
                 GVAR(processedIcons) pushBack _iconId;

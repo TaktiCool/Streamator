@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-    Server Init for Spectator
+    Server Init for TFAR Radio Coms Plugin
 
     Parameter(s):
     None
