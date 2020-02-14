@@ -170,7 +170,7 @@ private _return = switch (_keyCode) do {
                         private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
                         {
                             _x params ["_time", "_pos"];
-                            private _alpha = 1 - ([time, serverTime] select isMultiplayer - _time) max 0;
+                            private _alpha = 1 - (([time, serverTime] select isMultiplayer) - _time) max 0;
                             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
                             _color set [3, _alpha];
                             private _text = "";
