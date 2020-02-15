@@ -15,10 +15,10 @@
 */
 params ["_ctrlInfo"];
 
-DFUNC(isValidSearchableUnit) = {
+[{
     if !(isPlayer _this || GVAR(RenderAIUnits)) exitWith { false };
     alive _this
-};
+}, QFUNC(isValidSearchableUnit)] call CFUNC(compileFinal);
 
 [QGVAR(updateGuess), {
     switch (GVAR(InputMode)) do {

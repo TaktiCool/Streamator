@@ -27,15 +27,14 @@ GVAR(lastFrameTriggered) = diag_frameNo;
 GVAR(processedIcons) = [];
 GVAR(lastProcessedIcons) = [];
 
-
-DFUNC(isValidVehicle) = {
+[{
     params[["_vehicle", objNull]];
     !isNull _vehicle
      && (((crew _vehicle) findIf {_x call EFUNC(Spectator,isValidUnit)}) == -1)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
      && !isObjectHidden _vehicle
-};
+}, QFUNC(isValidVehicle)] call CFUNC(compileFinal);
 
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);
 

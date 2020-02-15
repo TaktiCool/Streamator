@@ -135,7 +135,8 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
     GVAR(lastFrameDataUpdate) = diag_frameNo;
 }] call CFUNC(addEventhandler);
 
-DFUNC(updateSpectatorArray) = {
+
+[{
     GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_player});
 
     // hijack this for disabling the UI.
@@ -148,7 +149,7 @@ DFUNC(updateSpectatorArray) = {
     [{
         call FUNC(updateSpectatorArray);
     }, 3] call CFUNC(wait);
-};
+}, QFUNC(updateSpectatorArray)] call CFUNC(compileFinal);
 
 private _fnc_init = {
 
@@ -182,6 +183,7 @@ private _fnc_init = {
             ace_goggles_PostProcessEyes ppEffectEnable false;
         };
         CLib_Player setDamage 0;
+        clearRadio;
     }, 0] call CFUNC(addPerFrameHandler);
 
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
@@ -215,7 +217,7 @@ private _fnc_init = {
 
         QGVAR(updateInput) call CFUNC(localEvent);
 
-        [DFUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+        [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
         QGVAR(spectatorOpened) call CFUNC(localEvent);
     }, {
@@ -233,7 +235,7 @@ if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo side
 };
 
 // Camera Update PFH
-addMissionEventHandler ["Draw3D", {call DFUNC(draw3dEH)}];
+addMissionEventHandler ["Draw3D", {call FUNC(draw3dEH)}];
 
 call FUNC(updateSpectatorArray);
 [
