@@ -29,3 +29,8 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
 ["initializeSpectator", {
     call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);
+
+["Respawn", {
+    (_this select 0) params ["_new"];
+    _new setVariable [QGVAR(isPlayer), true, true];
+}] call CFUNC(addEventhandler);

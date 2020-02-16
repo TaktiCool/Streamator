@@ -4,7 +4,7 @@
     Author: BadGuy
 
     Description:
-    Checks if a Unit should get Rendert
+    Checks if a Unit should get Rendered
 
     Parameter(s):
     0: Unit <Object>
@@ -15,7 +15,7 @@
 
 params [["_unit", objNull]];
 
-if !(isPlayer _unit || GVAR(RenderAIUnits)) exitWith { false };
+if !(_unit getVariable [QGVAR(isPlayer), false] || GVAR(RenderAIUnits)) exitWith { false };
 
 !(side _unit in [sideLogic, sideUnknown])
 && alive _unit

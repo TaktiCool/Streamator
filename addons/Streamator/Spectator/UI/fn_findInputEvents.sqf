@@ -16,7 +16,7 @@
 params ["_ctrlInfo"];
 
 [{
-    if !(isPlayer _this || GVAR(RenderAIUnits)) exitWith { false };
+    if !(_this getVariable [QGVAR(isPlayer), false] || GVAR(RenderAIUnits)) exitWith { false };
     alive _this
 }, QFUNC(isValidSearchableUnit)] call CFUNC(compileFinal);
 
