@@ -129,6 +129,9 @@ if (GVAR(OverlayPlanningMode)) then {
 
 //Units
 if (GVAR(OverlayUnitMarker)) then {
+    private _allUnits = allUnits;
+    _allUnits append allUnitsUAV;
+    _allUnits = _allUnits arrayIntersect _allUnits;
     {
         if (_x call FUNC(isValidUnit)) then {
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
@@ -180,11 +183,14 @@ if (GVAR(OverlayUnitMarker)) then {
             };
         };
         nil
-    } count allUnits;
+    } count _allUnits;
 };
 
 // GROUPS
 if (GVAR(OverlayGroupMarker)) then {
+    private _allGroups = allGroups;
+    _allGroups append (allUnitsUAV apply { group _x });
+    _allGroups = _allGroups arrayIntersect _allGroups;
     {
         private _leader = leader _x;
         if (_leader call FUNC(isValidUnit)) then {
@@ -220,5 +226,5 @@ if (GVAR(OverlayGroupMarker)) then {
             };
         };
         nil
-    } count allGroups;
+    } count _allGroups;
 };
