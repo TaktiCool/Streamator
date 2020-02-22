@@ -17,6 +17,7 @@
 // Create Camera
 GVAR(Camera) = "Camera" camCreate (eyePos CLib_player);
 GVAR(Camera) cameraEffect ["internal", "back"];
+switchCamera CLib_Player;
 CLib_player attachTo [GVAR(Camera), [0, 0, 0]];
 GVAR(CameraPos) = (eyePos CLib_player) vectorAdd [0, 0, GVAR(CameraHeight)];
 showCinemaBorder false;
@@ -311,6 +312,7 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
 [_ctrlGrp] call FUNC(buildRadioInfoUI);
 [_ctrlGrp] call FUNC(buildUnitInfoUI);
+[_ctrlGrp] call FUNC(buildFPSUI);
 _ctrlInfo call FUNC(findInputEvents);
 
 [{

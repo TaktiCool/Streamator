@@ -105,6 +105,12 @@ if (_cameraFollowTarget call Streamator_fnc_isSpectator && _cameraMode > 2) exit
 };
 
 
+if (_cameraMode == 5 && (vehicle _cameraFollowTarget) != cameraOn && GVAR(CameraInFirstPerson)) exitWith {
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    switchCamera CLib_Player;
+    cameraEffectEnableHUD true;
+    GVAR(CameraInFirstPerson) = false;
+};
 
 if (_cameraMode == 5 && !GVAR(CameraInFirstPerson)) exitWith {
     GVAR(Camera) cameraEffect ["Terminate", "BACK"];
@@ -115,7 +121,7 @@ if (_cameraMode == 5 && !GVAR(CameraInFirstPerson)) exitWith {
 
 if (_cameraMode != 5 && GVAR(CameraInFirstPerson)) then {
     GVAR(Camera) cameraEffect ["internal", "back"];
-    switchCamera CLib_player;
+    switchCamera CLib_Player;
     cameraEffectEnableHUD true;
     GVAR(CameraInFirstPerson) = false;
 };
@@ -148,16 +154,18 @@ switch (_cameraMode) do {
 
     case 5: { // FPS
         if !(cameraOn in [CLib_player, GVAR(Camera)]) then {
-
+            /*
             if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget != cameraOn) then {
                 GVAR(CameraFollowTarget) = cameraOn;
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
                 _cameraFollowTarget = cameraOn;
             };
+
             if !(_cameraFollowTarget isKindOf "CAManBase") then {
                 [QGVAR(CameraModeChanged), 2] call CFUNC(localEvent);
             };
+            */
             _cameraFollowTarget switchCamera "INTERNAL";
 
             CLib_Player setPos (_cameraFollowTarget modelToWorld [0, 0, -3]);

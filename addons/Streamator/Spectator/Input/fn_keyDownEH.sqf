@@ -332,6 +332,8 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F10: {
         GVAR(Camera) cameraEffect ["internal", "back"];
+        switchCamera CLib_Player;
+        cameraEffectEnableHUD true;
         true;
     };
     case DIK_E: { // E
@@ -457,7 +459,13 @@ private _return = switch (_keyCode) do {
                 _newCameraTarget = objNull;
                 1;
             };
-            case DIK_RETURN;
+            case DIK_RETURN: {
+                if (GVAR(CameraMode) == 1) then {
+                    2
+                } else {
+                    GVAR(CameraMode);
+                };
+            };
             case DIK_NUMPAD1: {2};
             case DIK_NUMPAD2: {3};
             case DIK_NUMPAD3: {5};
