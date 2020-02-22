@@ -1,6 +1,6 @@
 #include "macros.hpp"
 /*
-    Arma At War - AAW
+    Stremator
 
     Author: BadGuy, joko // Jonas
 

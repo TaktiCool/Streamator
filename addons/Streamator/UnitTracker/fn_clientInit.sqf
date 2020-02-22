@@ -1,6 +1,6 @@
 #include "macros.hpp"
 /*
-    Arma At War - AAW
+    Stremator
 
     Author: BadGuy
 
@@ -27,28 +27,21 @@ GVAR(lastFrameTriggered) = diag_frameNo;
 GVAR(processedIcons) = [];
 GVAR(lastProcessedIcons) = [];
 
-DFUNC(isValidUnit) = {
-    params [["_unit", objNull]];
-    if !(isPlayer _unit || EGVAR(Spectator,RenderAIUnits)) exitWith { false };
-    !isNull _unit
-     && simulationEnabled _unit
-     && !isObjectHidden _unit;
-};
-
-DFUNC(isValidVehicle) = {
-    params[ ["_vehicle", objNull]];
+[{
+    params[["_vehicle", objNull]];
     !isNull _vehicle
-     && (({alive _x} count crew _vehicle) == 0)
+     && (((crew _vehicle) findIf {_x call EFUNC(Spectator,isValidUnit)}) == -1)
      && (damage _vehicle < 1)
      && _vehicle isKindOf "AllVehicles"
      && !isObjectHidden _vehicle
-};
+}, QFUNC(isValidVehicle)] call CFUNC(compileFinal);
 
 GVAR(ProcessingSM) = call CFUNC(createStatemachine);
 
 [GVAR(ProcessingSM), "init", {
-    private _units = +(allUnits select {[_x] call FUNC(isValidUnit)});
-    _units append (allDead select {[_x] call FUNC(isValidUnit) && _x isKindOf "CAManBase"});
+    private _units = +(allUnits select {[_x] call EFUNC(Spectator,isValidUnit)});
+    _units append (allDead select {[_x] call EFUNC(Spectator,isValidUnit) && _x isKindOf "CAManBase"});
+    _units append allUnitsUAV;
     private _vehicles = (vehicles select {[_x] call FUNC(isValidVehicle)});
     GVAR(lastProcessedIcons) = (CGVAR(MapGraphics_MapGraphicsGroup) call CFUNC(allVariables)) select {(_x find toLower QGVAR(IconId)) == 0};
     {
@@ -66,13 +59,13 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
     if (!(_units isEqualTo [])) then {
         private _unit = _units deleteAt 0;
 
-        while {!([_unit] call FUNC(isValidUnit)) && {!(_units isEqualTo [])}} do {
+        while {!([_unit] call EFUNC(Spectator,isValidUnit)) && {!(_units isEqualTo [])}} do {
             _unit = _units deleteAt 0;
         };
 
-        if ([_unit] call FUNC(isValidUnit)) then {
+        if ([_unit] call EFUNC(Spectator,isValidUnit)) then {
             if (isNull objectParent _unit) then { // Infantry
-                private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _unit, group _unit isEqualTo group CLib_Player];
+                private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _unit, (group _unit) isEqualTo (group CLib_Player)];
                 GVAR(processedIcons) pushBack _iconId;
                 if !(_iconId in GVAR(lastProcessedIcons)) then {
                     DUMP("UNIT ICON ADDED: " + _iconId);
@@ -80,7 +73,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
                 };
 
                 if (leader _unit == _unit && alive _unit) then {
-                    _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _unit, _unit, group _unit isEqualTo group CLib_Player];
+                    _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _unit, _unit, (group _unit) isEqualTo (group CLib_Player)];
                     GVAR(processedIcons) pushBack _iconId;
                     if !(_iconId in GVAR(lastProcessedIcons)) then {
                         DUMP("GROUP ICON ADDED: " + _iconId);
@@ -93,7 +86,7 @@ GVAR(ProcessingSM) = call CFUNC(createStatemachine);
                 private _inGroup = {
                     if (leader _x == _x) then {
                         _nbrGroups = _nbrGroups + 1;
-                        private _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3_%4), group _x, _vehicle, group _unit isEqualTo group CLib_Player, _nbrGroups];
+                        private _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3_%4), group _x, _vehicle, (group _unit) isEqualTo (group CLib_Player), _nbrGroups];
                         GVAR(processedIcons) pushBack _iconId;
                         if !(_iconId in GVAR(lastProcessedIcons)) then {
                             DUMP("GROUP ICON ADDED: " + _iconId);

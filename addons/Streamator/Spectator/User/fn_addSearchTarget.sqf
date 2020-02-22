@@ -12,6 +12,7 @@
     1: Target <Object, String, Location, Array<Number>>
     2: Distance Offset <Number> (Default: 5)
     3: Hight Offset <Number> (Default: 1)
+
     Returns:
     None
 */

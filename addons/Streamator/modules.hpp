@@ -7,10 +7,24 @@ class CfgCLibModules {
         // Crates
         MODULE(Spectator) {
             dependency[] = {"CLib"};
+            MODULE(ACRE) {
+                FNC(clientInitACRE);
+            };
+            MODULE(TFAR) {
+                FNC(clientInitTFAR);
+                FNC(getTFARFrequency);
+                FNC(serverInitTFAR);
+                FNC(updateTFARFreq);
+            };
+            MODULE(Radio) {
+                FNC(setRadioFollowTarget);
+            };
+
             MODULE(UI) {
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
                 FNC(buildUnitInfoUI);
+                FNC(createPlanningDisplay);
                 FNC(findInputEvents);
             };
             MODULE(Input) {
@@ -31,10 +45,10 @@ class CfgCLibModules {
             FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
+            FNC(isValidUnit);
             FNC(openSpectator);
             FNC(restorePosition);
             FNC(savePosition);
-            FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
         };

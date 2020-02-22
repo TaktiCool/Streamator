@@ -5,10 +5,11 @@
     Author: BadGuy
 
     Description:
-    Client Init for Spectator
+    Sets Camera Target
 
     Parameter(s):
-    None
+    0: Unit to Focus on <ObjNull>
+    1: Camera Mode to switch to <Number> (Default: 2)
 
     Returns:
     None

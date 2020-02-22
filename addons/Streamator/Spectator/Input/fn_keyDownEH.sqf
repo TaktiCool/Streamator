@@ -18,19 +18,6 @@
     Event handled <Bool>
 */
 
-#define SAVERESTORE(slot) if (GVAR(InputMode) == 1) exitWith {false}; \
-if (_ctrl) then { \
-    [slot] call FUNC(savePosition); \
-} else { \
-    [slot] call FUNC(restorePosition); \
-};
-
-#define TOGGLEVIEW(num) if (GVAR(InputMode) != 0) exitWith {false;}; \
-if (isNull GVAR(CameraFollowTarget)) exitWith {false;};\
-GVAR(CameraMode) = num; \
-[QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent); \
-true;
-
 params [
     "",
     ["_keyCode", 0, [0]],
@@ -150,7 +137,7 @@ private _return = switch (_keyCode) do {
                     if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
                         private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
                         _pos set [2, 0];
-                        [CLib_Player, QGVAR(cursorPosition), [serverTime, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+                        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
                     };
                 };
             }];
@@ -183,7 +170,7 @@ private _return = switch (_keyCode) do {
                         private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
                         {
                             _x params ["_time", "_pos"];
-                            private _alpha = 1 - (serverTime - _time) max 0;
+                            private _alpha = 1 - (([time, serverTime] select isMultiplayer) - _time) max 0;
                             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
                             _color set [3, _alpha];
                             private _text = "";
@@ -340,14 +327,12 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F9: { // F9
         if (GVAR(InputMode) != 0) exitWith {false;};
-        if (GVAR(TFARLoaded)) exitWith {
-            call FUNC(TFARRadio);
-            true;
-        };
-        if (GVAR(ACRELoaded)) exitWith {
-            LOG("ACRE Radio is current not supported");
-        };
-        LOG("No Radio Mod Found");
+        call FUNC(setRadioFollowTarget);
+        true;
+    };
+    case DIK_F10: {
+        GVAR(Camera) cameraEffect ["internal", "back"];
+        true;
     };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
@@ -411,7 +396,12 @@ private _return = switch (_keyCode) do {
     case DIK_8;
     case DIK_9;
     case DIK_0: {
-        SAVERESTORE(_keyCode);
+        if (GVAR(InputMode) == 1) exitWith {false};
+        if (_ctrl) then {
+            [_keyCode] call FUNC(savePosition);
+        } else {
+            [_keyCode] call FUNC(restorePosition);
+        };
         true;
     };
 
@@ -424,7 +414,7 @@ private _return = switch (_keyCode) do {
                 true;
             };
             case 3: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,0.3];
+                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
                 true;
             };
             case 4: {
@@ -434,6 +424,9 @@ private _return = switch (_keyCode) do {
             case 6: {
                 GVAR(CameraRelPos) = [0, 10, 10];
                 true;
+            };
+            default {
+                false;
             };
         };
 

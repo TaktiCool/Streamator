@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Loads and Restores Position from Position Memory
 
     Parameter(s):
     None
@@ -19,7 +19,6 @@ private _element = GVAR(PositionMemory) getVariable (str _slot);
 if (isNil "_element") exitWith {};
 
 if (count _element != 12) exitWith {};
-private _lastCameraMode = GVAR(CameraMode);
 GVAR(CameraMode) = _element select 0;
 GVAR(CameraFollowTarget) = _element select 1;
 GVAR(CameraPos) = _element select 2;

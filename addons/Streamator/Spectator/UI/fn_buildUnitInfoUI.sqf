@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Builds Unit Chyron UI Elements
 
     Parameter(s):
     None

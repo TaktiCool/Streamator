@@ -5,20 +5,20 @@
     Author: BadGuy
 
     Description:
-
+    Registers Find Input Events and checks if a Unit is Searchable
 
     Parameter(s):
-    None
+    0: Info ctrl <Control>
 
     Returns:
     None
 */
 params ["_ctrlInfo"];
 
-DFUNC(isValidSearchableUnit) = {
-    if !(isPlayer _this || GVAR(RenderAIUnits)) exitWith { false };
+[{
+    if !(_this getVariable [QGVAR(isPlayer), false] || GVAR(RenderAIUnits)) exitWith { false };
     alive _this
-};
+}, QFUNC(isValidSearchableUnit)] call CFUNC(compileFinal);
 
 [QGVAR(updateGuess), {
     switch (GVAR(InputMode)) do {
