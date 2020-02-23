@@ -21,10 +21,10 @@ class CfgCLibModules {
             };
 
             MODULE(UI) {
+                FNC(buildFPSUI);
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
                 FNC(buildUnitInfoUI);
-                FNC(buildFPSUI);
                 FNC(createPlanningDisplay);
                 FNC(findInputEvents);
             };

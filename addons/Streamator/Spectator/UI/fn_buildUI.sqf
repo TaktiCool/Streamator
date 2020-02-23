@@ -332,7 +332,7 @@ _ctrlInfo call FUNC(findInputEvents);
     if (isNull GVAR(CameraFollowTarget)) then {
         _ctrlTargetSpeedInfo ctrlSetText "";
     } else {
-        _ctrlTargetSpeedInfo ctrlSetText format ["%1 km/h", floor (speed (vehicle GVAR(CameraFollowTarget)))];
+        _ctrlTargetSpeedInfo ctrlSetText format ["%1 km/h", abs (floor (speed (vehicle GVAR(CameraFollowTarget))))];
     };
     _ctrlTargetSpeedInfo ctrlCommit 0;
 }, 0, [_ctrlFOVBarCurrent, _ctrlTargetSpeedInfo]] call CFUNC(addPerFrameHandler);

@@ -41,6 +41,7 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
+**`V`** | Toggle MiniMap/GPS | Toggles MiniMap/GPS
 **`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel

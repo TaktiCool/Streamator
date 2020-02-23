@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=238;
+		nextID=245;
 	};
 	class Camera
 	{
-		pos[]={1639.1995,353.43423,4937.9077};
-		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,-0};
+		pos[]={1910.7662,11.239124,5525.4849};
+		dir[]={0.72933191,-0.68426436,0.0030434483};
+		up[]={0.6842733,0.72922045,0.0028567442};
+		aside[]={0.0041742697,-1.1946554e-007,-1.0000658};
 	};
 };
 binarizationWanted=0;
@@ -36,13 +36,14 @@ addons[]=
 	"A3_Air_F_Jets_Plane_Fighter_01",
 	"A3_Characters_F_Common",
 	"A3_Air_F_Jets_UAV_05",
-	"A3_Weapons_F_Ammoboxes"
+	"A3_Weapons_F_Ammoboxes",
+	"A3_Drones_F_Air_F_Gamma_UAV_01"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=13;
+		items=14;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -134,6 +135,13 @@ class AddonsMetaData
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
+		class Item13
+		{
+			className="A3_Drones_F";
+			name="Arma 3 Beta - Drones";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
 	};
 };
 randomSeed=10366851;
@@ -166,7 +174,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=40;
+		items=43;
 		class Item0
 		{
 			dataType="Group";
@@ -4824,6 +4832,187 @@ class Mission
 				};
 				nAttributes=1;
 			};
+		};
+		class Item40
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1912.5,9.0261545,5525.4028};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						name="JK_UAVOperator";
+						isPlayable=1;
+					};
+					id=239;
+					type="B_soldier_UAV_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"STRING"
+										};
+									};
+									value="Male10ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"SCALAR"
+										};
+									};
+									value=1.04;
+								};
+							};
+						};
+						nAttributes=2;
+					};
+				};
+			};
+			class Attributes
+			{
+			};
+			id=238;
+		};
+		class Item41
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=3;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1916.4199,71.247887,5525.1812};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						name="JK_UAVD";
+					};
+					id=242;
+					type="B_UAV_AI";
+					atlOffset=62.207573;
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1916.4199,71.247887,5525.1812};
+					};
+					side="West";
+					class Attributes
+					{
+						name="JK_UAVG";
+					};
+					id=243;
+					type="B_UAV_AI";
+					atlOffset=62.207573;
+				};
+				class Item2
+				{
+					dataType="Waypoint";
+					position[]={1916.4185,9.0388842,5525.1313};
+					type="Loiter";
+					class Effects
+					{
+					};
+					showWP="NEVER";
+					id=244;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=2;
+				};
+				class Links
+				{
+					items=2;
+					class Item0
+					{
+						linkID=0;
+						item0=242;
+						item1=241;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+					class Item1
+					{
+						linkID=1;
+						item0=243;
+						item1=241;
+						class CustomData
+						{
+							role=2;
+							turretPath[]={0};
+						};
+					};
+				};
+			};
+			id=240;
+			atlOffset=62.207573;
+		};
+		class Item42
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1916.4208,71.396545,5525.1211};
+			};
+			side="West";
+			flags=2;
+			class Attributes
+			{
+				name="JK_UAV";
+				reportRemoteTargets=1;
+				reportOwnPosition=1;
+			};
+			id=241;
+			type="B_UAV_01_F";
+			atlOffset=62.207573;
 		};
 	};
 };

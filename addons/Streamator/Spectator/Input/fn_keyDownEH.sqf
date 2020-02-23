@@ -475,6 +475,10 @@ private _return = switch (_keyCode) do {
         [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
         true;
     };
+    case DIK_V: {
+        QGVAR(ToggleMinimap) call CFUNC(localEvent);
+        true;
+    };
     default {
         false
     };
