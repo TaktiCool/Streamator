@@ -318,6 +318,8 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F7: { // F7
         GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
+        profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
+        saveProfileNamespace;
         true;
     };
     case DIK_F8: { // F8

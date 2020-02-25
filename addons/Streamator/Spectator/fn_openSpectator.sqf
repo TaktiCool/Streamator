@@ -82,7 +82,7 @@ GVAR(allSpectators) = [];
 GVAR(UnitInfoOpen) = false;
 GVAR(UnitInfoTarget) = objNull;
 
-GVAR(RenderAIUnits) = false;
+GVAR(RenderAIUnits) = profileNamespace getVariable [QGVAR(RenderAIUnits), false];
 
 GVAR(PlanningModeChannel) = 0;
 // ["#FF0000","#FFFF00","#0033FF","#CC66FF","#66FF66","#FF6600","#FFFFFF","#6699FF","#00FFFF","#99FF66","#339933","#FF0066","#CC3300","#0033CC"]
