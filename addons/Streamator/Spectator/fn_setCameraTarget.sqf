@@ -14,7 +14,7 @@
     Returns:
     None
 */
-params ["_unit", ["_cameraMode", 2]];
+params ["_unit", ["_cameraMode", CAMERAMODE_FOLLOW]];
 
 if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
@@ -48,10 +48,10 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect  min 1);
         GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
 
-        if (GVAR(CameraMode) != 1) then {
+        if (GVAR(CameraMode) != CAMERAMODE_FREE) then {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = objNull;
-            GVAR(CameraMode) = 1;
+            GVAR(CameraMode) = CAMERAMODE_FREE;
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
@@ -63,8 +63,8 @@ if (_unit isEqualType []) exitWith {
 private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 
-if (_cameraMode in [2, 6]) then {
-    if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
+if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
+    if (GVAR(CameraMode) != CAMERAMODE_FOLLOW || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
         GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
         GVAR(CameraRelPos) set [2, 5];
     };

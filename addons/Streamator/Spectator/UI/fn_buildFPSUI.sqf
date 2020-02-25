@@ -69,7 +69,7 @@ _ctrlMinimapTitle ctrlCommit 0;
     (_this select 0) params ["_cameraMode"];
     (_this select 1) params ["_ctrl"];
 
-    if (_cameraMode == 5) then {
+    if (_cameraMode == CAMERAMODE_FPS) then {
         _ctrl ctrlSetFade 0;
     } else {
         _ctrl ctrlSetFade 1;

@@ -13,7 +13,7 @@
     Returns:
     None
 */
-if (GVAR(InputMode) == 2) then {
+if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
     if (isNull (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull])) then {
         private _display = (findDisplay 46) createDisplay "RscDisplayEmpty";
         uiNamespace setVariable [QGVAR(PlanningModeDisplay), _display];
@@ -35,7 +35,7 @@ if (GVAR(InputMode) == 2) then {
         }];
         _display displayAddEventHandler ["Unload", {
             if (!GVAR(MapOpen)) then {
-                GVAR(InputMode) = 0;
+                GVAR(InputMode) = INPUTMODE_MOVE;
                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
                 [{
                     (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;

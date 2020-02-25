@@ -49,7 +49,7 @@ private _cameraPosition = positionCameraToWorld [0, 0, 0];
 //PlanningMode
 private _serverTime = [time, serverTime] select isMultiplayer;
 if (GVAR(OverlayPlanningMode)) then {
-    if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == 2) then {
+    if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
         if (_serverTime - _lastUpdate >= 0.2) then {
             private _endPosition = screenToWorld getMousePosition;

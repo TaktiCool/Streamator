@@ -46,7 +46,7 @@ GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
 GVAR(CameraEditMode) = false;
 GVAR(CameraSpeed) = 5;
-GVAR(CameraMode) = 1; // 1: FREE | 2: FOLLOW | 3: SHOULDER | 4: TOPDOWN
+GVAR(CameraMode) = CAMERAMODE_FREE; // 1: FREE | 2: FOLLOW | 3: SHOULDER | 4: TOPDOWN
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
@@ -73,7 +73,7 @@ GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
 GVAR(OverlayPlanningMode) = true;
 
-GVAR(InputMode) = 0;
+GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";
 GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;

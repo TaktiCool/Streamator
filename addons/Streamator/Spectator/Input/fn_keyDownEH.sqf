@@ -28,7 +28,7 @@ params [
 
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
-        if (GVAR(InputMode) == 1) exitWith {false};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         private _mapDisplay = uiNamespace getVariable [QGVAR(MapDisplay), displayNull];
         if (isNull _mapDisplay) then {
             GVAR(PlanningModeDrawing) = false;
@@ -61,11 +61,11 @@ private _return = switch (_keyCode) do {
                     case DIK_E: { // E
                         if !(_alt) exitWith {false};
                         with missionNamespace do {
-                            if (GVAR(InputMode) == 0) then {
-                                GVAR(InputMode) = 2;
+                            if (GVAR(InputMode) == INPUTMODE_MOVE) then {
+                                GVAR(InputMode) = INPUTMODE_PLANINGMODE;
                                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
                             } else {
-                                GVAR(InputMode) = 0;
+                                GVAR(InputMode) = INPUTMODE_MOVE;
                                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
                             };
                         };
@@ -134,7 +134,7 @@ private _return = switch (_keyCode) do {
             _map ctrlAddEventHandler ["MouseMoving", {
                 params ["_map", "_xPos", "_yPos"];
                 with missionNamespace do {
-                    if (GVAR(InputMode) == 2 && GVAR(PlanningModeDrawing)) then {
+                    if (GVAR(InputMode) == INPUTMODE_PLANINGMODE && GVAR(PlanningModeDrawing)) then {
                         private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
                         _pos set [2, 0];
                         [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
@@ -219,9 +219,9 @@ private _return = switch (_keyCode) do {
         true
     };
     case DIK_F: { // F
-        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
         if (_ctrl) exitWith {
-            GVAR(InputMode) = 1;
+            GVAR(InputMode) = INPUTMODE_SEARCH;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             true;
         };
@@ -238,33 +238,33 @@ private _return = switch (_keyCode) do {
         };
     };
     case DIK_LSHIFT: { // LShift
-        if (GVAR(InputMode) == 1) exitWith {false;};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraSpeedMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false;
     };
     case DIK_LCONTROL: { // LCTRL
-        if (GVAR(InputMode) == 1) exitWith {false;};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraSmoothingMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false;
     };
     case DIK_LALT: { // LALT
-        if (GVAR(InputMode) == 1) exitWith {false;};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         false;
     };
     case DIK_ESCAPE: { // ESC
-        if (GVAR(InputMode) == 1) exitWith {
-            GVAR(InputMode) = 0;
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {
+            GVAR(InputMode) = INPUTMODE_MOVE;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             true;
         };
         false;
     };
     case DIK_TAB: { // TAB
-        if (GVAR(InputMode) == 1) exitWith {
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {
             GVAR(InputGuessIndex) = GVAR(InputGuessIndex) + ([1, -1] select _shift);
             if (GVAR(InputGuessIndex) < 0) then {
                 GVAR(InputGuessIndex) = count GVAR(InputGuess) - 1;
@@ -280,7 +280,7 @@ private _return = switch (_keyCode) do {
         true
     };
     case DIK_BACKSPACE: { // BACKSPACE
-        if (GVAR(InputMode) == 1) exitWith {false;};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
         true;
     };
@@ -323,12 +323,12 @@ private _return = switch (_keyCode) do {
         true;
     };
     case DIK_F8: { // F8
-        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
         QGVAR(toggleRadioUI) call CFUNC(localEvent);
         true;
     };
     case DIK_F9: { // F9
-        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
         call FUNC(setRadioFollowTarget);
         true;
     };
@@ -340,26 +340,26 @@ private _return = switch (_keyCode) do {
     };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};
-        if (GVAR(InputMode) == 0) then {
-            GVAR(InputMode) = 2;
+        if (GVAR(InputMode) == INPUTMODE_MOVE) then {
+            GVAR(InputMode) = INPUTMODE_PLANINGMODE;
             GVAR(OverlayPlanningMode) = true;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             call FUNC(createPlanningDisplay);
         } else {
-            GVAR(InputMode) = 0;
+            GVAR(InputMode) = INPUTMODE_MOVE;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
         };
         true;
     };
     case DIK_N: { // N
-        if (GVAR(InputMode) == 1) exitWith {false};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
         true;
     };
     case DIK_B: { // B
-        if (GVAR(InputMode) == 1) exitWith {false};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         GVAR(CameraVision) = (GVAR(CameraVision) - 1);
         if (GVAR(CameraVision) == -1) then {
             GVAR(CameraVision) = 10;
@@ -400,7 +400,7 @@ private _return = switch (_keyCode) do {
     case DIK_8;
     case DIK_9;
     case DIK_0: {
-        if (GVAR(InputMode) == 1) exitWith {false};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_ctrl) then {
             [_keyCode] call FUNC(savePosition);
         } else {
@@ -410,7 +410,7 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_R: { // R
-        if (GVAR(InputMode) != 0) exitWith {false;};
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
         if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
         switch (GVAR(CameraMode)) do {
             case 2: {
@@ -444,12 +444,12 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD5;
     case DIK_NUMPAD4: {
         private _newCameraTarget = GVAR(CameraFollowTarget);
-        if (GVAR(InputMode) == 0 && _keyCode == DIK_RETURN) exitWith {false};
-        if (GVAR(InputMode) == 1) then {
+        if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
             if !(GVAR(InputGuess) isEqualTo []) then {
                 _newCameraTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
             };
-            GVAR(InputMode) = 0;
+            GVAR(InputMode) = INPUTMODE_MOVE;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
         };
 
@@ -459,20 +459,20 @@ private _return = switch (_keyCode) do {
         private _cameraMode = switch (_keyCode) do {
             case DIK_NUMPAD0: {
                 _newCameraTarget = objNull;
-                1;
+                CAMERAMODE_FREE;
             };
             case DIK_RETURN: {
-                if (GVAR(CameraMode) == 1) then {
-                    2
+                if (GVAR(CameraMode) == CAMERAMODE_FREE) then {
+                    CAMERAMODE_FOLLOW
                 } else {
                     GVAR(CameraMode);
                 };
             };
-            case DIK_NUMPAD1: {2};
-            case DIK_NUMPAD2: {3};
-            case DIK_NUMPAD3: {5};
-            case DIK_NUMPAD4: {4};
-            case DIK_NUMPAD5: {6};
+            case DIK_NUMPAD1: {CAMERAMODE_FOLLOW};
+            case DIK_NUMPAD2: {CAMERAMODE_SHOULDER};
+            case DIK_NUMPAD3: {CAMERAMODE_TOPDOWN};
+            case DIK_NUMPAD4: {CAMERAMODE_FPS};
+            case DIK_NUMPAD5: {CAMERAMODE_ORBIT};
         };
         [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
         true;
@@ -486,7 +486,7 @@ private _return = switch (_keyCode) do {
     };
 };
 
-if (!_return && GVAR(InputMode) == 1) then {
+if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;

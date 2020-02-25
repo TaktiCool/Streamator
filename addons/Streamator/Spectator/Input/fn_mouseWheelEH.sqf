@@ -46,7 +46,7 @@ if (GVAR(CameraZoomMode)) exitWith {
     true
 };
 
-if (GVAR(CameraMode) == 4) exitWith {
+if (GVAR(CameraMode) == CAMERAMODE_TOPDOWN) exitWith {
     private _value = 2 max (999999 min ((GVAR(TopDownOffset) select 2) * sqrt 2 ^ (_delta /4)));
     GVAR(TopDownOffset) set [2, _value];
     true;

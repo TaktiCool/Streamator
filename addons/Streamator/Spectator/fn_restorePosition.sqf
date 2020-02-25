@@ -29,12 +29,12 @@ GVAR(CameraPitch) = _element select 5;
 private _lastCameraFOV = GVAR(CameraFOV);
 GVAR(CameraFOV) = _element select 8;
 GVAR(CameraVision) = _element select 9;
-if (GVAR(CameraMode) == 3) then {
+if (GVAR(CameraMode) == CAMERAMODE_SHOULDER) then {
     GVAR(ShoulderOffSet) = _element select 10;
     GVAR(CameraDirOffset) = _element select 6;
     GVAR(CameraPitchOffset) = _element select 7;
 };
-if (GVAR(CameraMode) == 4) then {
+if (GVAR(CameraMode) == CAMERAMODE_TOPDOWN) then {
     GVAR(TopDownOffset) = _element select 11;
 };
 call FUNC(setVisionMode);
