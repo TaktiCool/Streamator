@@ -212,17 +212,13 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
-    [{
-        call FUNC(buildUI);
+    call FUNC(buildUI);
 
-        QGVAR(updateInput) call CFUNC(localEvent);
+    QGVAR(updateInput) call CFUNC(localEvent);
 
-        [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+    [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
-        QGVAR(spectatorOpened) call CFUNC(localEvent);
-    }, {
-        isNull (["GetCamera"] call BIS_fnc_EGSpectatorCamera)
-    }] call CFUNC(waitUntil);
+    QGVAR(spectatorOpened) call CFUNC(localEvent);
 
 };
 
