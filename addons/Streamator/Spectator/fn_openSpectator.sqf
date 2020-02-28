@@ -183,7 +183,10 @@ private _fnc_init = {
             ace_goggles_PostProcessEyes ppEffectEnable false;
         };
         CLib_Player setDamage 0;
-        clearRadio;
+        #ifndef ISDEV
+            clearRadio;
+        #endif
+
     }, 0] call CFUNC(addPerFrameHandler);
 
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);

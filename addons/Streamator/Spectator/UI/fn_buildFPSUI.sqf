@@ -38,8 +38,8 @@ _ctrlMinimapBackground ctrlCommit 0;
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
 _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
 _ctrlMinimap ctrlCommit 0;
-
 [_ctrlMinimap] call CFUNC(registerMapControl);
+
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
     private _position = if !(isNull GVAR(CameraFollowTarget)) then {
@@ -47,7 +47,12 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     } else {
         getPos GVAR(Camera);
     };
-    _map ctrlMapAnimAdd [0, 0.05, (_position vectorAdd [-(safeZoneX + PX(BORDERWIDTH + 2.6)), -(safeZoneY + safeZoneH - PY(BORDERWIDTH + 37)), 0])]; // TODO: fix offset
+
+    private _worldToScreen = (_map ctrlMapWorldToScreen _position);
+    private _mapPosition = [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37)];
+    _position = _map ctrlMapScreenToWorld [(_worldToScreen select 0) - (_mapPosition select 0) + 0.5, (_worldToScreen select 1) + (_mapPosition select 1) - 0.5];
+
+    _map ctrlMapAnimAdd [0, 0.05, _position];
     ctrlMapAnimCommit _map;
 }];
 
