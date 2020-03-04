@@ -60,8 +60,30 @@ if (_unit isEqualType []) exitWith {
 
 };
 
+
 private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
+
+if (GVAR(CameraMode) == CAMERAMODE_UAV) then {
+    detach GVAR(Camera);
+    GVAR(UAVCameraTarget) = objNull;
+};
+
+if (_cameraMode == CAMERAMODE_UAV) then {
+    GVAR(UAVCameraTarget) = vehicle _unit;
+    private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+
+    if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
+        GVAR(UAVCameraTarget) = getConnectedUAV _unit;
+        private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+        if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
+            _cameraMode = CAMERAMODE_FOLLOW;
+            GVAR(UAVCameraTarget) = objNull;
+            breakTo SCRIPTSCOPENAME;
+        };
+    };
+    GVAR(Camera) attachTo [GVAR(UAVCameraTarget), [0,0,0], getText ((_vehicleConfig >> "uavCameraGunnerPos"))];
+};
 
 if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
     if (GVAR(CameraMode) != CAMERAMODE_FOLLOW || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {

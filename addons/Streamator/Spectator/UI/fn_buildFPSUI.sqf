@@ -40,6 +40,18 @@ _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + saf
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
 
+JK_Marker0 = createMarkerLocal ["JK_Marker0", [0,0,0]];
+JK_Marker0 setMarkerShapeLocal "Icon";
+JK_Marker0 setMarkerColorLocal "colorBlack";
+JK_Marker0 setMarkerTypeLocal "mil_dot";
+JK_Marker0 setMarkerTextLocal "Map Offset Pos";
+
+JK_Marker1 = createMarkerLocal ["JK_Marker1", [0,0,0]];
+JK_Marker1 setMarkerShapeLocal "Icon";
+JK_Marker1 setMarkerColorLocal "colorBlack";
+JK_Marker1 setMarkerTypeLocal "mil_dot";
+JK_Marker1 setMarkerTextLocal "Map Center Pos";
+
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
     private _position = if !(isNull GVAR(CameraFollowTarget)) then {
@@ -53,6 +65,10 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     _position = _map ctrlMapScreenToWorld [(_worldToScreen select 0) - (_mapPosition select 0) + 0.5, (_worldToScreen select 1) + (_mapPosition select 1) - 0.5];
 
     _map ctrlMapAnimAdd [0, 0.05, _position];
+
+    JK_Marker0 setMarkerPosLocal _position;
+    JK_Marker1 setMarkerPosLocal (_map ctrlMapScreenToWorld [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37)]);
+
     ctrlMapAnimCommit _map;
 }];
 

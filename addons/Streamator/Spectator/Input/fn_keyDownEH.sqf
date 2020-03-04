@@ -441,8 +441,9 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD1;
     case DIK_NUMPAD2;
     case DIK_NUMPAD3;
+    case DIK_NUMPAD4;
     case DIK_NUMPAD5;
-    case DIK_NUMPAD4: {
+    case DIK_NUMPAD6: {
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
@@ -473,6 +474,7 @@ private _return = switch (_keyCode) do {
             case DIK_NUMPAD3: {CAMERAMODE_TOPDOWN};
             case DIK_NUMPAD4: {CAMERAMODE_FPS};
             case DIK_NUMPAD5: {CAMERAMODE_ORBIT};
+            case DIK_NUMPAD6: {CAMERAMODE_UAV};
         };
         [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
         true;

@@ -183,11 +183,22 @@ switch (_cameraMode) do {
         GVAR(CameraPitch) = -asin (((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos)) min 1);
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     };
+    case CAMERAMODE_UAV: {
+
+        private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+
+        private _posSelection = getText (_vehicleConfig >> "uavCameraGunnerPos");
+        private _dirSelection = getText (_vehicleConfig >> "uavCameraGunnerDir");
+
+        GVAR(Camera) camSetFov GVAR(CameraFOV);
+
+        private _dir = (GVAR(UAVCameraTarget) selectionPosition _posSelection) vectorFromTo (GVAR(UAVCameraTarget) selectionPosition _dirSelection);
+        GVAR(Camera) setVectorDirAndUp [_dir, _dir vectorCrossProduct [-(_dir select 1), _dir select 0, 0]];
+        breakOut SCRIPTSCOPENAME;
+    };
 };
 
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];
-
-
 
 private _position = GVAR(CameraPos);
 private _direction = GVAR(CameraDir) + GVAR(CameraDirOffset);
