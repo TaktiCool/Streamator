@@ -77,7 +77,7 @@ if (_cameraMode == CAMERAMODE_UAV) then {
         GVAR(UAVCameraTarget) = getConnectedUAV _unit;
         private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
         if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
-            _cameraMode = CAMERAMODE_FOLLOW;
+            _cameraMode = GVAR(CameraMode);
             GVAR(UAVCameraTarget) = objNull;
             breakTo SCRIPTSCOPENAME;
         };

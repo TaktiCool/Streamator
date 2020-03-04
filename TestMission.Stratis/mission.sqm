@@ -8,11 +8,11 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=245;
+		nextID=247;
 	};
 	class Camera
 	{
-		pos[]={1910.7662,11.239124,5525.4849};
+		pos[]={1892.1951,33.515495,5528.5933};
 		dir[]={0.72933191,-0.68426436,0.0030434483};
 		up[]={0.6842733,0.72922045,0.0028567442};
 		aside[]={0.0041742697,-1.1946554e-007,-1.0000658};
@@ -174,7 +174,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=43;
+		items=44;
 		class Item0
 		{
 			dataType="Group";
@@ -3854,6 +3854,7 @@ class Mission
 					flags=4;
 					class Attributes
 					{
+						name="JK_TANKD";
 						isPlayable=1;
 					};
 					id=181;
@@ -3870,6 +3871,7 @@ class Mission
 					flags=4;
 					class Attributes
 					{
+						name="JK_TANKG";
 						isPlayable=1;
 					};
 					id=182;
@@ -3886,6 +3888,7 @@ class Mission
 					flags=6;
 					class Attributes
 					{
+						name="JK_TANKC";
 						isPlayable=1;
 					};
 					id=183;
@@ -3975,6 +3978,7 @@ class Mission
 			flags=6;
 			class Attributes
 			{
+				name="JK_TANK";
 				reportRemoteTargets=1;
 				receiveRemoteTargets=1;
 				reportOwnPosition=1;
@@ -4570,31 +4574,33 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1440.4301,1193.1669,4969.9463};
+						position[]={1440.696,1193.188,4970.0098};
 					};
 					side="West";
 					flags=2;
 					class Attributes
 					{
+						name="JK_UAV_1D";
 					};
 					id=223;
 					type="B_UAV_AI";
-					atlOffset=1189.4867;
+					atlOffset=1189.467;
 				};
 				class Item1
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1440.4301,1193.1669,4969.9463};
+						position[]={1440.696,1193.188,4970.0098};
 					};
 					side="West";
 					class Attributes
 					{
+						name="JK_UAV_1G";
 					};
 					id=224;
 					type="B_UAV_AI";
-					atlOffset=1189.4867;
+					atlOffset=1189.467;
 				};
 				class Item2
 				{
@@ -4780,12 +4786,13 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1440.4301,1195.0195,4969.8726};
+				position[]={1440.4303,1195.0195,4969.8721};
 			};
 			side="West";
 			flags=2;
 			class Attributes
 			{
+				name="JK_UAV_1";
 				reportRemoteTargets=1;
 				reportOwnPosition=1;
 			};
@@ -5013,6 +5020,78 @@ class Mission
 			id=241;
 			type="B_UAV_01_F";
 			atlOffset=62.207573;
+		};
+		class Item43
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={1904.1687,9.0412521,5527.9009};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						name="JK_UAVOperator_1";
+						isPlayable=1;
+					};
+					id=246;
+					type="B_soldier_UAV_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"STRING"
+										};
+									};
+									value="Male10ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"SCALAR"
+										};
+									};
+									value=1.04;
+								};
+							};
+						};
+						nAttributes=2;
+					};
+				};
+			};
+			class Attributes
+			{
+			};
+			id=245;
 		};
 	};
 };
