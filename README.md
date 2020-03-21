@@ -13,6 +13,7 @@ Mode | Description
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
 **TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 **ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
+**ORBIT [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -54,7 +55,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | First Person View | Toggles to First Person View
 **`NUMPAD 4`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
-**`NUMPAD 5`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
+**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
 
 
