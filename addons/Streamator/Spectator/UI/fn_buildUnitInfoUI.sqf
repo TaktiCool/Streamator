@@ -283,10 +283,10 @@ private _unitInfoAllCtrls = [
         _ctrlHealthIcon ctrlSetTextColor [1, _value, _value, 1];
     };
 
-    _health = linearConversion [1,0, _health, 0, 1]; // Invert Health value to show better how health is
 
     _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
     _ctrlHealthRing ctrlCommit 0;
+    _health = linearConversion [1,0, _health, 0, 1]; // Invert Health value to show better how health is
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
 

@@ -29,7 +29,7 @@ params [
 private _return = switch (_keyCode) do {
     case DIK_M: { // M: Map
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        call FUNC(buildMap);
+        call FUNC(buildMapUI);
         true
     };
     case DIK_F: { // F
@@ -40,14 +40,14 @@ private _return = switch (_keyCode) do {
             true;
         };
         if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
-            [GVAR(lastUnitShooting)] call FUNC(setCameraTarget);
+            [GVAR(lastUnitShooting), [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE)] call FUNC(setCameraTarget);
             true;
         };
         if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
-            [GVAR(CursorTarget), 2] call FUNC(setCameraTarget);
+            [GVAR(CursorTarget), CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
         } else {
-            [objNull, 1] call FUNC(setCameraTarget);
+            [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
             true;
         };
     };

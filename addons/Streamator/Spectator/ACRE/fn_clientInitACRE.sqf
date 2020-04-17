@@ -42,20 +42,20 @@ LOG("ACRE2 Detected");
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "_isRadio", "_radioID"];
-        if (_unit == CLib_Player) exitWith {};
-        if (_isRadio == 0) exitWith {};
-        if (isNull GVAR(RadioFollowTarget)) exitWith {}; // early Exit
+        if (_unit == CLib_Player || { _isRadio == 0 } || { isNull GVAR(RadioFollowTarget) }) exitWith {};
         private _availability = [[_radioID], GVAR(CurrentRadioList), true] call acre_sys_modes_fnc_checkAvailability;
         if (((_availability select 0) select 1) isEqualTo []) exitWith {};
         private _radioIDLocal = (((_availability select 0) select 1) select 0);
         private _usedRadios = _unit getVariable [QGVAR(SpeaksOnRadios), []];
         _usedRadios pushBack _radioIDLocal;
         _unit setVariable [QGVAR(SpeaksOnRadios), _usedRadios];
+        #ifdef ISDEV
         private _debug = format ["Radio used Local : %1  Radio Remote: %2 Radio CheckAvailability: %3", _radioIDLocal, _radioID, _availability];
         DUMP(_debug);
+        #endif
         private _radio = [_radioIDLocal] call acre_api_fnc_getBaseRadio;
         private _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\radio_ca.paa";
-        if (_radio in ["ACRE_PRC77", "ACRE_PRC117F"]) then {
+        if (_radio in ["ACRE_PRC77", "ACRE_PRC117F", "ACRE_SEM70"]) then {
             _icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\backpack_ca.paa";
         };
         [QGVAR(ShowIcon), [_unit, _icon, _radioIDLocal]] call CFUNC(localEvent);

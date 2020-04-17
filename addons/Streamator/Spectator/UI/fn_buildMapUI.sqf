@@ -35,7 +35,13 @@ if (isNull _mapDisplay) then {
 
     [_map] call CFUNC(registerMapControl);
     _mapDisplay displayAddEventHandler ["KeyDown", {
-        params ["_display", "_keyCode"];
+        params [
+            "_display",
+            ["_keyCode", 0, [0]],
+            ["_shift", false, [true]],
+            ["_ctrl", false, [true]],
+            ["_alt", false, [true]]
+        ];
         switch (_keyCode) do {
             case DIK_ESCAPE;
             case DIK_M: { // M

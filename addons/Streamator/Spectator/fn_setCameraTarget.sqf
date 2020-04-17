@@ -57,9 +57,7 @@ if (_unit isEqualType []) exitWith {
         };
 
     };
-
 };
-
 
 private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
