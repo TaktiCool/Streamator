@@ -168,16 +168,16 @@ private _return = switch (_keyCode) do {
     };
     case DIK_N: { // N
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
+        GVAR(CameraVision) = (GVAR(CameraVision) - 1);
+        if (GVAR(CameraVision) == -1) then {
+            GVAR(CameraVision) = 10;
+        };
         call FUNC(setVisionMode);
         true;
     };
     case DIK_B: { // B
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        GVAR(CameraVision) = (GVAR(CameraVision) - 1);
-        if (GVAR(CameraVision) == -1) then {
-            GVAR(CameraVision) = 10;
-        };
+        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
         true;
     };
