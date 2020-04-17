@@ -224,7 +224,7 @@ private _unitInfoAllCtrls = [
     (_this select 1) params ["_ctrlGrp", "", "_ctrlUnitName",
     "_ctrlRoleIconBackground", "_ctrlUnitRoleIcon", "_ctrlGroupId",
     "","_ctrlSquadPicture", "_ctrlSquadName",
-    "", "", "_ctrlHealthRing", "_ctrlHealthValue",
+    "", "_ctrlHealthIcon", "_ctrlHealthRing", "_ctrlHealthValue",
     "", "_ctrlShotsIcon", "_ctrlShotsValue",
     "_ctrlWeaponSlots", "_ctrlStats"];
 
@@ -278,11 +278,36 @@ private _unitInfoAllCtrls = [
             true
         } count ((getAllHitPointsDamage _unit) select 2);
         _health = _health/_c;
+        private _value = linearConversion [1, 0, _unit getVariable ["ace_medical_bloodVolume", 6], 6, 3];
+        _ctrlHealthRing ctrlSetTextColor [1, _value, _value, 1];
+        _ctrlHealthIcon ctrlSetTextColor [1, _value, _value, 1];
     };
+
+    _health = linearConversion [1,0, _health, 0, 1]; // Invert Health value to show better how health is
+
     _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
     _ctrlHealthRing ctrlCommit 0;
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
+
+    private _healthIcon = switch (toUpper (lifeState _unit)) do {
+        case ("DEAD-RESPAWN");
+        case ("DEAD-SWITCHING");
+        case ("DEAD"): {
+            "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"
+        };
+        case ("INCAPACITATED");
+        case ("INJURED"): {
+            "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_reviveMedic_ca.paa"
+        };
+        default {
+            "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa"
+        };
+    };
+
+    _ctrlHealthIcon ctrlSetText _healthIcon;
+    _ctrlHealthIcon ctrlCommit 0;
+
 
     // set number of shots
     _ctrlShotsValue ctrlSetText format ["%1", _unit getVariable [QGVAR(shotCount), 0]];
