@@ -22,6 +22,7 @@ class CfgCLibModules {
 
             MODULE(UI) {
                 FNC(buildFPSUI);
+                FNC(buildMapUI);
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
                 FNC(buildUnitInfoUI);

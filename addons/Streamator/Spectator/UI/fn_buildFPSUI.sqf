@@ -24,6 +24,7 @@ _ctrlUnitName ctrlSetTextColor [1, 1, 1, 1];
 _ctrlUnitName ctrlSetFade 1;
 _ctrlUnitName ctrlSetText "UNIT NAME"; // Unit Name
 _ctrlUnitName ctrlCommit 0;
+#ifdef ISDEV
 
 private _ctrlGrpMinimap = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlGrpMinimap ctrlSetPosition [PX(BORDERWIDTH + 2.6), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(28)];
@@ -39,7 +40,6 @@ private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap
 _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
-
 JK_Marker0 = createMarkerLocal ["JK_Marker0", [0,0,0]];
 JK_Marker0 setMarkerShapeLocal "Icon";
 JK_Marker0 setMarkerColorLocal "colorBlack";
@@ -51,7 +51,6 @@ JK_Marker1 setMarkerShapeLocal "Icon";
 JK_Marker1 setMarkerColorLocal "colorBlack";
 JK_Marker1 setMarkerTypeLocal "mil_dot";
 JK_Marker1 setMarkerTextLocal "Map Center Pos";
-
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
     private _position = if !(isNull GVAR(CameraFollowTarget)) then {
@@ -78,6 +77,7 @@ _ctrlMinimapTitle ctrlSetFontHeight PY(2);
 _ctrlMinimapTitle ctrlSetFont "RobotoCondensedBold";
 _ctrlMinimapTitle ctrlSetText "GPS";
 _ctrlMinimapTitle ctrlCommit 0;
+#endif
 
 [QGVAR(CameraTargetChanged), {
     (_this select 0) params ["_cameraTarget"];
@@ -98,6 +98,7 @@ _ctrlMinimapTitle ctrlCommit 0;
     _ctrl ctrlCommit 0.3;
 }, [_ctrlUnitName]] call CFUNC(addEventhandler);
 
+#ifdef ISDEV
 [QGVAR(ToggleMinimap), {
     (_this select 1) params ["_ctrlGrpMinimap"];
     if (ctrlFade _ctrlGrpMinimap == 1) then {
@@ -107,3 +108,4 @@ _ctrlMinimapTitle ctrlCommit 0;
     };
     _ctrlGrpMinimap ctrlCommit 0.3;
 }, [_ctrlGrpMinimap]] call CFUNC(addEventhandler);
+#endif

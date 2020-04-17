@@ -15,7 +15,7 @@
 */
 
 GVAR(aceLoaded) = isClass (configFile >> "CfgPatches" >> "ace_main");
-
+GVAR(aceMapGesturesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_map_gestures");
 if (CLib_player call Streamator_fnc_isSpectator) then {
     ["missionStarted", {
         "initializeSpectator" call CFUNC(localEvent);
@@ -30,7 +30,7 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
     call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);
 
-["Respawn", {
-    (_this select 0) params ["_new"];
-    _new setVariable [QGVAR(isPlayer), true, true];
+["playerChanged", {
+    (_this select 0) params ["_newPlayer"];
+    _newPlayer setVariable [QGVAR(isPlayer), true, true];
 }] call CFUNC(addEventhandler);
