@@ -22,7 +22,7 @@ params [
 ];
 
 if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
-    if (GVAR(PlanningModeDrawing)) then {
+    if (GVAR(PlanningModeDrawing) && !GVAR(MapOpen)) then {
         private _endPosition = screenToWorld getMousePosition;
         private _startPosition = positionCameraToWorld [0, 0, 0];
         private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
