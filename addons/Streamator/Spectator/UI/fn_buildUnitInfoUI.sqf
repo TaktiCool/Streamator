@@ -298,10 +298,10 @@ private _unitInfoAllCtrls = [
         };
         case ("INCAPACITATED");
         case ("INJURED"): {
-            "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_reviveMedic_ca.paa"
+            "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa"
         };
         default {
-            "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa"
+            ["\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa", "\A3\ui_f\data\IGUI\Cfg\TankDirection\tower_gs.paa"] select (_unit getVariable ["ace_medical_woundBleeding", 0] != 0);
         };
     };
 
