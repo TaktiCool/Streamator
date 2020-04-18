@@ -38,6 +38,9 @@ LOG("ACRE2 Detected");
         } forEach _targetRadios;
         [QGVAR(radioInformationChanged), _targetRadios] call CFUNC(localEvent);
         GVAR(CurrentRadioList) = _targetRadios;
+        if (!ACRE_IS_SPECTATOR) then {
+            [true] call acre_api_fnc_setSpectator;
+        };
     }, 1] call CFUNC(addPerFrameHandler);
 
     ["acre_remoteStartedSpeaking", {

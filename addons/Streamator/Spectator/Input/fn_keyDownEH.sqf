@@ -249,8 +249,7 @@ private _return = switch (_keyCode) do {
                         _players = _players arrayIntersect _players;
                         // Iterate over all nearby players and render their pointer if player is transmitting.
                         {
-                            // Only render if the unit is alive and transmitting
-                            private _pos = _x getVariable ["ace_map_gestures_pointPosition", [0,0,0]];
+                            private _pos = _x getVariable ["ace_map_gestures_pointPosition", [0, 0, 0]];
                             private _grpName = groupID (group _x);
 
                             // If color settings for the group exist, then use those, otherwise fall back to the default colors
@@ -264,7 +263,7 @@ private _return = switch (_keyCode) do {
                             // Render icon and player name
                             _map drawIcon ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
                             _map drawIcon ["#(argb,8,8,3)color(0,0,0,0)", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
-                        } count (_players select { alive _x &&{ !((lifeState _x) in []) } && {_x getVariable ["ace_map_gestures_Transmit", false]} });
+                        } count (_players select { alive _x && { !((lifeState _x) in []) } && {_x getVariable ["ace_map_gestures_Transmit", false]} });
                     };
                 };
             }];
@@ -413,6 +412,7 @@ private _return = switch (_keyCode) do {
         GVAR(BulletTracers) = [];
     };
     case DIK_E: { // E
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if !(_ctrl) exitWith {false};
         if (GVAR(InputMode) == INPUTMODE_MOVE) then {
             GVAR(InputMode) = INPUTMODE_PLANINGMODE;
@@ -518,6 +518,7 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD4;
     case DIK_NUMPAD5;
     case DIK_NUMPAD6: {
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
@@ -554,6 +555,7 @@ private _return = switch (_keyCode) do {
         true;
     };
     case DIK_V: {
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
     };
