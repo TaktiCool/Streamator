@@ -13,7 +13,7 @@
     Returns:
     None
 */
-
+if (isGamePaused) exitWith {};
 private _tempDir = [GVAR(CameraDir), GVAR(CameraDirOffset)] select (GVAR(CameraMode) == CAMERAMODE_SHOULDER);
 private _forward = [sin _tempDir, cos _tempDir, 0];
 private _right = [cos _tempDir, -sin _tempDir, 0];

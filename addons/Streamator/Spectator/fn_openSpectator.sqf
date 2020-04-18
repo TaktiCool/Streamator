@@ -114,9 +114,8 @@ GVAR(TopDownOffset) = [0, 0, 100];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
             if (GVAR(BulletTracerEnabled)) then {
-                private _index = GVAR(BulletTracers) pushBack [getPos _unit, _projectile];
-
-                if (_index > diag_fps) then {
+                private _index = GVAR(BulletTracers) pushBack [getPos _projectile, _projectile];
+                if (_index > diag_fps * 1.5) then {
                     GVAR(BulletTracers) deleteAt 0;
                 };
             };

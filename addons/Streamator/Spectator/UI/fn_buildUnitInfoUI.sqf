@@ -270,25 +270,21 @@ private _unitInfoAllCtrls = [
     };
 
     // set health
-    private _health = damage _unit;
-    if (GVAR(aceLoaded)) then {
-        _health = 0;
-        private _c = {
-            _health = _health + _x;
-            true
-        } count ((getAllHitPointsDamage _unit) select 2);
-        _health = _health/_c;
-        private _value = linearConversion [1, 0, _unit getVariable ["ace_medical_bloodVolume", 6], 6, 3];
-        _ctrlHealthRing ctrlSetTextColor [1, _value, _value, 1];
-        _ctrlHealthIcon ctrlSetTextColor [1, _value, _value, 1];
-    };
-
-
-    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
-    _ctrlHealthRing ctrlCommit 0;
-    _health = linearConversion [1,0, _health, 0, 1]; // Invert Health value to show better how health is
+    private _health = 0;
+    private _c = {
+        _health = _health + _x;
+        true
+    } count ((getAllHitPointsDamage _unit) select 2);
+    _health = _health/_c;
+    _health = linearConversion [1, 0, _health, 0, 1]; // Invert Health value to show better how health is
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
+    if (GVAR(aceLoaded)) then {
+        _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
+    };
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
+    _ctrlHealthRing ctrlCommit 0;
+
 
     private _healthIcon = switch (toUpper (lifeState _unit)) do {
         case ("DEAD-RESPAWN");
@@ -301,7 +297,7 @@ private _unitInfoAllCtrls = [
             "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa"
         };
         default {
-            ["\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa", "\A3\ui_f\data\IGUI\Cfg\TankDirection\tower_gs.paa"] select (_unit getVariable ["ace_medical_woundBleeding", 0] != 0);
+            "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa"
         };
     };
 

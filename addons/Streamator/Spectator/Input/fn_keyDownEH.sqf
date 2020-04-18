@@ -37,6 +37,8 @@ private _return = switch (_keyCode) do {
             (_mapDisplay displayCtrl 1202) ctrlSetFade 1;
             (_mapDisplay displayCtrl 1202) ctrlCommit 0;
 
+            QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
+
             private _map = _mapDisplay ctrlCreate ["RscMapControl", -1];
             _map ctrlSetPosition [safeZoneX + PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), safeZoneW - PX(2 * BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)];
             _map ctrlCommit 0;
@@ -208,18 +210,23 @@ private _return = switch (_keyCode) do {
                         {
                             _x params ["_startPos", "_projectile", ["_secments", []]];
                             if (alive _projectile) then {
-                                if !(_secments isEqualTo []) then {
-                                    _startPos = _secments select ((count _secments) -1) select 1;
+                                if (diag_frameno mod 3 == 0) then {
+                                    if !(_secments isEqualTo []) then {
+                                        _startPos = _secments select ((count _secments) -1) select 1;
+                                    };
+                                    private _index = _secments pushBack [_startPos, getPos _projectile];
+                                    if (_index >= TRACER_SEGMENT_COUNT) then {
+                                        _secments deleteAt 0;
+                                    };
+                                    _x set [2, _secments];
                                 };
-                                private _index = _secments pushBack [_startPos, getPos _projectile];
-                                if (_index > diag_fps) then {
-                                    _secments deleteAt 0;
-                                };
-                                _x set [2, _secments];
                                 private _secmentCount = count _secments - 1;
                                 {
-                                    _map drawLine [_x select 0, _x select 1, [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]]];
+                                    _map drawLine [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]];
                                 } forEach _secments;
+                            } else {
+                                _deleted = true;
+                                GVAR(BulletTracers) set [_forEachIndex, objNull];
                             };
                         } forEach GVAR(BulletTracers);
 
@@ -234,30 +241,30 @@ private _return = switch (_keyCode) do {
                     if (GVAR(aceMapGesturesLoaded)) then {
                         #define TEXT_FONT "RobotoCondensedBold"
 
+                        private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
+                        if !(isNull GVAR(CameraFollowTarget)) then {
+                            _players pushBackUnique GVAR(CameraFollowTarget);
+                            _players append (crew vehicle GVAR(CameraFollowTarget));
+                        };
+                        _players = _players arrayIntersect _players;
                         // Iterate over all nearby players and render their pointer if player is transmitting.
                         {
                             // Only render if the unit is alive and transmitting
-                            if (alive _x && {_x getVariable ["ace_map_gestures_Transmit", false]}) then {
+                            private _pos = _x getVariable ["ace_map_gestures_pointPosition", [0,0,0]];
+                            private _grpName = groupID (group _x);
 
-                                private _pos = _x getVariable ["ace_map_gestures_pointPosition", [0,0,0]];
-
-                                private _group = group _x;
-                                private _grpName = groupID _group;
-
-                                // If color settings for the group exist, then use those, otherwise fall back to the default colors
-                                private _colorMap = ace_map_gestures_GroupColorCfgMappingNew getVariable _grpName;
-                                private _color = if (isNil "_colorMap") then {
-                                    [ace_map_gestures_defaultLeadColor, ace_map_gestures_defaultColor] select (_x != leader _group);
-                                } else {
-                                    _colorMap select (_x != leader _group);
-                                };
-
-                                // Render icon and player name
-                                _map drawIcon ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
-                                _map drawIcon ["#(argb,8,8,3)color(0,0,0,0)", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
+                            // If color settings for the group exist, then use those, otherwise fall back to the default colors
+                            private _colorMap = ace_map_gestures_GroupColorCfgMappingNew getVariable _grpName;
+                            private _color = if (isNil "_colorMap") then {
+                                [ace_map_gestures_defaultLeadColor, ace_map_gestures_defaultColor] select (_x != leader _group);
+                            } else {
+                                _colorMap select (_x != leader _group);
                             };
-                            nil
-                        } count ([CLib_Player, ace_map_gestures_maxRange] call ace_map_gestures_fnc_getProximityPlayers);
+
+                            // Render icon and player name
+                            _map drawIcon ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
+                            _map drawIcon ["#(argb,8,8,3)color(0,0,0,0)", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
+                        } count (_players select { alive _x &&{ !((lifeState _x) in []) } && {_x getVariable ["ace_map_gestures_Transmit", false]} });
                     };
                 };
             }];

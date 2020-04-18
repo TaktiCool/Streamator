@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=267;
+		nextID=269;
 	};
 	class Camera
 	{
-		pos[]={4262.7217,229.79732,5253.2432};
-		dir[]={0.63965648,-0.50738746,0.57755554};
-		up[]={0.37662053,0.86169428,0.34005925};
-		aside[]={0.67021996,-3.2945536e-007,-0.74228132};
+		pos[]={5017.6836,210.12172,5882.1123};
+		dir[]={0.093953058,-0.34363744,0.93451273};
+		up[]={0.034379952,0.93900913,0.34195903};
+		aside[]={0.99510241,-1.3224781e-007,-0.10004079};
 	};
 };
 binarizationWanted=0;
@@ -2005,6 +2005,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=73;
@@ -2064,6 +2065,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=74;
@@ -2124,6 +2126,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=75;
@@ -2183,6 +2186,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=76;
@@ -2243,6 +2247,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=77;
@@ -2302,6 +2307,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=78;
@@ -2361,6 +2367,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=79;
@@ -2420,6 +2427,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=80;
@@ -2504,6 +2512,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=82;
@@ -2564,6 +2573,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=83;
@@ -2625,6 +2635,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=84;
@@ -2685,6 +2696,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=85;
@@ -2746,6 +2758,7 @@ class Mission
 					{
 						skill=0.44999999;
 						rank="CORPORAL";
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=86;
@@ -2807,6 +2820,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=87;
@@ -2867,6 +2881,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=88;
@@ -2927,6 +2942,7 @@ class Mission
 					class Attributes
 					{
 						skill=0.40000001;
+						init="call{this setVehicleAmmoDef 1; this addEventHandler [""Fired"", {_this select 0 setVehicleAmmoDef 1;}];}";
 						isPlayable=1;
 					};
 					id=89;
@@ -4924,7 +4940,7 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1916.4199,71.247887,5525.1812};
+						position[]={1714.6567,71.247887,5378.4072};
 					};
 					side="West";
 					flags=2;
@@ -4934,14 +4950,14 @@ class Mission
 					};
 					id=242;
 					type="B_UAV_AI";
-					atlOffset=62.207573;
+					atlOffset=65.746445;
 				};
 				class Item1
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1916.4199,71.247887,5525.1812};
+						position[]={1714.6567,71.247887,5378.4072};
 					};
 					side="West";
 					class Attributes
@@ -4950,7 +4966,7 @@ class Mission
 					};
 					id=243;
 					type="B_UAV_AI";
-					atlOffset=62.207573;
+					atlOffset=65.746445;
 				};
 				class Item2
 				{
@@ -5000,14 +5016,14 @@ class Mission
 				};
 			};
 			id=240;
-			atlOffset=62.207573;
+			atlOffset=65.746078;
 		};
 		class Item42
 		{
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1916.4208,71.396545,5525.1211};
+				position[]={1714.6576,71.396545,5378.3472};
 			};
 			side="West";
 			flags=2;
@@ -5019,7 +5035,7 @@ class Mission
 			};
 			id=241;
 			type="B_UAV_01_F";
-			atlOffset=62.207573;
+			atlOffset=65.746078;
 		};
 		class Item43
 		{
@@ -5685,7 +5701,6 @@ class Mission
 					};
 					id=259;
 					type="O_Soldier_AR_F";
-					atlOffset=7.6293945e-006;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -5747,7 +5762,6 @@ class Mission
 					};
 					id=260;
 					type="O_Soldier_GL_F";
-					atlOffset=7.6293945e-006;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -5869,6 +5883,7 @@ class Mission
 					};
 					id=262;
 					type="O_Soldier_AT_F";
+					atlOffset=-7.6293945e-006;
 					class CustomAttributes
 					{
 						class Attribute0

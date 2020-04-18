@@ -57,10 +57,11 @@ class CfgCLibModules {
         // UnitTracker
         MODULE(UnitTracker) {
             dependency[] = {"Streamator/Spectator"};
-            FNC(clientInit);
             FNC(addUnitToTracker);
             FNC(addGroupToTracker);
             FNC(addVehicleToTracker);
+            FNC(clientInit);
+            FNC(updateIcons);
         };
     };
 };

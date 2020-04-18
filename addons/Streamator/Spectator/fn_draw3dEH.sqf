@@ -13,7 +13,7 @@
     Returns:
     None
 */
-
+if (isGamePaused) exitWith {};
 // Cursor Target
 private _nextTarget = objNull;
 private _intersectCam = AGLToASL positionCameraToWorld [0, 0, 0];
@@ -41,7 +41,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
         GVAR(lastCursorTarget) = time;
     };
 };
-if (GVAR(hideUI) || GVAR(MapOpen) || isGamePaused || !isGameFocused) exitWith {};
+if (GVAR(hideUI) || GVAR(MapOpen) || !isGameFocused) exitWith {};
 
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
@@ -234,18 +234,25 @@ if (GVAR(BulletTracerEnabled)) then {
     {
         _x params ["_startPos", "_projectile", ["_secments", []]];
         if (alive _projectile) then {
-            if !(_secments isEqualTo []) then {
-                _startPos = _secments select ((count _secments) -1) select 1;
+            if (diag_frameno mod 3 == 0) then {
+                if !(_secments isEqualTo []) then {
+                    _startPos = _secments select ((count _secments) -1) select 1;
+                };
+                private _index = _secments pushBack [_startPos, getPos _projectile];
+                if (_index >= TRACER_SEGMENT_COUNT) then {
+                    _secments deleteAt 0;
+                };
+                _x set [2, _secments];
             };
-            private _index = _secments pushBack [_startPos, getPos _projectile];
-            if (_index > diag_fps) then {
-                _secments deleteAt 0;
+            if ((_projectile distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
+                private _secmentCount = count _secments - 1;
+                {
+                    drawLine3D [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]];
+                } forEach _secments;
             };
-            _x set [2, _secments];
-            private _secmentCount = count _secments - 1;
-            {
-                drawLine3D [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]];
-            } forEach _secments;
+        } else {
+            _deleted = true;
+            GVAR(BulletTracers) set [_forEachIndex, objNull];
         };
     } forEach GVAR(BulletTracers);
 
