@@ -203,26 +203,29 @@ private _return = switch (_keyCode) do {
                          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
                     });
 
-                    private _deleted = false;
-                    {
-                        _x params ["_startPos", "_projectile", ["_positions", []]];
-                        if (alive _projectile) then {
-                            if !(_positions isEqualTo []) then {
-                                _startPos = _positions select ((count _positions) -1) select 1;
+                    if (GVAR(BulletTracerEnabled)) then {
+                        private _deleted = false;
+                        {
+                            _x params ["_startPos", "_projectile", ["_secments", []]];
+                            if (alive _projectile) then {
+                                if !(_secments isEqualTo []) then {
+                                    _startPos = _secments select ((count _secments) -1) select 1;
+                                };
+                                private _index = _secments pushBack [_startPos, getPos _projectile];
+                                if (_index > diag_fps) then {
+                                    _secments deleteAt 0;
+                                };
+                                _x set [2, _secments];
+                                private _secmentCount = count _secments - 1;
+                                {
+                                    _map drawLine [_x select 0, _x select 1, [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]]];
+                                } forEach _secments;
                             };
-                            private _index = _positions pushBack [_startPos, getPos _projectile];
-                            if (_index > diag_fps) then {
-                                _positions deleteAt 0;
-                            };
-                            _x set [2, _positions];
-                            {
-                                _map drawLine [_x select 0, _x select 1, [1, 0, 0, 1]];
-                            } count _positions;
-                        };
-                    } forEach GVAR(BulletTracers);
+                        } forEach GVAR(BulletTracers);
 
-                    if (_deleted) then {
-                        GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+                        if (_deleted) then {
+                            GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+                        };
                     };
 
                     // Render ACE3 Map Gestures
@@ -255,7 +258,6 @@ private _return = switch (_keyCode) do {
                             };
                             nil
                         } count ([CLib_Player, ace_map_gestures_maxRange] call ace_map_gestures_fnc_getProximityPlayers);
-
                     };
                 };
             }];
