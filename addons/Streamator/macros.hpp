@@ -19,7 +19,7 @@
 
 // Do not release with this setting enabled!
 // #define DEBUGFULL // Enable all debug methods
-// #define ISDEV // Enable better logging
+#define ISDEV // Enable better logging
 // #define ENABLEPERFORMANCECOUNTER // Enable performance counter for function calls
 // #define ENABLEFUNCTIONTRACE // Enable SQF based function tracer
 // #define DISABLECOMPRESSION
