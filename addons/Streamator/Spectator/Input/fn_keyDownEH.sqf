@@ -203,6 +203,27 @@ private _return = switch (_keyCode) do {
                          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
                     });
 
+                    private _deleted = false;
+                    {
+                        _x params ["_startPos", "_projectile", ["_positions", []]];
+                        if (alive _projectile) then {
+                            if !(_positions isEqualTo []) then {
+                                _startPos = _positions select ((count _positions) -1) select 1;
+                            };
+                            private _index = _positions pushBack [_startPos, getPos _projectile];
+                            if (_index > diag_fps) then {
+                                _positions deleteAt 0;
+                            };
+                            _x set [2, _positions];
+                            {
+                                _map drawLine [_x select 0, _x select 1, [1, 0, 0, 1]];
+                            } count _positions;
+                        };
+                    } forEach GVAR(BulletTracers);
+
+                    if (_deleted) then {
+                        GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+                    };
 
                     // Render ACE3 Map Gestures
                     // Credits: Dslyecxi, MikeMatrix
@@ -376,7 +397,11 @@ private _return = switch (_keyCode) do {
         GVAR(Camera) cameraEffect ["internal", "back"];
         switchCamera CLib_Player;
         cameraEffectEnableHUD true;
-        true;
+        true; // F10
+    };
+    case DIK_F11: { // F11
+        GVAR(BulletTracerEnabled) = !GVAR(BulletTracerEnabled);
+        GVAR(BulletTracers) = [];
     };
     case DIK_E: { // E
         if !(_ctrl) exitWith {false};

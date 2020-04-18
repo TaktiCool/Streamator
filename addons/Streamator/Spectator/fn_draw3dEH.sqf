@@ -41,7 +41,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
         GVAR(lastCursorTarget) = time;
     };
 };
-if (GVAR(hideUI)) exitWith {};
+if (GVAR(hideUI) || GVAR(MapOpen) || isGamePaused || !isGameFocused) exitWith {};
 
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
@@ -227,4 +227,28 @@ if (GVAR(OverlayGroupMarker)) then {
         };
         nil
     } count _allGroups;
+};
+
+if (GVAR(BulletTracerEnabled)) then {
+    private _deleted = false;
+    {
+        _x params ["_startPos", "_projectile", ["_positions", []]];
+        if (alive _projectile) then {
+            if !(_positions isEqualTo []) then {
+                _startPos = _positions select ((count _positions) -1) select 1;
+            };
+            private _index = _positions pushBack [_startPos, getPos _projectile];
+            if (_index > diag_fps) then {
+                _positions deleteAt 0;
+            };
+            _x set [2, _positions];
+            {
+                drawLine3D [_x select 0, _x select 1, [1, 0, 0, 1]];
+            } count _positions;
+        };
+    } forEach GVAR(BulletTracers);
+
+    if (_deleted) then {
+        GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+    };
 };

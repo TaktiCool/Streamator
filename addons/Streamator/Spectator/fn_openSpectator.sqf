@@ -94,6 +94,9 @@ GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_
 
 GVAR(RadioInformationPrev) = [];
 
+GVAR(BulletTracerEnabled) = false;
+GVAR(BulletTracers) = [];
+
 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 [QGVAR(InputModeChanged), {
@@ -105,11 +108,18 @@ GVAR(TopDownOffset) = [0, 0, 100];
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
         _target addEventHandler ["FiredMan", {
-            params ["_unit"];
+            params ["_unit", "", "", "", "", "", "_projectile"];
             GVAR(lastUnitShooting) = _unit;
             _unit setVariable [QGVAR(lastShot), time];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
+            if (GVAR(BulletTracerEnabled)) then {
+                private _index = GVAR(BulletTracers) pushBack [getPos _unit, _projectile];
+
+                if (_index > diag_fps) then {
+                    GVAR(BulletTracers) deleteAt 0;
+                };
+            };
         }];
     };
 }] call CFUNC(addEventhandler);
