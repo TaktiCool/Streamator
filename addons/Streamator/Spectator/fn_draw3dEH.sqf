@@ -52,13 +52,17 @@ if (GVAR(OverlayPlanningMode)) then {
     if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
         if (_serverTime - _lastUpdate >= 0.2) then {
-            private _endPosition = screenToWorld getMousePosition;
-            private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _endPosition, objNull, objNull, true, 1, "GEOM", "NONE", false];
-            if !(_intersectArray isEqualTo []) then {
-                (_intersectArray select 0) params ["_intersectPosition"];
-                _endPosition = ASLtoAGL _intersectPosition;
+            if (GVAR(MapOpen)) then {
+                [CLib_Player, QGVAR(cursorPosition), [_serverTime, (CLib_Player getVariable [QGVAR(cursorPosition), [0, [0, 0, 0]]]) select 1], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+            } else {
+                private _endPosition = screenToWorld getMousePosition;
+                private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _endPosition, objNull, objNull, true, 1, "GEOM", "NONE", false];
+                if !(_intersectArray isEqualTo []) then {
+                    (_intersectArray select 0) params ["_intersectPosition"];
+                    _endPosition = ASLtoAGL _intersectPosition;
+                };
+                [CLib_Player, QGVAR(cursorPosition), [_serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
             };
-            [CLib_Player, QGVAR(cursorPosition), [_serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
         };
     };
     {

@@ -63,6 +63,7 @@ private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 
 if (GVAR(CameraMode) == CAMERAMODE_UAV) then {
+    GVAR(UAVCameraTarget) hideObject false;
     detach GVAR(Camera);
     GVAR(UAVCameraTarget) = objNull;
 };
@@ -75,12 +76,13 @@ if (_cameraMode == CAMERAMODE_UAV) then {
         GVAR(UAVCameraTarget) = getConnectedUAV _unit;
         private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
         if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
-            _cameraMode = GVAR(CameraMode);
             GVAR(UAVCameraTarget) = objNull;
             breakTo SCRIPTSCOPENAME;
         };
     };
     GVAR(Camera) attachTo [GVAR(UAVCameraTarget), [0,0,0], getText ((_vehicleConfig >> "uavCameraGunnerPos"))];
+    GVAR(UAVCameraTarget) hideObject true;
+
 };
 
 if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {

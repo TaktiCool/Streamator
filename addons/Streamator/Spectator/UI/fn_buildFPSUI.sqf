@@ -24,7 +24,6 @@ _ctrlUnitName ctrlSetTextColor [1, 1, 1, 1];
 _ctrlUnitName ctrlSetFade 1;
 _ctrlUnitName ctrlSetText "UNIT NAME"; // Unit Name
 _ctrlUnitName ctrlCommit 0;
-#ifdef ISDEV
 
 private _ctrlGrpMinimap = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
 _ctrlGrpMinimap ctrlSetPosition [PX(BORDERWIDTH + 2.6), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(28)];
@@ -40,35 +39,27 @@ private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap
 _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
-JK_Marker0 = createMarkerLocal ["JK_Marker0", [0,0,0]];
-JK_Marker0 setMarkerShapeLocal "Icon";
-JK_Marker0 setMarkerColorLocal "colorBlack";
-JK_Marker0 setMarkerTypeLocal "mil_dot";
-JK_Marker0 setMarkerTextLocal "Map Offset Pos";
-
-JK_Marker1 = createMarkerLocal ["JK_Marker1", [0,0,0]];
-JK_Marker1 setMarkerShapeLocal "Icon";
-JK_Marker1 setMarkerColorLocal "colorBlack";
-JK_Marker1 setMarkerTypeLocal "mil_dot";
-JK_Marker1 setMarkerTextLocal "Map Center Pos";
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
+    private _mapPosition = ctrlPosition _map;
     private _position = if !(isNull GVAR(CameraFollowTarget)) then {
         getPos GVAR(CameraFollowTarget);
     } else {
         getPos GVAR(Camera);
     };
+    private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + PX(25/2),  (_mapPosition select 1) + PY(25/2)];
 
-    private _worldToScreen = (_map ctrlMapWorldToScreen _position);
-    private _mapPosition = [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37)];
-    _position = _map ctrlMapScreenToWorld [(_worldToScreen select 0) - (_mapPosition select 0) + 0.5, (_worldToScreen select 1) + (_mapPosition select 1) - 0.5];
+    private _screenCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + safeZoneWAbs/2, (_mapPosition select 1) + (SafeZoneH - 1.5 *((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))/2];
+    _screenCenterWorldPos set [2, 0];
+    _mapCenterWorldPos set [2, 0];
+    _position = _position vectorAdd ( _screenCenterWorldPos vectorDiff _mapCenterWorldPos );
+    //private _worldToScreen = (_map ctrlMapWorldToScreen _position);
+
+    //_position = _map ctrlMapScreenToWorld [(_worldToScreen select 0) - (_mapPosition select 0) + 0.5, (_worldToScreen select 1) + (_mapPosition select 1) - 0.5];
 
     _map ctrlMapAnimAdd [0, 0.05, _position];
-
-    JK_Marker0 setMarkerPosLocal _position;
-    JK_Marker1 setMarkerPosLocal (_map ctrlMapScreenToWorld [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37)]);
-
     ctrlMapAnimCommit _map;
+    private _screenPosition = _map ctrlMapWorldToScreen _position;
 }];
 
 private _ctrlMinimapTitle = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
@@ -77,7 +68,6 @@ _ctrlMinimapTitle ctrlSetFontHeight PY(2);
 _ctrlMinimapTitle ctrlSetFont "RobotoCondensedBold";
 _ctrlMinimapTitle ctrlSetText "GPS";
 _ctrlMinimapTitle ctrlCommit 0;
-#endif
 
 [QGVAR(CameraTargetChanged), {
     (_this select 0) params ["_cameraTarget"];
@@ -104,7 +94,6 @@ _ctrlMinimapTitle ctrlCommit 0;
     _ctrl ctrlCommit 0.3;
 }, [_ctrlUnitName]] call CFUNC(addEventhandler);
 
-#ifdef ISDEV
 [QGVAR(ToggleMinimap), {
     (_this select 1) params ["_ctrlGrpMinimap"];
     if (ctrlFade _ctrlGrpMinimap == 1) then {
@@ -117,4 +106,3 @@ _ctrlMinimapTitle ctrlCommit 0;
     QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
     _ctrlGrpMinimap ctrlCommit 0.3;
 }, [_ctrlGrpMinimap]] call CFUNC(addEventhandler);
-#endif
