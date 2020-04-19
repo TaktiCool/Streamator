@@ -58,7 +58,7 @@ private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa
 [_iconId, "dblclicked", {
     (_this select 1) params ["_unit"];
     GVAR(CameraPreviousState) = [];
-    [_unit] call EFUNC(Spectator,setCameraTarget);
+    [_unit, [EGVAR(Spectator,CameraMode), CAMERAMODE_FOLLOW] select (EGVAR(Spectator,CameraMode) == CAMERAMODE_FREE)] call EFUNC(Spectator,setCameraTarget);
 }, _newUnit] call CFUNC(addMapGraphicsEventHandler);
 
 _iconId;

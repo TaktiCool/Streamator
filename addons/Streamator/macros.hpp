@@ -26,8 +26,6 @@
 
 #include "\tc\CLib\addons\CLib\macros.hpp"
 
-#define ERROR_LOG(var) SYSLOGGING("Error", var)
-
 #define CAMERAMODE_FREE 1
 #define CAMERAMODE_FOLLOW 2
 #define CAMERAMODE_SHOULDER 3

@@ -41,7 +41,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
         GVAR(lastCursorTarget) = time;
     };
 };
-if (GVAR(hideUI) || GVAR(MapOpen)) exitWith {};
+if (GVAR(hideUI)) exitWith {};
 
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
@@ -126,7 +126,7 @@ if (GVAR(OverlayPlanningMode)) then {
          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
     });
 };
-
+if (GVAR(MapOpen)) exitWith {};
 //Units
 if (GVAR(OverlayUnitMarker)) then {
     private _allUnits = allUnits;

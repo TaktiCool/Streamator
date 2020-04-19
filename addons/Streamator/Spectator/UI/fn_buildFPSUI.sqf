@@ -83,6 +83,9 @@ _ctrlMinimapTitle ctrlCommit 0;
     (_this select 0) params ["_cameraTarget"];
     (_this select 1) params ["_ctrl"];
     if (isNull _cameraTarget) exitWith {};
+    if !(_cameraTarget isKindOf "CAManBase" || isNull (driver _cameraTarget) ) then {
+        _cameraTarget = driver _cameraTarget;
+    };
     _ctrl ctrlSetText (_cameraTarget call CFUNC(name));
 }, [_ctrlUnitName]] call CFUNC(addEventhandler);
 

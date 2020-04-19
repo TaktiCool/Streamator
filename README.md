@@ -30,6 +30,7 @@ Key Binding | Short Description | Remarks
 **`TAB`** | Resets FOV | Resets the field of View
 **`N`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
 **`B`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
+**`C`** | Reset Vision mode | Resets Vision mode to Default
 **`F1`** | Toggle Group Markers | Toggles the visibility of group marker.
 **`F2`** | Toggle Unit Marker | Toggles the visibility of unit marker and names.
 **`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.

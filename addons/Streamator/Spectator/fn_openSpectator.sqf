@@ -254,3 +254,15 @@ call FUNC(updateSpectatorArray);
         _angle = getDirVisual GVAR(Camera);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
+
+
+DFUNC(getNearByTransmitingPlayers) = {
+    private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
+    if !(isNull GVAR(CameraFollowTarget)) then {
+        _players append (GVAR(CameraFollowTarget) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange]);
+        _players pushBackUnique GVAR(CameraFollowTarget);
+        _players append (crew vehicle GVAR(CameraFollowTarget));
+    };
+    _players = _players arrayIntersect _players;
+    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } && {_x getVariable ["ace_map_gestures_Transmit", false]} };
+};

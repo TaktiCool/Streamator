@@ -20,9 +20,8 @@ GVAR(aceMapGesturesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_map_ges
 // ACE map Gestures Hack until acemod/ACE3#7646 is merged
 if (GVAR(aceMapGesturesLoaded)) then {
     [{
-        if !(ace_map_gestures_EnableTransmit) exitWith {};
         if (ace_map_gestures_pointPosition distance2D (player getVariable ["ace_map_gestures_pointPosition", [0, 0, 0]]) > 1) then {
-            player setVariable ["ace_map_gestures_pointPosition", ace_map_gestures_pointPosition];
+            player setVariable ["ace_map_gestures_pointPosition", ace_map_gestures_pointPosition, true];
         };
     }, 0] call CFUNC(addPerFrameHandler);
 };
@@ -40,6 +39,8 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
 ["initializeSpectator", {
     call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);
+
+CLib_Player setVariable [QGVAR(isPlayer), true, true];
 
 ["playerChanged", {
     (_this select 0) params ["_newPlayer"];

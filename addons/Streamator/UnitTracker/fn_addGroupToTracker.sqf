@@ -45,7 +45,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 [_groupIconId, "dblclicked", {
     (_this select 1) params ["_unit"];
     GVAR(CameraPreviousState) = [];
-    [_unit] call EFUNC(Spectator,setCameraTarget);
+    [_unit, [EGVAR(Spectator,CameraMode), CAMERAMODE_FOLLOW] select (EGVAR(Spectator,CameraMode) == CAMERAMODE_FREE)] call EFUNC(Spectator,setCameraTarget);
 }, leader _group] call CFUNC(addMapGraphicsEventHandler);
 
 [

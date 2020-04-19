@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=269;
+		nextID=275;
 	};
 	class Camera
 	{
-		pos[]={4013.1094,235.81613,3462.9019};
-		dir[]={0.92326242,-0.36497074,-0.12087184};
-		up[]={0.36194086,0.93094957,-0.047386162};
-		aside[]={-0.12983736,-3.8836151e-007,-0.99167162};
+		pos[]={4215.0122,247.32263,3563.5535};
+		dir[]={-0.44737199,-0.67956698,-0.58158398};
+		up[]={-0.41433528,0.73360646,-0.5386346};
+		aside[]={-0.79270798,-1.0674266e-006,0.60977566};
 	};
 };
 binarizationWanted=0;
@@ -37,13 +37,20 @@ addons[]=
 	"A3_Characters_F_Common",
 	"A3_Air_F_Jets_UAV_05",
 	"A3_Weapons_F_Ammoboxes",
-	"A3_Drones_F_Air_F_Gamma_UAV_01"
+	"A3_Drones_F_Air_F_Gamma_UAV_01",
+	"A3_Armor_F_EPC_MBT_01",
+	"A3_Air_F_Beta_Heli_Transport_01",
+	"A3_Drones_F_Soft_F_Gamma_UGV_01",
+	"A3_Soft_F_Exp_LSV_01",
+	"A3_Armor_F_Beta_APC_Tracked_01",
+	"ace_repair",
+	"acre_sys_intercom"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=14;
+		items=19;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -142,6 +149,41 @@ class AddonsMetaData
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
+		class Item14
+		{
+			className="A3_Armor_F_EPC";
+			name="Arma 3 Win Episode - Armored Land Vehicles";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item15
+		{
+			className="A3_Air_F_Beta";
+			name="Arma 3 Beta - Aircraft";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item16
+		{
+			className="A3_Armor_F_Beta";
+			name="Arma 3 Beta - Armored Land Vehicles";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item17
+		{
+			className="ace_repair";
+			name="ACE3 - Repair";
+			author="ACE-Team";
+			url="http://ace3mod.com/";
+		};
+		class Item18
+		{
+			className="acre_sys_intercom";
+			name="ACRE2 - Vehicle Intercom";
+			author="ACRE2Team";
+			url="https://github.com/IDI-Systems/acre2";
+		};
 	};
 };
 randomSeed=10366851;
@@ -174,7 +216,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=46;
+		items=51;
 		class Item0
 		{
 			dataType="Group";
@@ -194,6 +236,7 @@ class Mission
 					class Attributes
 					{
 						rank="SERGEANT";
+						isPlayer=1;
 						isPlayable=1;
 					};
 					id=1;
@@ -1112,7 +1155,6 @@ class Mission
 				position[]={4262.8818,214.28822,3577.2959};
 				angles[]={0.0075049158,0,6.2581921};
 			};
-			isPlayer=1;
 			isPlayable=1;
 			id=55;
 			type="VirtualSpectator_F";
@@ -6123,6 +6165,89 @@ class Mission
 			{
 			};
 			id=257;
+		};
+		class Item46
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4174.0596,217.3804,3523.7363};
+				angles[]={0.044968102,2.6909089,6.2008715};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=269;
+			type="B_MBT_01_TUSK_F";
+		};
+		class Item47
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4187.2163,215.34975,3530.791};
+				angles[]={0.059929453,2.6390269,6.19839};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=270;
+			type="B_Heli_Transport_01_F";
+		};
+		class Item48
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4164.1543,217.5864,3517.7007};
+				angles[]={-0,2.5230007,6.2606921};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				reportOwnPosition=1;
+			};
+			id=271;
+			type="B_UGV_01_rcws_F";
+		};
+		class Item49
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4157.1294,217.54741,3515.2031};
+				angles[]={6.2656851,2.5137019,0.029989703};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=273;
+			type="B_LSV_01_armed_F";
+		};
+		class Item50
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4147.9355,218.04779,3508.2312};
+				angles[]={6.270689,2.5953486,0.019996032};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				reportRemoteTargets=1;
+				receiveRemoteTargets=1;
+			};
+			id=274;
+			type="B_APC_Tracked_01_AA_F";
 		};
 	};
 };

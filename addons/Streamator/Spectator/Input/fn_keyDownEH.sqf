@@ -68,7 +68,7 @@ private _return = switch (_keyCode) do {
                         true;
                     };
                     case DIK_E: { // E
-                        if !(_alt) exitWith {false};
+                        if !(_ctrl) exitWith {false};
                         with missionNamespace do {
                             if (GVAR(InputMode) == INPUTMODE_MOVE) then {
                                 GVAR(InputMode) = INPUTMODE_PLANINGMODE;
@@ -132,7 +132,7 @@ private _return = switch (_keyCode) do {
                         GVAR(CameraPreviousState) = [];
                         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
                         _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
-                        [objNull, 1] call FUNC(setCameraTarget);
+                        [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
                         GVAR(CameraPos) = _pos;
                     };
                     true;
@@ -243,29 +243,20 @@ private _return = switch (_keyCode) do {
                     if (GVAR(aceMapGesturesLoaded)) then {
                         #define TEXT_FONT "RobotoCondensedBold"
 
-                        private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
-                        if !(isNull GVAR(CameraFollowTarget)) then {
-                            _players pushBackUnique GVAR(CameraFollowTarget);
-                            _players append (crew vehicle GVAR(CameraFollowTarget));
-                        };
-                        _players = _players arrayIntersect _players;
+
                         // Iterate over all nearby players and render their pointer if player is transmitting.
                         {
                             private _pos = _x getVariable ["ace_map_gestures_pointPosition", [0, 0, 0]];
                             private _grpName = groupID (group _x);
 
                             // If color settings for the group exist, then use those, otherwise fall back to the default colors
-                            private _colorMap = ace_map_gestures_GroupColorCfgMappingNew getVariable _grpName;
-                            private _color = if (isNil "_colorMap") then {
-                                [ace_map_gestures_defaultLeadColor, ace_map_gestures_defaultColor] select (_x != leader _group);
-                            } else {
-                                _colorMap select (_x != leader _group);
-                            };
+                            private _color = (ace_map_gestures_GroupColorCfgMappingNew getVariable [_grpName, [ace_map_gestures_defaultLeadColor, ace_map_gestures_defaultColor]]) select (_x != leader _x);
 
                             // Render icon and player name
+                            diag_log ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
                             _map drawIcon ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
                             _map drawIcon ["#(argb,8,8,3)color(0,0,0,0)", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
-                        } count (_players select { alive _x && { !((lifeState _x) in []) } && {_x getVariable ["ace_map_gestures_Transmit", false]} });
+                        } count call FUNC(getNearByTransmitingPlayers);
                     };
                 };
             }];
@@ -442,6 +433,11 @@ private _return = switch (_keyCode) do {
         GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
         call FUNC(setVisionMode);
         true;
+    };
+    case DIK_C: {
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
+        GVAR(CameraVision) = 9;
+        call FUNC(setVisionMode);
     };
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
