@@ -36,9 +36,17 @@ GVAR(updateIconRunning) = false;
 [QGVAR(updateIcons), {
     if (GVAR(updateIconRunning)) exitWith {};
     GVAR(updateIconRunning) = true;
-    [{call FUNC(updateIcons); GVAR(updateIconRunning) = false; }, 1] call CFUNC(wait);
+    [{
+        GVAR(updateIconRunning) = false;
+        if !(EGVAR(Spectator,MapOpen) || EGVAR(Spectator,MinimapVisible)) exitWith {};
+        call FUNC(updateIcons);
+    }, 0.3] call CFUNC(wait);
 }] call CFUNC(addEventhandler);
 
 [{
     QGVAR(updateIcons) call CFUNC(localEvent);
 }, 3] call CFUNC(addPerframeHandler);
+
+["initializeSpectator", {
+    call FUNC(updateIcons);
+}] call CFUNC(addEventhandler);

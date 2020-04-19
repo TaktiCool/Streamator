@@ -41,7 +41,7 @@ if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
         GVAR(lastCursorTarget) = time;
     };
 };
-if (GVAR(hideUI) || GVAR(MapOpen) || !isGameFocused) exitWith {};
+if (GVAR(hideUI) || GVAR(MapOpen)) exitWith {};
 
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
@@ -232,23 +232,24 @@ if (GVAR(OverlayGroupMarker)) then {
 if (GVAR(BulletTracerEnabled)) then {
     private _deleted = false;
     {
-        _x params ["_startPos", "_projectile", ["_secments", []]];
+        _x params ["_color", "_startPos", "_projectile", ["_segments", []]];
         if (alive _projectile) then {
             if (diag_frameno mod 3 == 0) then {
-                if !(_secments isEqualTo []) then {
-                    _startPos = _secments select ((count _secments) -1) select 1;
+                if !(_segments isEqualTo []) then {
+                    _startPos = _segments select ((count _segments) -1) select 1;
                 };
-                private _index = _secments pushBack [_startPos, getPos _projectile];
+                private _index = _segments pushBack [_startPos, getPos _projectile];
                 if (_index >= TRACER_SEGMENT_COUNT) then {
-                    _secments deleteAt 0;
+                    _segments deleteAt 0;
                 };
-                _x set [2, _secments];
+                _x set [3, _segments];
             };
             if ((_projectile distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
-                private _secmentCount = count _secments - 1;
+                private _segmentCount = count _segments - 1;
                 {
-                    drawLine3D [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]];
-                } forEach _secments;
+                    _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
+                    drawLine3D [_x select 0, _x select 1, _color];
+                } forEach _segments;
             };
         } else {
             _deleted = true;

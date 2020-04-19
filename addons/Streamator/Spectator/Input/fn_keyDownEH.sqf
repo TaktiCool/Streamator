@@ -37,7 +37,6 @@ private _return = switch (_keyCode) do {
             (_mapDisplay displayCtrl 1202) ctrlSetFade 1;
             (_mapDisplay displayCtrl 1202) ctrlCommit 0;
 
-            QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
 
             private _map = _mapDisplay ctrlCreate ["RscMapControl", -1];
             _map ctrlSetPosition [safeZoneX + PX(BORDERWIDTH), safeZoneY + PY(BORDERWIDTH), safeZoneW - PX(2 * BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)];
@@ -47,6 +46,8 @@ private _return = switch (_keyCode) do {
             (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
             QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
             GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_player]];
+
+            QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
 
             _map ctrlMapAnimAdd [0, _zoom, _position];
             ctrlMapAnimCommit _map;
@@ -208,22 +209,23 @@ private _return = switch (_keyCode) do {
                     if (GVAR(BulletTracerEnabled)) then {
                         private _deleted = false;
                         {
-                            _x params ["_startPos", "_projectile", ["_secments", []]];
+                            _x params ["_color", "_startPos", "_projectile", ["_segments", []]];
                             if (alive _projectile) then {
                                 if (diag_frameno mod 3 == 0) then {
-                                    if !(_secments isEqualTo []) then {
-                                        _startPos = _secments select ((count _secments) -1) select 1;
+                                    if !(_segments isEqualTo []) then {
+                                        _startPos = _segments select ((count _segments) -1) select 1;
                                     };
-                                    private _index = _secments pushBack [_startPos, getPos _projectile];
+                                    private _index = _segments pushBack [_startPos, getPos _projectile];
                                     if (_index >= TRACER_SEGMENT_COUNT) then {
-                                        _secments deleteAt 0;
+                                        _segments deleteAt 0;
                                     };
-                                    _x set [2, _secments];
+                                    _x set [3, _segments];
                                 };
-                                private _secmentCount = count _secments - 1;
+                                private _segmentCount = count _segments - 1;
                                 {
-                                    _map drawLine [_x select 0, _x select 1, [1, 0, 0, linearConversion [_secmentCount, 0, _forEachIndex, 1, 0]]];
-                                } forEach _secments;
+                                    _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
+                                    _map drawLine [_x select 0, _x select 1, _color];
+                                } forEach _segments;
                             } else {
                                 _deleted = true;
                                 GVAR(BulletTracers) set [_forEachIndex, objNull];

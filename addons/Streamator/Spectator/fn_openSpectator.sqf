@@ -65,6 +65,7 @@ GVAR(CameraSmoothingTime) = 0.2;
 
 GVAR(MapState) = [];
 GVAR(MapOpen) = false;
+GVAR(MinimapVisible) = false;
 
 GVAR(hideUI) = false;
 
@@ -114,8 +115,9 @@ GVAR(TopDownOffset) = [0, 0, 100];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
             if (GVAR(BulletTracerEnabled)) then {
-                private _index = GVAR(BulletTracers) pushBack [getPos _projectile, _projectile];
-                if (_index > diag_fps * 1.5) then {
+                private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
+                private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
+                if (_index > diag_fps) then {
                     GVAR(BulletTracers) deleteAt 0;
                 };
             };

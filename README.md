@@ -13,7 +13,7 @@ Mode | Description
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
 **TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
 **ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
-**ORBIT [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
+**UAV [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -21,7 +21,7 @@ Key Binding | Short Description | Remarks
 **`W` `S` `A` `D`** | Horiz. movement |
 **`Q` `Y`** | Vert. movement |
 **`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focussed object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
-**`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focussed object in FOLLOW mode. With **`NUMPAD 1-4`** the selected unit will be focussed with the selected camera mode (see **`NUMPAD 1-4`**).
+**`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focussed object in FOLLOW mode. With **`NUMPAD 1-6`** the selected unit will be focussed with the selected camera mode (see **`NUMPAD 1-6`**).
 **`ALT`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
 **`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focussed object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera. if in SHOULDER, TOPDOWN or ORBIT Mode it resets Camera to Default Values
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.

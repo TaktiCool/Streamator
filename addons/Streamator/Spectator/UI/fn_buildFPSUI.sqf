@@ -103,9 +103,12 @@ _ctrlMinimapTitle ctrlCommit 0;
     (_this select 1) params ["_ctrlGrpMinimap"];
     if (ctrlFade _ctrlGrpMinimap == 1) then {
         _ctrlGrpMinimap ctrlSetFade 0;
+        GVAR(MinimapVisible) = true;
     } else {
         _ctrlGrpMinimap ctrlSetFade 1;
+        GVAR(MinimapVisible) = false;
     };
+    QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
     _ctrlGrpMinimap ctrlCommit 0.3;
 }, [_ctrlGrpMinimap]] call CFUNC(addEventhandler);
 #endif

@@ -14,9 +14,9 @@
     None
 */
 
-
+DUMP("Update Icons");
 {
-    DUMP("ICON REMOVED: " + _x);
+    // DUMP("ICON REMOVED: " + _x);
     [_x] call CFUNC(removeMapGraphicsGroup);
 } count GVAR(processedIcons);
 GVAR(processedIcons) = [];
@@ -29,18 +29,18 @@ private _vehicles = (vehicles select {[_x] call FUNC(isValidVehicle)});
 if !(_units isEqualTo []) then {
     {
         if (isNull objectParent _x) then { // Infantry
-            private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _x, (group _x) isEqualTo (group CLib_Player)];
+            private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _x, (group _x)];
             if !(_iconId in GVAR(processedIcons)) then {
                 GVAR(processedIcons) pushBack _iconId;
-                DUMP("UNIT ICON ADDED: " + _iconId);
+                // DUMP("UNIT ICON ADDED: " + _iconId);
                 [_x, _iconId] call FUNC(addUnitToTracker);
             };
 
             if (leader _x == _x && alive _x) then {
-                _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _x, _x, (group _x) isEqualTo (group CLib_Player)];
+                _iconId = toLower format [QGVAR(IconId_Group_%1_%2), group _x, _x];
                 if !(_iconId in GVAR(processedIcons)) then {
                     GVAR(processedIcons) pushBack _iconId;
-                    DUMP("GROUP ICON ADDED: " + _iconId);
+                    // DUMP("GROUP ICON ADDED: " + _iconId);
                     [group _x, _iconId] call FUNC(addGroupToTracker);
                 };
             };
@@ -50,20 +50,20 @@ if !(_units isEqualTo []) then {
             private _inGroup = {
                 if (leader _x == _x) then {
                     _nbrGroups = _nbrGroups + 1;
-                    private _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3_%4), group _x, _vehicle, (group _x) isEqualTo (group CLib_Player), _nbrGroups];
+                    private _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _x, _vehicle, _nbrGroups];
                     if !(_iconId in GVAR(processedIcons)) then {
                         GVAR(processedIcons) pushBack _iconId;
-                        DUMP("GROUP ICON ADDED: " + _iconId);
+                        // DUMP("GROUP ICON ADDED: " + _iconId);
                         [group _x, _iconId, [0, -20 * _nbrGroups]] call FUNC(addGroupToTracker);
                     };
                 };
-                ({group _x isEqualTo group CLib_Player} count crew _vehicle) > 0;
-            } count crew _vehicle;
+                ({group _x isEqualTo group CLib_Player} count (crew _vehicle)) > 0;
+            } count (crew _vehicle);
             _inGroup = _inGroup > 0;
             private _iconId = toLower format [QGVAR(IconId_Vehicle_%1_%2), _vehicle, _inGroup];
             if !(_iconId in GVAR(processedIcons)) then {
                 GVAR(processedIcons) pushBack _iconId;
-                DUMP("VEHICLE ADDED: " + _iconId);
+                // DUMP("VEHICLE ADDED: " + _iconId);
                 [_vehicle, _iconId, _inGroup] call FUNC(addVehicleToTracker);
             };
         };
@@ -74,7 +74,7 @@ if !(_vehicles isEqualTo []) then {
         private _iconId = toLower format [QGVAR(IconId_EmptyVehicle_%1), _vehicle];
         if !(_iconId in GVAR(processedIcons)) then {
             GVAR(processedIcons) pushBack _iconId;
-            DUMP("EMPTY VEHICLE ADDED: " + _iconId);
+            // DUMP("EMPTY VEHICLE ADDED: " + _iconId);
             [_x, _iconId, true] call FUNC(addVehicleToTracker);
         };
     } forEach _vehicles;

@@ -33,6 +33,15 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
     ]
 ] call CFUNC(addMapGraphicsGroup);
 
+[
+    _groupIconId,
+    [
+        ["ICON", _groupMapIcon, _color, _iconPos, 30, 30],
+        ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _iconPos, 31, 31, 0, _shortGroupId, 2]
+    ],
+    "hover"
+] call CFUNC(addMapGraphicsGroup);
+
 [_groupIconId, "dblclicked", {
     (_this select 1) params ["_unit"];
     GVAR(CameraPreviousState) = [];
