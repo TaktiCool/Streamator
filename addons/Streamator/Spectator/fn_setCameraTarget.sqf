@@ -63,26 +63,29 @@ private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 
 if (GVAR(CameraMode) == CAMERAMODE_UAV) then {
-    GVAR(UAVCameraTarget) hideObject false;
     detach GVAR(Camera);
     GVAR(UAVCameraTarget) = objNull;
 };
 
 if (_cameraMode == CAMERAMODE_UAV) then {
     GVAR(UAVCameraTarget) = vehicle _unit;
-    private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+    private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof vehicle GVAR(UAVCameraTarget));
 
     if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
-        GVAR(UAVCameraTarget) = getConnectedUAV _unit;
+        GVAR(UAVCameraTarget) = vehicle (getConnectedUAV _unit);
         private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
         if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
             GVAR(UAVCameraTarget) = objNull;
             breakTo SCRIPTSCOPENAME;
         };
     };
-    GVAR(Camera) attachTo [GVAR(UAVCameraTarget), [0,0,0], getText ((_vehicleConfig >> "uavCameraGunnerPos"))];
-    GVAR(UAVCameraTarget) hideObject true;
+    private _camPosSelection = getText (_vehicleConfig >> "uavCameraGunnerPos");
+    private _camDirSelection = getText (_vehicleConfig >> "uavCameraGunnerDir");
+    private _camPos = GVAR(UAVCameraTarget) selectionPosition _camPosSelection;
+    private _camDir = GVAR(UAVCameraTarget) selectionPosition _camDirSelection;
+    private _vDir = _camPos vectorFromTo _camDir;
 
+    GVAR(Camera) attachTo [GVAR(UAVCameraTarget), [0,0,0], _camDirSelection];
 };
 
 if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {

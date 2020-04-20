@@ -36,37 +36,46 @@ _ctrlMinimapBackground ctrlSetText "#(argb,8,8,3)color(0.1,0.1,0.1,0.75)";
 _ctrlMinimapBackground ctrlCommit 0;
 
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
-_ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
+_ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
     private _mapPosition = ctrlPosition _map;
-    private _position = if !(isNull GVAR(CameraFollowTarget)) then {
-        getPos GVAR(CameraFollowTarget);
-    } else {
-        getPos GVAR(Camera);
+
+    private _target = switch (true) do {
+        case !(isNull GVAR(UAVCameraTarget)): {
+            vehicle GVAR(UAVCameraTarget);
+        };
+        case !(isNull GVAR(CameraFollowTarget)): {
+            vehicle GVAR(CameraFollowTarget);
+        };
+        default {
+            GVAR(Camera);
+        };
     };
-    private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + PX(25/2),  (_mapPosition select 1) + PY(25/2)];
+    private _position = getPos _target;
+    private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + ((_mapPosition select 2)/2),  (_mapPosition select 1) + ((_mapPosition select 3)/2)];
 
     private _screenCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + safeZoneWAbs/2, (_mapPosition select 1) + (SafeZoneH - 1.5 *((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))/2];
     _screenCenterWorldPos set [2, 0];
     _mapCenterWorldPos set [2, 0];
-    _position = _position vectorAdd ( _screenCenterWorldPos vectorDiff _mapCenterWorldPos );
-    //private _worldToScreen = (_map ctrlMapWorldToScreen _position);
+    _position = _position vectorAdd (_screenCenterWorldPos vectorDiff _mapCenterWorldPos);
 
-    //_position = _map ctrlMapScreenToWorld [(_worldToScreen select 0) - (_mapPosition select 0) + 0.5, (_worldToScreen select 1) + (_mapPosition select 1) - 0.5];
+    // Calculate Zoom Level
+    ctrlMapScale _map;
+    private _zoom = (ctrlMapScale _map) * (1 - 0.1) + linearConversion [0, 80, abs (speed _target), 0.025, 0.5, true] * 0.1;
 
-    _map ctrlMapAnimAdd [0, 0.05, _position];
+    // Animate Map
+    _map ctrlMapAnimAdd [0, _zoom, _position];
     ctrlMapAnimCommit _map;
-    private _screenPosition = _map ctrlMapWorldToScreen _position;
 }];
 
 private _ctrlMinimapTitle = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
 _ctrlMinimapTitle ctrlSetPosition [0, 0, PX(15), PY(3)];
 _ctrlMinimapTitle ctrlSetFontHeight PY(2);
 _ctrlMinimapTitle ctrlSetFont "RobotoCondensedBold";
-_ctrlMinimapTitle ctrlSetText "GPS";
+_ctrlMinimapTitle ctrlSetText "Minimap";
 _ctrlMinimapTitle ctrlCommit 0;
 
 [QGVAR(CameraTargetChanged), {
@@ -95,14 +104,17 @@ _ctrlMinimapTitle ctrlCommit 0;
 }, [_ctrlUnitName]] call CFUNC(addEventhandler);
 
 [QGVAR(ToggleMinimap), {
-    (_this select 1) params ["_ctrlGrpMinimap"];
+    (_this select 1) params ["_ctrlGrpMinimap", "_ctrlMinimap"];
     if (ctrlFade _ctrlGrpMinimap == 1) then {
+        _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
         _ctrlGrpMinimap ctrlSetFade 0;
         GVAR(MinimapVisible) = true;
     } else {
+        _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
         _ctrlGrpMinimap ctrlSetFade 1;
         GVAR(MinimapVisible) = false;
     };
     QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
-    _ctrlGrpMinimap ctrlCommit 0.3;
-}, [_ctrlGrpMinimap]] call CFUNC(addEventhandler);
+    _ctrlGrpMinimap ctrlCommit 0.5;
+    _ctrlMinimap ctrlCommit 0.3;
+}, [_ctrlGrpMinimap, _ctrlMinimap]] call CFUNC(addEventhandler);
