@@ -10,6 +10,10 @@ class CfgCLibModules {
             MODULE(ACRE) {
                 FNC(clientInitACRE);
             };
+            MODULE(Draw) {
+                FNC(draw3dEH);
+                FNC(drawEH);
+            };
             MODULE(TFAR) {
                 FNC(clientInitTFAR);
                 FNC(getTFARFrequency);
@@ -22,6 +26,7 @@ class CfgCLibModules {
 
             MODULE(UI) {
                 FNC(buildFPSUI);
+                FNC(buildMapUI);
                 FNC(buildRadioInfoUI);
                 FNC(buildUI);
                 FNC(buildUnitInfoUI);
@@ -43,7 +48,6 @@ class CfgCLibModules {
             FNC(cameraUpdateLoop);
             FNC(clientInit);
             FNC(closeSpectator);
-            FNC(draw3dEH);
             FNC(getDefaultIcon);
             FNC(getUnitType);
             FNC(isValidUnit);

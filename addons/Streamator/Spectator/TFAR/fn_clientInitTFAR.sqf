@@ -52,7 +52,21 @@ LOG("TFAR Stable Detected");
         TFAR_player_name = name CLib_player;
         private _request = "";
         if (GVAR(TFARLegacy)) then {
-            _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13", str(_freqSW), str(_freqLR), "No_DD_Radio", true, TF_speak_volume_meters min TF_max_voice_volume, TF_dd_volume_level, TFAR_player_name, waves, 0, 1.0, CLib_player getVariable ["tf_voiceVolume", 1.0], 1.0, TF_speakerDistance];
+            _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
+                str(_freqSW),
+                str(_freqLR),
+                "No_DD_Radio",
+                true,
+                TF_speak_volume_meters min TF_max_voice_volume,
+                TF_dd_volume_level,
+                TFAR_player_name,
+                waves,
+                0,
+                1.0,
+                CLib_player getVariable ["tf_voiceVolume", 1.0],
+                1.0,
+                TF_speakerDistance
+            ];
         } else {
             _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
                 str(_freqSW), // list of short wave frequencies to set (including volume and stero info)

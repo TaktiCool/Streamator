@@ -128,14 +128,14 @@ if (_cameraMode != CAMERAMODE_FPS && GVAR(CameraInFirstPerson)) then {
 
 switch (_cameraMode) do {
     case CAMERAMODE_FREE: { // FREE
-        GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
     };
     case CAMERAMODE_FOLLOW: { // FOLLOW
-        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = getPosASLVisual _cameraFollowTarget vectorAdd GVAR(CameraRelPos);
     };
     case CAMERAMODE_SHOULDER: { // Over Shoulder
-        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPitch) = -(asin ([0, 1, 0] vectorDotProduct (vectorNormalized ((_cameraFollowTarget selectionPosition "camera") vectorDiff (_cameraFollowTarget selectionPosition "pelvis")))));
         private _offset = +GVAR(ShoulderOffSet);
         _offset set [1, (_offset select 1) * cos GVAR(CameraPitch) - (_offset select 2) * sin GVAR(CameraPitch)];
@@ -145,7 +145,7 @@ switch (_cameraMode) do {
     };
 
     case CAMERAMODE_TOPDOWN: { // TOPDOWN
-        GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld (_cameraFollowTarget selectionPosition "head")) vectorAdd GVAR(TopDownOffset);
         GVAR(CameraDir) = 0;
         GVAR(CameraPitch) = -90;
@@ -175,7 +175,7 @@ switch (_cameraMode) do {
         breakOut SCRIPTSCOPENAME;
     };
     case CAMERAMODE_ORBIT: { // Orbit
-        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = (getPosASLVisual _cameraFollowTarget vectorAdd [0, 0, 0.8]) vectorAdd GVAR(CameraRelPos);
         private _mag = vectorMagnitude GVAR(CameraRelPos);
         private _norm = vectorNormalized GVAR(CameraRelPos);

@@ -13,9 +13,9 @@ class EditorData
 	class Camera
 	{
 		pos[]={4215.0122,247.32263,3563.5535};
-		dir[]={-0.44737199,-0.67956698,-0.58158398};
-		up[]={-0.41433528,0.73360646,-0.5386346};
-		aside[]={-0.79270798,-1.0674266e-006,0.60977566};
+		dir[]={-0.57489979,-0.54588562,-0.60966569};
+		up[]={-0.3745212,0.8378377,-0.39716804};
+		aside[]={-0.72762394,-1.1068769e-006,0.68613183};
 	};
 };
 binarizationWanted=0;
@@ -43,14 +43,13 @@ addons[]=
 	"A3_Drones_F_Soft_F_Gamma_UGV_01",
 	"A3_Soft_F_Exp_LSV_01",
 	"A3_Armor_F_Beta_APC_Tracked_01",
-	"ace_repair",
-	"acre_sys_intercom"
+	"ace_repair"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=19;
+		items=18;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -176,13 +175,6 @@ class AddonsMetaData
 			name="ACE3 - Repair";
 			author="ACE-Team";
 			url="http://ace3mod.com/";
-		};
-		class Item18
-		{
-			className="acre_sys_intercom";
-			name="ACRE2 - Vehicle Intercom";
-			author="ACRE2Team";
-			url="https://github.com/IDI-Systems/acre2";
 		};
 	};
 };
@@ -6181,6 +6173,7 @@ class Mission
 			};
 			id=269;
 			type="B_MBT_01_TUSK_F";
+			atlOffset=-4.5776367e-005;
 		};
 		class Item47
 		{
@@ -6197,6 +6190,7 @@ class Mission
 			};
 			id=270;
 			type="B_Heli_Transport_01_F";
+			atlOffset=-0.00018310547;
 		};
 		class Item48
 		{
@@ -6204,7 +6198,7 @@ class Mission
 			class PositionInfo
 			{
 				position[]={4164.1543,217.5864,3517.7007};
-				angles[]={-0,2.5230007,6.2606921};
+				angles[]={0,2.5230007,6.2606921};
 			};
 			side="Empty";
 			flags=4;
