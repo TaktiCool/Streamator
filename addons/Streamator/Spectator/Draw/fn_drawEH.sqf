@@ -52,7 +52,7 @@ with missionNamespace do {
         });
     };
 
-    if (GVAR(BulletTracerEnabled)) then {
+    if (GVAR(OverlayBulletTracer)) then {
         private _deleted = false;
         {
             _x params ["_color", "_startPos", "_projectile", ["_segments", []]];

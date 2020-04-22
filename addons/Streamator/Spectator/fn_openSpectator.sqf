@@ -95,7 +95,7 @@ GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_
 
 GVAR(RadioInformationPrev) = [];
 
-GVAR(BulletTracerEnabled) = false;
+GVAR(OverlayBulletTracer) = false;
 GVAR(BulletTracers) = [];
 
 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
@@ -114,7 +114,7 @@ GVAR(TopDownOffset) = [0, 0, 100];
             _unit setVariable [QGVAR(lastShot), time];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
-            if (GVAR(BulletTracerEnabled)) then {
+            if (GVAR(OverlayBulletTracer)) then {
                 private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
                 private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
                 if (_index > diag_fps) then {

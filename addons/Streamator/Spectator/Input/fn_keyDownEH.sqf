@@ -153,7 +153,7 @@ private _return = switch (_keyCode) do {
         true; // F10
     };
     case DIK_F11: { // F11
-        GVAR(BulletTracerEnabled) = !GVAR(BulletTracerEnabled);
+        GVAR(OverlayBulletTracer) = !GVAR(OverlayBulletTracer);
         GVAR(BulletTracers) = [];
     };
     case DIK_E: { // E
