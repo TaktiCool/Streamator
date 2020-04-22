@@ -34,7 +34,7 @@ version= "{{git \"id 8\"}}"
 [scripts.dev_set]
 steps_linux = [
     "echo 'Setting Dev'",
-    "sed -i -r -s 's/// #define ISDEV/ #define ISDEV {{semver.major}}/g' addons/Streamator/macros.hpp",
+    "sed -i -r -s 's/\\/\// #define ISDEV/ #define ISDEV {{semver.major}}/g' addons/Streamator/macros.hpp",
 ]
 steps_windows = [
     "echo 'Setting Dev'",
@@ -46,7 +46,7 @@ show_output = true
 [scripts.dev_unset]
 steps_linux = [
     "echo 'Unsetting Dev'",
-    "sed -i -r -s 's/// #define ISDEV/#define ISDEV/g' addons/Streamator/macros.hpp",
+    "sed -i -r -s 's/\\/\// #define ISDEV/#define ISDEV/g' addons/Streamator/macros.hpp",
 ]
 steps_windows = [
     "echo 'Unsetting Dev'",
