@@ -17,39 +17,40 @@ params [
     ["_map", controlNull, [controlNull]]
 ];
 with missionNamespace do {
-    if (!GVAR(OverlayPlanningMode)) exitWith {};
-    {
-        private _unit = _x;
-        private _cursorPos = _unit getVariable QGVAR(cursorPosition);
-        private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
+    if (!GVAR(OverlayPlanningMode)) then {
         {
-            _x params ["_time", "_pos"];
-            private _alpha = 1 - (([time, serverTime] select isMultiplayer) - _time) max 0;
-            private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
-            _color set [3, _alpha];
-            private _text = "";
-            private _mapScale = ctrlMapScale _map;
-            private _textSize = PY(4);
-            if (_mapScale < 0.1) then {
-                _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
-            };
-            if (_alpha != 0) then {
-                if (_cursorPos isEqualTo _x) then {
-                    _color set [3, 1];
-                    _text = format ["%1", (_unit call CFUNC(name))];
-                    _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 18, 18, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
-                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"]
-                } else {
-                    _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+            private _unit = _x;
+            private _cursorPos = _unit getVariable QGVAR(cursorPosition);
+            private _cursorHistory = _unit getVariable [QGVAR(cursorPositionHistory), []];
+            {
+                _x params ["_time", "_pos"];
+                private _alpha = 1 - (([time, serverTime] select isMultiplayer) - _time) max 0;
+                private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
+                _color set [3, _alpha];
+                private _text = "";
+                private _mapScale = ctrlMapScale _map;
+                private _textSize = PY(4);
+                if (_mapScale < 0.1) then {
+                    _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
                 };
-            };
-        } count _cursorHistory;
-        nil
-    } count ((GVAR(allSpectators) + [CLib_Player]) select {
-        (GVAR(PlanningModeChannel) == 0)
-         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
-         || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
-    });
+                if (_alpha != 0) then {
+                    if (_cursorPos isEqualTo _x) then {
+                        _color set [3, 1];
+                        _text = format ["%1", (_unit call CFUNC(name))];
+                        _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, 18, 18, 0, _text, 2, _textSize,  "RobotoCondensedBold", "right"];
+                        _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 2, _textSize,  "RobotoCondensedBold", "right"]
+                    } else {
+                        _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, 12, 12, 0, "", 0, _textSize,  "RobotoCondensedBold", "right"];
+                    };
+                };
+            } count _cursorHistory;
+            nil
+        } count ((GVAR(allSpectators) + [CLib_Player]) select {
+            (GVAR(PlanningModeChannel) == 0)
+             || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+             || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
+        });
+    };
 
     if (GVAR(BulletTracerEnabled)) then {
         private _deleted = false;
