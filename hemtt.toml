@@ -34,7 +34,7 @@ version= "{{git \"id 8\"}}"
 [scripts.dev_set]
 steps_linux = [
     "echo 'Setting Dev'",
-    "sed -i -r -s 's/// #define ISDEV/ #define ISDEV {{semver.major}}/g' addons/main/script_version.hpp",
+    "sed -i -r -s 's/// #define ISDEV/ #define ISDEV {{semver.major}}/g' addons/Streamator/macros.hpp",
 ]
 steps_windows = [
     "echo 'Setting Dev'",
@@ -46,11 +46,11 @@ show_output = true
 [scripts.dev_unset]
 steps_linux = [
     "echo 'Unsetting Dev'",
-    "sed -i -r -s 's/// #define ISDEV/#define ISDEV/g' addons/main/script_version.hpp",
+    "sed -i -r -s 's/// #define ISDEV/#define ISDEV/g' addons/Streamator/macros.hpp",
 ]
 steps_windows = [
     "echo 'Unsetting Dev'",
-    "powershell -Command foreach ($f in 'addons/main/script_version.hpp') {(Get-Content $f) -replace '// #define ISDEV', '#define ISDEV' -join \"`n\" ^| Set-Content -NoNewline $f; Add-Content -NoNewline \"`n\" $f}",
+    "powershell -Command foreach ($f in 'addons/Streamator/macros.hpp') {(Get-Content $f) -replace '// #define ISDEV', '#define ISDEV' -join \"`n\" ^| Set-Content -NoNewline $f; Add-Content -NoNewline \"`n\" $f}",
 ]
 only_release = true
 show_output = true
