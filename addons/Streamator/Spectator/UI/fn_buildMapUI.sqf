@@ -84,11 +84,17 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
             };
             true;
         };
+        case DIK_F4: { // F4
+            with missionNamespace do {
+                GVAR(OverlayPlayerMarkers) != GVAR(OverlayPlayerMarkers);
+            };
+            true;
+        };
         case DIK_F6: { // F6
             with missionNamespace do {
                 GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
             };
-            true
+            true;
         };
         case DIK_F7: { // F7
             with missionNamespace do {

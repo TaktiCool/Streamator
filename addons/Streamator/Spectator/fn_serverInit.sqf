@@ -13,6 +13,7 @@
     Returns:
     None
 */
+
 GVAR(playerIDs) = call CFUNC(createHash);
 publicVariable QGVAR(playerIDs);
 addMissionEventHandler ["onPlayerConnected", {
@@ -26,6 +27,7 @@ addMissionEventHandler ["onPlayerDisconnected", {
     GVAR(playerIDs) = [GVAR(playerIDs), _id, nil] call CFUNC(setHash);
     publicVariable QGVAR(playerIDs);
 }];
+
 
 GVAR(PlayerSideMarkers) = call CFUNC(createHash);
 

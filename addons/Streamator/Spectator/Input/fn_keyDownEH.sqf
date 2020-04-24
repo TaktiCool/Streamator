@@ -113,6 +113,10 @@ private _return = switch (_keyCode) do {
         QGVAR(updateInput) call CFUNC(localEvent);
         true;
     };
+    case DIK_F4: { // F4
+        GVAR(OverlayPlayerMarkers) != GVAR(OverlayPlayerMarkers);
+        true;
+    };
     case DIK_F5: { // F5
         if (!isNull GVAR(CameraFollowTarget)) then {
             if (GVAR(UnitInfoOpen)) then {
@@ -128,7 +132,7 @@ private _return = switch (_keyCode) do {
 
     case DIK_F6: { // F6
         GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
-        true
+        true;
     };
     case DIK_F7: { // F7
         GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);

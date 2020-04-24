@@ -73,6 +73,7 @@ GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
 GVAR(OverlayPlanningMode) = true;
+GVAR(OverlayPlayerMarkers) = true;
 
 GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";

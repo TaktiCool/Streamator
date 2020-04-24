@@ -83,6 +83,22 @@ with missionNamespace do {
         };
     };
 
+    if (GVAR(OverlayPlayerMarkers)) then {
+        private _fnc_DrawMarker = {
+            params ["_data", "_map"];
+            _data params ["_text", "_position", "_dir", "_type", "_color"];
+            _map drawIcon [_type, _color, _position, 25, 25, _dir, _text];
+        };
+        [GVAR(PlayerSideMarkers), {
+            params ["", "_hash", "_args"];
+            _args params ["_map", "_fnc_DrawMarker"];
+            [_hash, _map] call _fnc_DrawMarker;
+        }, [_map, _fnc_DrawMarker]] call CFUNC(forEachHash);
+
+        {
+            [_x, _map] call _fnc_DrawMarker;
+        } forEach (CLib_Player getVariable [QGVAR(mapMarkers), []]);
+    };
     // Render ACE3 Map Gestures
     // Credits: Dslyecxi, MikeMatrix
     // https://github.com/acemod/ACE3/blob/master/addons/map_gestures/functions/fnc_drawMapGestures.sqf
