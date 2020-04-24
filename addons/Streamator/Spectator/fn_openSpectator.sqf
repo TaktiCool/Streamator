@@ -13,6 +13,7 @@
     Returns:
     None
 */
+
 if (isNil QGVAR(SideColorsArray)) then {
     GVAR(SideColorsArray) = false call CFUNC(createNamespace);
     GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
@@ -46,7 +47,7 @@ GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
 GVAR(CameraEditMode) = false;
 GVAR(CameraSpeed) = 5;
-GVAR(CameraMode) = CAMERAMODE_FREE; // 1: FREE | 2: FOLLOW | 3: SHOULDER | 4: TOPDOWN
+GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
 GVAR(CameraRelPos) = [0, 0, 0];
@@ -176,7 +177,6 @@ private _fnc_init = {
         ace_goggles_PostProcess ppEffectEnable false;
         ace_goggles_PostProcessEyes ppEffectEnable false;
     };
-
     if (goggles CLib_Player != "") then {
         removeGoggles CLib_Player;
     };
@@ -204,7 +204,9 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
-
+    if (GVAR(aceSpectatorLoaded)) then {
+        [false] call ace_spectator_fnc_setSpectator;
+    };
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
 
@@ -266,4 +268,15 @@ DFUNC(getNearByTransmitingPlayers) = {
     };
     _players = _players arrayIntersect _players;
     _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } && {_x getVariable ["ace_map_gestures_Transmit", false]} };
+};
+
+if (GVAR(aceSpectatorLoaded)) then {
+    ["ace_spectatorSet", {
+        params ["_set", "_player"];
+        if (_player isEqualTo player && !isNull GVAR(Camera)) then {
+            GVAR(Camera) cameraEffect ["internal", "back"];
+            switchCamera CLib_Player;
+            cameraEffectEnableHUD true;
+        };
+    }] call CBA_fnc_addEventHandler;
 };

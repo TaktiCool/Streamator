@@ -279,36 +279,33 @@ private _unitInfoAllCtrls = [
     _health = linearConversion [1, 0, _health, 0, 1]; // Invert Health value to show better how health is
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
-    if (GVAR(aceLoaded)) then {
-        _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
+    private _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
+    if !(_unit isEqualTo vehicle _unit) then {
+        if (GVAR(aceLoaded)) then {
+            _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
+        };
+        switch (toUpper (lifeState _unit)) do {
+            case ("DEAD-RESPAWN");
+            case ("DEAD-SWITCHING");
+            case ("DEAD"): {
+                _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"
+            };
+            case ("INCAPACITATED");
+            case ("INJURED"): {
+                _healthIcon = "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa"
+            };
+        };
     };
+
     _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
     _ctrlHealthRing ctrlCommit 0;
-
-
-    private _healthIcon = switch (toUpper (lifeState _unit)) do {
-        case ("DEAD-RESPAWN");
-        case ("DEAD-SWITCHING");
-        case ("DEAD"): {
-            "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"
-        };
-        case ("INCAPACITATED");
-        case ("INJURED"): {
-            "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa"
-        };
-        default {
-            "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa"
-        };
-    };
-
     _ctrlHealthIcon ctrlSetText _healthIcon;
     _ctrlHealthIcon ctrlCommit 0;
-
 
     // set number of shots
     _ctrlShotsValue ctrlSetText format ["%1", _unit getVariable [QGVAR(shotCount), 0]];
     _ctrlShotsValue ctrlCommit 0;
-    if ((time - (_unit getVariable [QGVAR(lastShot), 0])) <= 0.5) then {
+    if ((time - ((gunner _unit) getVariable [QGVAR(lastShot), 1])) <= 0.5) then {
         _ctrlShotsIcon ctrlSetPosition [PX(0.5), PY(0.5), PX(5), PY(5)];
         _ctrlShotsIcon ctrlCommit 0;
         _ctrlShotsIcon ctrlSetPosition [PX(1), PY(1), PX(4), PY(4)];
