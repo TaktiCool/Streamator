@@ -100,7 +100,7 @@ with missionNamespace do {
 
         {
             [_x, _map] call _fnc_DrawMarker;
-        } forEach (CLib_Player getVariable [QGVAR(mapMarkers), []]);
+        } forEach (GVAR(CameraFollowTarget) getVariable [QGVAR(mapMarkers), []]);
     };
     // Render ACE3 Map Gestures
     // Credits: Dslyecxi, MikeMatrix

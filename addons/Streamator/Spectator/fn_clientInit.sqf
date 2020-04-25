@@ -115,10 +115,11 @@ DFUNC(bindMarkerEH) = {
 DFUNC(updateLocalMapMarkers) = {
     private _markers = allMapMarkers select {
         (_x splitString "#/") params ["_userDef", "", "", "_channel"];
-        _userDef == "_USER_DEFINED #"
+        _userDef == "_USER_DEFINED "
         && !(_channel in [Channel_Side, Channel_Command])
     };
-    if (_marker isEqualTo (CLib_Player getVariable [QGVAR(mapMarkers), _markers])) exitWith {};
+    _markers = _markers apply { _x call FUNC(collectMarkerData); };
+    if (_markers isEqualTo (CLib_Player getVariable [QGVAR(mapMarkers), []])) exitWith {};
     CLib_Player setVariable [QGVAR(mapMarkers), _markers, true];
 };
 
