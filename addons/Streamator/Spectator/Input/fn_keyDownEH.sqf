@@ -114,7 +114,7 @@ private _return = switch (_keyCode) do {
         true;
     };
     case DIK_F4: { // F4
-        GVAR(OverlayPlayerMarkers) != GVAR(OverlayPlayerMarkers);
+        GVAR(OverlayPlayerMarkers) = !GVAR(OverlayPlayerMarkers);
         true;
     };
     case DIK_F5: { // F5
@@ -272,9 +272,8 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD4;
     case DIK_NUMPAD5;
     case DIK_NUMPAD6: {
-        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
+        private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
             if !(GVAR(InputGuess) isEqualTo []) then {
                 _newCameraTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);

@@ -86,7 +86,7 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
         };
         case DIK_F4: { // F4
             with missionNamespace do {
-                GVAR(OverlayPlayerMarkers) != GVAR(OverlayPlayerMarkers);
+                GVAR(OverlayPlayerMarkers) = !GVAR(OverlayPlayerMarkers);
             };
             true;
         };

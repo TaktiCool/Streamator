@@ -87,6 +87,9 @@ with missionNamespace do {
         private _fnc_DrawMarker = {
             params ["_data", "_map"];
             _data params ["_text", "_position", "_dir", "_type", "_color"];
+            if (_color isEqualType sideUnknown) then {
+                _color = GVAR(SideColorsArray) getVariable [str _color, [1, 1, 1, 1]];
+            };
             _map drawIcon [_type, _color, _position, 25, 25, _dir, _text];
         };
         [GVAR(PlayerSideMarkers), {
