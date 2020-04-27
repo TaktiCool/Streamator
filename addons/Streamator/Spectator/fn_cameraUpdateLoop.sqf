@@ -153,7 +153,7 @@ switch (_cameraMode) do {
     };
 
     case CAMERAMODE_FPS: { // FPS
-        if !(cameraOn in [CLib_player, GVAR(Camera)]) then {
+        if !(cameraOn in [CLib_Player, GVAR(Camera)]) then {
             /*
             if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget != cameraOn) then {
                 GVAR(CameraFollowTarget) = cameraOn;

@@ -98,7 +98,7 @@ if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
     };
 
     if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
-        [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_player]] call CFUNC(targetEvent);
+        [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_Player]] call CFUNC(targetEvent);
     };
     GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos) min 1);
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);

@@ -37,7 +37,7 @@ if (isNil QGVAR(PositionMemory)) then {
 GVAR(Camera) = objNull;
 
 GVAR(CameraPos) = [0, 0, 0];
-GVAR(CameraDir) = getDirVisual CLib_player;
+GVAR(CameraDir) = getDirVisual CLib_Player;
 GVAR(CameraDirOffset) = 0;
 GVAR(CameraPitch) = -45;
 GVAR(CameraPitchOffset) = 0;
@@ -55,7 +55,6 @@ GVAR(CameraInFirstPerson) = false;
 
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;
-GVAR(CurrentRadioList) = [];
 
 GVAR(CursorTarget) = objNull;
 GVAR(lastCursorTarget) = time;
@@ -130,7 +129,7 @@ GVAR(TopDownOffset) = [0, 0, 100];
 GVAR(lastFrameDataUpdate) = diag_frameNo;
 [QGVAR(RequestCameraState), {
     if (GVAR(lastFrameDataUpdate) == diag_frameNo) exitWith {};
-    CLib_player setVariable [QGVAR(State), [
+    CLib_Player setVariable [QGVAR(State), [
         GVAR(CameraMode),
         GVAR(CameraFollowTarget),
         GVAR(CameraPos),
@@ -150,7 +149,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
 
 
 [{
-    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_player});
+    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_Player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
@@ -239,7 +238,7 @@ private _fnc_init = {
 
 };
 
-if (CLib_player isKindof "VirtualSpectator_F" && side CLib_player isEqualTo sideLogic) then {
+if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
     [_fnc_init, {
         (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
     }] call CFUNC(waitUntil);

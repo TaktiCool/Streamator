@@ -28,7 +28,7 @@ private _freqLR = [];
         _freqSW pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
     };
     nil;
-} count (CLib_player call TFAR_fnc_radiosList);
+} count (CLib_Player call TFAR_fnc_radiosList);
 
 {
     private _adChannel = _x call TFAR_fnc_getAdditionalLrChannel;
@@ -38,7 +38,7 @@ private _freqLR = [];
         _freqLR pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
     };
     nil;
-} count (CLib_player call TFAR_fnc_lrRadiosList);
+} count (CLib_Player call TFAR_fnc_lrRadiosList);
 
 if (_freqSW isEqualTo []) then {
     _freqSW pushBackUnique "No_SW_Radio";
@@ -46,4 +46,4 @@ if (_freqSW isEqualTo []) then {
 if (_freqLR isEqualTo []) then {
     _freqLR pushBackUnique "No_LR_Radio";
 };
-CLib_player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];
+CLib_Player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];

@@ -19,29 +19,33 @@ LOG("ACRE2 Detected");
 [QGVAR(spectatorOpened), {
     [true] call acre_api_fnc_setSpectator;
 
+    GVAR(CurrentRadioList) = [];
+
     if !(isNil "acre_sys_core_languages") then {
         (acre_sys_core_languages apply {_x select 0}) call acre_api_fnc_babelSetSpokenLanguages;
     };
 
     [{
+        if (!ACRE_IS_SPECTATOR) then {
+            [true] call acre_api_fnc_setSpectator;
+        };
+
         private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
 
-        if (!(isNull GVAR(RadioFollowTarget))&& {!(GVAR(RadioFollowTarget) isKindOf "CAManBase")}) then {
+        if (!(isNull GVAR(RadioFollowTarget)) && {!(GVAR(RadioFollowTarget) isKindOf "CAManBase")}) then {
             {
                 _targetRadios pushBackUnique ([_x] call acre_api_fnc_getMountedRackRadio);
             } forEach ([GVAR(RadioFollowTarget)] call acre_api_fnc_getVehicleRacks);
         };
         if (_targetRadios isEqualTo GVAR(CurrentRadioList)) exitWith {};
-        [CLIb_Player] call acre_api_fnc_removeAllSpectatorRadios;
+        [CLib_Player] call acre_api_fnc_removeAllSpectatorRadios;
         {
             [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio;
         } forEach _targetRadios;
         [QGVAR(radioInformationChanged), _targetRadios] call CFUNC(localEvent);
         GVAR(CurrentRadioList) = _targetRadios;
-        if (!ACRE_IS_SPECTATOR) then {
-            [true] call acre_api_fnc_setSpectator;
-        };
-    }, 1] call CFUNC(addPerFrameHandler);
+
+    }, 0.5] call CFUNC(addPerFrameHandler);
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "_isRadio", "_radioID"];
@@ -78,14 +82,12 @@ LOG("ACRE2 Detected");
         {
             [QGVAR(HideIcon), [_unit, _x]] call CFUNC(localEvent);
         } forEach (_unit getVariable [QGVAR(SpeaksOnRadios), []]);
-
     }] call CFUNC(addEventhandler);
 }] call CFUNC(addEventhandler);
 
 [{
     private _newRadios = call acre_api_fnc_getCurrentRadioList;
     private _oldRadios = CLib_Player getVariable [QGVAR(ACRE_Radios), []];
-    if !(_newRadios isEqualTo _oldRadios) then {
-        CLib_Player setVariable [QGVAR(ACRE_Radios), _newRadios, true];
-    };
+    if (_newRadios isEqualTo _oldRadios) exitWith {};
+    CLib_Player setVariable [QGVAR(ACRE_Radios), _newRadios, true];
 }, 1] call CFUNC(addPerFrameHandler); // see how high freqency we need to send this maybe lower it

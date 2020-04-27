@@ -31,7 +31,7 @@ _map ctrlCommit 0;
 GVAR(MapOpen) = true;
 (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
 QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
-GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_player]];
+GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_Player]];
 
 QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
 

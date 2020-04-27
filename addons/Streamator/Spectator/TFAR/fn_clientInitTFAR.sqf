@@ -49,7 +49,7 @@ LOG("TFAR Stable Detected");
         if !("No_LR_Radio" in _freqLR) then {
             _freqLR = _freqLR apply {_x + "|7|0"};
         };
-        TFAR_player_name = name CLib_player;
+        TFAR_player_name = name CLib_Player;
         private _request = "";
         if (GVAR(TFARLegacy)) then {
             _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10	%11	%12	%13",
@@ -63,7 +63,7 @@ LOG("TFAR Stable Detected");
                 waves,
                 0,
                 1.0,
-                CLib_player getVariable ["tf_voiceVolume", 1.0],
+                CLib_Player getVariable ["tf_voiceVolume", 1.0],
                 1.0,
                 TF_speakerDistance
             ];

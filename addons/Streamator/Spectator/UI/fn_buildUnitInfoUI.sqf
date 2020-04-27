@@ -280,7 +280,7 @@ private _unitInfoAllCtrls = [
     _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
-    if !(_unit isEqualTo vehicle _unit) then {
+    if (_unit isKindOf "CAManBase") then {
         if (GVAR(aceLoaded)) then {
             _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
         };

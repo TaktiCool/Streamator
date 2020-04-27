@@ -15,11 +15,11 @@
 */
 
 // Create Camera
-GVAR(Camera) = "Camera" camCreate (eyePos CLib_player);
+GVAR(Camera) = "Camera" camCreate (eyePos CLib_Player);
 GVAR(Camera) cameraEffect ["internal", "back"];
 switchCamera CLib_Player;
-CLib_player attachTo [GVAR(Camera), [0, 0, 0]];
-GVAR(CameraPos) = (eyePos CLib_player) vectorAdd [0, 0, GVAR(CameraHeight)];
+CLib_Player attachTo [GVAR(Camera), [0, 0, 0]];
+GVAR(CameraPos) = (eyePos CLib_Player) vectorAdd [0, 0, GVAR(CameraHeight)];
 showCinemaBorder false;
 cameraEffectEnableHUD true;
 
