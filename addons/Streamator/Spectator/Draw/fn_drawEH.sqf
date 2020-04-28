@@ -17,7 +17,7 @@ params [
     ["_map", controlNull, [controlNull]]
 ];
 with missionNamespace do {
-    if (!GVAR(OverlayPlanningMode)) then {
+    if (GVAR(OverlayPlanningMode)) then {
         {
             private _unit = _x;
             private _cursorPos = _unit getVariable QGVAR(cursorPosition);
