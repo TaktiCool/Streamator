@@ -54,8 +54,8 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 0`** | Free View | Toggles back to Free View
 **`NUMPAD 1`** | Follow View | Toggles to Follow Mode
 **`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
-**`NUMPAD 3`** | First Person View | Toggles to First Person View
-**`NUMPAD 4`** | Topdown View | Toggles to TopDown View
+**`NUMPAD 3`** | Topdown View | Toggles to TopDown View
+**`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
 **`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
