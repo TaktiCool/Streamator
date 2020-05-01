@@ -100,11 +100,13 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
+        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
         QGVAR(updateInput) call CFUNC(localEvent);
         true;
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
+        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
         QGVAR(updateInput) call CFUNC(localEvent);
         true;
     };
@@ -138,6 +140,7 @@ private _return = switch (_keyCode) do {
         GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
         profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
         saveProfileNamespace;
+        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
         true;
     };
     case DIK_F8: { // F8
