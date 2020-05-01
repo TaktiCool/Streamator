@@ -26,7 +26,7 @@ _ctrlUnitName ctrlSetText "UNIT NAME"; // Unit Name
 _ctrlUnitName ctrlCommit 0;
 
 private _ctrlGrpMinimap = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlGrpMinimap ctrlSetPosition [PX(BORDERWIDTH + 2.6), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(28)];
+_ctrlGrpMinimap ctrlSetPosition [safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(28)];
 _ctrlGrpMinimap ctrlSetFade 1;
 _ctrlGrpMinimap ctrlCommit 0;
 
@@ -36,7 +36,7 @@ _ctrlMinimapBackground ctrlSetText "#(argb,8,8,3)color(0.1,0.1,0.1,0.75)";
 _ctrlMinimapBackground ctrlCommit 0;
 
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
-_ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
+_ctrlMinimap ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
@@ -105,16 +105,18 @@ _ctrlMinimapTitle ctrlCommit 0;
 
 [QGVAR(ToggleMinimap), {
     (_this select 1) params ["_ctrlGrpMinimap", "_ctrlMinimap"];
+    private _ctrlMinimapPos = ctrlPosition _ctrlMinimap;
     if (ctrlFade _ctrlGrpMinimap == 1) then {
-        _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), PY(25)];
+        _ctrlMinimapPos set [3, PY(25)];
         _ctrlGrpMinimap ctrlSetFade 0;
         GVAR(MinimapVisible) = true;
     } else {
-        _ctrlMinimap ctrlSetPosition [safeZoneX + PX(BORDERWIDTH + 2.6), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
+        _ctrlMinimapPos set [3, 0];
         _ctrlGrpMinimap ctrlSetFade 1;
         GVAR(MinimapVisible) = false;
     };
     QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
+    _ctrlMinimap ctrlSetPosition _ctrlMinimapPos;
     _ctrlGrpMinimap ctrlCommit 0.5;
     _ctrlMinimap ctrlCommit 0.3;
 }, [_ctrlGrpMinimap, _ctrlMinimap]] call CFUNC(addEventhandler);
