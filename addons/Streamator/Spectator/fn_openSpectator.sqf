@@ -253,8 +253,8 @@ addMissionEventHandler ["Draw3D", {call FUNC(draw3dEH)}];
 call FUNC(updateSpectatorArray);
 [
     "SpectatorCamera", [["ICON", "\a3\ui_f\data\gui\rsc\rscdisplayegspectator\cameratexture_ca.paa", [0.5,0.5,1,1], GVAR(Camera), 20, 20, GVAR(Camera), "", 1, 0.08, "RobotoCondensed", "right", {
-        _position = getPos GVAR(Camera);
-        _angle = getDirVisual GVAR(Camera);
+        _position = positionCameraToWorld [0, 0, 0];
+        _angle = (positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 1]);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
 

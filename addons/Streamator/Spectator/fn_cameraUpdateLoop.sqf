@@ -171,6 +171,8 @@ switch (_cameraMode) do {
             CLib_Player setPos (_cameraFollowTarget modelToWorld [0, 0, -3]);
             CLib_Player setVectorDirAndUp [vectorDir _cameraFollowTarget, vectorUp _cameraFollowTarget];
         };
+        GVAR(Camera) setPos positionCameraToWorld [0, 0, 0];
+        GVAR(Camera) setDir ((positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 1]));
 
         breakOut SCRIPTSCOPENAME;
     };

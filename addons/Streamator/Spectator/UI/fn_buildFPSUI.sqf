@@ -64,9 +64,6 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
             _tis = positionCameraToWorld [0, 0, 1000];
         };
         _velocity = (_tis distance2D (AGLToASL _position)) / 16;
-        #ifdef ISDEV
-        _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", [1,1,1,1], _tis, 10, 10, 0, "TIS"];
-        #endif
         _position = positionCameraToWorld [0, 0, (_tis distance2D (AGLToASL _position)) / 2];
     };
 
