@@ -40,11 +40,12 @@ Key Binding | Short Description | Remarks
 **`F8`** | Toggle Radio Coms UI | Toggles Radio Coms Information UI
 **`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 **`F10`** | Fix Camera | Fix Camera
-**`F11`** | Toggles Bullet Tracer Lines | Toggles Bullet Tracer Visualisation
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
+**`F11`** | Toggles Bullet Tracer Lines | Toggles Bullet Tracer Visualisation
 **`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
-**`V`** | Toggle MiniMap/GPS | Toggles MiniMap/GPS
+**`V`** | Toggle MiniMap | Toggles MiniMap
+**`Shift + V`** | Toggles Center Minimap on Camera | Toggles Center Minimap on Camera or View Vector
 **`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel

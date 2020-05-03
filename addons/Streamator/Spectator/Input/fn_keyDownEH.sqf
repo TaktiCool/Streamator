@@ -100,13 +100,11 @@ private _return = switch (_keyCode) do {
     };
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
-        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
         QGVAR(updateInput) call CFUNC(localEvent);
         true;
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
         QGVAR(updateInput) call CFUNC(localEvent);
         true;
     };
@@ -312,6 +310,12 @@ private _return = switch (_keyCode) do {
     };
     case DIK_V: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
+        if (_shift) exitWith {
+            if (!GVAR(MinimapVisible)) then {
+                QGVAR(ToggleMinimap) call CFUNC(localEvent);
+            };
+            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
+        };
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
     };

@@ -64,7 +64,30 @@ params ["_ctrlInfo"];
                 } forEach _searchableUnits;
 
                 if !(_guess isEqualTo []) then {
+                    _guess = _guess apply {
+                        _x params ["", "_data"];
+                        private _distance = switch (typeName _data) do {
+                            case (typeName ""): {
+                                GVAR(Camera) distance2D (getMarkerPos _data);
+                            };
+                            case (typeName []);
+                            case (typeName objNull): {
+                                GVAR(Camera) distance _data;
+                            };
+                            case (typeName grpNull): {
+                                GVAR(Camera) distance (leader _data);
+                            };
+                            case (typeName locationNull): {
+                                GVAR(Camera) distance (getPos _data);
+                            };
+                            default {
+                                0;
+                            };
+                        };
+                        [_distance, _x]
+                    };
                     _guess sort true;
+                    _guess = _guess apply { _x select 1 };
                 };
 
                 GVAR(InputGuess) = _guess;

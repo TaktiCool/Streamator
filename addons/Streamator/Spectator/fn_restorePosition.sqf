@@ -49,8 +49,8 @@ if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
     [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
 } else {
     private _distance = (getPos GVAR(Camera)) distance ([GVAR(CameraPos), (getPos GVAR(CameraFollowTarget)) vectorAdd GVAR(CameraRelPos)] select (isNull GVAR(CameraFollowTarget)));
-    [QGVAR(CameraFollowTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
     if (_distance > 300) then {
         GVAR(CameraPreviousState) = [];
     };
+    [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
 };

@@ -26,7 +26,7 @@ _ctrlUnitName ctrlSetText "UNIT NAME"; // Unit Name
 _ctrlUnitName ctrlCommit 0;
 
 private _ctrlGrpMinimap = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1, _ctrlGrp];
-_ctrlGrpMinimap ctrlSetPosition [safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(28)];
+_ctrlGrpMinimap ctrlSetPosition [safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneH - PY(BORDERWIDTH + 40), PX(25), PY(25)];
 _ctrlGrpMinimap ctrlSetFade 1;
 _ctrlGrpMinimap ctrlCommit 0;
 
@@ -43,18 +43,33 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
     private _mapPosition = ctrlPosition _map;
 
-    private _target = switch (true) do {
+    private _position = positionCameraToWorld [0, 0, 0];
+    private _velocity = GVAR(CameraSpeed) / 16;
+    switch (true) do {
         case !(isNull GVAR(UAVCameraTarget)): {
-            vehicle GVAR(UAVCameraTarget);
+            private _target = vehicle GVAR(UAVCameraTarget);
+            _position = getPos _target;
+            _velocity = (speed _target) min 80;
         };
         case !(isNull GVAR(CameraFollowTarget)): {
-            vehicle GVAR(CameraFollowTarget);
-        };
-        default {
-            GVAR(Camera);
+            private _target = vehicle GVAR(CameraFollowTarget);
+            _position = getPos _target;
+            _velocity = (speed _target) min 80;
         };
     };
-    private _position = getPos _target;
+
+    if (!GVAR(CenterMinimapOnCameraPositon)) then {
+        private _tis = terrainIntersectAtASL [AGLToASL positionCameraToWorld [0, 0, 0], AGLToASL positionCameraToWorld [0, 0, 10000]];
+        if (_tis isEqualTo [0, 0, 0]) then {
+            _tis = positionCameraToWorld [0, 0, 1000];
+        };
+        _velocity = (_tis distance2D (AGLToASL _position)) / 16;
+        #ifdef ISDEV
+        _map drawIcon ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", [1,1,1,1], _tis, 10, 10, 0, "TIS"];
+        #endif
+        _position = positionCameraToWorld [0, 0, (_tis distance2D (AGLToASL _position)) / 2];
+    };
+
     private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + ((_mapPosition select 2)/2),  (_mapPosition select 1) + ((_mapPosition select 3)/2)];
 
     private _screenCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + safeZoneWAbs/2, (_mapPosition select 1) + (SafeZoneH - 1.5 *((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))/2];
@@ -64,10 +79,10 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
 
     // Calculate Zoom Level
     ctrlMapScale _map;
-    private _zoom = (ctrlMapScale _map) * (1 - 0.1) + linearConversion [0, 80, abs (speed _target), 0.025, 0.5, true] * 0.1;
+    private _zoom = (ctrlMapScale _map) * (1 - 0.1) + linearConversion [0, 80, abs _velocity, 0.025, 0.5, false] * 0.1;
 
     // Animate Map
-    _map ctrlMapAnimAdd [0, _zoom, _position];
+    _map ctrlMapAnimAdd [0, _zoom min 1, _position];
     ctrlMapAnimCommit _map;
 }];
 
@@ -83,9 +98,6 @@ _ctrlMinimapTitle ctrlCommit 0;
     (_this select 1) params ["_ctrl"];
     if (isNull _cameraTarget) exitWith {};
     if !(_cameraTarget isKindOf "CAManBase") then {
-        if !(isNull commander _cameraTarget) exitWith { _cameraTarget = driver _cameraTarget; };
-        if !(isNull driver _cameraTarget) exitWith { _cameraTarget = driver _cameraTarget; };
-        if !(isNull gunner _cameraTarget) exitWith { _cameraTarget = gunner _cameraTarget; };
         _cameraTarget = (crew _cameraTarget) select 0;
     };
     _ctrl ctrlSetText (_cameraTarget call CFUNC(name));
