@@ -102,6 +102,7 @@ GVAR(BulletTracers) = [];
 
 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
+
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
@@ -280,3 +281,19 @@ if (GVAR(aceSpectatorLoaded)) then {
         };
     }] call CBA_fnc_addEventHandler;
 };
+
+DFUNC(UpdateValidUnits) = {
+    private _allUnits = allUnits;
+    _allUnits append allUnitsUAV;
+    _allUnits append allDead;
+    _allUnits = _allUnits arrayIntersect _allUnits;
+    {
+        _x setVariable [QGVAR(isValidUnit), _x call FUNC(isValidUnit)];
+    } foreach _allUnits;
+
+} call CFUNC(CompileFinal);
+
+[{
+    call FUNC(UpdateValidUnits);
+}, 1] call CFUNC(addPerframeHandler);
+call FUNC(UpdateValidUnits);

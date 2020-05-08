@@ -13,6 +13,7 @@
     Returns:
     None
 */
+call FUNC(UpdateValidUnits);
 private _mapDisplay = uiNamespace getVariable [QGVAR(MapDisplay), displayNull];
 if (!isNull _mapDisplay) exitWith {
     _mapDisplay closeDisplay 1;

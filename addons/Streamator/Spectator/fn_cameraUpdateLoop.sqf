@@ -44,14 +44,14 @@ if (GVAR(InputMode) == INPUTMODE_MOVE) then {
 
 private _deltaX = (inputAction "cameraLookRight" - inputAction "cameraLookLeft") * 2;
 private _deltaY = (inputAction "cameraLookDown" - inputAction "cameraLookUp") * 2;
-if (_deltaX != 0 || _deltaY != 0) then {
+if (_deltaX != 0 || { _deltaY != 0 }) then {
     [displayNull, _deltaX, _deltaY] call FUNC(mouseMovingEH);
 };
 
 private _cameraMode = GVAR(CameraMode);
 private _cameraFollowTarget = GVAR(CameraFollowTarget);
 
-if (_cameraMode == CAMERAMODE_FOLLOW && GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
+if (_cameraMode == CAMERAMODE_FOLLOW && { GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator }) then {
     private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
     if !(_state isEqualTo []) then {
         _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime", "_shoulderOffset", "_dirOffset", "_pitchOffset", "_topdownOffset"];
@@ -94,32 +94,32 @@ if (_cameraMode == CAMERAMODE_FOLLOW && GVAR(CameraFollowTarget) call Streamator
     };
 };
 
-if (_cameraMode > CAMERAMODE_FREE && isNull _cameraFollowTarget) exitWith {
+if (_cameraMode > CAMERAMODE_FREE && { isNull _cameraFollowTarget }) exitWith {
     GVAR(CameraMode) = CAMERAMODE_FREE;
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
-if (_cameraFollowTarget call Streamator_fnc_isSpectator && _cameraMode > 2) exitWith {
+if (_cameraFollowTarget call Streamator_fnc_isSpectator && { _cameraMode > CAMERAMODE_FOLLOW }) exitWith {
     GVAR(CameraMode) = CAMERAMODE_FREE;
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
 
-if (_cameraMode == CAMERAMODE_FPS && (vehicle _cameraFollowTarget) != cameraOn && GVAR(CameraInFirstPerson)) exitWith {
+if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) != cameraOn }) exitWith {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
     GVAR(CameraInFirstPerson) = false;
 };
 
-if (_cameraMode == CAMERAMODE_FPS && !GVAR(CameraInFirstPerson)) exitWith {
+if (!GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS }) exitWith {
     GVAR(Camera) cameraEffect ["Terminate", "BACK"];
     _cameraFollowTarget switchCamera "INTERNAL";
     cameraEffectEnableHUD true;
     GVAR(CameraInFirstPerson) = true;
 };
 
-if (_cameraMode != CAMERAMODE_FPS && GVAR(CameraInFirstPerson)) then {
+if (GVAR(CameraInFirstPerson) && { _cameraMode != CAMERAMODE_FPS }) then {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;

@@ -96,21 +96,25 @@ private _return = switch (_keyCode) do {
     case DIK_BACKSPACE: { // BACKSPACE
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
+        call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
         QGVAR(updateInput) call CFUNC(localEvent);
+        call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
         QGVAR(updateInput) call CFUNC(localEvent);
+        call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F3: { // F3
         GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
         QGVAR(updateInput) call CFUNC(localEvent);
+        call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F4: { // F4
@@ -139,6 +143,7 @@ private _return = switch (_keyCode) do {
         profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
         saveProfileNamespace;
         QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
+        call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F8: { // F8

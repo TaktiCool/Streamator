@@ -49,7 +49,7 @@ private _cameraPosition = positionCameraToWorld [0, 0, 0];
 //PlanningMode
 private _serverTime = [time, serverTime] select isMultiplayer;
 if (GVAR(OverlayPlanningMode)) then {
-    if (GVAR(PlanningModeDrawing) && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
+    if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) then {
         (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
         if (_serverTime - _lastUpdate >= 0.2) then {
             if (GVAR(MapOpen)) then {
@@ -137,20 +137,20 @@ if (GVAR(OverlayUnitMarker)) then {
     _allUnits append allUnitsUAV;
     _allUnits = _allUnits arrayIntersect _allUnits;
     {
-        if (_x call FUNC(isValidUnit)) then {
+        if (_x getVariable [QGVAR(isValidUnit), false]) then {
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = _cameraPosition distance _x;
 
             _distance = _distance / _fov;
-            if (_distance < NAMETAGDIST && {_distance < (getObjectViewDistance select 0)}) then {
+            if (_distance < NAMETAGDIST && { _distance < (getObjectViewDistance select 0) }) then {
                 private _headPosition = _x modelToWorldVisual (_x selectionPosition "Head");
                 private _screenPos = worldToScreen _headPosition;
                 if (_screenPos isEqualTo []) exitWith {nil};
 
                 private _iconType = _x getVariable QGVAR(unitType);
-                if (isNil "_iconType" || {(_iconType select 1) <= time}) then {
+                if (isNil "_iconType" || { (_iconType select 1) <= time }) then {
                     private _icon = _x call FUNC(getUnitType);
                     _iconType = [_icon, time + 60];
                     _x setVariable [QGVAR(unitType), _iconType];
@@ -167,7 +167,7 @@ if (GVAR(OverlayUnitMarker)) then {
                 _sideColor set [3, _alpha];
 
                 private _scale = 1 + 0.4 * (1 - _shotFactor);
-                if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
+                if (_x == GVAR(CursorTarget) && { _x != GVAR(CameraFollowTarget) }) then {
                     drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
@@ -179,7 +179,7 @@ if (GVAR(OverlayUnitMarker)) then {
                     _sideColor set [3, 0.4];
                     private _scale = 1 + 0.4 * (1 - _shotFactor);
                     private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
-                    if (_x == GVAR(CursorTarget) && _x != GVAR(CameraFollowTarget)) then {
+                    if (_x == GVAR(CursorTarget) && { _x != GVAR(CameraFollowTarget) }) then {
                         drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, 0.4*1.4, 0.4*1.4, 0];
                     };
                     drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4*_scale, 0.4*_scale, 0];
@@ -197,7 +197,7 @@ if (GVAR(OverlayGroupMarker)) then {
     _allGroups = _allGroups arrayIntersect _allGroups;
     {
         private _leader = leader _x;
-        if (_leader call FUNC(isValidUnit)) then {
+        if (_leader getVariable [QGVAR(isValidUnit), false]) then {
             private _distance = _cameraPosition distance _leader;
             _distance = _distance / _fov;
 

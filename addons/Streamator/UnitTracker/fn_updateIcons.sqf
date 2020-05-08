@@ -21,10 +21,12 @@ DUMP("Update Icons");
 } count GVAR(processedIcons);
 GVAR(processedIcons) = [];
 
-private _units = +(allUnits select {[_x] call EFUNC(Spectator,isValidUnit)});
-_units append (allDead select {[_x] call EFUNC(Spectator,isValidUnit) && _x isKindOf "CAManBase"});
+private _units = +allUnits;
+_units append (allDead select {_x isKindOf "CAManBase"});
 _units append allUnitsUAV;
-private _vehicles = (vehicles select {[_x] call FUNC(isValidVehicle)});
+_unit select { _x getVariable [QGVAR(Spectator,isValidUnit), false] };
+_unit = _unit arrayIntersect _unit;
+private _vehicles = (vehicles select { [_x] call FUNC(isValidVehicle) });
 
 if !(_units isEqualTo []) then {
     {
@@ -36,7 +38,7 @@ if !(_units isEqualTo []) then {
                 [_x, _iconId] call FUNC(addUnitToTracker);
             };
 
-            if (leader _x == _x && alive _x) then {
+            if (alive _x && { leader _x == _x }) then {
                 _iconId = toLower format [QGVAR(IconId_Group_%1_%2), group _x, _x];
                 if !(_iconId in GVAR(processedIcons)) then {
                     GVAR(processedIcons) pushBack _iconId;
