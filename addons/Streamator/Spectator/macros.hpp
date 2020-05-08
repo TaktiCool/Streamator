@@ -10,6 +10,6 @@
 #define NAMETAGDIST 200
 #define UNITDOTDIST 1000
 #define TRACER_SEGMENT_COUNT diag_fps
-#define PLANNINGMODEUPDATETIME 0.05
+#define PLANNINGMODEUPDATETIME GVAR(PlaningModeUpdateTime)
 
 #define LEFTBORDER (((((getResolution select 4)-16/9)/2) max 0)*safeZoneH)

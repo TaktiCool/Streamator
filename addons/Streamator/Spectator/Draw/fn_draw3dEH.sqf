@@ -123,8 +123,7 @@ if (GVAR(OverlayPlanningMode)) then {
         };
 
         _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
-        nil
-    } count ((GVAR(allSpectators) + [CLib_Player]) select {
+    } forEach ((GVAR(allSpectators) + [CLib_Player]) select {
         (GVAR(PlanningModeChannel) == 0)
          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
          || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
@@ -136,18 +135,24 @@ if (GVAR(OverlayUnitMarker)) then {
     private _allUnits = allUnits;
     _allUnits append allUnitsUAV;
     _allUnits = _allUnits arrayIntersect _allUnits;
+    private _viewRecBase = (0.5*safeZoneH*((16/9) min (safeZoneW/safeZoneH)));
+    private _objViewDistance = getObjectViewDistance select 0;
     {
         if (_x getVariable [QGVAR(isValidUnit), false]) then {
-            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
-            private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
-            _sideColor set [3, 0.7+0.3*_shotFactor];
             private _distance = _cameraPosition distance _x;
 
             _distance = _distance / _fov;
-            if (_distance < NAMETAGDIST && { _distance < (getObjectViewDistance select 0) }) then {
+            if (_distance < NAMETAGDIST && { _distance < (_objViewDistance) }) then {
                 private _headPosition = _x modelToWorldVisual (_x selectionPosition "Head");
                 private _screenPos = worldToScreen _headPosition;
-                if (_screenPos isEqualTo []) exitWith {nil};
+                if (_screenPos isEqualTo []) exitWith {};
+
+                private _size = (0.4 max (0.5 / ((_distance/30)^0.8))) min 1;
+                private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _headPosition, _x, objNull, true, 1, "GEOM", "NONE"];
+
+                private _nametagVisibility = 1 - (((_screenPos distance [0.5, 0.5])/_viewRecBase)^2 min 1);
+                private _alpha = (0.3+0.7*_visibility)*(0.5+0.5*_nametagVisibility);
+                if (_alpha == 0) exitWith {};
 
                 private _iconType = _x getVariable QGVAR(unitType);
                 if (isNil "_iconType" || { (_iconType select 1) <= time }) then {
@@ -157,14 +162,12 @@ if (GVAR(OverlayUnitMarker)) then {
                 };
                 (_iconType select 0) params ["_icon", "_iconRelSize"];
 
-                private _pos = _headPosition vectorAdd [0, 0, (0.4 max 0.25*((_distance/2)^0.8)) min 1.5];
-                private _size = (0.4 max (0.5 / ((_distance/30)^0.8))) min 1;
-                //private _visibility = [_x, "VIEW"] checkVisibility [AGLToASL _cameraPosition, AGLtoASL _headPosition];
-                private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _headPosition, _x, objNull, true, 1, "GEOM", "NONE"];
+                private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+                private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
+                _sideColor set [3, 0.7+0.3*_shotFactor];
 
-                private _nametagVisibility = 1 - (((_screenPos distance [0.5, 0.5])/(0.5*safeZoneH*((16/9) min (safeZoneW/safeZoneH))))^2 min 1);
-                private _alpha =  (0.3+0.7*_visibility)*(0.5+0.5*_nametagVisibility);
                 _sideColor set [3, _alpha];
+                private _pos = _headPosition vectorAdd [0, 0, (0.4 max 0.25*((_distance/2)^0.8)) min 1.5];
 
                 private _scale = 1 + 0.4 * (1 - _shotFactor);
                 if (_x == GVAR(CursorTarget) && { _x != GVAR(CameraFollowTarget) }) then {
@@ -173,9 +176,10 @@ if (GVAR(OverlayUnitMarker)) then {
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
                 drawIcon3D [_icon, [1, 1, 1, 0.5+0.5*_alpha], _pos, _size*0.75*_iconRelSize*_scale, _size*0.75*_iconRelSize*_scale, 0];
                 drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, _alpha*_nametagVisibility], _pos, _size*1.4, _size*1.4, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
-
             } else {
                 if (_distance < UNITDOTDIST) then {
+                    private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+                    private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
                     _sideColor set [3, 0.4];
                     private _scale = 1 + 0.4 * (1 - _shotFactor);
                     private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
@@ -186,12 +190,16 @@ if (GVAR(OverlayUnitMarker)) then {
                 };
             };
         };
-        nil
-    } count _allUnits;
+    } forEach _allUnits;
 };
 
 // GROUPS
 if (GVAR(OverlayGroupMarker)) then {
+    private _fontSmallsize = PY(1.8);
+    private _fontMiddlesize = PY(2);
+    private _fontFullsize = PY(2.5);
+    private _unitDotMaxDistance = 4 * UNITDOTDIST;
+    private _unitDotFontDistance = 2 * UNITDOTDIST;
     private _allGroups = allGroups;
     _allGroups append (allUnitsUAV apply { group _x });
     _allGroups = _allGroups arrayIntersect _allGroups;
@@ -203,34 +211,32 @@ if (GVAR(OverlayGroupMarker)) then {
 
             private _pos = (_leader modelToWorldVisual (_leader selectionPosition "Head")) vectorAdd [0, 0, 10 min (2 max (_distance * 30 / 150)^0.8)];
             private _screenPos = worldToScreen _pos;
-            if (_screenPos isEqualTo []) exitWith {nil};
+            if (_screenPos isEqualTo []) exitWith {};
 
-            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+            private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
+            private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _pos, _leader, objNull, true, 1, "NONE", "NONE"];
+            private _alpha =  0.5 + 0.5 * _visibility;
+            if (_alpha == 0) exitWith {};
             private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
             if (isNil "_groupMapIcon") then {
                 _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
                 _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
             };
-
-            private _size = (1.5 min (0.2 / (_distance / 5000))) max 0.7;
-            private _visibility = 1 - count lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _pos, _leader, objNull, true, 1, "NONE", "NONE"];
-            private _alpha =  0.5 + 0.5 * _visibility;
+            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
             _sideColor set [3, 0.7*_alpha];
             drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
-            if (_distance < 4 * UNITDOTDIST) then {
-                private _fontSize = PY(2.5);
+            if (_distance < _unitDotMaxDistance) then {
+                private _fontSize = _fontFullsize;
                 if (_distance > UNITDOTDIST) then {
-                    _fontSize = PY(2);
+                    _fontSize = _fontMiddlesize;
                 };
-
-                if (_distance > 2 * UNITDOTDIST) then {
-                    _fontSize = PY(1.8);
+                if (_distance > _unitDotFontDistance) then {
+                    _fontSize = _fontSmallsize;
                 };
                 drawIcon3D ["", [1, 1, 1, _alpha], _pos, _size, _size, 0, groupId _x, 2, _fontSize, "RobotoCondensedBold", "center"];
             };
         };
-        nil
-    } count _allGroups;
+    } forEach _allGroups;
 };
 
 if (GVAR(OverlayBulletTracer)) then {

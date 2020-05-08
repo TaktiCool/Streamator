@@ -103,6 +103,11 @@ GVAR(BulletTracers) = [];
 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 
+GVAR(PlaningModeUpdateTime) = 0.05;
+if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)))) then {
+    GVAR(PlaningModeUpdateTime) = getNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)));
+};
+
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
     [QGVAR(updateInput)] call CFUNC(localEvent);
