@@ -29,6 +29,9 @@ LOG("ACRE2 Detected");
         if (!ACRE_IS_SPECTATOR) then {
             [true] call acre_api_fnc_setSpectator;
         };
+        if (acre_sys_core_fullDuplex) then {
+            acre_sys_core_fullDuplex = false;
+        };
 
         private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
 

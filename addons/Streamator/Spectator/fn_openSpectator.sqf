@@ -278,7 +278,7 @@ DFUNC(getNearByTransmitingPlayers) = {
 
 if (GVAR(aceSpectatorLoaded)) then {
     ["ace_spectatorSet", {
-        params ["_set", "_player"];
+        params ["", "_player"];
         if (_player isEqualTo player && !isNull GVAR(Camera)) then {
             GVAR(Camera) cameraEffect ["internal", "back"];
             switchCamera CLib_Player;

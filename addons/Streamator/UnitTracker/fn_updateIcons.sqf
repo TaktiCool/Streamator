@@ -24,8 +24,8 @@ GVAR(processedIcons) = [];
 private _units = +allUnits;
 _units append (allDead select {_x isKindOf "CAManBase"});
 _units append allUnitsUAV;
-_unit = _unit select { _x getVariable [QEGVAR(Spectator,isValidUnit), false] };
-_unit = _unit arrayIntersect _unit;
+_units = _units select { _x getVariable [QEGVAR(Spectator,isValidUnit), false] };
+_units = _units arrayIntersect _units;
 private _vehicles = (vehicles select { [_x] call FUNC(isValidVehicle) });
 
 if !(_units isEqualTo []) then {

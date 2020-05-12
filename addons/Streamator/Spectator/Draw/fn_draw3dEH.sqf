@@ -95,10 +95,10 @@ if (GVAR(OverlayPlanningMode)) then {
             };
         };
         private _deleted = false;
+        private _sqrtFOV = sqrt(_fov);
         {
             _x params ["_time", "_pos"];
-
-            private _size = (0.8 min (1 / (((_cameraPosition distance _pos) / 100)^0.7)) max 0.15)*sqrt(_fov);
+            private _size = (0.8 min (1 / (((_cameraPosition distance _pos) / 100)^0.7)) max 0.15) * _sqrtFOV;
             private _alpha = 1 - (_serverTime - _time) max 0;
             private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
             _color set [3, _alpha];
@@ -163,8 +163,8 @@ if (GVAR(OverlayUnitMarker)) then {
                 (_iconType select 0) params ["_icon", "_iconRelSize"];
 
                 private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
-                private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
-                _sideColor set [3, 0.7+0.3*_shotFactor];
+                private _shotFactor = 2 * (time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
+                _sideColor set [3, 0.7 + 0.3 * _shotFactor];
 
                 _sideColor set [3, _alpha];
                 private _pos = _headPosition vectorAdd [0, 0, (0.4 max 0.25*((_distance/2)^0.8)) min 1.5];
@@ -174,12 +174,12 @@ if (GVAR(OverlayUnitMarker)) then {
                     drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
-                drawIcon3D [_icon, [1, 1, 1, 0.5+0.5*_alpha], _pos, _size*0.75*_iconRelSize*_scale, _size*0.75*_iconRelSize*_scale, 0];
-                drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, _alpha*_nametagVisibility], _pos, _size*1.4, _size*1.4, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
+                drawIcon3D [_icon, [1, 1, 1, 0.5 + 0.5 * _alpha], _pos, _size * 0.75 * _iconRelSize * _scale, _size * 0.75 * _iconRelSize * _scale, 0];
+                drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, _alpha * _nametagVisibility], _pos, _size * 1.4, _size * 1.4, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
             } else {
                 if (_distance < UNITDOTDIST) then {
                     private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
-                    private _shotFactor = 2*(time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
+                    private _shotFactor = 2 * (time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
                     _sideColor set [3, 0.4];
                     private _scale = 1 + 0.4 * (1 - _shotFactor);
                     private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
@@ -223,7 +223,7 @@ if (GVAR(OverlayGroupMarker)) then {
                 _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
             };
             private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
-            _sideColor set [3, 0.7*_alpha];
+            _sideColor set [3, 0.7 * _alpha];
             drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
             if (_distance < _unitDotMaxDistance) then {
                 private _fontSize = _fontFullsize;
