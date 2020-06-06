@@ -13,6 +13,13 @@
     Returns:
     None
 */
+// This Fixes the Sticky Buttons, when a player tabs out
+if !(isGameFocused) then {
+    GVAR(CameraSpeedMode) = false;
+    GVAR(CameraSmoothingMode) = false;
+    GVAR(CameraZoomMode) = false;
+    QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+};
 if (isGamePaused) exitWith {};
 private _tempDir = [GVAR(CameraDir), GVAR(CameraDirOffset)] select (GVAR(CameraMode) == CAMERAMODE_SHOULDER);
 private _forward = [sin _tempDir, cos _tempDir, 0];

@@ -45,7 +45,6 @@ GVAR(CameraHeight) = 10;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
-GVAR(CameraEditMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
