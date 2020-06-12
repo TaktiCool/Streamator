@@ -8,14 +8,14 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=330;
+		nextID=332;
 	};
 	class Camera
 	{
-		pos[]={2662.0828,79.119438,6000.8721};
-		dir[]={-0.47962254,-0.85320932,0.20495503};
-		up[]={-0.78457695,0.52156806,0.33526945};
-		aside[]={0.39295346,-1.5960541e-007,0.91956484};
+		pos[]={4206.2344,219.11325,3536.9617};
+		dir[]={-0.56440717,-0.66607368,0.48764274};
+		up[]={-0.50401306,0.74588305,0.43546277};
+		aside[]={0.65377653,-1.5133992e-009,0.75669229};
 	};
 };
 binarizationWanted=0;
@@ -36,7 +36,6 @@ addons[]=
 	"A3_Air_F_Jets_Plane_Fighter_01",
 	"A3_Characters_F_Common",
 	"A3_Air_F_Jets_UAV_05",
-	"A3_Weapons_F_Ammoboxes",
 	"A3_Drones_F_Air_F_Gamma_UAV_01",
 	"A3_Armor_F_EPC_MBT_01",
 	"A3_Air_F_Beta_Heli_Transport_01",
@@ -46,7 +45,8 @@ addons[]=
 	"ace_repair",
 	"acre_sys_intercom",
 	"A3_Boat_F_Boat_Armed_01",
-	"A3_Boat_F_Beta_SDV_01"
+	"A3_Boat_F_Beta_SDV_01",
+	"acre_sys_radio"
 };
 class AddonsMetaData
 {
@@ -139,66 +139,66 @@ class AddonsMetaData
 		};
 		class Item12
 		{
-			className="A3_Weapons_F";
-			name="Arma 3 Alpha - Weapons and Accessories";
-			author="Bohemia Interactive";
-			url="https://www.arma3.com";
-		};
-		class Item13
-		{
 			className="A3_Drones_F";
 			name="Arma 3 Beta - Drones";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item14
+		class Item13
 		{
 			className="A3_Armor_F_EPC";
 			name="Arma 3 Win Episode - Armored Land Vehicles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item15
+		class Item14
 		{
 			className="A3_Air_F_Beta";
 			name="Arma 3 Beta - Aircraft";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item16
+		class Item15
 		{
 			className="A3_Armor_F_Beta";
 			name="Arma 3 Beta - Armored Land Vehicles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item17
+		class Item16
 		{
 			className="ace_repair";
 			name="ACE3 - Repair";
 			author="ACE-Team";
 			url="http://ace3mod.com/";
 		};
-		class Item18
+		class Item17
 		{
 			className="acre_sys_intercom";
 			name="ACRE2 - Vehicle Intercom";
 			author="ACRE2Team";
 			url="https://github.com/IDI-Systems/acre2";
 		};
-		class Item19
+		class Item18
 		{
 			className="A3_Boat_F";
 			name="Arma 3 Alpha - Boats and Submersibles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
-		class Item20
+		class Item19
 		{
 			className="A3_Boat_F_Beta";
 			name="Arma 3 Beta - Boats and Submersibles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
+		};
+		class Item20
+		{
+			className="acre_sys_radio";
+			name="ACRE2 - Radio";
+			author="ACRE2Team";
+			url="https://github.com/IDI-Systems/acre2";
 		};
 	};
 };
@@ -4875,46 +4875,6 @@ class Mission
 		};
 		class Item39
 		{
-			dataType="Object";
-			class PositionInfo
-			{
-				position[]={4197.7876,212.40254,3537.8157};
-				angles[]={0.012496558,0,6.2108064};
-			};
-			side="Empty";
-			flags=4;
-			class Attributes
-			{
-				init="call{[""AmmoboxInit"", [this, true]] spawn BIS_fnc_arsenal; " \n "}";
-			};
-			id=225;
-			type="Box_IND_Ammo_F";
-			class CustomAttributes
-			{
-				class Attribute0
-				{
-					property="ammoBox";
-					expression="[_this,_value] call bis_fnc_initAmmoBox;";
-					class Value
-					{
-						class data
-						{
-							class type
-							{
-								type[]=
-								{
-									"STRING"
-								};
-							};
-							value="[[[[],[]],[[],[]],[[],[]],[[],[]]],false]";
-						};
-					};
-				};
-				nAttributes=1;
-			};
-		};
-		class Item40
-		{
 			dataType="Group";
 			side="West";
 			class Entities
@@ -4985,7 +4945,7 @@ class Mission
 			};
 			id=238;
 		};
-		class Item41
+		class Item40
 		{
 			dataType="Group";
 			side="West";
@@ -5075,7 +5035,7 @@ class Mission
 			id=240;
 			atlOffset=65.746078;
 		};
-		class Item42
+		class Item41
 		{
 			dataType="Object";
 			class PositionInfo
@@ -5094,7 +5054,7 @@ class Mission
 			type="B_UAV_01_F";
 			atlOffset=65.746078;
 		};
-		class Item43
+		class Item42
 		{
 			dataType="Group";
 			side="West";
@@ -5166,7 +5126,7 @@ class Mission
 			};
 			id=245;
 		};
-		class Item44
+		class Item43
 		{
 			dataType="Group";
 			side="West";
@@ -5674,7 +5634,7 @@ class Mission
 			};
 			id=247;
 		};
-		class Item45
+		class Item44
 		{
 			dataType="Group";
 			side="East";
@@ -6182,7 +6142,7 @@ class Mission
 			};
 			id=257;
 		};
-		class Item46
+		class Item45
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6199,7 +6159,7 @@ class Mission
 			type="B_MBT_01_TUSK_F";
 			atlOffset=-4.5776367e-005;
 		};
-		class Item47
+		class Item46
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6216,7 +6176,7 @@ class Mission
 			type="B_Heli_Transport_01_F";
 			atlOffset=-0.00018310547;
 		};
-		class Item48
+		class Item47
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6233,7 +6193,7 @@ class Mission
 			id=271;
 			type="B_UGV_01_rcws_F";
 		};
-		class Item49
+		class Item48
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6249,7 +6209,7 @@ class Mission
 			id=273;
 			type="B_LSV_01_armed_F";
 		};
-		class Item50
+		class Item49
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6267,7 +6227,7 @@ class Mission
 			id=274;
 			type="B_APC_Tracked_01_AA_F";
 		};
-		class Item51
+		class Item50
 		{
 			dataType="Group";
 			side="West";
@@ -6478,7 +6438,7 @@ class Mission
 			id=275;
 			atlOffset=69.724792;
 		};
-		class Item52
+		class Item51
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6494,7 +6454,7 @@ class Mission
 			type="B_Boat_Armed_01_minigun_F";
 			atlOffset=69.724792;
 		};
-		class Item53
+		class Item52
 		{
 			dataType="Group";
 			side="West";
@@ -6620,7 +6580,7 @@ class Mission
 			};
 			id=289;
 		};
-		class Item54
+		class Item53
 		{
 			dataType="Group";
 			side="West";
@@ -6864,7 +6824,7 @@ class Mission
 			id=305;
 			atlOffset=17.50602;
 		};
-		class Item55
+		class Item54
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6880,7 +6840,7 @@ class Mission
 			type="B_SDV_01_F";
 			atlOffset=17.50602;
 		};
-		class Item56
+		class Item55
 		{
 			dataType="Object";
 			class PositionInfo
@@ -6896,7 +6856,7 @@ class Mission
 			type="B_SDV_01_F";
 			atlOffset=17.50602;
 		};
-		class Item57
+		class Item56
 		{
 			dataType="Group";
 			side="West";
@@ -7021,6 +6981,22 @@ class Mission
 			{
 			};
 			id=316;
+		};
+		class Item57
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4199.624,212.26784,3539.4351};
+				angles[]={6.278194,6.0949717,6.228241};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=330;
+			type="ACRE_RadioSupplyCrate";
 		};
 	};
 };
