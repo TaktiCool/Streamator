@@ -238,7 +238,7 @@ private _return = switch (_keyCode) do {
         if (_ctrl) then {
             [_keyCode] call FUNC(savePosition);
         } else {
-            [_keyCode] call FUNC(restorePosition);
+            [_keyCode, _alt] call FUNC(restorePosition);
         };
         true;
     };
@@ -310,7 +310,7 @@ private _return = switch (_keyCode) do {
             case DIK_NUMPAD5: {CAMERAMODE_ORBIT};
             case DIK_NUMPAD6: {CAMERAMODE_UAV};
         };
-        [_newCameraTarget, _cameraMode] call FUNC(setCameraTarget);
+        [_newCameraTarget, _cameraMode, _alt] call FUNC(setCameraTarget);
         true;
     };
     case DIK_V: {

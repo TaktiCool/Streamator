@@ -8,13 +8,14 @@
     Sets Camera Target
 
     Parameter(s):
-    0: Unit to Focus on <ObjNull>
+    0: Unit to Focus on <Object>
     1: Camera Mode to switch to <Number> (Default: 2)
+    2: Force Translate to new Position Smoothly <Bool>
 
     Returns:
     None
 */
-params ["_unit", ["_cameraMode", CAMERAMODE_FOLLOW]];
+params ["_unit", ["_cameraMode", CAMERAMODE_FOLLOW], ["_smoothTranslate", false]];
 
 if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
@@ -109,7 +110,7 @@ GVAR(CameraMode) = _cameraMode;
 
 [QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);
 if (!isNull GVAR(CameraFollowTarget)) then {
-    if ((getPosASL GVAR(CameraFollowTarget) distance AGLToASL positionCameraToWorld [0 ,0 ,0]) > 300) then {
+    if ((getPosASL GVAR(CameraFollowTarget) distance AGLToASL positionCameraToWorld [0 ,0 ,0]) > 300 && !(_smoothTranslate)) then {
         GVAR(CameraPreviousState) = [];
     };
 };

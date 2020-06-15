@@ -13,7 +13,7 @@
     Returns:
     None
 */
-params ["_slot"];
+params ["_slot", "_smoothTranslation"];
 
 private _element = GVAR(PositionMemory) getVariable (str _slot);
 if (isNil "_element") exitWith {};
@@ -46,10 +46,10 @@ if (GVAR(CameraFOV) != _lastCameraFOV) then {
 };
 if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
     GVAR(CameraPreviousState) = [];
-    [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
+    [GVAR(CameraFollowTarget), nil, _smoothTranslation] call FUNC(setCameraTarget);
 } else {
     private _distance = (getPos GVAR(Camera)) distance ([GVAR(CameraPos), (getPos GVAR(CameraFollowTarget)) vectorAdd GVAR(CameraRelPos)] select (isNull GVAR(CameraFollowTarget)));
-    if (_distance > 300) then {
+    if (_distance > 300 && !_smoothTranslation) then {
         GVAR(CameraPreviousState) = [];
     };
     [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
