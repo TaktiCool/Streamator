@@ -272,8 +272,8 @@ DFUNC(getNearByTransmitingPlayers) = {
         _players append (crew vehicle GVAR(CameraFollowTarget));
     };
     _players = _players arrayIntersect _players;
-    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } && {_x getVariable ["ace_map_gestures_Transmit", false]} };
-};
+    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
+} call CFUNC(CompileFinal);
 
 if (GVAR(aceSpectatorLoaded)) then {
     ["ace_spectatorSet", {
