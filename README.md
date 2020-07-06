@@ -60,7 +60,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
 **`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
-
+**`ALT`** | Smooth Transition Modifier | When Pressed While Changing Camera Targets a Smooth Transition is done
 
 ## MAP VIEW
 Key Binding | Short Description | Remarks
