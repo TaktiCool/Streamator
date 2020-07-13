@@ -8,11 +8,11 @@ The camera mode is shown on the top right.
 Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
-**FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focussed object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focussed spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focussing. It can be refreshed by pressing the R key.
-**FIRST PERSON [&lt;Object&gt;]** | First Persion View Mode to see what the player sees
+**FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focused object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focused spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focusing. It can be refreshed by pressing the R key.
+**FIRST PERSON [&lt;Object&gt;]** | First Person View Mode to see what the player sees
 **SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
-**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
-**ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movments
+**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
+**ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
 **UAV [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
 
 ## 3D VIEW
@@ -20,10 +20,10 @@ Key Binding | Short Description | Remarks
 ---|---|---
 **`W` `S` `A` `D`** | Horiz. movement |
 **`Q` `Y`** | Vert. movement |
-**`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focussed object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
-**`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focussed object in FOLLOW mode. With **`NUMPAD 1-6`** the selected unit will be focussed with the selected camera mode (see **`NUMPAD 1-6`**).
+**`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focused object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
+**`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focused object in FOLLOW mode. With **`NUMPAD 1-6`** the selected unit will be focused with the selected camera mode (see **`NUMPAD 1-6`**).
 **`ALT`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
-**`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focussed object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera. if in SHOULDER, TOPDOWN or ORBIT Mode it resets Camera to Default Values
+**`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focused object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera. if in SHOULDER, TOPDOWN or ORBIT Mode it resets Camera to Default Values
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.
 **`CTRL`** + **`Scrollwheel`** | Change Smoothing | Changes the camera smoothing coefficient.
 **`ALT`** + **`Scrollwheel`** | Change FOV | Changes the field of view (zoom).
@@ -41,8 +41,8 @@ Key Binding | Short Description | Remarks
 **`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
 **`F10`** | Fix Camera | Fix Camera
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
-**`F11`** | Toggles Bullet Tracer Lines | Toggles Bullet Tracer Visualisation
-**`0`**...**`9`** | Restore camera state | Restores camara state. See Save camera state
+**`F11`** | Toggles Bullet Tracer Lines | Toggles Bullet Tracer Visualization
+**`0`**...**`9`** | Restore camera state | Restores camera state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
 **`V`** | Toggle MiniMap | Toggles MiniMap
 **`Shift + V`** | Toggles Center Minimap on Camera | Toggles Center Minimap on Camera or View Vector
@@ -67,7 +67,7 @@ Key Binding | Short Description | Remarks
 ---|---|---
 **`M`** | Close map | Closes the map view.
 **`ALT`** + **`LMB`** | Move camera | Moves the camera to the clicked position
-**`LMB`** (Dbl. Click) on Marker | Focus Unit/Vehicle | Focusses a unit or vehicle.
+**`LMB`** (Dbl. Click) on Marker | Focus Unit/Vehicle | Focuses a unit or vehicle.
 Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups: ID and group members<br>Vehicles: type and units<br>
 **`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
