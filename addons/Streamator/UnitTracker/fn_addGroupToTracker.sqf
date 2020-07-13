@@ -17,7 +17,11 @@ params ["_group", "_groupIconId", ["_attachTo", [0, -20]]];
 
 private _color = EGVAR(Spectator,SideColorsArray) getVariable [str side _group, [1, 1, 1, 1]];
 
-private _groupMapIcon = (side _group) call EFUNC(Spectator,getDefaultIcon);
+private _groupMapIcon = _group getVariable QEGVAR(Spectator,GroupIcon);
+if (isNil "_groupMapIcon") then {
+    _groupMapIcon = [side _group] call EFUNC(Spectator,getDefaultIcon);
+    _group setVariable [QEGVAR(Spectator,GroupIcon), _groupMapIcon];
+};
 
 private _iconPos = [vehicle leader _group, _attachTo];
 
