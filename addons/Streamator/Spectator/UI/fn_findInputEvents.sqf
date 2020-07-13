@@ -30,7 +30,9 @@ params ["_ctrlInfo"];
                 private _guess = [];
                 private _searchableUnits = allUnits;
                 _searchableUnits append GVAR(allSpectators);
-                _searchableUnits append GVAR(CustomSearchItems);
+                if !(isNil QGVAR(CustomSearchItems)) then {
+                    _searchableUnits append GVAR(CustomSearchItems);
+                };
                 _searchableUnits = _searchableUnits arrayIntersect _searchableUnits;
                 {
                     if (_x isEqualType []) then {

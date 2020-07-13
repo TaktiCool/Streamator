@@ -9,7 +9,7 @@
 
     Parameter(s):
     0: Icon ID <String>
-    1: CLib GraphicsData <GraphicsData>
+    1: CLib 3dGraphicsData <3dGraphicsData>
 
     Returns:
     Icon ID
@@ -26,6 +26,7 @@ private _buildedIcons = [];
     _buildedIcons pushBack _x;
     nil
 } count _icons;
+
 [
     _id,
     _buildedIcons
