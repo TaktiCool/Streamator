@@ -249,25 +249,25 @@ private _unitInfoAllCtrls = [
     _ctrlGroupId ctrlCommit 0;
 
     // set squad xml info /
+    private _squadImage = "\A3\Ui_f\Data\GUI\Cfg\LoadingScreens\A3_LoadingLogo_ca.paa";
+    private _squadName = "";
     private _squadParams = squadParams _unit;
     if (_squadParams isEqualTo []) then {
-        _ctrlSquadName ctrlSetText "";
-        _ctrlSquadName ctrlCommit 0;
-
-        private _squadImage = [_unit] call BIS_fnc_getUnitInsignia;
-        if (_squadImage == "") then {
-            _squadImage = "\A3\Ui_f\Data\GUI\Cfg\LoadingScreens\A3_LoadingLogo_ca.paa";
+        private _image = [_unit] call BIS_fnc_getUnitInsignia;
+        if (_image != "") then {
+            _squadImage = _image;
         };
-        _ctrlSquadPicture ctrlSetText _squadImage;
-        _ctrlSquadPicture ctrlCommit 0;
     } else {
         _squadParams = _squadParams select 0;
-        _ctrlSquadName ctrlSetText toUpper (_squadParams select 1);
-        _ctrlSquadName ctrlCommit 0;
-
-        _ctrlSquadPicture ctrlSetText (_squadParams select 4);
-        _ctrlSquadPicture ctrlCommit 0;
+        _squadName = toUpper (_squadParams select 1);
+        private _squadImage = _squadParams select 4;
     };
+
+    _ctrlSquadName ctrlSetText _squadName;
+    _ctrlSquadName ctrlCommit 0;
+
+    _ctrlSquadPicture ctrlSetText _squadImage;
+    _ctrlSquadPicture ctrlCommit 0;
 
     // set health
     private _health = 0;
@@ -276,8 +276,7 @@ private _unitInfoAllCtrls = [
         true
     } count ((getAllHitPointsDamage _unit) select 2);
     _health = _health/_c;
-    _health = linearConversion [1, 0, _health, 0, 1]; // Invert Health value to show better how health is
-    _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
+    _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
     if (_unit isKindOf "CAManBase") then {
