@@ -35,11 +35,11 @@ GVAR(updateIconRunning) = false;
 
 [QGVAR(updateIcons), {
     if (GVAR(updateIconRunning)) exitWith {};
+    if !(EGVAR(Spectator,MapOpen) || EGVAR(Spectator,MinimapVisible)) exitWith {};
+    call FUNC(updateIcons);
     GVAR(updateIconRunning) = true;
     [{
         GVAR(updateIconRunning) = false;
-        if !(EGVAR(Spectator,MapOpen) || EGVAR(Spectator,MinimapVisible)) exitWith {};
-        call FUNC(updateIcons);
     }, 0.3] call CFUNC(wait);
 }] call CFUNC(addEventhandler);
 
