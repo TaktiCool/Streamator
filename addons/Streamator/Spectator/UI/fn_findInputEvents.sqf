@@ -62,12 +62,14 @@ params ["_ctrlInfo"];
                             };
                         };
                     };
-
                 } forEach _searchableUnits;
 
                 if !(_guess isEqualTo []) then {
                     _guess = _guess apply {
                         _x params ["", "_data"];
+                        if (_data isEqualType [] && {!(_data isEqualTypeArray [0,0,0])}) then {
+                            _data = _data select 0;
+                        };
                         private _distance = switch (typeName _data) do {
                             case (typeName ""): {
                                 GVAR(Camera) distance2D (getMarkerPos _data);

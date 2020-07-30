@@ -21,7 +21,8 @@ private _buildedIcons = [];
     private _index = (count _x) - 1;
     private _code = _x select _index;
     private _codeStr = _code call CFUNC(codeToString);
-    _codeStr = _codeStr + "; " + QGVAR(OverlayCustomMarker) + ";";
+    _codeStr = "private _ret = call {" + _codeStr + "}; if (!(isNil '_ret') && {_ret isEqualType true}) then { _ret && " + QGVAR(OverlayCustomMarker) + "} else {" + QGVAR(OverlayCustomMarker) + "};";
+    diag_log _codeStr;
     _x set [_index, compile _codeStr];
     _buildedIcons pushBack _x;
     nil
