@@ -27,30 +27,6 @@ params [
 ];
 
 private _return = switch (_keyCode) do {
-    case DIK_M: { // M: Map
-        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
-        call FUNC(buildMapUI);
-        true;
-    };
-    case DIK_F: { // F
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
-        if (_ctrl) exitWith {
-            GVAR(InputMode) = INPUTMODE_SEARCH;
-            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-            true;
-        };
-        if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
-            [GVAR(lastUnitShooting), [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE)] call FUNC(setCameraTarget);
-            true;
-        };
-        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
-            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
-            [GVAR(CursorTarget), CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
-        } else {
-            [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
-            true;
-        };
-    };
     case DIK_LSHIFT: { // LShift
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraSpeedMode) = true;
@@ -164,6 +140,35 @@ private _return = switch (_keyCode) do {
     case DIK_F11: { // F11
         GVAR(OverlayBulletTracer) = !GVAR(OverlayBulletTracer);
         GVAR(BulletTracers) = [];
+        true;
+    };
+    case DIK_F12: { // F12
+        GVAR(OverlayLaserTargets) = !GVAR(OverlayLaserTargets);
+        true;
+    };
+    case DIK_M: { // M: Map
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        call FUNC(buildMapUI);
+        true;
+    };
+    case DIK_F: { // F
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
+        if (_ctrl) exitWith {
+            GVAR(InputMode) = INPUTMODE_SEARCH;
+            [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+            true;
+        };
+        if (_alt && !isNull GVAR(lastUnitShooting)) exitWith {
+            [GVAR(lastUnitShooting), [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE)] call FUNC(setCameraTarget);
+            true;
+        };
+        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+            GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
+            [GVAR(CursorTarget), CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
+        } else {
+            [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
+            true;
+        };
     };
     case DIK_E: { // E
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};

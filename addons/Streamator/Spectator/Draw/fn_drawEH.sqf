@@ -52,6 +52,18 @@ with missionNamespace do {
         });
     };
 
+    if (GVAR(OverlayLaserTargets)) then {
+        private _targets = entities "LaserTarget";
+        if !(_targets isEqualTo []) then {
+            {
+                if !(isNull (laserTarget _x)) then {
+                    private _text = format ["Laser Target - %1", name _x];
+                    _map drawIcon ["a3\ui_f_curator\data\cfgwrapperui\cursors\curatorplacewaypointdestroy_ca.paa", [1, 1, 1, 1], getPos _x, 1, 1, 0, _text, "RobotoCondensedBold"];
+                };
+            } forEach allUnits;
+        };
+    };
+
     if (GVAR(OverlayBulletTracer)) then {
         private _deleted = false;
         {
@@ -102,6 +114,7 @@ with missionNamespace do {
             [_x, _map] call _fnc_DrawMarker;
         } forEach (GVAR(CameraFollowTarget) getVariable [QGVAR(mapMarkers), []]);
     };
+
     // Render ACE3 Map Gestures
     // Credits: Dslyecxi, MikeMatrix
     // https://github.com/acemod/ACE3/blob/master/addons/map_gestures/functions/fnc_drawMapGestures.sqf

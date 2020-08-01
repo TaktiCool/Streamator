@@ -239,6 +239,16 @@ if (GVAR(OverlayGroupMarker)) then {
     } forEach _allGroups;
 };
 
+if (GVAR(OverlayLaserTargets)) then {
+    {
+        private _text = "Laser Target";
+        if (GVAR(aceLoaded)) then {
+            _text = format ["%1 - %2", _text, _x getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
+        };
+        drawIcon3D ["a3\ui_f_curator\data\cfgwrapperui\cursors\curatorplacewaypointdestroy_ca.paa", [1, 1, 1, 1], getPos _x, 1, 1, 0, _text, 2, 0.05, "RobotoCondensedBold"];
+    } forEach entities "LaserTarget";
+};
+
 if (GVAR(OverlayBulletTracer)) then {
     private _deleted = false;
     {
