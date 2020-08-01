@@ -278,26 +278,44 @@ private _unitInfoAllCtrls = [
     _health = _health/_c;
     _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
-    private _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
+    private _healthIcons = [];
     if (_unit isKindOf "CAManBase") then {
         if (GVAR(aceLoaded)) then {
             _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
+            if (_unit getVariable ["ace_medical_woundBleeding", 0] > 0) then {
+                _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa";
+            };
         };
         switch (toUpper (lifeState _unit)) do {
             case ("DEAD-RESPAWN");
             case ("DEAD-SWITCHING");
             case ("DEAD"): {
-                _healthIcon = "\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"
+                _healthIcons = ["\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"];
             };
             case ("INCAPACITATED");
             case ("INJURED"): {
-                _healthIcon = "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa"
+                _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa";
+            };
+            default {
+                if (_healthIcons isEqualTo []) then {
+                    _healthIcons pushBack "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
+                };
             };
         };
+    };
+    private _healthIcon = if (count _healthIcons == 2) then {
+        _healthIcons select (time % 2);
+    } else {
+        _healthIcons select 0;
     };
 
     _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
     _ctrlHealthRing ctrlCommit 0;
+    if (_healthIcon isEqualTo "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa") then {
+        _ctrlHealthIcon ctrlSetPosition [PX(1.5), PY(1.5), PX(3), PY(3)];
+    } else {
+        _ctrlHealthIcon ctrlSetPosition [PX(0), PY(0), PX(6), PY(6)];
+    };
     _ctrlHealthIcon ctrlSetText _healthIcon;
     _ctrlHealthIcon ctrlCommit 0;
 
@@ -477,7 +495,7 @@ private _unitInfoAllCtrls = [
         } else {
             (_this select 1) call CFUNC(removePerFrameHandler);
         };
-    }, 0.5] call CFUNC(addPerFrameHandler);
+    }, 0.4] call CFUNC(addPerFrameHandler);
 
     GVAR(UnitInfoOpen) = true;
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);
