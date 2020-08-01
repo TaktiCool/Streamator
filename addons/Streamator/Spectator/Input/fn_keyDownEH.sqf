@@ -152,7 +152,6 @@ private _return = switch (_keyCode) do {
         true;
     };
     case DIK_F9: { // F9
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
         call FUNC(setRadioFollowTarget);
         true;
     };
@@ -287,7 +286,6 @@ private _return = switch (_keyCode) do {
             GVAR(InputMode) = INPUTMODE_MOVE;
             [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
         };
-
 
         if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
 
