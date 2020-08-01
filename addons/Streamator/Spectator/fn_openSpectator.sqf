@@ -98,7 +98,7 @@ GVAR(RadioInformationPrev) = [];
 
 GVAR(OverlayBulletTracer) = false;
 GVAR(BulletTracers) = [];
-
+GVAR(ThrownTracked) = [];
 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 
@@ -116,11 +116,14 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
         _target addEventHandler ["FiredMan", {
-            params ["_unit", "", "", "", "", "", "_projectile"];
+            params ["_unit", "_weapon", "", "", "", "", "_projectile"];
             GVAR(lastUnitShooting) = _unit;
             _unit setVariable [QGVAR(lastShot), time];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
+            if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
+                GVAR(ThrownTracked) pushBack _projectile;
+            };
             if (GVAR(OverlayBulletTracer)) then {
                 private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
                 private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
@@ -181,6 +184,15 @@ private _fnc_init = {
         CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
         ace_goggles_PostProcess ppEffectEnable false;
         ace_goggles_PostProcessEyes ppEffectEnable false;
+        ["ace_throwableThrown", {
+            (_this select 0) params["_unit", "_projectile"];
+            GVAR(lastUnitShooting) = _unit;
+            _unit setVariable [QGVAR(lastShot), time];
+            private _shots = _unit getVariable [QGVAR(shotCount), 0];
+            _unit setVariable [QGVAR(shotCount), _shots + 1];
+
+            GVAR(ThrownTracked) pushBack _projectile;
+        }] call CFUNC(addEventHandler);
     };
     if (goggles CLib_Player != "") then {
         removeGoggles CLib_Player;

@@ -31,7 +31,7 @@ private _object = lineIntersectsSurfaces [
 ];
 
 if !(_object isEqualTo []) then {
-    _nextTarget = _object select 0 select 2;
+    _nextTarget = (_object select 0) select 2;
 };
 
 if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
@@ -269,5 +269,19 @@ if (GVAR(OverlayBulletTracer)) then {
 
     if (_deleted) then {
         GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+    };
+
+    _deleted = false;
+    {
+        if !(alive _x) then {
+            _deleted = true;
+            GVAR(ThrownTracked) set [_forEachIndex, objNull];
+        } else {
+            drawIcon3D ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual _x, 0.6, 0.6, 0, ""];
+        };
+    } forEach GVAR(ThrownTracked);
+
+    if (_deleted) then {
+        GVAR(ThrownTracked) = GVAR(ThrownTracked) - [objNull];
     };
 };

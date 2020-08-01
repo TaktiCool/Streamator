@@ -40,6 +40,11 @@ CLib_Player setVariable [QGVAR(isPlayer), true, true];
     call FUNC(updateLocalMapMarkers);
 }] call CFUNC(addEventhandler);
 
+if (GVAR(ace_Loaded)) then {
+    ["ace_throwableThrown", {
+        ["ace_throwableThrown", _this] call CFUNC(globalEvent);
+    }] call CBA_fnc_addEventHandler;
+};
 GVAR(allMapMarkers) = [];
 
 #define Channel_Side "1"
