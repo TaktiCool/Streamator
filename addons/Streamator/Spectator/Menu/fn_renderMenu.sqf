@@ -13,7 +13,10 @@
     Returns:
 
 */
-params ["_path"];
+params [["_path", "", [""]]];
+if (_path isEqualTo "") then {
+    "MAIN" call FUNC(renderMenu);
+};
 private _entry = GVAR(menuEntries) getVariable [_path, []];
 if (_entry isEqualTo []) exitWith {
     "MAIN" call FUNC(renderMenu);
