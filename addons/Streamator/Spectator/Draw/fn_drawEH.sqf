@@ -17,7 +17,12 @@ params [
     ["_map", controlNull, [controlNull]]
 ];
 with missionNamespace do {
+    private _mapScale = ctrlMapScale _map;
     if (GVAR(OverlayPlanningMode)) then {
+        private _textSize = PY(4);
+        if (_mapScale < 0.1) then {
+            _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
+        };
         {
             private _unit = _x;
             private _cursorPos = _unit getVariable QGVAR(cursorPosition);
@@ -28,11 +33,6 @@ with missionNamespace do {
                 private _color = GVAR(PlanningModeColorRGB) select (_unit getVariable [QGVAR(PlanningModeColor), 0]);
                 _color set [3, _alpha];
                 private _text = "";
-                private _mapScale = ctrlMapScale _map;
-                private _textSize = PY(4);
-                if (_mapScale < 0.1) then {
-                    _textSize = (_textSize * ((_mapScale / 0.1) max 0.5));
-                };
                 if (_alpha != 0) then {
                     if (_cursorPos isEqualTo _x) then {
                         _color set [3, 1];
@@ -73,7 +73,7 @@ with missionNamespace do {
                     if !(_segments isEqualTo []) then {
                         _startPos = _segments select ((count _segments) -1) select 1;
                     };
-                    private _index = _segments pushBack [_startPos, getPos _projectile];
+                    private _index = _segments pushBack [_startPos, ASLToAGL getPosASL _projectile];
                     if (_index >= TRACER_SEGMENT_COUNT) then {
                         _segments deleteAt 0;
                     };
@@ -92,6 +92,19 @@ with missionNamespace do {
 
         if (_deleted) then {
             GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
+        };
+        _deleted = false;
+        {
+            if (alive _x) then {
+                _map drawIcon ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPos _x, 25, 25, 0, ""];
+            } else {
+                _deleted = true;
+                GVAR(ThrownTracked) set [_forEachIndex, objNull];
+            };
+        } forEach GVAR(ThrownTracked);
+
+        if (_deleted) then {
+            GVAR(ThrownTracked) = GVAR(ThrownTracked) - [objNull];
         };
     };
 

@@ -304,7 +304,7 @@ private _unitInfoAllCtrls = [
         };
     };
     private _healthIcon = if (count _healthIcons == 2) then {
-        _healthIcons select (time % 2);
+        _healthIcons select ((round (time / 2)) mod 2);
     } else {
         _healthIcons select 0;
     };

@@ -13,7 +13,7 @@
     Returns:
     None
 */
-if (isGamePaused) exitWith {};
+if (isGamePaused || CGVAR(PauseMenuOpen)) exitWith {};
 // Cursor Target
 private _nextTarget = objNull;
 private _intersectCam = AGLToASL positionCameraToWorld [0, 0, 0];
@@ -241,11 +241,16 @@ if (GVAR(OverlayGroupMarker)) then {
 
 if (GVAR(OverlayLaserTargets)) then {
     {
+        private _target = _x;
         private _text = "Laser Target";
         if (GVAR(aceLoaded)) then {
-            _text = format ["%1 - %2", _text, _x getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
+            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
         };
-        drawIcon3D ["a3\ui_f_curator\data\cfgwrapperui\cursors\curatorplacewaypointdestroy_ca.paa", [1, 1, 1, 1], getPos _x, 1, 1, 0, _text, 2, 0.05, "RobotoCondensedBold"];
+        private _index = allUnits findIf {(laserTarget _x) isEqualTo _target};
+        if (_index != -1) then {
+            drawLine3D [ASLToAGL (eyePos (allUnits select _index)), ASLToAGL getPosASL _target, [1, 0, 0, 1]];
+        };
+        drawIcon3D ["a3\ui_f_curator\data\cfgwrapperui\cursors\curatorplacewaypointdestroy_ca.paa", [1, 1, 1, 1], getPos _target, 1, 1, 0, _text, 2, 0.05, "RobotoCondensedBold"];
     } forEach entities "LaserTarget";
 };
 
@@ -258,7 +263,7 @@ if (GVAR(OverlayBulletTracer)) then {
                 if !(_segments isEqualTo []) then {
                     _startPos = _segments select ((count _segments) -1) select 1;
                 };
-                private _index = _segments pushBack [_startPos, getPos _projectile];
+                private _index = _segments pushBack [_startPos, ASLToAGL getPosASL _projectile];
                 if (_index >= TRACER_SEGMENT_COUNT) then {
                     _segments deleteAt 0;
                 };
@@ -283,11 +288,13 @@ if (GVAR(OverlayBulletTracer)) then {
 
     _deleted = false;
     {
-        if !(alive _x) then {
+        if (alive _x) then {
+            if ((_x distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
+                drawIcon3D ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], ASLToAGL getPosASL _x, 0.6, 0.6, 0, ""];
+            };
+        } else {
             _deleted = true;
             GVAR(ThrownTracked) set [_forEachIndex, objNull];
-        } else {
-            drawIcon3D ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual _x, 0.6, 0.6, 0, ""];
         };
     } forEach GVAR(ThrownTracked);
 

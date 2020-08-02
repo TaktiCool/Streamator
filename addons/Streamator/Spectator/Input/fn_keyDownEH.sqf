@@ -205,6 +205,17 @@ private _return = switch (_keyCode) do {
         GVAR(CameraVision) = 9;
         call FUNC(setVisionMode);
     };
+    case DIK_V: {
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
+        if (_shift) exitWith {
+            if (!GVAR(MinimapVisible)) then {
+                QGVAR(ToggleMinimap) call CFUNC(localEvent);
+            };
+            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
+        };
+        QGVAR(ToggleMinimap) call CFUNC(localEvent);
+        true;
+    };
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
             GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
@@ -248,22 +259,22 @@ private _return = switch (_keyCode) do {
     };
 
     case DIK_R: { // R
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
-        if (isNull GVAR(CameraFollowTarget)) exitWith {false;};
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
+        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
         switch (GVAR(CameraMode)) do {
-            case 2: {
+            case CAMERAMODE_FOLLOW: {
                 [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
                 true;
             };
-            case 3: {
+            case CAMERAMODE_SHOULDER: {
                 GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
                 true;
             };
-            case 4: {
+            case CAMERAMODE_TOPDOWN: {
                 GVAR(TopDownOffset) = [0, 0, 100];
                 true;
             };
-            case 6: {
+            case CAMERAMODE_ORBIT: {
                 GVAR(CameraRelPos) = [0, 10, 10];
                 true;
             };
@@ -314,17 +325,6 @@ private _return = switch (_keyCode) do {
             case DIK_NUMPAD6: {CAMERAMODE_UAV};
         };
         [_newCameraTarget, _cameraMode, _alt] call FUNC(setCameraTarget);
-        true;
-    };
-    case DIK_V: {
-        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        if (_shift) exitWith {
-            if (!GVAR(MinimapVisible)) then {
-                QGVAR(ToggleMinimap) call CFUNC(localEvent);
-            };
-            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
-        };
-        QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
     };
     default {
