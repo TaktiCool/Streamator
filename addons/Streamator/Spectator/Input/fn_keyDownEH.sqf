@@ -133,7 +133,7 @@ private _return = switch (_keyCode) do {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         GVAR(CameraVision) = 9;
         call FUNC(setVisionMode);
-		true;
+        true;
     };
     case DIK_V: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
@@ -147,6 +147,32 @@ private _return = switch (_keyCode) do {
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
     };
+    case DIK_R: { // R
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
+        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
+        switch (GVAR(CameraMode)) do {
+            case CAMERAMODE_FOLLOW: {
+                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
+                true;
+            };
+            case CAMERAMODE_SHOULDER: {
+                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
+                true;
+            };
+            case CAMERAMODE_TOPDOWN: {
+                GVAR(TopDownOffset) = [0, 0, 100];
+                true;
+            };
+            case CAMERAMODE_ORBIT: {
+                GVAR(CameraRelPos) = [0, 10, 10];
+                true;
+            };
+            default {
+                false;
+            };
+        };
+    };
+
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
             GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
@@ -187,33 +213,6 @@ private _return = switch (_keyCode) do {
             [_keyCode, _alt] call FUNC(restorePosition);
         };
         true;
-    };
-
-    case DIK_R: { // R
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
-        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
-        switch (GVAR(CameraMode)) do {
-            case CAMERAMODE_FOLLOW: {
-                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
-                true;
-            };
-            case CAMERAMODE_SHOULDER: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
-                true;
-            };
-            case CAMERAMODE_TOPDOWN: {
-                GVAR(TopDownOffset) = [0, 0, 100];
-                true;
-            };
-            case CAMERAMODE_ORBIT: {
-                GVAR(CameraRelPos) = [0, 10, 10];
-                true;
-            };
-            default {
-                false;
-            };
-        };
-
     };
 
     case DIK_RETURN;
