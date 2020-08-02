@@ -31,17 +31,7 @@ Key Binding | Short Description | Remarks
 **`N`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
 **`B`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
 **`C`** | Reset Vision mode | Resets Vision mode to Default
-**`F1`** | Toggle Group Markers | Toggles the visibility of group marker.
-**`F2`** | Toggle Unit Marker | Toggles the visibility of unit marker and names.
-**`F3`** | Toggle Custom Marker | Toggles the visibility of custom Marker, defined by mission creator.
-**`F5`** | Toggle Unit Chyron | Toggles Chyron for the current Unit
-**`F6`** | Toggle Planning Mode Icons and Markers | Toggle Planning Mode Icons and Markers from other spectators
-**`F7`** | Toggle AI Units | Toggles Visibility of AI Units
-**`F8`** | Toggle Radio Coms UI | Toggles Radio Coms Information UI
-**`F9`** | Enable Radio Coms Follow Unit | Listen Into Radio Coms from the currently Followed Unit
-**`F10`** | Fix Camera | Fix Camera
-**`F11`** | Toggles Bullet Tracer Lines | Toggles Bullet Tracer Visualization
-**`F12`** | Toggles Laser Target Overlay | Toggle Laser Target Overlay
+**`F1-F12 + Escape`** | Menu Navigation | Keybindings used for Menu Navigation
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camera state. See Save camera state
 **`M`** | Open Map | Opens the map. (see Map View)
@@ -74,6 +64,42 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
+
+# MENU SYSTEM
+
+**[F1]** Overlays
+    **[Esc]** Back
+    **[F1]** Group Markers
+    **[F2]** Unit Markers
+    **[F3]** Player Markers
+    **[F4]** Planning Mode
+    **[F5]** Bullet Tracers
+    **[F6]** Laser Targets
+    **[F7]** Custom Markers
+**[F2]** Camera Modes
+    **[Esc]** Back
+    **[F1]** Free
+    **[F2]** Follow
+    **[F3]** Shoulder
+    **[F4]** Topdown
+    **[F5]** FPS
+    **[F6]** Orbit
+    **[F7]** UAV
+**[F3]** Vision Modes
+    **[Esc]** Back
+    **[F1]** Normal
+    **[F2]** Next
+    **[F3]** Previous
+**[F4]** Minimap
+    **[Esc]** Back
+    **[F1]** Toggle
+    **[F2]** Toggle View Mode
+**[F5]** Radio
+    **[Esc]** Back
+    **[F1]** Toggle Radio Overlay
+    **[F2]** Target current Camera target
+**[F5]** Toggle AI
+**[F6]** Fix Camera
 
 # Creators Manual
 TBD
