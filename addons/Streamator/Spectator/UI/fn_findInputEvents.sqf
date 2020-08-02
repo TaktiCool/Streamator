@@ -101,7 +101,7 @@ params ["_ctrlInfo"];
     };
 }] call CFUNC(addEventhandler);
 
-[QGVAR(updateInput), {
+[QGVAR(updateMenu), {
     (_this select 1) params ["_ctrl"];
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     private _str = switch (GVAR(InputMode)) do {
@@ -176,14 +176,7 @@ params ["_ctrlInfo"];
             if (GVAR(MapOpen)) then {
                 format ["<t size='%1'>[ALT+LMB] Teleport [M] Close Map</t>", _smallTextSize]
             } else {
-                private _colors = ["#ffffff", "#3CB371"];
-                format [
-                    "<t size='%4'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t><t size='%4' color='%1'>[F1] Toggle Group Overlay</t> <t size='%4' color='%2'>[F2] Toggle Unit Overlay</t> <t size='%4' color='%3'>[F3] Toggle Custom Overlay</t>",
-                    _colors select GVAR(OverlayGroupMarker),
-                    _colors select GVAR(OverlayUnitMarker),
-                    _colors select GVAR(OverlayCustomMarker),
-                    _smallTextSize
-                ]
+                GVAR(currentMenuPath) call FUNC(renderMenu);
             };
         };
     };

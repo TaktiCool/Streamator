@@ -31,7 +31,7 @@ _map ctrlCommit 0;
 
 GVAR(MapOpen) = true;
 (uiNamespace getVariable [QGVAR(PlanningModeDisplay), displayNull]) closeDisplay 1;
-QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
+QGVAR(updateMenu) call CFUNC(localEvent); // hijack To Update Text on Map Open
 GVAR(MapState) params [["_zoom", 1], ["_position", getPos CLib_Player]];
 
 QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
@@ -163,7 +163,7 @@ _map ctrlAddEventHandler ["Destroy", {
     private _zoom = ctrlMapScale _map;
     GVAR(MapState) = [_zoom, _pos];
     GVAR(MapOpen) = false;
-    QGVAR(updateInput) call CFUNC(localEvent); // hijack To Update Text on Map Open
+    QGVAR(updateMenu) call CFUNC(localEvent); // hijack To Update Text on Map Open
     GVAR(PlanningModeDrawing) = false;
     [{
         call FUNC(createPlanningDisplay);

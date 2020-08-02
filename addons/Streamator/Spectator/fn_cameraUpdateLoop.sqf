@@ -14,7 +14,7 @@
     None
 */
 // This Fixes the Sticky Buttons, when a player tabs out
-if !(isGameFocused) then {
+if (!isGameFocused && (GVAR(CameraSpeedMode) || GVAR(CameraSmoothingMode) || GVAR(CameraZoomMode))) then {
     GVAR(CameraSpeedMode) = false;
     GVAR(CameraSmoothingMode) = false;
     GVAR(CameraZoomMode) = false;

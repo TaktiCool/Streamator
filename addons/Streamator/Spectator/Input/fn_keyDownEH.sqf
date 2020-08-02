@@ -62,7 +62,7 @@ private _return = switch (_keyCode) do {
             if (GVAR(InputGuessIndex) >= count GVAR(InputGuess)) then {
                 GVAR(InputGuessIndex) = 0;
             };
-            [QGVAR(updateInput)] call CFUNC(localEvent);
+            [QGVAR(updateMenu)] call CFUNC(localEvent);
             true
         };
         GVAR(CameraFOV) = 0.75;
@@ -75,21 +75,22 @@ private _return = switch (_keyCode) do {
         call FUNC(UpdateValidUnits);
         true;
     };
+    /*
     case DIK_F1: { // F1
         GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F2: { // F2
         GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         call FUNC(UpdateValidUnits);
         true;
     };
     case DIK_F3: { // F3
         GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         call FUNC(UpdateValidUnits);
         true;
     };
@@ -146,6 +147,7 @@ private _return = switch (_keyCode) do {
         GVAR(OverlayLaserTargets) = !GVAR(OverlayLaserTargets);
         true;
     };
+    */
     case DIK_M: { // M: Map
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         call FUNC(buildMapUI);
@@ -204,14 +206,16 @@ private _return = switch (_keyCode) do {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         GVAR(CameraVision) = 9;
         call FUNC(setVisionMode);
+		true;
     };
     case DIK_V: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_shift) exitWith {
+            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             if (!GVAR(MinimapVisible)) then {
                 QGVAR(ToggleMinimap) call CFUNC(localEvent);
             };
-            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
         };
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
@@ -332,18 +336,21 @@ private _return = switch (_keyCode) do {
     };
 };
 
+if (!_return && GVAR(InputMode) != INPUTMODE_SEARCH) then {
+    _return = [GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry);
+};
 if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;
         QGVAR(updateGuess) call CFUNC(localEvent);
-        QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         _return = true;
     } else {
         if (_keyCode == DIK_BACKSPACE) then { // BACKSPACE
             GVAR(InputScratchpad) = GVAR(InputScratchpad) select [0, count GVAR(InputScratchpad) - 1];
             QGVAR(updateGuess) call CFUNC(localEvent);
-            QGVAR(updateInput) call CFUNC(localEvent);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             _return = true;
         };
     };

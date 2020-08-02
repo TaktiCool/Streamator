@@ -56,13 +56,13 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 [QGVAR(toggleRadioUI), {
     (_this select 1) params ["_ctrlGroup"];
     _ctrlGroup ctrlShow !(ctrlShown _ctrlGroup);
+    GVAR(RadioIconsVisible) = ctrlShown _ctrlGroup;
 }, _ctrlRadioInfoGrp] call CFUNC(addEventhandler);
 
 [QGVAR(ShowIcon), {
     (_this select 0) params ["_unit", "_icon", "_uid"]; // UID is in case of TFAR the Freq and in case of ACRE the Radio Item
     (_this select 1) params ["_ctrlGroup"];
     private _display = ctrlParent _ctrlGroup;
-
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _nbrElements = count _elements;
 
@@ -114,7 +114,6 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 [QGVAR(HideIcon), {
     (_this select 0) params ["_unit", "_uid"];
     (_this select 1) params ["_ctrlGroup"];
-
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
     private _elementFound = false;
     private _element = controlNull;
