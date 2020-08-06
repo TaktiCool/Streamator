@@ -21,7 +21,7 @@ Key Binding | Short Description | Remarks
 **`W` `S` `A` `D`** | Horiz. movement |
 **`Q` `Y`** | Vert. movement |
 **`F`** | (De-)focus object | Changes the camera mode to FOLLOW. The current camera target (shown on the bottom) will be the focused object. If no object is selected (camera target = Null Object), the camera mode will change to FREE.
-**`CTRL`** + **`F`** | Find object | Opens a search field with completion. All alive units and spectators are searchable. The selected object in the completion list can be cycled by pressing **`TAB`** (right) and **`SHIFT`**+**`TAB`** (left). With ENTER the selected object will be the focused object in FOLLOW mode. With **`NUMPAD 1-6`** the selected unit will be focused with the selected camera mode (see **`NUMPAD 1-6`**).
+**`CTRL`** + **`F`** | Find object | Opens a search field with completion. See more [Serach Mode](#search-mode)
 **`ALT`** + **`F`** | last Shooting Unit | Changes the FOLLOW Target to the last Shooting Unit
 **`R`** | Refocus object | Only in FOLLOW Mode! Refocus (center) the camera to the current focused object. If a spectator is selected, the current camera state (position, view angle etc.) is transferred to your camera. if in SHOULDER, TOPDOWN or ORBIT Mode it resets Camera to Default Values
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.
@@ -58,13 +58,26 @@ Key Binding | Short Description | Remarks
 **`ALT`** + **`LMB`** | Move camera | Moves the camera to the clicked position
 **`LMB`** (Dbl. Click) on Marker | Focus Unit/Vehicle | Focuses a unit or vehicle.
 Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups: ID and group members<br>Vehicles: type and units<br>
-**`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planing Mode and shows Cursor
+**`CTRL`** + **`E`** | Toggle Planning Mode | Toggles Planning Mode and shows Cursor
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
 
-# MENU SYSTEM
+## Search Mode
+Key Binding | Short Description | Remarks
+---|---|---
+**`ENTER`** | Switch to Search Entry | Switch to Search Entry
+**`NUMPAD 0`** | Free View | Toggles back to Free View
+**`NUMPAD 1`** | Follow View | Toggles to Follow Mode
+**`NUMPAD 2`** | Shoulder View | Toggles to Shoulder View
+**`NUMPAD 3`** | Topdown View | Toggles to Topdown View
+**`NUMPAD 4`** | First Person View | Toggles to First Person View
+**`NUMPAD 5`** | Orbit View | Toggles to Orbit View
+**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
+**`TAB`** | Cycle to Search Entry Right | Switches to the Next Searched Result
+**`SHIFT`** + **`TAB`** | Cycle to Search Entry Left | Switches to the Next Searched Result
 
+# MENU SYSTEM
 **[F1]** <Overlays>
     **[Esc]** Back
     **[F1]** Group Markers
@@ -89,13 +102,15 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
     **[F2]** NVG
     **[F3]** Thermal
     **[F4]** <Thermal Modes>
-        **[F1]** Thermal (RGW)
-        **[F2]** Thermal (WR)
-        **[F3]** Thermal (BR)
-        **[F4]** Thermal (R)
-        **[F5]** Thermal (G)
-        **[F6]** Thermal (B)
-        **[F7]** Thermal (W)
+        **[Esc]** Back
+        **[F1]** Thermal (W)
+        **[F2]** Thermal (B)
+        **[F3]** Thermal (G)
+        **[F4]** Thermal (BG)
+        **[F5]** Thermal (R)
+        **[F6]** Thermal (BR)
+        **[F7]** Thermal (WR)
+        **[F8]** Thermal (RGW)
 **[F4]** <Minimap>
     **[Esc]** Back
     **[F1]** Toggle

@@ -181,13 +181,14 @@ private _fnc_onRenderThermalVision = {
     true
 };
 // Thermal Vision Submenu Entries
-["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F1, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
-["Thermal (WR)", "MAIN/VISION/THERMALMODES", DIK_F2, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 6] call FUNC(addMenuItem);
-["Thermal (BR)", "MAIN/VISION/THERMALMODES", DIK_F3, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 5] call FUNC(addMenuItem);
-["Thermal (R)", "MAIN/VISION/THERMALMODES", DIK_F4, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 4] call FUNC(addMenuItem);
-["Thermal (G)", "MAIN/VISION/THERMALMODES", DIK_F5, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 3] call FUNC(addMenuItem);
-["Thermal (B)", "MAIN/VISION/THERMALMODES", DIK_F6, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 2] call FUNC(addMenuItem);
-["Thermal (W)", "MAIN/VISION/THERMALMODES", DIK_F7, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 1] call FUNC(addMenuItem);
+["Thermal (W)", "MAIN/VISION/THERMALMODES", DIK_F1, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 0] call FUNC(addMenuItem);
+["Thermal (B)", "MAIN/VISION/THERMALMODES", DIK_F2, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 1] call FUNC(addMenuItem);
+["Thermal (G)", "MAIN/VISION/THERMALMODES", DIK_F3, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 2] call FUNC(addMenuItem);
+["Thermal (BG)", "MAIN/VISION/THERMALMODES", DIK_F4, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 3] call FUNC(addMenuItem);
+["Thermal (R)", "MAIN/VISION/THERMALMODES", DIK_F5, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 4] call FUNC(addMenuItem);
+["Thermal (BR)", "MAIN/VISION/THERMALMODES", DIK_F6, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 5] call FUNC(addMenuItem);
+["Thermal (WR)", "MAIN/VISION/THERMALMODES", DIK_F7, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 6] call FUNC(addMenuItem);
+["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F8, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
 
 // Minimap
 ["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {true}, true] call FUNC(addMenuItem);
