@@ -90,9 +90,8 @@ GVAR(currentMenuPath) = "MAIN";
     };
     true
 }] call FUNC(addMenuItem);
-
 // Camera
-["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {true}, true] call FUNC(addMenuItem);
+["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {!isNull GVAR(CameraFollowTarget)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/CAMERA", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 private _fnc_setCameraMode = {
     params ["_mode"];
@@ -112,6 +111,7 @@ private _fnc_onRenderCameraMode = {
 // Camera Submenu Entries
 ["Free", "MAIN/CAMERA", DIK_F1, {
     [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
+    GVAR(currentMenuPath) = "MAIN";
     true
 }, _fnc_onRenderCameraMode, false, CAMERAMODE_FREE] call FUNC(addMenuItem);
 ["Follow", "MAIN/CAMERA", DIK_F2, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_FOLLOW] call FUNC(addMenuItem);
