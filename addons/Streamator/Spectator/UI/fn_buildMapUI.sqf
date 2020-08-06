@@ -40,6 +40,7 @@ _map ctrlMapAnimAdd [0, _zoom, _position];
 ctrlMapAnimCommit _map;
 
 [_map] call CFUNC(registerMapControl);
+
 _mapDisplay displayAddEventHandler ["KeyDown", {
     params [
         "_display",
@@ -48,6 +49,7 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
         ["_ctrl", false, [true]],
         ["_alt", false, [true]]
     ];
+    if ([GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry)) exitWith { true }; // exit if we have a Menu Action to Execute
     switch (_keyCode) do {
         case DIK_ESCAPE;
         case DIK_M: { // M
@@ -63,31 +65,6 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
                 GVAR(InputMode) = INPUTMODE_MOVE;
                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             };
-            true;
-        };
-        case DIK_F1: { // F1
-            GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
-            true;
-        };
-        case DIK_F2: { // F2
-            GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-            true;
-        };
-        case DIK_F3: { // F3
-            GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
-            true;
-        };
-        case DIK_F4: { // F4
-            GVAR(OverlayPlayerMarkers) = !GVAR(OverlayPlayerMarkers);
-            true;
-        };
-        case DIK_F6: { // F6
-            GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
-            true;
-        };
-        case DIK_F7: { // F7
-            GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
-            QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
             true;
         };
         case DIK_PGDN: { // Page Down
@@ -110,7 +87,7 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
                 CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
             };
             QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-        true;
+            true;
         };
         default {
             true;

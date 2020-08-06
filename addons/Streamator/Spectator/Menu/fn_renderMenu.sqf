@@ -13,7 +13,7 @@
     Returns:
 
 */
-params [["_path", "", [""]]];
+params [["_path", "", [""]], ["_mainPrefixText", ""]];
 if (_path isEqualTo "") then {
     "MAIN" call FUNC(renderMenu);
 };
@@ -24,8 +24,9 @@ if (_entry isEqualTo []) exitWith {
 private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
 private _ret = "";
 if (_path == "MAIN") then {
-    _ret = format ["<t size='%1'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t>", _smallTextSize];
+    _ret = format [_mainPrefixText, _smallTextSize];
 };
+
 {
     _x params ["_dik", "_name", "_onUse", "_onRender", "_hasSubmenus", "_args"];
     private _color = "#ffffff";
