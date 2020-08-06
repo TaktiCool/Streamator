@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Builds Unit Chyron UI Elements
 
     Parameter(s):
     None
@@ -224,7 +224,7 @@ private _unitInfoAllCtrls = [
     (_this select 1) params ["_ctrlGrp", "", "_ctrlUnitName",
     "_ctrlRoleIconBackground", "_ctrlUnitRoleIcon", "_ctrlGroupId",
     "","_ctrlSquadPicture", "_ctrlSquadName",
-    "", "", "_ctrlHealthRing", "_ctrlHealthValue",
+    "", "_ctrlHealthIcon", "_ctrlHealthRing", "_ctrlHealthValue",
     "", "_ctrlShotsIcon", "_ctrlShotsValue",
     "_ctrlWeaponSlots", "_ctrlStats"];
 
@@ -249,37 +249,80 @@ private _unitInfoAllCtrls = [
     _ctrlGroupId ctrlCommit 0;
 
     // set squad xml info /
+    private _squadImage = "\A3\Ui_f\Data\GUI\Cfg\LoadingScreens\A3_LoadingLogo_ca.paa";
+    private _squadName = "";
     private _squadParams = squadParams _unit;
     if (_squadParams isEqualTo []) then {
-        _ctrlSquadName ctrlSetText "";
-        _ctrlSquadName ctrlCommit 0;
-
-        private _squadImage = [_unit] call BIS_fnc_getUnitInsignia;
-        if (_squadImage == "") then {
-            _squadImage = "\A3\Ui_f\Data\GUI\Cfg\LoadingScreens\A3_LoadingLogo_ca.paa";
+        private _image = [_unit] call BIS_fnc_getUnitInsignia;
+        if (_image != "") then {
+            _squadImage = _image;
         };
-        _ctrlSquadPicture ctrlSetText _squadImage;
-        _ctrlSquadPicture ctrlCommit 0;
     } else {
         _squadParams = _squadParams select 0;
-        _ctrlSquadName ctrlSetText toUpper (_squadParams select 1);
-        _ctrlSquadName ctrlCommit 0;
-
-        _ctrlSquadPicture ctrlSetText (_squadParams select 4);
-        _ctrlSquadPicture ctrlCommit 0;
+        _squadName = toUpper (_squadParams select 1);
+        private _squadImage = _squadParams select 4;
     };
 
+    _ctrlSquadName ctrlSetText _squadName;
+    _ctrlSquadName ctrlCommit 0;
+
+    _ctrlSquadPicture ctrlSetText _squadImage;
+    _ctrlSquadPicture ctrlCommit 0;
+
     // set health
-    private _health = 1 - damage _unit;
-    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round (_health*24)];
-    _ctrlHealthRing ctrlCommit 0;
-    _ctrlHealthValue ctrlSetText format ["%1", round (_health*100)];
+    private _health = 0;
+    private _c = {
+        _health = _health + _x;
+        true
+    } count ((getAllHitPointsDamage _unit) select 2);
+    _health = _health/_c;
+    _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
+    private _healthIcons = [];
+    if (_unit isKindOf "CAManBase") then {
+        if (GVAR(aceLoaded)) then {
+            _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
+            if (_unit getVariable ["ace_medical_woundBleeding", 0] > 0) then {
+                _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa";
+            };
+        };
+        switch (toUpper (lifeState _unit)) do {
+            case ("DEAD-RESPAWN");
+            case ("DEAD-SWITCHING");
+            case ("DEAD"): {
+                _healthIcons = ["\A3\Ui_f\Data\igui\cfg\holdactions\holdAction_forceRespawn_ca.paa"];
+            };
+            case ("INCAPACITATED");
+            case ("INJURED"): {
+                _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa";
+            };
+            default {
+                if (_healthIcons isEqualTo []) then {
+                    _healthIcons pushBack "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
+                };
+            };
+        };
+    };
+    private _healthIcon = if (count _healthIcons == 2) then {
+        _healthIcons select ((round (time / 2)) mod 2);
+    } else {
+        _healthIcons select 0;
+    };
+
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
+    _ctrlHealthRing ctrlCommit 0;
+    if (_healthIcon isEqualTo "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa") then {
+        _ctrlHealthIcon ctrlSetPosition [PX(1.5), PY(1.5), PX(3), PY(3)];
+    } else {
+        _ctrlHealthIcon ctrlSetPosition [PX(0), PY(0), PX(6), PY(6)];
+    };
+    _ctrlHealthIcon ctrlSetText _healthIcon;
+    _ctrlHealthIcon ctrlCommit 0;
 
     // set number of shots
     _ctrlShotsValue ctrlSetText format ["%1", _unit getVariable [QGVAR(shotCount), 0]];
     _ctrlShotsValue ctrlCommit 0;
-    if ((time - (_unit getVariable [QGVAR(lastShot), 0])) <= 0.5) then {
+    if ((time - ((gunner _unit) getVariable [QGVAR(lastShot), 1])) <= 0.5) then {
         _ctrlShotsIcon ctrlSetPosition [PX(0.5), PY(0.5), PX(5), PY(5)];
         _ctrlShotsIcon ctrlCommit 0;
         _ctrlShotsIcon ctrlSetPosition [PX(1), PY(1), PX(4), PY(4)];
@@ -301,21 +344,21 @@ private _unitInfoAllCtrls = [
         _x params ["_class", "_ammo", "_loaded"];
 
         switch (true) do {
-            case (_class in ((primaryWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((primaryWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _primaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrPrimaryMags = _nbrPrimaryMags + 1;
                 };
             };
-            case (_class in ((handgunWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((handgunWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _handgunMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
                     _nbrHandgunMags = _nbrHandgunMags + 1;
                 };
             };
-            case (_class in ((secondaryWeapon _unit) call FUNC(compatibleMagazines))): {
+            case (_class in ((secondaryWeapon _unit) call CFUNC(compatibleMagazines))): {
                 if (_loaded) then {
                     _secondaryMagLoaded = format[ "%1 / %2", _ammo, getNumber (_cfgMagazines >> _class >> "count")];
                 } else {
@@ -452,7 +495,7 @@ private _unitInfoAllCtrls = [
         } else {
             (_this select 1) call CFUNC(removePerFrameHandler);
         };
-    }, 0.5] call CFUNC(addPerFrameHandler);
+    }, 0.4] call CFUNC(addPerFrameHandler);
 
     GVAR(UnitInfoOpen) = true;
 }, _unitInfoAllCtrls] call CFUNC(addEventhandler);

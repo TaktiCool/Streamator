@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Loads and Restores Position from Position Memory
 
     Parameter(s):
     None
@@ -13,13 +13,12 @@
     Returns:
     None
 */
-params ["_slot"];
+params ["_slot", "_smoothTranslation"];
 
 private _element = GVAR(PositionMemory) getVariable (str _slot);
 if (isNil "_element") exitWith {};
 
 if (count _element != 12) exitWith {};
-private _lastCameraMode = GVAR(CameraMode);
 GVAR(CameraMode) = _element select 0;
 GVAR(CameraFollowTarget) = _element select 1;
 GVAR(CameraPos) = _element select 2;
@@ -30,12 +29,12 @@ GVAR(CameraPitch) = _element select 5;
 private _lastCameraFOV = GVAR(CameraFOV);
 GVAR(CameraFOV) = _element select 8;
 GVAR(CameraVision) = _element select 9;
-if (GVAR(CameraMode) == 3) then {
+if (GVAR(CameraMode) == CAMERAMODE_SHOULDER) then {
     GVAR(ShoulderOffSet) = _element select 10;
     GVAR(CameraDirOffset) = _element select 6;
     GVAR(CameraPitchOffset) = _element select 7;
 };
-if (GVAR(CameraMode) == 4) then {
+if (GVAR(CameraMode) == CAMERAMODE_TOPDOWN) then {
     GVAR(TopDownOffset) = _element select 11;
 };
 call FUNC(setVisionMode);
@@ -47,11 +46,11 @@ if (GVAR(CameraFOV) != _lastCameraFOV) then {
 };
 if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
     GVAR(CameraPreviousState) = [];
-    [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
+    [GVAR(CameraFollowTarget), nil, _smoothTranslation] call FUNC(setCameraTarget);
 } else {
     private _distance = (getPos GVAR(Camera)) distance ([GVAR(CameraPos), (getPos GVAR(CameraFollowTarget)) vectorAdd GVAR(CameraRelPos)] select (isNull GVAR(CameraFollowTarget)));
-
-    if (_distance > 300) then {
+    if (_distance > 300 && !_smoothTranslation) then {
         GVAR(CameraPreviousState) = [];
     };
+    [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
 };

@@ -5,15 +5,17 @@
     Author: BadGuy
 
     Description:
-    Client Init for Spectator
+    Sets Camera Target
 
     Parameter(s):
-    None
+    0: Unit to Focus on <Object>
+    1: Camera Mode to switch to <Number> (Default: 2)
+    2: Force Translate to new Position Smoothly <Bool>
 
     Returns:
     None
 */
-params ["_unit", ["_cameraMode", 2]];
+params ["_unit", ["_cameraMode", CAMERAMODE_FOLLOW], ["_smoothTranslate", false]];
 
 if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
@@ -47,23 +49,48 @@ if (_unit isEqualType []) exitWith {
         GVAR(CameraPitch) = -asin ((_diffVect select 2) / vectorMagnitude _diffVect  min 1);
         GVAR(CameraDir) = -(_diffVect select 0) atan2 -(_diffVect select 1);
 
-        if (GVAR(CameraMode) != 1) then {
+        if (GVAR(CameraMode) != CAMERAMODE_FREE) then {
             private _prevUnit = GVAR(CameraFollowTarget);
             GVAR(CameraFollowTarget) = objNull;
-            GVAR(CameraMode) = 1;
+            GVAR(CameraMode) = CAMERAMODE_FREE;
             [QGVAR(CameraTargetChanged), [objNull, _prevUnit]] call CFUNC(localEvent);
             [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
         };
 
     };
-
 };
 
 private _prevUnit = GVAR(CameraFollowTarget);
 GVAR(CameraFollowTarget) = _unit;
 
-if (_cameraMode in [2, 6]) then {
-    if (GVAR(CameraMode) != 2 || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
+if (GVAR(CameraMode) == CAMERAMODE_UAV) then {
+    detach GVAR(Camera);
+    GVAR(UAVCameraTarget) = objNull;
+};
+
+if (_cameraMode == CAMERAMODE_UAV) then {
+    GVAR(UAVCameraTarget) = vehicle _unit;
+    private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof vehicle GVAR(UAVCameraTarget));
+
+    if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
+        GVAR(UAVCameraTarget) = vehicle (getConnectedUAV _unit);
+        private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+        if (!isText (_vehicleConfig >> "uavCameraGunnerPos") || !isText (_vehicleConfig >> "uavCameraGunnerDir")) then {
+            GVAR(UAVCameraTarget) = objNull;
+            breakTo SCRIPTSCOPENAME;
+        };
+    };
+    private _camPosSelection = getText (_vehicleConfig >> "uavCameraGunnerPos");
+    private _camDirSelection = getText (_vehicleConfig >> "uavCameraGunnerDir");
+    private _camPos = GVAR(UAVCameraTarget) selectionPosition _camPosSelection;
+    private _camDir = GVAR(UAVCameraTarget) selectionPosition _camDirSelection;
+    private _vDir = _camPos vectorFromTo _camDir;
+
+    GVAR(Camera) attachTo [GVAR(UAVCameraTarget), [0,0,0], _camDirSelection];
+};
+
+if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
+    if (GVAR(CameraMode) != CAMERAMODE_FOLLOW || {(getPosASLVisual GVAR(Camera) distance getPosASLVisual GVAR(CameraFollowTarget)) > 50}) then {
         GVAR(CameraRelPos) = (vectorNormalized (getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CameraFollowTarget))) vectorMultiply 10;
         GVAR(CameraRelPos) set [2, 5];
     };
@@ -72,18 +99,19 @@ if (_cameraMode in [2, 6]) then {
     };
 
     if (GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
-        [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_player]] call CFUNC(targetEvent);
+        [QGVAR(RequestCameraState), GVAR(CameraFollowTarget), [CLib_Player]] call CFUNC(targetEvent);
     };
     GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos) min 1);
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 };
 
 GVAR(CameraMode) = _cameraMode;
+QGVAR(updateMenu) call CFUNC(localEvent);
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 
 [QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);
 if (!isNull GVAR(CameraFollowTarget)) then {
-    if ((getPosASL GVAR(CameraFollowTarget) distance AGLToASL positionCameraToWorld [0 ,0 ,0]) > 300) then {
+    if ((getPosASL GVAR(CameraFollowTarget) distance AGLToASL positionCameraToWorld [0 ,0 ,0]) > 300 && !(_smoothTranslate)) then {
         GVAR(CameraPreviousState) = [];
     };
 };

@@ -5,13 +5,13 @@
     Author: joko // Jonas
 
     Description:
-    Add or Update Group in Tracker
+    Gets Icon for Unit
 
     Parameter(s):
-
+    0: Unit to get Icon for <Object>
 
     Returns:
-
+    <String> Icon path for Unit
 */
 params ["_unit"];
 private _customIcon = _unit getVariable "Spectator_CustomIcon";

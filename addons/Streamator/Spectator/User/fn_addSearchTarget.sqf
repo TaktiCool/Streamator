@@ -12,6 +12,7 @@
     1: Target <Object, String, Location, Array<Number>>
     2: Distance Offset <Number> (Default: 5)
     3: Hight Offset <Number> (Default: 1)
+
     Returns:
     None
 */
@@ -25,4 +26,9 @@ params [
 if (isNil QGVAR(CustomSearchItems)) then {
     GVAR(CustomSearchItems) = [];
 };
-GVAR(CustomSearchItems) pushback [_name, [_target, _distance, _hight]];
+private _index = GVAR(CustomSearchItems) findIf {_x select 0 == _name};
+if (_index == -1) then {
+    GVAR(CustomSearchItems) pushback [_name, [_target, _distance, _hight]];
+} else {
+    GVAR(CustomSearchItems) set [_index, [_name, [_target, _distance, _hight]]]
+};

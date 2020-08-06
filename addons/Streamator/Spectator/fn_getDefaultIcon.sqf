@@ -5,7 +5,7 @@
     Author: BadGuy
 
     Description:
-
+    Gets Group Icon for Side
 
     Parameter(s):
     None

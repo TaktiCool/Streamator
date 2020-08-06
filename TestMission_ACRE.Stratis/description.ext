@@ -1,13 +1,14 @@
 joinUnassigned = 1;
 allowFunctionsRecompile = 1;
 allowFunctionsLog = 1;
-briefing = 0;
-debriefing = 0;
+briefing = 1;
+debriefing = 1;
 enableDebugConsole = 2;
 
 class CLib {
     Modules[] = {"CLib", "Streamator"};
-	useExperimentalAutoload = 0;
+    useExperimentalAutoload = 0;
     useCompressedFunction = 0;
     useFallbackRemoteExecution = 0;
+    FrameGraphSize = 128;
 };

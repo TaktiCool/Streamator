@@ -13,15 +13,22 @@
     Returns:
     None
 */
-
-private _tempDir = [GVAR(CameraDir), GVAR(CameraDirOffset)] select (GVAR(CameraMode) == 3);
+// This Fixes the Sticky Buttons, when a player tabs out
+if (!isGameFocused && (GVAR(CameraSpeedMode) || GVAR(CameraSmoothingMode) || GVAR(CameraZoomMode))) then {
+    GVAR(CameraSpeedMode) = false;
+    GVAR(CameraSmoothingMode) = false;
+    GVAR(CameraZoomMode) = false;
+    QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+};
+if (isGamePaused) exitWith {};
+private _tempDir = [GVAR(CameraDir), GVAR(CameraDirOffset)] select (GVAR(CameraMode) == CAMERAMODE_SHOULDER);
 private _forward = [sin _tempDir, cos _tempDir, 0];
 private _right = [cos _tempDir, -sin _tempDir, 0];
 
 private _cameraSmoothingTime = GVAR(CameraSmoothingTime);
 // Calculate velocity
 private _velocity = [0, 0, 0];
-if (GVAR(InputMode) == 0) then {
+if (GVAR(InputMode) == INPUTMODE_MOVE) then {
     if (inputAction "cameraMoveForward" > 0) then {
         _velocity = _velocity vectorAdd (_forward vectorMultiply (inputAction "cameraMoveForward"));
     };
@@ -44,14 +51,14 @@ if (GVAR(InputMode) == 0) then {
 
 private _deltaX = (inputAction "cameraLookRight" - inputAction "cameraLookLeft") * 2;
 private _deltaY = (inputAction "cameraLookDown" - inputAction "cameraLookUp") * 2;
-if (_deltaX != 0 || _deltaY != 0) then {
+if (_deltaX != 0 || { _deltaY != 0 }) then {
     [displayNull, _deltaX, _deltaY] call FUNC(mouseMovingEH);
 };
 
 private _cameraMode = GVAR(CameraMode);
 private _cameraFollowTarget = GVAR(CameraFollowTarget);
 
-if (_cameraMode == 2 && GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) then {
+if (_cameraMode == CAMERAMODE_FOLLOW && { GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator }) then {
     private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
     if !(_state isEqualTo []) then {
         _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime", "_shoulderOffset", "_dirOffset", "_pitchOffset", "_topdownOffset"];
@@ -64,27 +71,27 @@ if (_cameraMode == 2 && GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator
         _cameraSmoothingTime = _smoothingTime max 0.2;
 
         switch (_cameraMode) do {
-            case 1: { // FREE
+            case CAMERAMODE_FREE: { // FREE
                 GVAR(CameraPos) = _pos;
             };
-            case 2: { // FOLLOW
+            case CAMERAMODE_FOLLOW: { // FOLLOW
                 GVAR(CameraRelPos) = _relPos;
                 _cameraFollowTarget = _rfollowTarget;
             };
-            case 3: { // SHOULDER
+            case CAMERAMODE_SHOULDER: { // SHOULDER
                 _cameraFollowTarget = _rfollowTarget;
                 GVAR(ShoulderOffset) = _shoulderOffset;
                 GVAR(CameraDirOffset) = _dirOffset;
                 GVAR(CameraPitchOffset) = _pitchOffset;
             };
-            case 4: { // TOPDOWN
+            case CAMERAMODE_TOPDOWN: { // TOPDOWN
                 _cameraFollowTarget = _rfollowTarget;
                 GVAR(TopdownOffset) = _topdownOffset;
             };
-            case 5: { // FPS
+            case CAMERAMODE_FPS: { // FPS
                 _cameraFollowTarget = _rfollowTarget;
             };
-            case 6: { // SHOULDER
+            case CAMERAMODE_ORBIT: { // ORBIT
                 _cameraFollowTarget = _rfollowTarget;
                 GVAR(CameraRelPos) = _relPos;
                 GVAR(CameraDirOffset) = _dirOffset;
@@ -94,42 +101,48 @@ if (_cameraMode == 2 && GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator
     };
 };
 
-if (_cameraMode > 1 && isNull _cameraFollowTarget) exitWith {
-    GVAR(CameraMode) = 1;
+if (_cameraMode > CAMERAMODE_FREE && { isNull _cameraFollowTarget }) exitWith {
+    GVAR(CameraMode) = CAMERAMODE_FREE;
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
-if (_cameraFollowTarget call Streamator_fnc_isSpectator && _cameraMode > 2) exitWith {
-    GVAR(CameraMode) = 1;
+if (_cameraFollowTarget call Streamator_fnc_isSpectator && { _cameraMode > CAMERAMODE_FOLLOW }) exitWith {
+    GVAR(CameraMode) = CAMERAMODE_FREE;
     [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 };
 
 
+if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) != cameraOn }) exitWith {
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    switchCamera CLib_Player;
+    cameraEffectEnableHUD true;
+    GVAR(CameraInFirstPerson) = false;
+};
 
-if (_cameraMode == 5 && !GVAR(CameraInFirstPerson)) exitWith {
+if (!GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS }) exitWith {
     GVAR(Camera) cameraEffect ["Terminate", "BACK"];
     _cameraFollowTarget switchCamera "INTERNAL";
     cameraEffectEnableHUD true;
     GVAR(CameraInFirstPerson) = true;
 };
 
-if (_cameraMode != 5 && GVAR(CameraInFirstPerson)) then {
+if (GVAR(CameraInFirstPerson) && { _cameraMode != CAMERAMODE_FPS }) then {
     GVAR(Camera) cameraEffect ["internal", "back"];
-    switchCamera CLib_player;
+    switchCamera CLib_Player;
     cameraEffectEnableHUD true;
     GVAR(CameraInFirstPerson) = false;
 };
 
 switch (_cameraMode) do {
-    case 1: { // FREE
-        GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+    case CAMERAMODE_FREE: { // FREE
+        GVAR(CameraPos) = GVAR(CameraPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
     };
-    case 2: { // FOLLOW
-        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+    case CAMERAMODE_FOLLOW: { // FOLLOW
+        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = getPosASLVisual _cameraFollowTarget vectorAdd GVAR(CameraRelPos);
     };
-    case 3: { // Over Shoulder
-        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * CGVAR(deltaTime)));
+    case CAMERAMODE_SHOULDER: { // Over Shoulder
+        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPitch) = -(asin ([0, 1, 0] vectorDotProduct (vectorNormalized ((_cameraFollowTarget selectionPosition "camera") vectorDiff (_cameraFollowTarget selectionPosition "pelvis")))));
         private _offset = +GVAR(ShoulderOffSet);
         _offset set [1, (_offset select 1) * cos GVAR(CameraPitch) - (_offset select 2) * sin GVAR(CameraPitch)];
@@ -138,36 +151,40 @@ switch (_cameraMode) do {
         GVAR(CameraDir) = getDirVisual _cameraFollowTarget;
     };
 
-    case 4: { // TOPDOWN
-        GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+    case CAMERAMODE_TOPDOWN: { // TOPDOWN
+        GVAR(TopDownOffset) = GVAR(TopDownOffset) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld (_cameraFollowTarget selectionPosition "head")) vectorAdd GVAR(TopDownOffset);
         GVAR(CameraDir) = 0;
         GVAR(CameraPitch) = -90;
         _cameraSmoothingTime = _cameraSmoothingTime max 0.0757858;
     };
 
-    case 5: { // FPS
-        if !(cameraOn in [CLib_player, GVAR(Camera)]) then {
-
+    case CAMERAMODE_FPS: { // FPS
+        if !(cameraOn in [CLib_Player, GVAR(Camera)]) then {
+            /*
             if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget != cameraOn) then {
                 GVAR(CameraFollowTarget) = cameraOn;
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
                 _cameraFollowTarget = cameraOn;
             };
+
             if !(_cameraFollowTarget isKindOf "CAManBase") then {
                 [QGVAR(CameraModeChanged), 2] call CFUNC(localEvent);
             };
-            _cameraFollowTarget switchCamera "INTERNAL";
-
+            */
             CLib_Player setPos (_cameraFollowTarget modelToWorld [0, 0, -3]);
             CLib_Player setVectorDirAndUp [vectorDir _cameraFollowTarget, vectorUp _cameraFollowTarget];
         };
+        GVAR(Camera) setPos positionCameraToWorld [0, 0, 0];
+        GVAR(Camera) setDir ((positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 1]));
+
+        _cameraFollowTarget switchCamera "INTERNAL";
 
         breakOut SCRIPTSCOPENAME;
     };
-    case 6: { // Orbit
-        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * CGVAR(deltaTime)));
+    case CAMERAMODE_ORBIT: { // Orbit
+        GVAR(CameraRelPos) = GVAR(CameraRelPos) vectorAdd (_velocity vectorMultiply (GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPos) = (getPosASLVisual _cameraFollowTarget vectorAdd [0, 0, 0.8]) vectorAdd GVAR(CameraRelPos);
         private _mag = vectorMagnitude GVAR(CameraRelPos);
         private _norm = vectorNormalized GVAR(CameraRelPos);
@@ -175,11 +192,22 @@ switch (_cameraMode) do {
         GVAR(CameraPitch) = -asin (((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos)) min 1);
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
     };
+    case CAMERAMODE_UAV: {
+
+        private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
+
+        private _posSelection = getText (_vehicleConfig >> "uavCameraGunnerPos");
+        private _dirSelection = getText (_vehicleConfig >> "uavCameraGunnerDir");
+
+        GVAR(Camera) camSetFov GVAR(CameraFOV);
+
+        private _dir = (GVAR(UAVCameraTarget) selectionPosition _posSelection) vectorFromTo (GVAR(UAVCameraTarget) selectionPosition _dirSelection);
+        GVAR(Camera) setVectorDirAndUp [_dir, _dir vectorCrossProduct [-(_dir select 1), _dir select 0, 0]];
+        breakOut SCRIPTSCOPENAME;
+    };
 };
 
 GVAR(CameraPos) set [2, (getTerrainHeightASL GVAR(CameraPos)) max (GVAR(CameraPos) select 2)];
-
-
 
 private _position = GVAR(CameraPos);
 private _direction = GVAR(CameraDir) + GVAR(CameraDirOffset);

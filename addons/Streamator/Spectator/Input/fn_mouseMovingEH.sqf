@@ -21,8 +21,8 @@ params [
     ["_deltaY", 0, [0]]
 ];
 
-if (GVAR(InputMode) == 2) then {
-    if (GVAR(PlanningModeDrawing)) then {
+if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
+    if (GVAR(PlanningModeDrawing) && !GVAR(MapOpen)) then {
         private _endPosition = screenToWorld getMousePosition;
         private _startPosition = positionCameraToWorld [0, 0, 0];
         private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
@@ -31,11 +31,11 @@ if (GVAR(InputMode) == 2) then {
             _endPosition = ASLtoAGL _intersectPosition;
         };
 
-        [CLib_Player, QGVAR(cursorPosition), [serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
 } else {
     private _fov_factor = (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)]) / 0.75;
-    if (GVAR(CameraMode) in [3, 6]) exitWith {
+    if (GVAR(CameraMode) in [CAMERAMODE_SHOULDER, CAMERAMODE_ORBIT]) exitWith {
         private _dir = GVAR(CameraPreviousState) param [5, GVAR(CameraDirOffset)];
         GVAR(CameraDirOffset) = GVAR(CameraDirOffset) + _deltaX * 0.5 * _fov_factor;
         GVAR(CameraPitchOffset) = -89.0 max (89.9 min (GVAR(CameraPitchOffset) - _deltaY * _fov_factor));

@@ -1,6 +1,6 @@
 #include "macros.hpp"
 /*
-    Arma At War - AAW
+    Stremator
 
     Author: BadGuy, joko // Jonas
 
@@ -27,7 +27,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
         _height = _width;
     };
 
-    if (!alive _position) exitWith {
+    if ((toUpper (lifeState _position)) == "INCAPACITATED") exitWith {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\A3\ui_f\data\igui\cfg\revive\overlayicons\u100_ca.paa";
         _color = [1, 0, 0, 1];
@@ -36,7 +36,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
         _angle = 0;
     };
 
-    if ((toUpper (lifeState _position)) == "INCAPACITATED" || _position getVariable ["ACE_isUnconscious", false]) exitWith {
+    if (!alive _position) exitWith {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\a3\ui_f_curator\data\cfgmarkers\kia_ca.paa";
         _angle = 0;
@@ -58,7 +58,7 @@ private _manDescription = ["ICON", "a3\ui_f\data\Map\Markers\System\dummy_ca.paa
 [_iconId, "dblclicked", {
     (_this select 1) params ["_unit"];
     GVAR(CameraPreviousState) = [];
-    [_unit] call EFUNC(Spectator,setCameraTarget);
+    [_unit, [EGVAR(Spectator,CameraMode), CAMERAMODE_FOLLOW] select (EGVAR(Spectator,CameraMode) == CAMERAMODE_FREE)] call EFUNC(Spectator,setCameraTarget);
 }, _newUnit] call CFUNC(addMapGraphicsEventHandler);
 
 _iconId;

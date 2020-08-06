@@ -15,14 +15,14 @@
 */
 
 GVAR(aceLoaded) = isClass (configFile >> "CfgPatches" >> "ace_main");
-GVAR(TFARLoaded) = isClass (configFile >> "CfgPatches" >> "task_force_radio");
-GVAR(ACRELoaded) = isClass (configFile >> "CfgPatches" >> "acre_main");
-
-if (CLib_player call Streamator_fnc_isSpectator) then {
-    ["missionStarted", {
+GVAR(aceMapGesturesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_map_gestures");
+GVAR(aceSpectatorLoaded) = isClass (configFile >> "CfgPatches" >> "ace_spectator");
+["missionStarted", {
+    if (CLib_Player call Streamator_fnc_isSpectator) then {
         "initializeSpectator" call CFUNC(localEvent);
-    }] call CFUNC(addEventhandler);
-};
+    };
+    CLib_Player setVariable [QGVAR(isPlayer), true, true];
+}] call CFUNC(addEventhandler);
 
 ["terminateSpectator", {
     call FUNC(closeSpectator);
@@ -32,95 +32,105 @@ if (CLib_player call Streamator_fnc_isSpectator) then {
     call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);
 
-if (GVAR(TFARLoaded)) then {
-    DFUNC(updateTFARFreq) = {
-        private _freqSW = [];
-        private _freqLR = [];
+CLib_Player setVariable [QGVAR(isPlayer), true, true];
 
-        {
-            private _adChannel = _x call TFAR_fnc_getAdditionalSwChannel;
-            private _rc = _x call TFAR_fnc_getSwRadioCode;
-            _freqSW pushBackUnique format ["%1%2", _x call TFAR_fnc_getSwFrequency, _rc];
-            if ( _adChannel > -1 && {_adChannel == (_x call TFAR_fnc_getSwChannel)}) then {
-                _freqSW pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
-            };
-            nil;
-        } count (CLib_player call TFAR_fnc_radiosList);
+["playerChanged", {
+    (_this select 0) params ["_newPlayer"];
+    _newPlayer setVariable [QGVAR(isPlayer), true, true];
+    call FUNC(updateLocalMapMarkers);
+}] call CFUNC(addEventhandler);
 
-        {
-            private _adChannel = _x call TFAR_fnc_getAdditionalLrChannel;
-            private _rc = _x call TFAR_fnc_getLrRadioCode;
-            _freqLR pushBackUnique format ["%1%2", _x call TFAR_fnc_getLrFrequency, _rc];
-            if (_adChannel > -1 && {_adChannel != (_x call TFAR_fnc_getLrChannel)}) then {
-                _freqLR pushBackUnique format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc];
-            };
-            nil;
-        } count (CLib_player call TFAR_fnc_lrRadiosList);
-
-        if (_freqSW isEqualTo []) then {
-            _freqSW pushBackUnique "No_SW_Radio";
-        };
-        if (_freqLR isEqualTo []) then {
-            _freqLR pushBackUnique "No_LR_Radio";
-        };
-        CLib_player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];
-    };
-    [QGVAR(OnRadiosReceived), "OnRadiosReceived", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    [QGVAR(OnRadioOwnerSet), "OnRadioOwnerSet", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    [QGVAR(OnLRChange), "OnLRChange", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    [QGVAR(OnSWChange), "OnSWChange", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    [QGVAR(OnLRchannelSet), "OnLRchannelSet", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    [QGVAR(OnSWchannelSet), "OnSWchannelSet", {
-        call FUNC(updateTFARFreq);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-    ["vehicleChanged", {
-        call FUNC(updateTFARFreq);
-    }] call CFUNC(addEventhandler);
-    ["playerChanged", {
-        call FUNC(updateTFARFreq);
-    }] call CFUNC(addEventhandler);
-    ["Respawn", {
-        call FUNC(updateTFARFreq);
-    }] call CFUNC(addEventhandler);
-    call FUNC(updateTFARFreq);
-
-    [QGVAR(OnTangent), "OnTangent", {
-        params ["_unit", "_radio", "_radioType", "_additional", "_tangentPressed"];
-
-        private _freq = switch (_radioType) do {
-            case (0): {
-                if !(_additional) then {
-                    format ["%1%2", _radio call TFAR_fnc_getSwFrequency, _radio call TFAR_fnc_getSwRadioCode];
-                } else {
-                    format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getSwRadioCode];
-                };
-            };
-            case (1): {
-                if !(_additional) then {
-                    format ["%1%2", _radio call TFAR_fnc_getLrFrequency, _radio call TFAR_fnc_getLrRadioCode];
-                } else {
-                    format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
-                };
-            };
-            case (2): {
-                DUMP("Magic you dont exist");
-                "";
-            };
-        };
-        if (_freq == "") exitWith {};
-        private _targets = GVAR(radioNamespace) getVariable [_freq, []];
-        if (_targets isEqualTo []) exitWith {};
-        [[QGVAR(tangentReleased), QGVAR(tangentPressed)] select _tangentPressed, _targets, [_unit, _freq]] call CFUNC(targetEvent);
-    }, CLib_Player] call TFAR_fnc_addEventHandler;
-
+if (GVAR(ace_Loaded)) then {
+    ["ace_throwableThrown", {
+        ["ace_throwableThrown", _this] call CFUNC(globalEvent);
+    }] call CBA_fnc_addEventHandler;
 };
+GVAR(allMapMarkers) = [];
+
+#define Channel_Side "1"
+#define Channel_Command "2"
+
+DFUNC(collectMarkerData) = {
+    params ["_marker", ["_forceSideColor", false]];
+    [
+        markerText _marker,
+        markerPos _marker,
+        markerDir _marker,
+        getText ([(configFile >> "CfgMarkers" >> markerType _marker >> "icon"), (configFile >> "CfgMarkers" >> markerType _marker >> "texture")] select (isText (configFile >> "CfgMarkers" >> markerType _marker >> "texture"))),
+        [(configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA, side CLib_Player] select _forceSideColor
+    ]
+};
+
+DFUNC(bindMarkerEH) = {
+    [{
+        if (_this == 53 && getClientState == "BRIEFING READ") exitWith {};
+        private _display = findDisplay _this;
+
+        _display displayAddEventHandler ["KeyDown", {
+            if (_this select 1 == DIK_DELETE) then {
+                [{
+                    {
+                        private _i = _this find _x;
+                        if (_i > -1) then {
+                            if (((_x splitString "#/") param [3, "-1"]) in [Channel_Side, Channel_Command]) then {
+                                [QGVAR(PlayerSideMarkerDeleted), _x] call CFUNC(serverEvent);
+                            };
+                        };
+                    } forEach (_this - allMapMarkers);
+                }, allMapMarkers] call CFUNC(execNextFrame);
+            };
+            false;
+        }];
+
+        _display displayAddEventHandler ["ChildDestroyed", {
+            if (ctrlIdd (_this select 1) == 54 && _this select 2 == 1) then {
+                [{
+                    {
+                        if (((_x splitString "#/") param [3, "-1"]) in [Channel_Side, Channel_Command]) then {
+                            [QGVAR(PlayerSideMarkerPlaced), [_x, [_x, true] call FUNC(collectMarkerData)]] call CFUNC(serverEvent);
+                        };
+                    } forEach (allMapMarkers - _this);
+                    {
+                        private _i = _this find _x;
+                        if (_i > -1) then {
+                            if (((_x splitString "#/") param [3, "-1"]) in [Channel_Side, Channel_Command]) then {
+                                [QGVAR(PlayerSideMarkerDeleted), _x] call CFUNC(serverEvent);
+                            };
+                        };
+                    } forEach (_this - allMapMarkers);
+                }, GVAR(allMapMarkers)] call CFUNC(execNextFrame);
+            };
+            false;
+        }];
+
+        _display displayCtrl 51 ctrlAddEventHandler ["MouseButtonDblClick", {
+            {
+                if (!isNull findDisplay 54) then {
+                    (findDisplay 54 displayCtrl 1) buttonSetAction QUOTE(GVAR(allMapMarkers) = allMapMarkers);
+                };
+            } call CFUNC(execNextFrame);
+            false;
+        }];
+    }, {
+        if (_this == 53 && getClientState == "BRIEFING READ") exitWith { false };
+        !(isNull (findDisplay _this))
+    }, _this] call CFUNC(waitUntil);
+};
+
+DFUNC(updateLocalMapMarkers) = {
+    private _markers = allMapMarkers select {
+        (_x splitString "#/") params ["_userDef", "", "", "_channel"];
+        _userDef == "_USER_DEFINED "
+        && !(_channel in [Channel_Side, Channel_Command])
+    };
+    _markers = _markers apply { _x call FUNC(collectMarkerData); };
+    if (_markers isEqualTo (CLib_Player getVariable [QGVAR(mapMarkers), []])) exitWith {};
+    CLib_Player setVariable [QGVAR(mapMarkers), _markers, true];
+};
+
+["allMapMarkersChanged", {
+    call FUNC(updateLocalMapMarkers);
+}] call CFUNC(addEventHandler);
+
+12 call FUNC(bindMarkerEH);
+53 call FUNC(bindMarkerEH);

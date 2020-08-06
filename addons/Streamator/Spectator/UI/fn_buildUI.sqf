@@ -15,10 +15,11 @@
 */
 
 // Create Camera
-GVAR(Camera) = "Camera" camCreate (eyePos CLib_player);
+GVAR(Camera) = "Camera" camCreate (eyePos CLib_Player);
 GVAR(Camera) cameraEffect ["internal", "back"];
-CLib_player attachTo [GVAR(Camera), [0, 0, 0]];
-GVAR(CameraPos) = (eyePos CLib_player) vectorAdd [0, 0, GVAR(CameraHeight)];
+switchCamera CLib_Player;
+CLib_Player attachTo [GVAR(Camera), [0, 0, 0]];
+GVAR(CameraPos) = (eyePos CLib_Player) vectorAdd [0, 0, GVAR(CameraHeight)];
 showCinemaBorder false;
 cameraEffectEnableHUD true;
 
@@ -55,7 +56,7 @@ private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlInfo ctrlSetPosition [PX(0.3 + BORDERWIDTH), PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
 _ctrlInfo ctrlSetFontHeight PY(1.5);
 _ctrlInfo ctrlSetFont "RobotoCondensed";
-_ctrlInfo ctrlSetText "[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map [F1] Toggle Group Overlay [F2] Toggle Unit Overlay [F3] Toggle Custom Overlay";
+_ctrlInfo ctrlSetText (GVAR(currentMenuPath) call FUNC(renderMenu));
 _ctrlInfo ctrlCommit 0;
 
 private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
@@ -72,6 +73,12 @@ _ctrlTargetInfo ctrlSetFontHeight PY(1.5);
 _ctrlTargetInfo ctrlSetFont "RobotoCondensedBold";
 _ctrlTargetInfo ctrlSetText "Target Info";
 _ctrlTargetInfo ctrlCommit 0;
+
+private _ctrlTargetSpeedInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
+_ctrlTargetSpeedInfo ctrlSetPosition [safeZoneW - PX(25),  PY(0.3), PX(20), PY(1.8)];
+_ctrlTargetSpeedInfo ctrlSetFont "RobotoCondensedBold";
+_ctrlTargetSpeedInfo ctrlSetText "";
+_ctrlTargetSpeedInfo ctrlCommit 0;
 
 private _ctrlMouseSpeedBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlMouseSpeedBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(2 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
@@ -188,7 +195,6 @@ _ctrlPlanningChannel ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
 
 [QGVAR(CameraTargetChanged), {
-    JK_test = GVAR(CameraFollowTarget);
     if (GVAR(UnitInfoOpen)) then {
         if (isNull GVAR(CameraFollowTarget)) then {
             QGVAR(CloseUnitInfo) call CFUNC(localEvent);
@@ -196,6 +202,7 @@ _ctrlPlanningChannel ctrlCommit 0;
             [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
         };
     };
+
 }] call CFUNC(addEventhandler);
 
 [QGVAR(CameraSpeedChanged), {
@@ -267,8 +274,8 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     (_this select 0) params ["_mode"];
     (_this select 1) params ["_ctrl"];
 
-    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]"]  select (_mode - 1);
-    _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name)];
+    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]", "UAV %2 [%1]"]  select (_mode - 1);
+    _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name), GVAR(UAVCameraTarget) call CFUNC(name)];
     private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
     _ctrl ctrlCommit 0;
@@ -305,21 +312,27 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
 [_ctrlGrp] call FUNC(buildRadioInfoUI);
 [_ctrlGrp] call FUNC(buildUnitInfoUI);
+[_ctrlGrp] call FUNC(buildFPSUI);
 _ctrlInfo call FUNC(findInputEvents);
 
 [{
-    (_this select 0) params ["_ctrl"];
+    (_this select 0) params ["_ctrlFOVBarCurrent", "_ctrlTargetSpeedInfo"];
     private _logScale = (ln (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / ln sqrt 2;
     private _logScaleMin = (ln 0.01) / ln sqrt 2;
     private _logScaleMax = (ln 2) / ln sqrt 2;
     private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
 
-    //private _relLength = (2 - (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / 2;
-    _ctrl ctrlSetPosition [
+    _ctrlFOVBarCurrent ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
         PX(BORDERWIDTH / 8),
         PY(BORDERWIDTH * 4) * _relLength
     ];
-    _ctrl ctrlCommit 0;
-}, 0, _ctrlFOVBarCurrent] call CFUNC(addPerFrameHandler);
+    _ctrlFOVBarCurrent ctrlCommit 0;
+    if (isNull GVAR(CameraFollowTarget)) then {
+        _ctrlTargetSpeedInfo ctrlSetText "";
+    } else {
+        _ctrlTargetSpeedInfo ctrlSetText format ["%1 km/h", abs (floor (speed (vehicle GVAR(CameraFollowTarget))))];
+    };
+    _ctrlTargetSpeedInfo ctrlCommit 0;
+}, 0, [_ctrlFOVBarCurrent, _ctrlTargetSpeedInfo]] call CFUNC(addPerFrameHandler);

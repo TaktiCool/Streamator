@@ -5,6 +5,7 @@
     Author: joko // Jonas
 
     Description:
+    Checks if Unit is Spectator
 
     Parameter(s):
     0: Unit <Object>
