@@ -128,4 +128,5 @@ _ctrlMinimapTitle ctrlCommit 0;
     _ctrlMinimap ctrlSetPosition _ctrlMinimapPos;
     _ctrlGrpMinimap ctrlCommit 0.5;
     _ctrlMinimap ctrlCommit 0.3;
+    QGVAR(updateMenu) call CFUNC(localEvent);
 }, [_ctrlGrpMinimap, _ctrlMinimap]] call CFUNC(addEventhandler);

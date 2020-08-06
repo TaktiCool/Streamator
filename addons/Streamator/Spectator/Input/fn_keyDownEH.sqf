@@ -62,7 +62,7 @@ private _return = switch (_keyCode) do {
             if (GVAR(InputGuessIndex) >= count GVAR(InputGuess)) then {
                 GVAR(InputGuessIndex) = 0;
             };
-            [QGVAR(updateInput)] call CFUNC(localEvent);
+            [QGVAR(updateMenu)] call CFUNC(localEvent);
             true
         };
         GVAR(CameraFOV) = 0.75;
@@ -73,77 +73,6 @@ private _return = switch (_keyCode) do {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
         call FUNC(UpdateValidUnits);
-        true;
-    };
-    case DIK_F1: { // F1
-        GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
-        true;
-    };
-    case DIK_F2: { // F2
-        GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
-        true;
-    };
-    case DIK_F3: { // F3
-        GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
-        QGVAR(updateInput) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
-        true;
-    };
-    case DIK_F4: { // F4
-        GVAR(OverlayPlayerMarkers) = !GVAR(OverlayPlayerMarkers);
-        true;
-    };
-    case DIK_F5: { // F5
-        if (!isNull GVAR(CameraFollowTarget)) then {
-            if (GVAR(UnitInfoOpen)) then {
-                QGVAR(CloseUnitInfo) call CFUNC(localEvent);
-            } else {
-                [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
-            };
-        } else {
-            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
-        };
-        true;
-    };
-
-    case DIK_F6: { // F6
-        GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
-        true;
-    };
-    case DIK_F7: { // F7
-        GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
-        profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
-        saveProfileNamespace;
-        QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
-        true;
-    };
-    case DIK_F8: { // F8
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false;};
-        QGVAR(toggleRadioUI) call CFUNC(localEvent);
-        true;
-    };
-    case DIK_F9: { // F9
-        call FUNC(setRadioFollowTarget);
-        true;
-    };
-    case DIK_F10: {
-        GVAR(Camera) cameraEffect ["internal", "back"];
-        switchCamera CLib_Player;
-        cameraEffectEnableHUD true;
-        true; // F10
-    };
-    case DIK_F11: { // F11
-        GVAR(OverlayBulletTracer) = !GVAR(OverlayBulletTracer);
-        GVAR(BulletTracers) = [];
-        true;
-    };
-    case DIK_F12: { // F12
-        GVAR(OverlayLaserTargets) = !GVAR(OverlayLaserTargets);
         true;
     };
     case DIK_M: { // M: Map
@@ -187,35 +116,53 @@ private _return = switch (_keyCode) do {
     };
     case DIK_N: { // N
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        GVAR(CameraVision) = (GVAR(CameraVision) - 1);
-        if (GVAR(CameraVision) == -1) then {
-            GVAR(CameraVision) = 10;
+        if (GVAR(CameraVision) == 9) then {
+            GVAR(CameraVision) = GVAR(PrevCameraVision);
+        } else {
+            GVAR(PrevCameraVision) = GVAR(CameraVision);
+            GVAR(CameraVision) = 9;
         };
         call FUNC(setVisionMode);
         true;
-    };
-    case DIK_B: { // B
-        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
-        call FUNC(setVisionMode);
-        true;
-    };
-    case DIK_C: {
-        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
-        GVAR(CameraVision) = 9;
-        call FUNC(setVisionMode);
     };
     case DIK_V: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_shift) exitWith {
+            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             if (!GVAR(MinimapVisible)) then {
                 QGVAR(ToggleMinimap) call CFUNC(localEvent);
             };
-            GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
         };
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
     };
+    case DIK_R: { // R
+        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
+        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
+        switch (GVAR(CameraMode)) do {
+            case CAMERAMODE_FOLLOW: {
+                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
+                true;
+            };
+            case CAMERAMODE_SHOULDER: {
+                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
+                true;
+            };
+            case CAMERAMODE_TOPDOWN: {
+                GVAR(TopDownOffset) = [0, 0, 100];
+                true;
+            };
+            case CAMERAMODE_ORBIT: {
+                GVAR(CameraRelPos) = [0, 10, 10];
+                true;
+            };
+            default {
+                false;
+            };
+        };
+    };
+
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
             GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
@@ -256,33 +203,6 @@ private _return = switch (_keyCode) do {
             [_keyCode, _alt] call FUNC(restorePosition);
         };
         true;
-    };
-
-    case DIK_R: { // R
-        if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
-        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
-        switch (GVAR(CameraMode)) do {
-            case CAMERAMODE_FOLLOW: {
-                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
-                true;
-            };
-            case CAMERAMODE_SHOULDER: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
-                true;
-            };
-            case CAMERAMODE_TOPDOWN: {
-                GVAR(TopDownOffset) = [0, 0, 100];
-                true;
-            };
-            case CAMERAMODE_ORBIT: {
-                GVAR(CameraRelPos) = [0, 10, 10];
-                true;
-            };
-            default {
-                false;
-            };
-        };
-
     };
 
     case DIK_RETURN;
@@ -332,18 +252,21 @@ private _return = switch (_keyCode) do {
     };
 };
 
+if (!_return && GVAR(InputMode) != INPUTMODE_SEARCH) then {
+    _return = [GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry);
+};
 if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;
         QGVAR(updateGuess) call CFUNC(localEvent);
-        QGVAR(updateInput) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         _return = true;
     } else {
         if (_keyCode == DIK_BACKSPACE) then { // BACKSPACE
             GVAR(InputScratchpad) = GVAR(InputScratchpad) select [0, count GVAR(InputScratchpad) - 1];
             QGVAR(updateGuess) call CFUNC(localEvent);
-            QGVAR(updateInput) call CFUNC(localEvent);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             _return = true;
         };
     };

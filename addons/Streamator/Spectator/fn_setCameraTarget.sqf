@@ -106,6 +106,7 @@ if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
 };
 
 GVAR(CameraMode) = _cameraMode;
+QGVAR(updateMenu) call CFUNC(localEvent);
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);
 
 [QGVAR(CameraTargetChanged), [_unit, _prevUnit]] call CFUNC(localEvent);

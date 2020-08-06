@@ -23,7 +23,6 @@ class CfgCLibModules {
             MODULE(Radio) {
                 FNC(setRadioFollowTarget);
             };
-
             MODULE(UI) {
                 FNC(buildFPSUI);
                 FNC(buildMapUI);
@@ -39,6 +38,12 @@ class CfgCLibModules {
                 FNC(keyUpEH);
                 FNC(mouseMovingEH);
                 FNC(mouseWheelEH);
+            };
+            MODULE(Menu) {
+                FNC(addMenuItem);
+                FNC(executeEntry);
+                FNC(registerMenus);
+                FNC(renderMenu);
             };
             MODULE(User) {
                 APIFNC(addCustom3dIcon);

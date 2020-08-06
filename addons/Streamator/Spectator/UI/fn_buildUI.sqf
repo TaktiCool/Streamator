@@ -56,7 +56,7 @@ private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlInfo ctrlSetPosition [PX(0.3 + BORDERWIDTH), PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
 _ctrlInfo ctrlSetFontHeight PY(1.5);
 _ctrlInfo ctrlSetFont "RobotoCondensed";
-_ctrlInfo ctrlSetText "[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map [F1] Toggle Group Overlay [F2] Toggle Unit Overlay [F3] Toggle Custom Overlay";
+_ctrlInfo ctrlSetText (GVAR(currentMenuPath) call FUNC(renderMenu));
 _ctrlInfo ctrlCommit 0;
 
 private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);

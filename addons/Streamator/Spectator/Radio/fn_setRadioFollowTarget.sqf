@@ -13,8 +13,7 @@
     Returns:
     None
 */
-
-private _newRadioFollowTarget = GVAR(CameraFollowTarget);
+params ["_newRadioFollowTarget"];
 if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
     if !(GVAR(InputGuess) isEqualTo []) then {
         _newRadioFollowTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);

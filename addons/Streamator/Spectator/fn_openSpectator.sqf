@@ -49,6 +49,8 @@ GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
+GVAR(ThermalVision) = 0;
+GVAR(PrevCameraVision) = 8;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraInFirstPerson) = false;
 
@@ -75,6 +77,7 @@ GVAR(OverlayCustomMarker) = true;
 GVAR(OverlayPlanningMode) = true;
 GVAR(OverlayPlayerMarkers) = true;
 GVAR(OverlayLaserTargets) = true;
+GVAR(RadioIconsVisible) = true;
 
 GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";
@@ -110,7 +113,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
-    [QGVAR(updateInput)] call CFUNC(localEvent);
+    [QGVAR(updateMenu)] call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
 
 ["entityCreated", {
@@ -247,9 +250,11 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
+    call FUNC(registerMenus);
+
     call FUNC(buildUI);
 
-    QGVAR(updateInput) call CFUNC(localEvent);
+    QGVAR(updateMenu) call CFUNC(localEvent);
 
     [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
