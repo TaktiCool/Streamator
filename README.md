@@ -119,8 +119,9 @@ Key Binding | Short Description | Remarks
     **[Esc]** Back
     **[F1]** Toggle Radio Overlay
     **[F2]** Target current Camera target
-**[F5]** Toggle AI
-**[F6]** Fix Camera
+**[F6]** Toggle AI
+**[F7]** Unit Chyron
+**[F8]** Fix Camera
 
 # Creators Manual
 TBD
