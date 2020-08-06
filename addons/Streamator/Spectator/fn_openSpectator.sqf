@@ -125,10 +125,10 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
             _unit setVariable [QGVAR(lastShot), time];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
-            if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-                GVAR(ThrownTracked) pushBack _projectile;
-            };
             if (GVAR(OverlayBulletTracer)) then {
+                if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
+                    GVAR(ThrownTracked) pushBack _projectile;
+                };
                 private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
                 private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
                 if (_index > diag_fps) then {
@@ -194,8 +194,9 @@ private _fnc_init = {
             _unit setVariable [QGVAR(lastShot), time];
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
-
-            GVAR(ThrownTracked) pushBack _projectile;
+            if (GVAR(OverlayBulletTracer)) then {
+                GVAR(ThrownTracked) pushBack _projectile;
+            };
         }] call CFUNC(addEventHandler);
     };
     if (goggles CLib_Player != "") then {
