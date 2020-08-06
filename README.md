@@ -28,9 +28,7 @@ Key Binding | Short Description | Remarks
 **`CTRL`** + **`Scrollwheel`** | Change Smoothing | Changes the camera smoothing coefficient.
 **`ALT`** + **`Scrollwheel`** | Change FOV | Changes the field of view (zoom).
 **`TAB`** | Resets FOV | Resets the field of View
-**`N`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
-**`B`** | Vision mode | Cycles the vision mode (IR/NV with different color schemes)
-**`C`** | Reset Vision mode | Resets Vision mode to Default
+**`N`** | Vision mode | Switches Between Normal Vision Mode and Last used Vision Mode
 **`F1-F12 + Escape`** | Menu Navigation | Keybindings used for Menu Navigation
 **`CTRL`** + **`0`**...**`9`** | Save camera state | Saves the current camera state (position, view angle, mode, camera target etc.) to a slot (0...9)
 **`0`**...**`9`** | Restore camera state | Restores camera state. See Save camera state
@@ -67,7 +65,7 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
 
 # MENU SYSTEM
 
-**[F1]** Overlays
+**[F1]** <Overlays>
     **[Esc]** Back
     **[F1]** Group Markers
     **[F2]** Unit Markers
@@ -76,7 +74,7 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
     **[F5]** Bullet Tracers
     **[F6]** Laser Targets
     **[F7]** Custom Markers
-**[F2]** Camera Modes
+**[F2]** <Camera Modes>
     **[Esc]** Back
     **[F1]** Free
     **[F2]** Follow
@@ -85,16 +83,24 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
     **[F5]** FPS
     **[F6]** Orbit
     **[F7]** UAV
-**[F3]** Vision Modes
+**[F3]** <Vision Modes>
     **[Esc]** Back
     **[F1]** Normal
-    **[F2]** Next
-    **[F3]** Previous
-**[F4]** Minimap
+    **[F2]** NVG
+    **[F3]** Thermal
+    **[F4]** <Thermal Modes>
+        **[F1]** Thermal (RGW)
+        **[F2]** Thermal (WR)
+        **[F3]** Thermal (BR)
+        **[F4]** Thermal (R)
+        **[F5]** Thermal (G)
+        **[F6]** Thermal (B)
+        **[F7]** Thermal (W)
+**[F4]** <Minimap>
     **[Esc]** Back
     **[F1]** Toggle
     **[F2]** Toggle View Mode
-**[F5]** Radio
+**[F5]** <Radio>
     **[Esc]** Back
     **[F1]** Toggle Radio Overlay
     **[F2]** Target current Camera target

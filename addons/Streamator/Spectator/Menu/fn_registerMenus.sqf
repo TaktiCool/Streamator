@@ -94,112 +94,100 @@ GVAR(currentMenuPath) = "MAIN";
 // Camera
 ["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {true}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/CAMERA", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
+private _fnc_setCameraMode = {
+    params ["_mode"];
+    private _newCameraTarget = GVAR(CameraFollowTarget);
+    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
 
+    [_newCameraTarget, _mode] call FUNC(setCameraTarget);
+    true
+};
+private _fnc_onRenderCameraMode = {
+    params ["_mode"];
+    if (GVAR(CameraMode) == _mode) then {
+        _color = "#3CB371";
+    };
+    true
+};
 // Camera Submenu Entries
 ["Free", "MAIN/CAMERA", DIK_F1, {
     [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
     true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_FREE) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["Follow", "MAIN/CAMERA", DIK_F2, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_FOLLOW) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["Shoulder", "MAIN/CAMERA", DIK_F3, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_SHOULDER] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_SHOULDER) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["Topdown", "MAIN/CAMERA", DIK_F4, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_TOPDOWN] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_TOPDOWN) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["FPS", "MAIN/CAMERA", DIK_F5, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_FPS] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_FPS) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["Orbit", "MAIN/CAMERA", DIK_F6, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_ORBIT] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_ORBIT) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-["UAV", "MAIN/CAMERA", DIK_F7, {
-    private _newCameraTarget = GVAR(CameraFollowTarget);
-    if (_newCameraTarget isEqualType objNull && {isNull _newCameraTarget}) exitWith {false};
-
-    [_newCameraTarget, CAMERAMODE_UAV] call FUNC(setCameraTarget);
-    true
-}, {
-    if (GVAR(CameraMode) == CAMERAMODE_UAV) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
+}, _fnc_onRenderCameraMode, false, CAMERAMODE_FREE] call FUNC(addMenuItem);
+["Follow", "MAIN/CAMERA", DIK_F2, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_FOLLOW] call FUNC(addMenuItem);
+["Shoulder", "MAIN/CAMERA", DIK_F3, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_SHOULDER] call FUNC(addMenuItem);
+["Topdown", "MAIN/CAMERA", DIK_F4, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_TOPDOWN] call FUNC(addMenuItem);
+["FPS", "MAIN/CAMERA", DIK_F5, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_FPS] call FUNC(addMenuItem);
+["Orbit", "MAIN/CAMERA", DIK_F6, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_ORBIT] call FUNC(addMenuItem);
+["UAV", "MAIN/CAMERA", DIK_F7, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_UAV] call FUNC(addMenuItem);
 
 // Vision Modes
 ["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {true}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/VISION", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
+
 // Vision Submenu Entries
 ["Normal", "MAIN/VISION", DIK_F1, {
     GVAR(CameraVision) = 9;
     call FUNC(setVisionMode);
     true
-}] call FUNC(addMenuItem);
-["Next", "MAIN/VISION", DIK_F2, {
-    GVAR(CameraVision) = (GVAR(CameraVision) + 1) mod 10;
-    call FUNC(setVisionMode);
-    true
-}] call FUNC(addMenuItem);
-["Previous", "MAIN/VISION", DIK_F3, {
-    GVAR(CameraVision) = (GVAR(CameraVision) - 1);
-    if (GVAR(CameraVision) == -1) then {
-        GVAR(CameraVision) = 10;
+}, {
+    if (GVAR(CameraVision) == 9) then {
+        _color = "#3CB371";
     };
-    call FUNC(setVisionMode);
     true
 }] call FUNC(addMenuItem);
+
+["NVG", "MAIN/VISION", DIK_F2, {
+    GVAR(CameraVision) = 8;
+    GVAR(PrevCameraVision) = GVAR(CameraVision);
+    call FUNC(setVisionMode);
+    true
+}, {
+    if (GVAR(CameraVision) == 8) then {
+        _color = "#3CB371";
+    };
+    true
+}] call FUNC(addMenuItem);
+
+["Thermal", "MAIN/VISION", DIK_F3, {
+    GVAR(CameraVision) = GVAR(ThermalVision);
+    GVAR(PrevCameraVision) = GVAR(CameraVision);
+    call FUNC(setVisionMode);
+    true
+}, {
+    if (GVAR(CameraVision) < 8) then {
+        _color = "#3CB371";
+    };
+    true
+}] call FUNC(addMenuItem);
+// Thermal Vision Modes
+["Thermal Modes", "MAIN/VISION", DIK_F4, { GVAR(currentMenuPath) = "MAIN/VISION/THERMALMODES"; true }, {true}, true] call FUNC(addMenuItem);
+["BACK", "MAIN/VISION/THERMALMODES", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN/VISION"; true }] call FUNC(addMenuItem);
+private _fnc_setThermalMode = {
+    params ["_mode"];
+    GVAR(ThermalVision) = _mode;
+    if (GVAR(CameraVision) < 8) then {
+        GVAR(CameraVision) = GVAR(ThermalVision);
+        GVAR(PrevCameraVision) = GVAR(CameraVision);
+        call FUNC(setVisionMode);
+    };
+    true
+};
+private _fnc_onRenderThermalVision = {
+    params ["_mode"];
+    if (GVAR(ThermalVision) == _mode) then {
+        _color = "#3CB371";
+    };
+    true
+};
+// Thermal Vision Submenu Entries
+["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F1, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
+["Thermal (WR)", "MAIN/VISION/THERMALMODES", DIK_F2, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 6] call FUNC(addMenuItem);
+["Thermal (BR)", "MAIN/VISION/THERMALMODES", DIK_F3, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 5] call FUNC(addMenuItem);
+["Thermal (R)", "MAIN/VISION/THERMALMODES", DIK_F4, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 4] call FUNC(addMenuItem);
+["Thermal (G)", "MAIN/VISION/THERMALMODES", DIK_F5, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 3] call FUNC(addMenuItem);
+["Thermal (B)", "MAIN/VISION/THERMALMODES", DIK_F6, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 2] call FUNC(addMenuItem);
+["Thermal (W)", "MAIN/VISION/THERMALMODES", DIK_F7, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 1] call FUNC(addMenuItem);
 
 // Minimap
 ["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {true}, true] call FUNC(addMenuItem);
@@ -238,7 +226,7 @@ GVAR(currentMenuPath) = "MAIN";
     true
 }] call FUNC(addMenuItem);
 ["Target current Camera target", "MAIN/RADIO", DIK_F2, {
-    call FUNC(setRadioFollowTarget);
+    GVAR(CameraFollowTarget) call FUNC(setRadioFollowTarget);
     true
 }] call FUNC(addMenuItem);
 

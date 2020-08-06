@@ -49,6 +49,8 @@ GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
 GVAR(CameraVision) = 9;
+GVAR(ThermalVision) = 1;
+GVAR(PrevCameraVision) = 8;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraInFirstPerson) = false;
 

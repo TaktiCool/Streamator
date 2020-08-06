@@ -14,16 +14,19 @@
     3: Key <String>
     4: onUse <Code>
     5: onRender <Code>
+    6: Arguments for Callbacks <Anything>
 
     Returns:
     None
 */
-params ["_name", "_path", "_dik", ["_onUse", {LOG("Nothing here.")}, []], ["_onRender", {true}, [{}]], ["_hasSubMenus", false]];
+params ["_name", "_path", "_dik", ["_onUse", {LOG("Nothing here.")}, []], ["_onRender", {true}, [{}]], ["_hasSubMenus", false], ["_args", []]];
+diag_log format ["%1: %2", _name, _hasSubMenus];
 if (isNil QGVAR(menuEntries)) then {
     GVAR(menuEntries) = false call CFUNC(createNamespace);
     GVAR(menuEntries) setVariable ["MAIN", []];
 };
 
 private _entry = GVAR(menuEntries) getVariable [_path, []];
-_entry pushBack [_name, _dik, _onUse, _onRender, _hasSubMenus];
+_entry pushBack [_dik, _name, _onUse, _onRender, _hasSubMenus, _args];
+_entry sort true;
 GVAR(menuEntries) setVariable [_path, _entry];

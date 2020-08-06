@@ -27,9 +27,9 @@ if (_path == "MAIN") then {
     _ret = format ["<t size='%1'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t>", _smallTextSize];
 };
 {
-    _x params ["_name", "_dik", "_onUse", "_onRender", "_hasSubmenus"];
+    _x params ["_dik", "_name", "_onUse", "_onRender", "_hasSubmenus", "_args"];
     private _color = "#ffffff";
-    if (call _onRender) then {
+    if (_args call _onRender) then {
         private _keyName = call compile keyName _dik;
         if (_dik == DIK_ESCAPE) then {
             _keyName = "ESC";
