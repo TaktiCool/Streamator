@@ -43,6 +43,8 @@ GVAR(updateIconRunning) = false;
     }, 0.3] call CFUNC(wait);
 }] call CFUNC(addEventhandler);
 
+[QGVAR(updateIcons), 0] call CFUNC(addIgnoredEventLog);
+
 [{
     QGVAR(updateIcons) call CFUNC(localEvent);
 }, 3] call CFUNC(addPerframeHandler);
