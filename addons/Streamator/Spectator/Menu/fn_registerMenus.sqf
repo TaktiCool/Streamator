@@ -251,7 +251,25 @@ private _fnc_onRenderThermalVision = {
     true
 }] call FUNC(addMenuItem);
 
-["Fix Camera", "MAIN", DIK_F7, {
+["Unit Chyron", "MAIN", DIK_F7, {
+    if (!isNull GVAR(CameraFollowTarget)) then {
+        if (GVAR(UnitInfoOpen)) then {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+        } else {
+            [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+        };
+    } else {
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+    };
+    true;
+}, {
+    if (GVAR(UnitInfoOpen)) then {
+        _color = "#3CB371";
+    };
+    !isNull GVAR(CameraFollowTarget) && !(GVAR(MapOpen))
+}] call FUNC(addMenuItem);
+
+["Fix Camera", "MAIN", DIK_F8, {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
