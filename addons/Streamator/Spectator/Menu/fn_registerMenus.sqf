@@ -119,7 +119,13 @@ private _fnc_onRenderCameraMode = {
 ["Topdown", "MAIN/CAMERA", DIK_F4, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_TOPDOWN] call FUNC(addMenuItem);
 ["FPS", "MAIN/CAMERA", DIK_F5, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_FPS] call FUNC(addMenuItem);
 ["Orbit", "MAIN/CAMERA", DIK_F6, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_ORBIT] call FUNC(addMenuItem);
-["UAV", "MAIN/CAMERA", DIK_F7, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_UAV] call FUNC(addMenuItem);
+["UAV", "MAIN/CAMERA", DIK_F7, _fnc_setCameraMode, {
+    params ["_mode"];
+    if (GVAR(CameraMode) == _mode) then {
+        _color = "#3CB371";
+    };
+    !isNull (getConnectedUAV GVAR(CameraFollowTarget))
+}, false, CAMERAMODE_UAV] call FUNC(addMenuItem);
 
 // Vision Modes
 ["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {true}, true] call FUNC(addMenuItem);
