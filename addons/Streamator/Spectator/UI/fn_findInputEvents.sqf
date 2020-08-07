@@ -173,7 +173,7 @@ params ["_ctrlInfo"];
         };
         default {
             if (GVAR(MapOpen)) then {
-                format ["<t size='%1'>[ALT+LMB] Teleport [M] Close Map </t>", GVAR(smallTextSize)]; // [GVAR(currentMenuPath), "<t size='%1'>[ALT+LMB] Teleport [M] Close Map </t> |  "] call FUNC(renderMenu);
+                [GVAR(currentMenuPath), "<t size='%1'>[ALT+LMB] Teleport [M] Close Map </t> |  "] call FUNC(renderMenu);
             } else {
                 [GVAR(currentMenuPath), "<t size='%1'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t> |  "] call FUNC(renderMenu);
             };

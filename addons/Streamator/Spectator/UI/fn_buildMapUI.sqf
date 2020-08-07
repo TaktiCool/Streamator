@@ -89,31 +89,6 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
             QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
             true;
         };
-        case DIK_F1: { // F1
-            GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
-            true;
-        };
-        case DIK_F2: { // F2
-            GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
-            true;
-        };
-        case DIK_F3: { // F3
-            GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
-            true;
-        };
-        case DIK_F4: { // F4
-            GVAR(OverlayPlayerMarkers) = !GVAR(OverlayPlayerMarkers);
-            true;
-        };
-        case DIK_F6: { // F6
-            GVAR(OverlayPlanningMode) = !GVAR(OverlayPlanningMode);
-            true;
-        };
-        case DIK_F7: { // F7
-            GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
-            QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
-            true;
-        };
         default {
             true;
         };
