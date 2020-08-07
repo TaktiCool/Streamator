@@ -255,10 +255,15 @@ private _return = switch (_keyCode) do {
 if (!_return && GVAR(InputMode) != INPUTMODE_SEARCH) then {
     _return = [GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry);
 };
-if (_keyCode >= DIK_F1 && _keyCode <= DIK_F12) then {
-    _return = true;
-};
+
 if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
+    if (_keyCode == DIK_F5) exitWith {
+        private _newRadioTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
+        if (_newRadioTarget isEqualType objNull) then {
+            _newRadioTarget call FUNC(setRadioFollowTarget);
+            _return = true;
+        };
+    };
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;
@@ -274,5 +279,7 @@ if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
         };
     };
 };
-
+if (_keyCode >= DIK_F1 && _keyCode <= DIK_F12) then {
+    _return = true;
+};
 _return

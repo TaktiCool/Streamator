@@ -232,9 +232,28 @@ private _fnc_onRenderThermalVision = {
     };
     true
 }] call FUNC(addMenuItem);
-["Target current Camera target", "MAIN/RADIO", DIK_F2, {
+["Set Radio Target", "MAIN/RADIO", DIK_F2, {
     GVAR(CameraFollowTarget) call FUNC(setRadioFollowTarget);
     true
+}, {
+    private _ret = false;
+    private _radioIsCamera = GVAR(RadioFollowTarget) isEqualTo GVAR(CameraFollowTarget);
+    private _radioIsNull = isNull GVAR(RadioFollowTarget);
+    private _cameraIsNull = isNull GVAR(CameraFollowTarget);
+
+    if ((_radioIsCamera || _cameraIsNull) && !_radioIsNull) then {
+        _name = format ["Release Radio Target (%1)", GVAR(RadioFollowTarget) call CFUNC(name)];
+        _ret = true;
+    };
+    if (!_radioIsCamera && !_cameraIsNull && !_radioIsNull) then {
+        _name = format ["Change Radio Target from (%1) to (%2)", GVAR(RadioFollowTarget) call CFUNC(name), GVAR(CameraFollowTarget) call CFUNC(name)];
+        _ret = true;
+    };
+    if (!_radioIsCamera && !_cameraIsNull && _radioIsNull) then {
+        _name = format ["Set Radio Target (%1)", GVAR(CameraFollowTarget) call CFUNC(name)];
+        _ret = true;
+    };
+    _ret
 }] call FUNC(addMenuItem);
 
 ["Toggle AI", "MAIN", DIK_F6, {

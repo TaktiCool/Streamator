@@ -76,6 +76,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`TAB`** | Cycle to Search Entry Right | Switches to the Next Searched Result
 **`SHIFT`** + **`TAB`** | Cycle to Search Entry Left | Switches to the Next Searched Result
+**`F5`** | Set Radio Follow Target | Set Current selected Search Entry Radio Follow Target
 
 # MENU SYSTEM
 **[F1]** <Overlays>
