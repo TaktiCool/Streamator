@@ -49,7 +49,7 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
         ["_ctrl", false, [true]],
         ["_alt", false, [true]]
     ];
-    if (["MAP", _keyCode] call FUNC(executeEntry)) exitWith { true }; // exit if we have a Menu Action to Execute
+    if ([GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry)) exitWith { true }; // exit if we have a Menu Action to Execute
     switch (_keyCode) do {
         case DIK_ESCAPE;
         case DIK_M: { // M

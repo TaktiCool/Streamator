@@ -22,7 +22,7 @@ if (_entry isEqualTo []) exitWith {
     "MAIN" call FUNC(renderMenu);
 };
 private _ret = "";
-if (_path in ["MAIN", "MAP"]) then {
+if (_path == "MAIN") then {
     _ret = format [_mainPrefixText, GVAR(smallTextSize)];
 };
 
