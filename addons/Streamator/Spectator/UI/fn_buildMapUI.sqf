@@ -40,6 +40,7 @@ _map ctrlMapAnimAdd [0, _zoom, _position];
 ctrlMapAnimCommit _map;
 
 [_map] call CFUNC(registerMapControl);
+
 _mapDisplay displayAddEventHandler ["KeyDown", {
     params [
         "_display",
@@ -48,6 +49,7 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
         ["_ctrl", false, [true]],
         ["_alt", false, [true]]
     ];
+    if ([GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry)) exitWith { true }; // exit if we have a Menu Action to Execute
     switch (_keyCode) do {
         case DIK_ESCAPE;
         case DIK_M: { // M
@@ -63,6 +65,28 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
                 GVAR(InputMode) = INPUTMODE_MOVE;
                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
             };
+            true;
+        };
+        case DIK_PGDN: { // Page Down
+            if (_ctrl) then {
+                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
+                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+            } else {
+                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
+                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+            };
+            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+            true;
+        };
+        case DIK_PGUP: { // Page Up
+            if (_ctrl) then {
+                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
+                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+            } else {
+                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
+                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+            };
+            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
             true;
         };
         case DIK_F1: { // F1
@@ -90,28 +114,6 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
             QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
             true;
         };
-        case DIK_PGDN: { // Page Down
-            if (_ctrl) then {
-                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
-                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-            } else {
-                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
-                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
-            };
-            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-            true;
-        };
-        case DIK_PGUP: { // Page Up
-            if (_ctrl) then {
-                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
-                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-            } else {
-                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
-                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
-            };
-            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-        true;
-        };
         default {
             true;
         };
@@ -123,7 +125,7 @@ _map ctrlAddEventHandler ["MouseButtonClick", {
     if (_alt) exitWith {
         GVAR(CameraPreviousState) = [];
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
-        _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
+        _pos pushBack (50 + getTerrainHeightASL _pos);
         [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
         GVAR(CameraPos) = _pos;
         true;

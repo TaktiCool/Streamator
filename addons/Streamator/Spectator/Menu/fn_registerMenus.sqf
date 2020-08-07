@@ -91,7 +91,7 @@ GVAR(currentMenuPath) = "MAIN";
     true
 }] call FUNC(addMenuItem);
 // Camera
-["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {!isNull GVAR(CameraFollowTarget)}, true] call FUNC(addMenuItem);
+["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {!isNull GVAR(CameraFollowTarget) && !(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/CAMERA", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 private _fnc_setCameraMode = {
     params ["_mode"];
@@ -128,7 +128,7 @@ private _fnc_onRenderCameraMode = {
 }, false, CAMERAMODE_UAV] call FUNC(addMenuItem);
 
 // Vision Modes
-["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {true}, true] call FUNC(addMenuItem);
+["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {!(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/VISION", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 
 // Vision Submenu Entries
@@ -197,7 +197,7 @@ private _fnc_onRenderThermalVision = {
 ["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F8, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
 
 // Minimap
-["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {true}, true] call FUNC(addMenuItem);
+["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {!(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/MINIMAP", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 // Minimap Submenu Entries
 ["Toggle", "MAIN/MINIMAP", DIK_F1, {
@@ -274,4 +274,4 @@ private _fnc_onRenderThermalVision = {
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
     true
-}] call FUNC(addMenuItem);
+}, {!GVAR(MapOpen)}] call FUNC(addMenuItem);

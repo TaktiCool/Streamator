@@ -59,12 +59,10 @@ _ctrlInfo ctrlSetFont "RobotoCondensed";
 _ctrlInfo ctrlSetText (GVAR(currentMenuPath) call FUNC(renderMenu));
 _ctrlInfo ctrlCommit 0;
 
-private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
-
 private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-_ctrlCameraMode ctrlSetPosition [safeZoneW - PX(21),  PY(0.3), PX(20), PY(1.8)];
+_ctrlCameraMode ctrlSetPosition [safeZoneW - PX(31),  PY(0.3), PX(30), PY(1.8)];
 _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
-_ctrlCameraMode ctrlSetStructuredText parseText format ["<t align='right' size='%1'>FREE</t>", _smallTextSize];
+_ctrlCameraMode ctrlSetStructuredText parseText format ["<t align='right' size='%1'>FREE</t>", GVAR(smallTextSize)];
 _ctrlCameraMode ctrlCommit 0;
 
 private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
@@ -75,7 +73,7 @@ _ctrlTargetInfo ctrlSetText "Target Info";
 _ctrlTargetInfo ctrlCommit 0;
 
 private _ctrlTargetSpeedInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-_ctrlTargetSpeedInfo ctrlSetPosition [safeZoneW - PX(25),  PY(0.3), PX(20), PY(1.8)];
+_ctrlTargetSpeedInfo ctrlSetPosition [safeZoneW - PX(36),  PY(0.3), PX(10), PY(1.8)];
 _ctrlTargetSpeedInfo ctrlSetFont "RobotoCondensedBold";
 _ctrlTargetSpeedInfo ctrlSetText "";
 _ctrlTargetSpeedInfo ctrlCommit 0;
@@ -130,10 +128,10 @@ private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
 _ctrlFOVBarBg ctrlCommit 0;
-
+private _log = ln sqrt 2;
 private _logScale = (ln GVAR(CameraFOV)) / ln sqrt 2;
-private _logScaleMin = (ln (sqrt(2)^-14)) / ln sqrt 2;
-private _logScaleMax = (ln 2) / ln sqrt 2;
+private _logScaleMin = (ln CAMERAMINFOV) / _log;
+private _logScaleMax = (ln CAMERAMAXFOV) / _log;
 private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
 private _ctrlFOVBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBar ctrlSetPosition [
@@ -180,16 +178,15 @@ _ctrlFOVDefaultLine ctrlCommit 0;
 private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
-    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     if (GVAR(PlanningModeChannel) == 0) then {
-        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
+        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
     } else {
-        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), _smallTextSize];
+        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
     };
     _ctrl ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
@@ -207,9 +204,10 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(CameraSpeedChanged), {
     (_this select 1) params ["_ctrl"];
-    private _logScale = (ln GVAR(CameraSpeed)) / ln sqrt 2;
-    private _logScaleMin = (ln CAMERAMINSPEED) / ln sqrt 2;
-    private _logScaleMax = (ln CAMERAMAXSPEED) / ln sqrt 2;
+    private _log = ln sqrt 2;
+    private _logScale = (ln GVAR(CameraSpeed)) / _log;
+    private _logScaleMin = (ln CAMERAMINSPEED) / _log;
+    private _logScaleMax = (ln CAMERAMAXSPEED) / _log;
     private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
     //private _relLength = sqrt GVAR(CameraSpeed) / sqrt CAMERAMAXSPEED;
     _ctrl ctrlSetPosition [
@@ -227,9 +225,10 @@ _ctrlPlanningChannel ctrlCommit 0;
     (_this select 1) params ["_ctrl"];
     private _relLength = 0;
     if (GVAR(CameraSmoothingTime) > 0) then {
-        private _logScale = (ln GVAR(CameraSmoothingTime)) / ln sqrt 2;
-        private _logScaleMin = (ln 0.05) / ln sqrt 2;
-        private _logScaleMax = (ln 1.6) / ln sqrt 2;
+        private _log = ln sqrt 2;
+        private _logScale = (ln GVAR(CameraSmoothingTime)) / _log;
+        private _logScaleMin = (ln CAMERAMINSMOOTHING) / _log;
+        private _logScaleMax = (ln CAMERAMAXSMOOTHING) / _log;
         _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0.1, 1];
     };
 
@@ -247,11 +246,11 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(CameraFOVChanged), {
     (_this select 1) params ["_ctrl"];
-    private _logScale = (ln GVAR(CameraFOV)) / ln sqrt 2;
-    private _logScaleMin = (ln (sqrt(2)^-14)) / ln sqrt 2;
-    private _logScaleMax = (ln 2) / ln sqrt 2;
+    private _log = ln sqrt 2;
+    private _logScale = (ln GVAR(CameraFOV)) / _log;
+    private _logScaleMin = (ln CAMERAMINFOV) / _log;
+    private _logScaleMax = (ln CAMERAMAXFOV) / _log;
     private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
-    //private _relLength = (2 - GVAR(CameraFOV)) / 2;
     _ctrl ctrlSetPosition [
         safeZoneW - PX(BORDERWIDTH * 3 / 4),
         PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
@@ -276,8 +275,7 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
     private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]", "UAV %2 [%1]"]  select (_mode - 1);
     _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name), GVAR(UAVCameraTarget) call CFUNC(name)];
-    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
-    _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, _smallTextSize];
+    _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, GVAR(smallTextSize)];
     _ctrl ctrlCommit 0;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
@@ -317,9 +315,10 @@ _ctrlInfo call FUNC(findInputEvents);
 
 [{
     (_this select 0) params ["_ctrlFOVBarCurrent", "_ctrlTargetSpeedInfo"];
-    private _logScale = (ln (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / ln sqrt 2;
-    private _logScaleMin = (ln 0.01) / ln sqrt 2;
-    private _logScaleMax = (ln 2) / ln sqrt 2;
+    private _log = ln sqrt 2;
+    private _logScale = (ln (GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)])) / _log;
+    private _logScaleMin = (ln CAMERAMINFOV) / _log;
+    private _logScaleMax = (ln CAMERAMAXFOV) / _log;
     private _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0, 1];
 
     _ctrlFOVBarCurrent ctrlSetPosition [
@@ -332,7 +331,7 @@ _ctrlInfo call FUNC(findInputEvents);
     if (isNull GVAR(CameraFollowTarget)) then {
         _ctrlTargetSpeedInfo ctrlSetText "";
     } else {
-        _ctrlTargetSpeedInfo ctrlSetText format ["%1 km/h", abs (floor (speed (vehicle GVAR(CameraFollowTarget))))];
+        _ctrlTargetSpeedInfo ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1 km/h</t>", abs (floor (speed (vehicle GVAR(CameraFollowTarget)))), GVAR(smallTextSize)];
     };
     _ctrlTargetSpeedInfo ctrlCommit 0;
 }, 0, [_ctrlFOVBarCurrent, _ctrlTargetSpeedInfo]] call CFUNC(addPerFrameHandler);
