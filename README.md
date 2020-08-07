@@ -62,6 +62,9 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
+**`F1`** | Overlay Player Markers | Toggle Overlay Player Marker
+**`F2`** | Overlay Planning Mode | Toggle Overlay Planning Mode
+**`F3`** | Render AI Units | Toggle UI Units
 
 ## Search Mode
 Key Binding | Short Description | Remarks
