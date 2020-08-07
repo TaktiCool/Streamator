@@ -141,15 +141,16 @@ _map ctrlAddEventHandler ["MouseMoving", {
 }];
 
 _map ctrlAddEventHandler  ["MouseButtonDown", {
-    params ["", ["_button", -1, [0]]];
-    with missionNamespace do {
-        if (_button == 0) then {
-            GVAR(PlanningModeDrawing) = true;
-        };
+    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
+    if (_button == 0) then {
+        GVAR(PlanningModeDrawing) = true;
+        private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
+        _pos set [2, 0];
+        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
 }];
 _map ctrlAddEventHandler  ["MouseButtonUp", {
-    params ["", ["_button", -1, [0]]];
+    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
     if (_button == 0) then {
         GVAR(PlanningModeDrawing) = false;
     };
