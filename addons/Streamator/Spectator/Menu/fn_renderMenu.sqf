@@ -29,7 +29,7 @@ if (_path == "MAIN") then {
 {
     _x params ["_dik", "_name", "_onUse", "_onRender", "_hasSubmenus", "_args"];
     private _color = "#ffffff";
-    if (!(_args call _onRender) && {_color == "#ffffff"}) then {
+    if (!(_args call _onRender)) then {
         _color = "#808080";
     };
     private _keyName = call compile keyName _dik;
