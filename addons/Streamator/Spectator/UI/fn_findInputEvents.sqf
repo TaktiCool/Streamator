@@ -103,11 +103,10 @@ params ["_ctrlInfo"];
 
 [QGVAR(updateMenu), {
     (_this select 1) params ["_ctrl"];
-    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     private _str = switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
             private _searchStr = GVAR(InputScratchpad);
-            private _temp = format ["<t size='%1' color='#cccccc'>Search for Target: </t>", _smallTextSize];
+            private _temp = format ["<t size='%1' color='#cccccc'>Search for Target: </t>", GVAR(smallTextSize)];
             if (_searchStr != "") then {
                 private _guess = +GVAR(InputGuess);
                 if !(_guess isEqualTo []) then {
@@ -125,7 +124,7 @@ params ["_ctrlInfo"];
                                     "<t size='%3' color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side group _target, "#ffffff"],
                                     _name,
-                                    _smallTextSize
+                                    GVAR(smallTextSize)
                                 ]
                             };
                             case ("GROUP"): {
@@ -133,7 +132,7 @@ params ["_ctrlInfo"];
                                     "<t size='%3' color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side _target, "#ffffff"],
                                     _name,
-                                    _smallTextSize
+                                    GVAR(smallTextSize)
                                 ]
                             };
                             default {
@@ -141,7 +140,7 @@ params ["_ctrlInfo"];
                                     "<t size='%3' color='%1'>%2</t>",
                                     "#ffffff",
                                     _name,
-                                    _smallTextSize
+                                    GVAR(smallTextSize)
                                 ]
                             };
                         };
@@ -157,17 +156,17 @@ params ["_ctrlInfo"];
                     };
 
 
-                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0]), _smallTextSize];
-                    _temp = _temp + format ["<t size='%3' color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr]), _smallTextSize];
-                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr]), _smallTextSize];
+                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0]), GVAR(smallTextSize)];
+                    _temp = _temp + format ["<t size='%3' color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr]), GVAR(smallTextSize)];
+                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr]), GVAR(smallTextSize)];
                     if (!(_guessStr isEqualTo [])) then {
-                        _temp = _temp + (format ["<t size='%1' color='#cccccc'> | ", _smallTextSize]) + (_guessStr joinString " | ") + "</t>";
+                        _temp = _temp + (format ["<t size='%1' color='#cccccc'> | ", GVAR(smallTextSize)]) + (_guessStr joinString " | ") + "</t>";
                     };
                 } else {
-                    _temp = _temp + format ["<t size='%1'>%2</>| <t size='%1' color='#cccccc'>NO RESULT</t>", _smallTextSize, _searchStr];
+                    _temp = _temp + format ["<t size='%1'>%2</>| <t size='%1' color='#cccccc'>NO RESULT</t>", GVAR(smallTextSize), _searchStr];
                 };
             } else {
-                _temp = _temp + format ["<t size='%1'>%2</>| ", _smallTextSize ,_searchStr];
+                _temp = _temp + format ["<t size='%1'>%2</>| ", GVAR(smallTextSize) ,_searchStr];
             };
 
             _temp

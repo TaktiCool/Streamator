@@ -28,10 +28,10 @@ if (GVAR(CameraSpeedMode)) exitWith {
 
 if (GVAR(CameraSmoothingMode)) exitWith {
     if (GVAR(CameraSmoothingTime) == 0 && _delta > 0) then {
-        GVAR(CameraSmoothingTime) = 0.05;
+        GVAR(CameraSmoothingTime) = CAMERAMINSMOOTHING;
     } else {
-        GVAR(CameraSmoothingTime) = 0.04 max (1.6 min (GVAR(CameraSmoothingTime) * sqrt 2 ^ _delta));
-        if (GVAR(CameraSmoothingTime) < 0.05) then {
+        GVAR(CameraSmoothingTime) = CAMERAMINSMOOTHING max (CAMERAMAXSMOOTHING min (GVAR(CameraSmoothingTime) * sqrt 2 ^ _delta));
+        if (GVAR(CameraSmoothingTime) <= CAMERAMINSMOOTHING) then {
             GVAR(CameraSmoothingTime) = 0;
         };
 
@@ -41,7 +41,7 @@ if (GVAR(CameraSmoothingMode)) exitWith {
 };
 
 if (GVAR(CameraZoomMode)) exitWith {
-    GVAR(CameraFOV) = (sqrt(2)^-14) max (2 min (GVAR(CameraFOV) * sqrt 2 ^ (-_delta)));
+    GVAR(CameraFOV) = CAMERAMINFOV max (CAMERAMAXFOV min (GVAR(CameraFOV) * sqrt 2 ^ (-_delta)));
     QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     true
 };

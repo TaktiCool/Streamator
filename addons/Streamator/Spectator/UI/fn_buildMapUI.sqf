@@ -100,7 +100,7 @@ _map ctrlAddEventHandler ["MouseButtonClick", {
     if (_alt) exitWith {
         GVAR(CameraPreviousState) = [];
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
-        _pos pushBack (((getPos GVAR(Camera)) select 2) + getTerrainHeightASL _pos);
+        _pos pushBack (50 + getTerrainHeightASL _pos);
         [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
         GVAR(CameraPos) = _pos;
         true;

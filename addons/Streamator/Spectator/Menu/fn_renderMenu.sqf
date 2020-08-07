@@ -21,10 +21,9 @@ private _entry = GVAR(menuEntries) getVariable [_path, []];
 if (_entry isEqualTo []) exitWith {
     "MAIN" call FUNC(renderMenu);
 };
-private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
 private _ret = "";
 if (_path == "MAIN") then {
-    _ret = format [_mainPrefixText, _smallTextSize];
+    _ret = format [_mainPrefixText, GVAR(smallTextSize)];
 };
 
 {
@@ -38,9 +37,9 @@ if (_path == "MAIN") then {
         _keyName = "ESC";
     };
     if (_hasSubmenus) then {
-        _ret = _ret + format ["<t size='%3' color='%4'>[%1] &lt;%2&gt; </t>", _keyName, _name, _smallTextSize, _color];
+        _ret = _ret + format ["<t size='%3' color='%4'>[%1] &lt;%2&gt; </t>", _keyName, _name, GVAR(smallTextSize), _color];
     } else {
-        _ret = _ret + format ["<t size='%3' color='%4'>[%1] %2 </t>", _keyName, _name, _smallTextSize, _color];
+        _ret = _ret + format ["<t size='%3' color='%4'>[%1] %2 </t>", _keyName, _name, GVAR(smallTextSize), _color];
     };
 } forEach _entry;
 _ret;

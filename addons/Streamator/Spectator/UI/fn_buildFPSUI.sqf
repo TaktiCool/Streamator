@@ -46,6 +46,14 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     private _position = positionCameraToWorld [0, 0, 0];
     private _velocity = GVAR(CameraSpeed) / 16;
     switch (true) do {
+        case (!GVAR(CenterMinimapOnCameraPositon)): {
+            private _tis = terrainIntersectAtASL [AGLToASL positionCameraToWorld [0, 0, 0], AGLToASL positionCameraToWorld [0, 0, 10000]];
+            if (_tis isEqualTo [0, 0, 0]) then {
+                _tis = positionCameraToWorld [0, 0, 1000];
+            };
+            _velocity = (_tis distance2D (AGLToASL _position)) / 16;
+            _position = positionCameraToWorld [0, 0, (_tis distance2D (AGLToASL _position)) / 2];
+        };
         case !(isNull GVAR(UAVCameraTarget)): {
             private _target = vehicle GVAR(UAVCameraTarget);
             _position = getPos _target;
@@ -56,15 +64,6 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
             _position = getPos _target;
             _velocity = (speed _target) min 80;
         };
-    };
-
-    if (!GVAR(CenterMinimapOnCameraPositon)) then {
-        private _tis = terrainIntersectAtASL [AGLToASL positionCameraToWorld [0, 0, 0], AGLToASL positionCameraToWorld [0, 0, 10000]];
-        if (_tis isEqualTo [0, 0, 0]) then {
-            _tis = positionCameraToWorld [0, 0, 1000];
-        };
-        _velocity = (_tis distance2D (AGLToASL _position)) / 16;
-        _position = positionCameraToWorld [0, 0, (_tis distance2D (AGLToASL _position)) / 2];
     };
 
     private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + ((_mapPosition select 2)/2),  (_mapPosition select 1) + ((_mapPosition select 3)/2)];

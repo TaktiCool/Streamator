@@ -15,12 +15,11 @@
 */
 params ["_ctrlGrp"];
 private _display = ctrlParent _ctrlGrp;
-private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
 
 private _ctrlRadioFollowUnit = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlRadioFollowUnit ctrlSetPosition [safeZoneW - PX(21),  safeZoneH - PY(BORDERWIDTH), PX(20), PY(BORDERWIDTH)];
 _ctrlRadioFollowUnit ctrlSetFont "RobotoCondensed";
-_ctrlRadioFollowUnit ctrlSetStructuredText parseText format ["<t align='right' size='%1'></t>", _smallTextSize];
+_ctrlRadioFollowUnit ctrlSetStructuredText parseText format ["<t align='right' size='%1'></t>", GVAR(smallTextSize)];
 _ctrlRadioFollowUnit ctrlCommit 0;
 
 // Radio Information
@@ -30,12 +29,11 @@ _ctrlRadioInfoGrp ctrlCommit 0;
 
 [QGVAR(radioFollowTargetChanged), {
     (_this select 1) params ["_ctrl", "_ctrlGroup"];
-    private _smallTextSize = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
     if (GVAR(RadioFollowTarget) isEqualTo objNull) then {
         _ctrl ctrlSetStructuredText parseText "";
         _ctrl ctrlCommit 0;
     } else {
-        _ctrl ctrlSetStructuredText parseText format ["<t align='right' color='#ffffff' size='%1'><img image='A3\ui_f\data\gui\cfg\communicationmenu\call_ca.paa' /> %2</t>", _smallTextSize, GVAR(RadioFollowTarget) call CFUNC(name)];
+        _ctrl ctrlSetStructuredText parseText format ["<t align='right' color='#ffffff' size='%1'><img image='A3\ui_f\data\gui\cfg\communicationmenu\call_ca.paa' /> %2</t>", GVAR(smallTextSize), GVAR(RadioFollowTarget) call CFUNC(name)];
         _ctrl ctrlCommit 0;
     };
     private _elements = _ctrlGroup getVariable [QGVAR(elements), []];
