@@ -78,7 +78,7 @@ Key Binding | Short Description | Remarks
 **`SHIFT`** + **`TAB`** | Cycle to Search Entry Left | Switches to the Next Searched Result
 
 # MENU SYSTEM
- - **[F1]** <Overlays>  
+ - **[F1]** \<Overlays\>  
      - **[Esc]** Back  
      - **[F1]** Group Markers  
      - **[F2]** Unit Markers  
@@ -87,7 +87,7 @@ Key Binding | Short Description | Remarks
      - **[F5]** Bullet Tracers  
      - **[F6]** Laser Targets  
      - **[F7]** Custom Markers  
- - **[F2]** <Camera Modes>  
+ - **[F2]** \<Camera Modes\>  
      - **[Esc]** Back  
      - **[F1]** Free  
      - **[F2]** Follow  
@@ -96,12 +96,12 @@ Key Binding | Short Description | Remarks
      - **[F5]** FPS  
      - **[F6]** Orbit  
      - **[F7]** UAV  
- - **[F3]** <Vision Modes>  
+ - **[F3]** \<Vision Modes\>  
      - **[Esc]** Back  
      - **[F1]** Normal  
      - **[F2]** NVG  
      - **[F3]** Thermal  
-     - **[F4]** <Thermal Modes>  
+     - **[F4]** \<Thermal Modes\>  
          - **[Esc]** Back  
          - **[F1]** Thermal (W)  
          - **[F2]** Thermal (B)  
@@ -111,11 +111,11 @@ Key Binding | Short Description | Remarks
          - **[F6]** Thermal (BR)  
          - **[F7]** Thermal (WR)  
          - **[F8]** Thermal (RGW)  
- - **[F4]** <Minimap>  
+ - **[F4]** \<Minimap\>  
      - **[Esc]** Back  
      - **[F1]** Toggle  
      - **[F2]** Toggle View Mode  
- - **[F5]** <Radio>  
+ - **[F5]** \<Radio\>  
      - **[Esc]** Back  
      - **[F1]** Toggle Radio Overlay  
      - **[F2]** Target current Camera target  
