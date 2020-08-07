@@ -144,7 +144,7 @@ _map ctrlAddEventHandler ["MouseMoving", {
 
 _map ctrlAddEventHandler  ["MouseButtonDown", {
     params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
-    if (_button == 0) then {
+    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         GVAR(PlanningModeDrawing) = true;
         private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
         _pos set [2, 0];
@@ -153,7 +153,7 @@ _map ctrlAddEventHandler  ["MouseButtonDown", {
 }];
 _map ctrlAddEventHandler  ["MouseButtonUp", {
     params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
-    if (_button == 0) then {
+    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         GVAR(PlanningModeDrawing) = false;
     };
 }];
