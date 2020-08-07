@@ -49,50 +49,46 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
         ["_ctrl", false, [true]],
         ["_alt", false, [true]]
     ];
-    if ([GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry)) exitWith { true }; // exit if we have a Menu Action to Execute
-    switch (_keyCode) do {
-        case DIK_ESCAPE;
-        case DIK_M: { // M
-            _display closeDisplay 1;
-            true;
-        };
-        case DIK_E: { // E
-            if !(_ctrl) exitWith {false};
-            if (GVAR(InputMode) == INPUTMODE_MOVE) then {
-                GVAR(InputMode) = INPUTMODE_PLANINGMODE;
-                [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
-            } else {
-                GVAR(InputMode) = INPUTMODE_MOVE;
-                [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+
+    if !([GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry)) then {
+        switch (_keyCode) do {
+            case DIK_ESCAPE;
+            case DIK_M: { // M
+                _display closeDisplay 1;
             };
-            true;
-        };
-        case DIK_PGDN: { // Page Down
-            if (_ctrl) then {
-                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
-                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-            } else {
-                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
-                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+            case DIK_E: { // E
+                if !(_ctrl) exitWith {false};
+                if (GVAR(InputMode) == INPUTMODE_MOVE) then {
+                    GVAR(InputMode) = INPUTMODE_PLANINGMODE;
+                    [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                } else {
+                    GVAR(InputMode) = INPUTMODE_MOVE;
+                    [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);
+                };
             };
-            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-            true;
-        };
-        case DIK_PGUP: { // Page Up
-            if (_ctrl) then {
-                GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
-                CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
-            } else {
-                GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
-                CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+            case DIK_PGDN: { // Page Down
+                if (_ctrl) then {
+                    GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
+                    CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+                } else {
+                    GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) - 1) max 0;
+                    CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                };
+                QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
             };
-            QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
-            true;
-        };
-        default {
-            true;
+            case DIK_PGUP: { // Page Up
+                if (_ctrl) then {
+                    GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) + 1) min ((count GVAR(PlanningModeColorRGB) - 1));
+                    CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
+                } else {
+                    GVAR(PlanningModeChannel) = (GVAR(PlanningModeChannel) + 1) min 10;
+                    CLib_Player setVariable [QGVAR(PlanningModeChannel), GVAR(PlanningModeChannel), true];
+                };
+                QGVAR(PlanningModeChannelChanged) call CFUNC(localEvent);
+            };
         };
     };
+    true;
 }];
 
 _map ctrlAddEventHandler ["MouseButtonClick", {
