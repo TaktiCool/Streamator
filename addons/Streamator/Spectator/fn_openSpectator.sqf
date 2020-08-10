@@ -85,6 +85,7 @@ GVAR(InputGuess) = [];
 GVAR(InputGuessIndex) = 0;
 
 GVAR(allSpectators) = [];
+GVAR(LaserTargets) = [];
 GVAR(UnitInfoOpen) = false;
 GVAR(UnitInfoTarget) = objNull;
 
@@ -116,28 +117,40 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
 [QGVAR(InputModeChanged), {
     GVAR(InputScratchpad) = "";
-    [QGVAR(updateMenu)] call CFUNC(localEvent);
+    QGVAR(updateMenu) call CFUNC(localEvent);
 }] call CFUNC(addEventhandler);
+
+[{
+    params ["_unit", "_weapon","_projectile", "_ammo"];
+    if (isPlayer _unit) then {
+        hintSilent str _this;
+    };
+    GVAR(lastUnitShooting) = _unit;
+    _unit setVariable [QGVAR(lastShot), time];
+    private _shots = _unit getVariable [QGVAR(shotCount), 0];
+    _unit setVariable [QGVAR(shotCount), _shots + 1];
+    if (GVAR(OverlayBulletTracer)) then {
+        if (GVAR(BulletTracers) findIf {(_x select 2) isEqualTo _projectile} != -1) exitWith {};
+        if (isNull _projectile) then {
+            _projectile = (getPos _unit) nearestObject _ammo;
+        };
+        if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
+            GVAR(ThrownTracked) pushBack _projectile;
+        };
+        private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
+        private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
+        if (_index > diag_fps) then {
+            GVAR(BulletTracers) deleteAt 0;
+        };
+    };
+}, QFUNC(firedEH)] call CFUNC(compileFinal);
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
         _target addEventHandler ["FiredMan", {
-            params ["_unit", "_weapon", "", "", "", "", "_projectile"];
-            GVAR(lastUnitShooting) = _unit;
-            _unit setVariable [QGVAR(lastShot), time];
-            private _shots = _unit getVariable [QGVAR(shotCount), 0];
-            _unit setVariable [QGVAR(shotCount), _shots + 1];
-            if (GVAR(OverlayBulletTracer)) then {
-                if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-                    GVAR(ThrownTracked) pushBack _projectile;
-                };
-                private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
-                private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
-                if (_index > diag_fps) then {
-                    GVAR(BulletTracers) deleteAt 0;
-                };
-            };
+            params ["_unit", "_weapon", "", "", "_ammo", "", "_projectile"];
+            [_unit, _weapon, _projectile, _ammo] call FUNC(firedEH);
         }];
     };
 }] call CFUNC(addEventhandler);
@@ -219,6 +232,7 @@ private _fnc_init = {
             ace_goggles_PostProcess ppEffectEnable false;
             ace_goggles_PostProcessEyes ppEffectEnable false;
         };
+        CLib_Player allowDamage false;
         CLib_Player setDamage 0;
         #ifndef ISDEV
             clearRadio;
@@ -229,6 +243,7 @@ private _fnc_init = {
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
+    CLib_Player addEventHandler ["HandleDamage", {0}];
     if (GVAR(aceSpectatorLoaded)) then {
         [false] call ace_spectator_fnc_setSpectator;
     };

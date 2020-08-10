@@ -260,8 +260,8 @@ private _fnc_onRenderThermalVision = {
     GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
     profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
     saveProfileNamespace;
-    QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
     call FUNC(UpdateValidUnits);
+    QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
     true
 }, {
     if (GVAR(RenderAIUnits)) then {

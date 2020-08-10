@@ -240,18 +240,23 @@ if (GVAR(OverlayGroupMarker)) then {
 };
 
 if (GVAR(OverlayLaserTargets)) then {
+    if (floor(time) % 1 == 0) then {
+        GVAR(LaserTargets) = entities "LaserTarget";
+    };
     {
         private _target = _x;
-        private _text = "Laser Target";
-        if (GVAR(aceLoaded)) then {
-            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
+        if !(isNull _target) then {
+            private _text = "Laser Target";
+            if (GVAR(aceLoaded)) then {
+                _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
+            };
+            private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
+            if (_index != -1) then {
+                drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), ASLToAGL getPosASL _target, [1, 0, 0, 1]];
+            };
+            drawIcon3D ["a3\ui_f\data\GUI\Cfg\Cursors\hc_overmission_gs.paa", [1, 1, 1, 1], getPos _target, 1, 1, 0, _text, 1, 0.05, "RobotoCondensedBold"];
         };
-        private _index = allUnits findIf {(laserTarget _x) isEqualTo _target};
-        if (_index != -1) then {
-            drawLine3D [ASLToAGL (eyePos (allUnits select _index)), ASLToAGL getPosASL _target, [1, 0, 0, 1]];
-        };
-        drawIcon3D ["a3\ui_f_curator\data\cfgwrapperui\cursors\curatorplacewaypointdestroy_ca.paa", [1, 1, 1, 1], getPos _target, 1, 1, 0, _text, 2, 0.05, "RobotoCondensedBold"];
-    } forEach entities "LaserTarget";
+    } forEach GVAR(LaserTargets);
 };
 
 if (GVAR(OverlayBulletTracer)) then {

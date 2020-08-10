@@ -22,25 +22,19 @@ GVAR(vehicleInfoPFH) = -1;
 
 GVAR(processedIcons) = [];
 
-GVAR(updateIconRunning) = false;
-
 [{
     params[["_vehicle", objNull]];
-    !isNull _vehicle
-     && (((crew _vehicle) findIf {_x call EFUNC(Spectator,isValidUnit)}) == -1)
-     && (damage _vehicle < 1)
-     && _vehicle isKindOf "AllVehicles"
-     && !isObjectHidden _vehicle
+    alive _vehicle
+    && ((((crew _vehicle) findIf { _x call EFUNC(Spectator,isValidUnit) }) != -1) || (crew _vehicle) isEqualTo [])
+    && (damage _vehicle < 1)
+    && _vehicle isKindOf "AllVehicles"
+    && !isObjectHidden _vehicle
 }, QFUNC(isValidVehicle)] call CFUNC(compileFinal);
 
 [QGVAR(updateIcons), {
-    if (GVAR(updateIconRunning)) exitWith {};
-    if !(EGVAR(Spectator,MapOpen) || EGVAR(Spectator,MinimapVisible)) exitWith {};
-    call FUNC(updateIcons);
-    GVAR(updateIconRunning) = true;
-    [{
-        GVAR(updateIconRunning) = false;
-    }, 0.3] call CFUNC(wait);
+    if (EGVAR(Spectator,MapOpen) || EGVAR(Spectator,MinimapVisible)) then {
+        call FUNC(updateIcons);
+    };
 }] call CFUNC(addEventhandler);
 
 [QGVAR(updateIcons), 0] call CFUNC(addIgnoredEventLog);
