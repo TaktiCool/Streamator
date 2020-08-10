@@ -122,9 +122,6 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
 [{
     params ["_unit", "_weapon","_projectile", "_ammo"];
-    if (isPlayer _unit) then {
-        hintSilent str _this;
-    };
     GVAR(lastUnitShooting) = _unit;
     _unit setVariable [QGVAR(lastShot), time];
     private _shots = _unit getVariable [QGVAR(shotCount), 0];
