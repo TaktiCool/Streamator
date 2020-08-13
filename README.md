@@ -8,12 +8,11 @@ The camera mode is shown on the top right.
 Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
-**FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focused object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focused spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focusing. It can be refreshed by pressing the R key.
-**FIRST PERSON [&lt;Object&gt;]** | First Person View Mode to see what the player sees
-**SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
-**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
-**ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
-**UAV [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
+**FOLLOW [\<Object\>]** | The camera is moving relatively to a focused object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focused spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focusing. It can be refreshed by pressing the R key.
+**FIRST PERSON [\<Object\>]** | First Person View Mode to see what the player sees
+**SHOULDER [\<Object\>]** | Over the Shoulder View with Camera Offset and Direction offset
+**TOPDOWN [\<Object\>]** | Topdown View Mode to Overview a Unit Movements
+**ORBIT [\<Object\>]** | Topdown View Mode to Overview a Unit Movements
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -47,7 +46,6 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
-**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
 **`ALT`** | Smooth Transition Modifier | When Pressed While Changing Camera Targets a Smooth Transition is done
 
@@ -73,7 +71,6 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | Topdown View | Toggles to Topdown View
 **`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
-**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`TAB`** | Cycle to Search Entry Right | Switches to the Next Searched Result
 **`SHIFT`** + **`TAB`** | Cycle to Search Entry Left | Switches to the Next Searched Result
 **`F5`** | Set Radio Follow Target | Set Current selected Search Entry Radio Follow Target
@@ -96,7 +93,6 @@ Key Binding | Short Description | Remarks
      - **[F4]** Topdown  
      - **[F5]** FPS  
      - **[F6]** Orbit  
-     - **[F7]** UAV  
  - **[F3]** \<Vision Modes\>  
      - **[Esc]** Back  
      - **[F1]** Normal  
@@ -120,9 +116,22 @@ Key Binding | Short Description | Remarks
      - **[Esc]** Back  
      - **[F1]** Toggle Radio Overlay  
      - **[F2]** Target current Camera target  
- - **[F6]** Toggle AI  
- - **[F7]** Unit Chyron  
- - **[F8]** Fix Camera  
+ - **[F6]** \<Misc\>  
+     - **[F1]** Toggle AI  
+     - **[F2]** Unit Chyron  
+     - **[F3]** Switch to UAV  
+     - **[F4]** \<ViewDistance\>
+        - **[F1]** ViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Minus)
+        - **[F2]** ObjectViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Minus)
+        - **[F3]** Sync ObjectViewDistance
+        - **[F4]** Reset ViewDistance
+     - **[F12]** Fix Camera  
+ - **[F7]** \<Crew\>  
+    - **[F1]** Commander
+    - **[F2]** Gunner
+    - **[F3]** Driver
+    - **[F4]** Vehicle
+    - **[F5]** Next Crew
 
 # Creators Manual
 TBD

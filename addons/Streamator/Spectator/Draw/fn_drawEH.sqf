@@ -64,10 +64,12 @@ if (GVAR(OverlayLaserTargets)) then {
                 _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
             };
             private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
+            private _pos = getPos _target;
             if (_index != -1) then {
-                _map drawLine [getPos _target, getPos (allPlayers select _index), [1, 0, 0, 1]]
+                _map drawLine [_pos, getPos (allPlayers select _index), [1, 0, 0, 1]]
             };
-            _map drawIcon ["a3\ui_f\data\GUI\Cfg\Cursors\hc_overmission_gs.paa", [1, 1, 1, 1], getPos _x, 25, 25, 0, _text, 2, _textSize, TEXT_FONT];
+            _map drawIcon ["a3\ui_f_curator\Data\CfgCurator\laser_ca.paa", [1, 0, 0, 1], _pos, 18.75, 18.75, 0, "", 2, _textSize, TEXT_FONT];
+            _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos, 18.75, 18.75, 0, _text, 2, _textSize, TEXT_FONT];
         };
     } forEach GVAR(LaserTargets);
 };

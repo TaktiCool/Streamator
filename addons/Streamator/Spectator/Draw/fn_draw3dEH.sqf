@@ -251,10 +251,12 @@ if (GVAR(OverlayLaserTargets)) then {
                 _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
             };
             private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
+            private _pos = ASLToAGL getPosASL _target;
             if (_index != -1) then {
-                drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), ASLToAGL getPosASL _target, [1, 0, 0, 1]];
+                drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), _pos, [1, 0, 0, 1]];
             };
-            drawIcon3D ["a3\ui_f\data\GUI\Cfg\Cursors\hc_overmission_gs.paa", [1, 1, 1, 1], getPos _target, 1, 1, 0, _text, 1, 0.05, "RobotoCondensedBold"];
+            drawIcon3D ["a3\ui_f_curator\Data\CfgCurator\laser_ca.paa", [1, 0, 0, 1], _pos, 0.75, 0.75, 0, "", 1, 0.05, "RobotoCondensedBold"];
+            drawIcon3D ["", [1, 1, 1, 1], _pos, 0.75, 0.75, 0, _text, 1, 0.05, "RobotoCondensedBold"];
         };
     } forEach GVAR(LaserTargets);
 };

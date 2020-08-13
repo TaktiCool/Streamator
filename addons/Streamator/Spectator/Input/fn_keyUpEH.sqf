@@ -24,14 +24,17 @@ switch (_keyCode) do {
     case DIK_LSHIFT: { // LShift
         GVAR(CameraSpeedMode) = false;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
     };
     case DIK_LCONTROL: { // LCTRL
         GVAR(CameraSmoothingMode) = false;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
     };
-    case DIK_LALT: { // LCTRL
+    case DIK_LALT: { // ALT
         GVAR(CameraZoomMode) = false;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
     };
 };
 

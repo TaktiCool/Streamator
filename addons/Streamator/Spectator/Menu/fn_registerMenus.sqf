@@ -91,7 +91,7 @@ GVAR(currentMenuPath) = "MAIN";
     true
 }] call FUNC(addMenuItem);
 // Camera
-["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {!isNull GVAR(CameraFollowTarget) && !(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
+["Camera Modes", "MAIN", DIK_F2, { GVAR(currentMenuPath) = "MAIN/CAMERA"; true }, {!isNull GVAR(CameraFollowTarget) && !GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/CAMERA", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 private _fnc_setCameraMode = {
     params ["_mode"];
@@ -119,16 +119,9 @@ private _fnc_onRenderCameraMode = {
 ["Topdown", "MAIN/CAMERA", DIK_F4, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_TOPDOWN] call FUNC(addMenuItem);
 ["FPS", "MAIN/CAMERA", DIK_F5, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_FPS] call FUNC(addMenuItem);
 ["Orbit", "MAIN/CAMERA", DIK_F6, _fnc_setCameraMode, _fnc_onRenderCameraMode, false, CAMERAMODE_ORBIT] call FUNC(addMenuItem);
-["UAV", "MAIN/CAMERA", DIK_F7, _fnc_setCameraMode, {
-    params ["_mode"];
-    if (GVAR(CameraMode) == _mode) then {
-        _color = "#3CB371";
-    };
-    !isNull (getConnectedUAV GVAR(CameraFollowTarget))
-}, false, CAMERAMODE_UAV] call FUNC(addMenuItem);
 
 // Vision Modes
-["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {!(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
+["Vision Modes", "MAIN", DIK_F3, { GVAR(currentMenuPath) = "MAIN/VISION"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/VISION", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 
 // Vision Submenu Entries
@@ -197,7 +190,7 @@ private _fnc_onRenderThermalVision = {
 ["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F8, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
 
 // Minimap
-["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {!(GVAR(MapOpen))}, true] call FUNC(addMenuItem);
+["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/MINIMAP", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 // Minimap Submenu Entries
 ["Toggle", "MAIN/MINIMAP", DIK_F1, {
@@ -256,43 +249,13 @@ private _fnc_onRenderThermalVision = {
     _ret
 }] call FUNC(addMenuItem);
 
-["Toggle AI", "MAIN", DIK_F6, {
-    GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
-    profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
-    saveProfileNamespace;
-    call FUNC(UpdateValidUnits);
-    QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
-    true
-}, {
-    if (GVAR(RenderAIUnits)) then {
-        _color = "#3CB371";
-    };
-    true
-}] call FUNC(addMenuItem);
-
-["Unit Chyron", "MAIN", DIK_F7, {
-    if (!isNull GVAR(CameraFollowTarget)) then {
-        if (GVAR(UnitInfoOpen)) then {
-            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
-        } else {
-            [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
-        };
-    } else {
-        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
-    };
-    true;
-}, {
-    if (GVAR(UnitInfoOpen)) then {
-        _color = "#3CB371";
-    };
-    !isNull GVAR(CameraFollowTarget) && !(GVAR(MapOpen))
-}] call FUNC(addMenuItem);
 
 
-["Crew", "MAIN", DIK_F8, { GVAR(currentMenuPath) = "MAIN/CREW"; true }, {
+
+["Crew", "MAIN", DIK_F6, { GVAR(currentMenuPath) = "MAIN/CREW"; true }, {
     !GVAR(MapOpen) && !isNull GVAR(CameraFollowTarget) && !((vehicle GVAR(CameraFollowTarget)) isKindOf "CAManBase");
 }, true] call FUNC(addMenuItem);
-["BACK", "MAIN/CREW", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }, {true}, true] call FUNC(addMenuItem);
+["BACK", "MAIN/CREW", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 
 private _fnc_onActionCrew = {
     params ["_type"];
@@ -336,7 +299,11 @@ private _fnc_onRenderCrew = {
         case ("DRIVER"): {
             _newCameraTarget = driver _newCameraTarget;
             if (!isNull _newCameraTarget) then {
-                _name = format ["Driver (%1)", _newCameraTarget call CFUNC(name)];
+                if (vehicle _newCameraTarget isKindOf "Air") then {
+                    _name = format ["Pilot (%1)", _newCameraTarget call CFUNC(name)];
+                } else {
+                    _name = format ["Driver (%1)", _newCameraTarget call CFUNC(name)];
+                };
             };
             _ret = !isNull GVAR(CameraFollowTarget) && !isNull _newCameraTarget;
         };
@@ -369,13 +336,125 @@ private _fnc_onRenderCrew = {
     _ret;
 };
 
-["Commander", "MAIN/CREW", DIK_F1, _fnc_onActionCrew, _fnc_onRenderCrew, true, "COMMANDER"] call FUNC(addMenuItem);
-["Gunner", "MAIN/CREW", DIK_F2, _fnc_onActionCrew, _fnc_onRenderCrew, true, "GUNNER"] call FUNC(addMenuItem);
-["Driver", "MAIN/CREW", DIK_F3, _fnc_onActionCrew, _fnc_onRenderCrew, true, "DRIVER"] call FUNC(addMenuItem);
-["Vehicle", "MAIN/CREW", DIK_F4, _fnc_onActionCrew, _fnc_onRenderCrew, true, "VEHICLE"] call FUNC(addMenuItem);
-["Next Crew", "MAIN/CREW", DIK_F5, _fnc_onActionCrew, _fnc_onRenderCrew, true, "CREW"] call FUNC(addMenuItem);
+["Commander", "MAIN/CREW", DIK_F1, _fnc_onActionCrew, _fnc_onRenderCrew, false, "COMMANDER"] call FUNC(addMenuItem);
+["Gunner", "MAIN/CREW", DIK_F2, _fnc_onActionCrew, _fnc_onRenderCrew, false, "GUNNER"] call FUNC(addMenuItem);
+["Driver", "MAIN/CREW", DIK_F3, _fnc_onActionCrew, _fnc_onRenderCrew, false, "DRIVER"] call FUNC(addMenuItem);
+["Vehicle", "MAIN/CREW", DIK_F4, _fnc_onActionCrew, _fnc_onRenderCrew, false, "VEHICLE"] call FUNC(addMenuItem);
+["Next Crew", "MAIN/CREW", DIK_F5, _fnc_onActionCrew, _fnc_onRenderCrew, false, "CREW"] call FUNC(addMenuItem);
 
-["Fix Camera", "MAIN", DIK_F9, {
+// Misc
+["Misc", "MAIN", DIK_F7, { GVAR(currentMenuPath) = "MAIN/MISC"; true }, {true}, true] call FUNC(addMenuItem);
+["BACK", "MAIN/MISC", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
+
+["Toggle AI", "MAIN/MISC", DIK_F1, {
+    GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
+    profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
+    saveProfileNamespace;
+    call FUNC(UpdateValidUnits);
+    QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
+    true
+}, {
+    if (GVAR(RenderAIUnits)) then {
+        _color = "#3CB371";
+    };
+    true
+}] call FUNC(addMenuItem);
+["Unit Chyron", "MAIN/MISC", DIK_F2, {
+    if (!isNull GVAR(CameraFollowTarget)) then {
+        if (GVAR(UnitInfoOpen)) then {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+        } else {
+            [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+        };
+    } else {
+        QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+    };
+    true;
+}, {
+    if (GVAR(UnitInfoOpen)) then {
+        _color = "#3CB371";
+    };
+    !isNull GVAR(CameraFollowTarget) && !GVAR(MapOpen)
+}] call FUNC(addMenuItem);
+["Switch To UAV", "MAIN/MISC", DIK_F3, {
+    private _newTarget = getConnectedUAV GVAR(CameraFollowTarget);
+    private _mode = GVAR(CameraMode);
+    if !(isNull (gunner _newTarget)) then { _newTarget = gunner _newTarget; _mode = CAMERAMODE_FPS; };
+    if !(isNull _newTarget) then {
+        [_newTarget, _mode] call FUNC(setCameraTarget);
+    };
+}, {
+    private _ret = !(isNull getConnectedUAV GVAR(CameraFollowTarget));
+    if (_ret) then {
+        _name = format ["Switch To UAV (%1)", (getConnectedUAV GVAR(CameraFollowTarget)) call CFUNC(name)];
+    };
+    _ret
+}] call FUNC(addMenuItem);
+
+["View Distance", "MAIN/MISC", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MISC/VIEWDISTANCE"; true }, {true}, true] call FUNC(addMenuItem);
+["BACK", "MAIN/MISC/VIEWDISTANCE", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN/MISC"; true }] call FUNC(addMenuItem);
+
+private _fnc_doViewDistance = {
+    params ["_type"];
+    private _value = 100;
+    if (GVAR(CameraSpeedMode)) then {
+        _value = 1000;
+    };
+    if (GVAR(CameraSmoothingMode)) then {
+        _value = 10;
+    };
+    if (GVAR(CameraZoomMode)) then {
+        _value = -_value;
+    };
+    switch (_type) do {
+        case ("ViewDistance"): {
+            setViewDistance (viewDistance + _value);
+            if (GVAR(SyncObjectViewDistance)) then {
+                setObjectViewDistance (viewDistance + _value);
+            };
+        };
+        case ("ObjectViewDistance"): {
+            setObjectViewDistance ((getObjectViewDistance select 0) + _value);
+        };
+    };
+    true
+};
+private _fnc_renderViewDistance = {
+    params ["_type"];
+    private _value = 100;
+    private _ret = true;
+    if (GVAR(CameraSpeedMode)) then {
+        _value = 1000;
+    };
+    if (GVAR(CameraSmoothingMode)) then {
+        _value = 10;
+    };
+    private _mType = "Add";
+    if (GVAR(CameraZoomMode)) then {
+        _mType = "Substract";
+    };
+    private _current = switch (_type) do {
+        case ("ObjectViewDistance"): {
+            private _ovd = (getObjectViewDistance select 0);
+            if (viewDistance == _ovd && _mType == "Add" || GVAR(SyncObjectViewDistance)) then {
+                _ret = false;
+            };
+            _ovd
+        };
+        default {
+            viewDistance;
+        };
+    };
+    _name = format ["%1 %2 %3 (%4)", _mType, _value, _type, _current];
+    _ret
+};
+
+["Add 100 ViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F1, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ViewDistance"] call FUNC(addMenuItem);
+["Add 100 ObjectViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ObjectViewDistance"] call FUNC(addMenuItem);
+["Sync ObjectViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, { GVAR(SyncObjectViewDistance) = !GVAR(SyncObjectViewDistance); if (GVAR(SyncObjectViewDistance)) then {setObjectViewDistance viewDistance;}; }, { if (GVAR(SyncObjectViewDistance)) then { _color = "#3CB371"; }; true }] call FUNC(addMenuItem);
+["Reset ViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, { setObjectViewDistance -1; setViewDistance -1; true }] call FUNC(addMenuItem);
+
+["Fix Camera", "MAIN/MISC", DIK_F12, {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;

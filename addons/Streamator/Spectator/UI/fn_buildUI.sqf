@@ -273,8 +273,8 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     (_this select 0) params ["_mode"];
     (_this select 1) params ["_ctrl"];
 
-    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]", "UAV %2 [%1]"]  select (_mode - 1);
-    _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name), GVAR(UAVCameraTarget) call CFUNC(name)];
+    private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]"]  select (_mode - 1);
+    _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name)];
     _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, GVAR(smallTextSize)];
     _ctrl ctrlCommit 0;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);

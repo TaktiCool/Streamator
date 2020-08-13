@@ -54,11 +54,6 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
             _velocity = (_tis distance2D (AGLToASL _position)) / 16;
             _position = positionCameraToWorld [0, 0, (_tis distance2D (AGLToASL _position)) / 2];
         };
-        case !(isNull GVAR(UAVCameraTarget)): {
-            private _target = vehicle GVAR(UAVCameraTarget);
-            _position = getPos _target;
-            _velocity = (speed _target) min 80;
-        };
         case !(isNull GVAR(CameraFollowTarget)): {
             private _target = vehicle GVAR(CameraFollowTarget);
             _position = getPos _target;

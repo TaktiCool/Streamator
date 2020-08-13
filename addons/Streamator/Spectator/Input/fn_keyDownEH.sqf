@@ -31,18 +31,21 @@ private _return = switch (_keyCode) do {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraSpeedMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         false;
     };
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraSmoothingMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         false;
     };
     case DIK_LALT: { // LALT
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
         false;
     };
     case DIK_ESCAPE: { // ESC
@@ -242,7 +245,6 @@ private _return = switch (_keyCode) do {
             case DIK_NUMPAD3: {CAMERAMODE_TOPDOWN};
             case DIK_NUMPAD4: {CAMERAMODE_FPS};
             case DIK_NUMPAD5: {CAMERAMODE_ORBIT};
-            case DIK_NUMPAD6: {CAMERAMODE_UAV};
         };
         [_newCameraTarget, _cameraMode, _alt] call FUNC(setCameraTarget);
         true;
