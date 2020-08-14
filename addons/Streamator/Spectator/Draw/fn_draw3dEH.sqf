@@ -162,7 +162,7 @@ if (GVAR(OverlayUnitMarker)) then {
                 };
                 (_iconType select 0) params ["_icon", "_iconRelSize"];
 
-                private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+                private _sideColor = +(GVAR(SideColorsArray) getVariable [str side (group _x), [1, 1, 1, 1]]);
                 private _shotFactor = 2 * (time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
                 _sideColor set [3, 0.7 + 0.3 * _shotFactor];
 
@@ -178,7 +178,7 @@ if (GVAR(OverlayUnitMarker)) then {
                 drawIcon3D ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", [1, 1, 1, _alpha * _nametagVisibility], _pos, _size * 1.4, _size * 1.4, 0, format ["%1", _x call CFUNC(name)], 2, PY(1.8), "RobotoCondensed", "center"];
             } else {
                 if (_distance < UNITDOTDIST) then {
-                    private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+                    private _sideColor = +(GVAR(SideColorsArray) getVariable [str side (group _x), [1, 1, 1, 1]]);
                     private _shotFactor = 2 * (time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
                     _sideColor set [3, 0.4];
                     private _scale = 1 + 0.4 * (1 - _shotFactor);
