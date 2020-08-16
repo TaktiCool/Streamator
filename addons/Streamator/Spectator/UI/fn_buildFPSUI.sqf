@@ -75,6 +75,20 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     // Animate Map
     _map ctrlMapAnimAdd [0, _zoom min 1, _position];
     ctrlMapAnimCommit _map;
+
+    if (GVAR(RenderFOVCone)) then {
+        private _vertices = [];
+        private _fov = GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)];
+        {
+            private _pos = GVAR(Camera) modelToWorld _x;
+            _vertices pushback _pos;
+        } forEach [
+            [0,0,0],
+            [(5400 * _fov) * _zoom, 4125 * _zoom,0],
+            [-(5400 * _fov) * _zoom, 4125 * _zoom,0]
+        ];
+        _map drawTriangle [_vertices, [1,1,1,1], "#(rgb,1,1,1)color(0.2,0.25,0.25,0.25)"];
+    };
 }];
 
 private _ctrlMinimapTitle = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];

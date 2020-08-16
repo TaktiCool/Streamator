@@ -66,11 +66,13 @@ GVAR(CameraSmoothingTime) = 0.2;
 
 GVAR(MapState) = [];
 GVAR(MapOpen) = false;
-GVAR(MinimapVisible) = false;
-GVAR(CenterMinimapOnCameraPositon) = true;
 GVAR(MeasureDistancePositions) = [];
 GVAR(MeasureDistance) = false;
 GVAR(useTerrainIntersect) = false;
+
+GVAR(MinimapVisible) = false;
+GVAR(CenterMinimapOnCameraPositon) = true;
+GVAR(RenderFOVCone) = true;
 
 GVAR(hideUI) = false;
 

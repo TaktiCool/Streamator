@@ -193,12 +193,14 @@ private _fnc_onRenderThermalVision = {
 ["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/MINIMAP", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 // Minimap Submenu Entries
-["Toggle", "MAIN/MINIMAP", DIK_F1, {
+["Show Minimap", "MAIN/MINIMAP", DIK_F1, {
     QGVAR(ToggleMinimap) call CFUNC(localEvent);
     true
 }, {
+    _name = "Show Minimap";
     if (GVAR(MinimapVisible)) then {
         _color = "#3CB371";
+        _name = "Hide Minimap";
     };
     true
 }] call FUNC(addMenuItem);
@@ -211,6 +213,17 @@ private _fnc_onRenderThermalVision = {
     };
     true
 }] call FUNC(addMenuItem);
+
+["Render FOV Cone", "MAIN/MINIMAP", DIK_F3, {
+    GVAR(RenderFOVCone) = !GVAR(RenderFOVCone);
+    true
+}, {
+    if (GVAR(RenderFOVCone)) then {
+        _color = "#3CB371";
+    };
+    true
+}] call FUNC(addMenuItem);
+
 
 // Radio
 ["Radio", "MAIN", DIK_F5, { GVAR(currentMenuPath) = "MAIN/RADIO"; true }, {true}, true] call FUNC(addMenuItem);
@@ -346,7 +359,7 @@ private _fnc_onRenderCrew = {
 ["Misc", "MAIN", DIK_F7, { GVAR(currentMenuPath) = "MAIN/MISC"; true }, {true}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/MISC", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN"; true }] call FUNC(addMenuItem);
 
-["Toggle AI", "MAIN/MISC", DIK_F1, {
+["Render AI", "MAIN/MISC", DIK_F1, {
     GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
     profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
     saveProfileNamespace;

@@ -111,14 +111,15 @@ Key Binding | Short Description | Remarks
         - **[F8]** Thermal (RGW)  
 - **[F4]** \<Minimap\>  
     - **[Esc]** Back  
-    - **[F1]** Toggle  
-    - **[F2]** Toggle View Mode  
+    - **[F1]** Show/Hide Minimap  
+    - **[F2]** Center On Camera  
+    - **[F2]** Render FOV Cone  
 - **[F5]** \<Radio\>  
     - **[Esc]** Back  
     - **[F1]** Toggle Radio Overlay  
     - **[F2]** Target current Camera target  
 - **[F6]** \<Misc\>  
-    - **[F1]** Toggle AI  
+    - **[F1]** Render AI  
     - **[F2]** Unit Chyron  
     - **[F3]** Switch to UAV  
     - **[F4]** \<ViewDistance\>
