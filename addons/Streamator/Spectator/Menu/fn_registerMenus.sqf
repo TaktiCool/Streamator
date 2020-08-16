@@ -454,6 +454,19 @@ private _fnc_renderViewDistance = {
 ["Sync ObjectViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, { GVAR(SyncObjectViewDistance) = !GVAR(SyncObjectViewDistance); if (GVAR(SyncObjectViewDistance)) then {setObjectViewDistance viewDistance;}; }, { if (GVAR(SyncObjectViewDistance)) then { _color = "#3CB371"; }; true }] call FUNC(addMenuItem);
 ["Reset ViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, { setObjectViewDistance -1; setViewDistance -1; true }] call FUNC(addMenuItem);
 
+
+["Use Terrain Intersect", "MAIN/MISC", DIK_F5, {
+    GVAR(useTerrainIntersect) = !GVAR(useTerrainIntersect);
+    true
+}, {
+    if (GVAR(useTerrainIntersect)) then {
+        _name = "Use Line Intersect";
+    } else {
+        _name = "Use Terrain Intersect";
+    };
+    true
+}] call FUNC(addMenuItem);
+
 ["Fix Camera", "MAIN/MISC", DIK_F12, {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;

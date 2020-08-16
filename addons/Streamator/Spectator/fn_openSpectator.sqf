@@ -68,6 +68,9 @@ GVAR(MapState) = [];
 GVAR(MapOpen) = false;
 GVAR(MinimapVisible) = false;
 GVAR(CenterMinimapOnCameraPositon) = true;
+GVAR(MeasureDistancePositions) = [];
+GVAR(MeasureDistance) = false;
+GVAR(useTerrainIntersect) = false;
 
 GVAR(hideUI) = false;
 

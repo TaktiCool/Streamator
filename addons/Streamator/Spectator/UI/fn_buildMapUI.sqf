@@ -91,8 +91,42 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
     true;
 }];
 
-_map ctrlAddEventHandler ["MouseButtonClick", {
-    params ["_map", "", "_xpos", "_ypos", "", "", "_alt"];
+_map ctrlAddEventHandler ["MouseMoving", {
+    params ["_map", "_xPos", "_yPos"];
+    if (GVAR(InputMode) == INPUTMODE_PLANINGMODE && GVAR(PlanningModeDrawing)) exitWith {
+        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+        _pos set [2, 0];
+        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+    };
+    if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {};
+    if (GVAR(MeasureDistance)) exitWith {
+        GVAR(MeasureDistancePositions) set [1, _map ctrlMapScreenToWorld [_xpos, _ypos]];
+    };
+}];
+
+_map ctrlAddEventHandler  ["MouseButtonDown", {
+    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
+    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {
+        GVAR(PlanningModeDrawing) = true;
+        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+        _pos set [2, 0];
+        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        true;
+    };
+    if (_button == 0 && _ctrl) exitWith {
+        GVAR(MeasureDistance) = true;
+        GVAR(MeasureDistancePositions) set [0, _map ctrlMapScreenToWorld [_xpos, _ypos]];
+        GVAR(MeasureDistancePositions) set [1, _map ctrlMapScreenToWorld [_xpos, _ypos]];
+        true;
+    };
+    true;
+}];
+_map ctrlAddEventHandler  ["MouseButtonUp", {
+    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
+    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {
+        GVAR(PlanningModeDrawing) = false;
+        true;
+    };
     if (_alt) exitWith {
         GVAR(CameraPreviousState) = [];
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
@@ -101,32 +135,12 @@ _map ctrlAddEventHandler ["MouseButtonClick", {
         GVAR(CameraPos) = _pos;
         true;
     };
-    false;
-}];
-
-_map ctrlAddEventHandler ["MouseMoving", {
-    params ["_map", "_xPos", "_yPos"];
-    if (GVAR(InputMode) == INPUTMODE_PLANINGMODE && GVAR(PlanningModeDrawing)) then {
-        private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
-        _pos set [2, 0];
-        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+    if (_button == 0 && GVAR(MeasureDistance)) exitWith {
+        GVAR(MeasureDistance) = false;
+        GVAR(MeasureDistancePositions) = [];
+        true;
     };
-}];
-
-_map ctrlAddEventHandler  ["MouseButtonDown", {
-    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
-    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
-        GVAR(PlanningModeDrawing) = true;
-        private _pos = _map ctrlMapScreenToWorld [_xPos, _yPos];
-        _pos set [2, 0];
-        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
-    };
-}];
-_map ctrlAddEventHandler  ["MouseButtonUp", {
-    params ["_map", ["_button", -1, [0]], "_xPos", "_yPos"];
-    if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
-        GVAR(PlanningModeDrawing) = false;
-    };
+    true;
 }];
 _map ctrlAddEventHandler ["Draw", { _this call FUNC(drawEH); }];
 

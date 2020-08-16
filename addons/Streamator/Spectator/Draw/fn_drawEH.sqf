@@ -138,6 +138,44 @@ if (GVAR(OverlayPlayerMarkers)) then {
     } forEach (GVAR(CameraFollowTarget) getVariable [QGVAR(mapMarkers), []]);
 };
 
+if  (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) then {
+    GVAR(MeasureDistancePositions) params ["_pos1", "_pos2"];
+    _pos1 set [2, (getTerrainHeightASL _pos1) + 1.8];
+    _pos2 set [2, (getTerrainHeightASL _pos2) + 1.8];
+    private _distance = (_pos1 distance2D _pos2);
+    private _text = format ["Distance %1m", _distance toFixed 1];
+    _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos1, 12.5, 12.5, 0, ""];
+    _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos2, 12.5, 12.5, 0, ""];
+    _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos2, 12.5, 12.5, 0, _text, 2];
+
+    private _interSectPos = [];
+    if (GVAR(useTerrainIntersect)) then {
+        private _ti = terrainIntersectAtASL [_pos1, _pos2];
+        if !(_ti isEqualTo [0,0,0]) then {
+            _interSectPos = _ti;
+        };
+    } else {
+        private _lis = lineIntersectsSurfaces [_pos1, _pos2];
+        if !(_lis isEqualTo []) then {
+            _interSectPos = (_lis select 0) select 0;
+        };
+    };
+    DUMP("IntersectPos: " + str _interSectPos);
+    if (_interSectPos isEqualTo []) then {
+        _map drawLine [_pos1, _pos2, [0, 1, 0, 1]];
+        _map drawEllipse [_pos1, _distance, _distance, 0, [0,1,0,1], ""];
+    } else {
+        _map drawLine [_pos1, _pos2, [1, 0, 0, 1]];
+        _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _interSectPos, 12.5, 12.5, 0, ""];
+        _map drawLine [_pos1, _interSectPos, [0, 1, 0, 1]];
+        _map drawEllipse [_pos1, _distance, _distance, 0, [1,0,0,1], ""];
+        _distance = _pos1 distance2d _interSectPos;
+        _map drawEllipse [_pos1, _distance, _distance, 0, [0,1,0,1], ""];
+
+    };
+
+};
+
 // Render ACE3 Map Gestures
 // Credits: Dslyecxi, MikeMatrix
 // https://github.com/acemod/ACE3/blob/master/addons/map_gestures/functions/fnc_drawMapGestures.sqf
@@ -152,8 +190,8 @@ if (GVAR(aceMapGesturesLoaded)) then {
             private _color = (ace_map_gestures_GroupColorCfgMappingNew getVariable [_grpName, [ace_map_gestures_defaultLeadColor, ace_map_gestures_defaultColor]]) select (_x != leader _x);
 
             // Render icon and player name
-            _map drawIcon ["\a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
-            _map drawIcon ["#(argb,8,8,3)color(0,0,0,0)", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
+            _map drawIcon ["a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1, 0.030, TEXT_FONT, "left"];
+            _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", ace_map_gestures_nameTextColor, _pos, 20, 20, 0, name _x, 0, 0.030, TEXT_FONT, "left"];
         };
     } forEach call FUNC(getNearByTransmitingPlayers);
 };
