@@ -404,7 +404,7 @@ private _fnc_onRenderCrew = {
     _ret
 }] call FUNC(addMenuItem);
 
-["View Distance", "MAIN/MISC", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MISC/VIEWDISTANCE"; true }, {true}, true] call FUNC(addMenuItem);
+["View Distance", "MAIN/MISC", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MISC/VIEWDISTANCE"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 ["BACK", "MAIN/MISC/VIEWDISTANCE", DIK_ESCAPE, { GVAR(currentMenuPath) = "MAIN/MISC"; true }] call FUNC(addMenuItem);
 
 private _fnc_doViewDistance = {
@@ -421,13 +421,14 @@ private _fnc_doViewDistance = {
     };
     switch (_type) do {
         case ("ViewDistance"): {
-            setViewDistance (viewDistance + _value);
+            private _newViewDistance = ((viewDistance + _value) min GVAR(ViewDistanceLimit));
+            setViewDistance _newViewDistance;
             if (GVAR(SyncObjectViewDistance)) then {
-                setObjectViewDistance (viewDistance + _value);
+                setObjectViewDistance _newViewDistance;
             };
         };
         case ("ObjectViewDistance"): {
-            setObjectViewDistance ((getObjectViewDistance select 0) + _value);
+            setObjectViewDistance (((getObjectViewDistance select 0) + _value) min GVAR(ViewDistanceLimit));
         };
     };
     true
@@ -435,7 +436,7 @@ private _fnc_doViewDistance = {
 private _fnc_renderViewDistance = {
     params ["_type"];
     private _value = 100;
-    private _ret = true;
+    private _ret = !GVAR(MapOpen);
     if (GVAR(CameraSpeedMode)) then {
         _value = 1000;
     };
@@ -449,12 +450,15 @@ private _fnc_renderViewDistance = {
     private _current = switch (_type) do {
         case ("ObjectViewDistance"): {
             private _ovd = (getObjectViewDistance select 0);
-            if (viewDistance == _ovd && _mType == "Add" || GVAR(SyncObjectViewDistance)) then {
+            if ((viewDistance == _ovd || _ovd == GVAR(ViewDistanceLimit)) && _mType == "Add" || GVAR(SyncObjectViewDistance)) then {
                 _ret = false;
             };
             _ovd
         };
         default {
+            if (viewDistance == GVAR(ViewDistanceLimit) && _mType == "Add") then {
+                _ret = false;
+            };
             viewDistance;
         };
     };
@@ -477,7 +481,7 @@ private _fnc_renderViewDistance = {
     } else {
         _name = "Use Terrain Intersect";
     };
-    true
+    GVAR(MapOpen)
 }] call FUNC(addMenuItem);
 
 ["Fix Camera", "MAIN/MISC", DIK_F12, {

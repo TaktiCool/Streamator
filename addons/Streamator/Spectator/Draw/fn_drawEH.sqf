@@ -140,8 +140,8 @@ if (GVAR(OverlayPlayerMarkers)) then {
 
 if  (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) then {
     GVAR(MeasureDistancePositions) params ["_pos1", "_pos2"];
-    _pos1 set [2, (getTerrainHeightASL _pos1) + 1.8];
-    _pos2 set [2, (getTerrainHeightASL _pos2) + 1.8];
+    _pos1 set [2, (getTerrainHeightASL _pos1) + 2];
+    _pos2 set [2, (getTerrainHeightASL _pos2) + 2];
     private _distance = (_pos1 distance2D _pos2);
     private _text = format ["Distance %1m", _distance toFixed 1];
     _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos1, 12.5, 12.5, 0, ""];
@@ -160,7 +160,6 @@ if  (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) 
             _interSectPos = (_lis select 0) select 0;
         };
     };
-    DUMP("IntersectPos: " + str _interSectPos);
     if (_interSectPos isEqualTo []) then {
         _map drawLine [_pos1, _pos2, [0, 1, 0, 1]];
         _map drawEllipse [_pos1, _distance, _distance, 0, [0,1,0,1], ""];

@@ -22,7 +22,8 @@ private _entries = GVAR(menuEntries) getVariable [_path, []];
         private _style = "<t size='%3' color='%4'>[%1] %2 </t>";
         if (_args call _onRender) then {
             _args call _onUse;
-            { QGVAR(updateMenu) call CFUNC(localEvent); } call CFUNC(execNextFrame);
+            // We need to wait 2 frames for some Arma Variables to Update like Object View Distance
+            { { QGVAR(updateMenu) call CFUNC(localEvent); } call CFUNC(execNextFrame); } call CFUNC(execNextFrame);
             true breakOut SCRIPTSCOPENAME;
         };
     };

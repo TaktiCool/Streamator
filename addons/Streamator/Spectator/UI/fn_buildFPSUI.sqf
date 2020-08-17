@@ -77,15 +77,20 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     ctrlMapAnimCommit _map;
 
     if (GVAR(RenderFOVCone)) then {
+
         private _vertices = [];
-        private _fov = GVAR(CameraPreviousState) param [4, GVAR(CameraFOV)];
+
+        private _cPos = positionCameraToWorld [0, 0, 0];
+        _cPos set [2, 0];
+        _vertices pushBack _cPos;
         {
-            private _pos = GVAR(Camera) modelToWorld _x;
-            _vertices pushback _pos;
+            private _newPos = _cPos vectorFromTo (screenToWorld _x);
+            _newPos = _newPos vectorMultiply 100000;
+            _newPos = _newPos vectorAdd _cPos;
+            _vertices pushBack _newPos;
         } forEach [
-            [0,0,0],
-            [(5400 * _fov) * _zoom, 4125 * _zoom,0],
-            [-(5400 * _fov) * _zoom, 4125 * _zoom,0]
+            [1 - safeZoneX, 0.5],
+            [safeZoneX, 0.5]
         ];
         _map drawTriangle [_vertices, [1,1,1,1], "#(rgb,1,1,1)color(0.2,0.25,0.25,0.25)"];
     };

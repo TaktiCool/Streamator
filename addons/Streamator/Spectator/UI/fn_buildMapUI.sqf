@@ -115,8 +115,8 @@ _map ctrlAddEventHandler  ["MouseButtonDown", {
     };
     if (_button == 0 && _ctrl) exitWith {
         GVAR(MeasureDistance) = true;
-        GVAR(MeasureDistancePositions) set [0, _map ctrlMapScreenToWorld [_xpos, _ypos]];
-        GVAR(MeasureDistancePositions) set [1, _map ctrlMapScreenToWorld [_xpos, _ypos]];
+        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+        GVAR(MeasureDistancePositions) = [_pos, _pos];
         true;
     };
     true;

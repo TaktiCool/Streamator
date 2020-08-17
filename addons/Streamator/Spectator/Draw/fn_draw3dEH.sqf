@@ -33,6 +33,7 @@ private _object = lineIntersectsSurfaces [
 if !(_object isEqualTo []) then {
     _nextTarget = (_object select 0) select 2;
 };
+#define TEXT_FONT "RobotoCondensedBold"
 
 if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
     if (!(isNull _nextTarget) || (time - GVAR(lastCursorTarget)) >= 1) then {
@@ -45,6 +46,7 @@ if (GVAR(hideUI)) exitWith {};
 
 private _fov = (call CFUNC(getFOV)) * 3;
 private _cameraPosition = positionCameraToWorld [0, 0, 0];
+private _sqrtFOV = sqrt(_fov);
 //HUD
 //PlanningMode
 private _serverTime = [time, serverTime] select isMultiplayer;
@@ -95,7 +97,7 @@ if (GVAR(OverlayPlanningMode)) then {
             };
         };
         private _deleted = false;
-        private _sqrtFOV = sqrt(_fov);
+
         {
             _x params ["_time", "_pos"];
             private _size = (0.8 min (1 / (((_cameraPosition distance _pos) / 100)^0.7)) max 0.15) * _sqrtFOV;
@@ -110,10 +112,10 @@ if (GVAR(OverlayPlanningMode)) then {
                 if (_cursorPos isEqualTo _x) then {
                     _color set [3, 1];
                     _text = format ["%1", (_unit call CFUNC(name))];
-                    drawIcon3D ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, _size, _size, 0, _text, 2, PY(2), "RobotoCondensedBold", "center"];
-                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 2, PY(2), "RobotoCondensedBold", "center"];
+                    drawIcon3D ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1,1,1,1], _pos, _size, _size, 0, _text, 2, PY(2), TEXT_FONT, "center"];
+                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 2, PY(2), TEXT_FONT, "center"];
                 } else {
-                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 0, PY(2), "RobotoCondensedBold", "center"];
+                    drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _color, _pos, _size, _size, 0, "", 0, PY(2), TEXT_FONT, "center"];
                 };
             };
         } forEach _cursorHistory;
@@ -233,7 +235,7 @@ if (GVAR(OverlayGroupMarker)) then {
                 if (_distance > _unitDotFontDistance) then {
                     _fontSize = _fontSmallsize;
                 };
-                drawIcon3D ["", [1, 1, 1, _alpha], _pos, _size, _size, 0, groupId _x, 2, _fontSize, "RobotoCondensedBold", "center"];
+                drawIcon3D ["", [1, 1, 1, _alpha], _pos, _size, _size, 0, groupId _x, 2, _fontSize, TEXT_FONT, "center"];
             };
         };
     } forEach _allGroups;
@@ -255,8 +257,8 @@ if (GVAR(OverlayLaserTargets)) then {
             if (_index != -1) then {
                 drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), _pos, [1, 0, 0, 1]];
             };
-            drawIcon3D ["a3\ui_f_curator\Data\CfgCurator\laser_ca.paa", [1, 0, 0, 1], _pos, 0.75, 0.75, 0, "", 1, 0.05, "RobotoCondensedBold"];
-            drawIcon3D ["", [1, 1, 1, 1], _pos, 0.75, 0.75, 0, _text, 1, 0.05, "RobotoCondensedBold"];
+            drawIcon3D ["a3\ui_f_curator\Data\CfgCurator\laser_ca.paa", [1, 0, 0, 1], _pos, 0.75, 0.75, 0, "", 1, 0.05, TEXT_FONT];
+            drawIcon3D ["", [1, 1, 1, 1], _pos, 0.75, 0.75, 0, _text, 1, 0.05, TEXT_FONT];
         };
     } forEach GVAR(LaserTargets);
 };
@@ -308,4 +310,15 @@ if (GVAR(OverlayBulletTracer)) then {
     if (_deleted) then {
         GVAR(ThrownTracked) = GVAR(ThrownTracked) - [objNull];
     };
+};
+
+if (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) then {
+    GVAR(MeasureDistancePositions) params ["_pos1", "_pos2"];
+    private _distance = (_pos1 distance2D _pos2);
+    private _text = format ["Distance %1m", _distance toFixed 1];
+
+    drawIcon3D ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos1, 1.25, 1.25, 0, "", 0, PY(2.5), TEXT_FONT, "center"];
+    drawIcon3D ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos2, 1.25, 1.25, 0, "", 0, PY(2.5), TEXT_FONT, "center"];
+    drawIcon3D ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos2, 1.25, 1.25, 0, _text, 2, PY(2.5), TEXT_FONT, "center"];
+    drawLine3D [_pos1, _pos2, [0, 1, 0, 1]];
 };

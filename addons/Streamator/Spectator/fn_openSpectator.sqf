@@ -76,6 +76,10 @@ GVAR(RenderFOVCone) = true;
 
 GVAR(hideUI) = false;
 
+if (isNil QGVAR(ViewDistanceLimit)) then {
+    GVAR(ViewDistanceLimit) = 12000;
+};
+
 GVAR(OverlayUnitMarker) = true;
 GVAR(OverlayGroupMarker) = true;
 GVAR(OverlayCustomMarker) = true;
