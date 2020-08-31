@@ -28,7 +28,7 @@ if (isNil QGVAR(menuEntries)) then {
 private _entry = GVAR(menuEntries) getVariable [_path, []];
 
 if ((_entry findIf {(_x select 0) == _dik}) != -1) exitWith {
-    ["Menu Item %1/%2 reused Keybinding %3", _path, _name, keyName _dik] call BIS_fnc_error;
+    ["Menu Item %1/%2 reused Keybinding %3", _path, _name, call compile (keyName _dik)] call BIS_fnc_error;
     [_name, _path, _dik + 1, _onUse, _onRender, _hasSubMenus, _args] call FUNC(addMenuItem);
 };
 _entry pushBack [_dik, _name, _onUse, _onRender, _hasSubMenus, _args];

@@ -123,8 +123,8 @@ Key Binding | Short Description | Remarks
     - **[F2]** Unit Chyron  
     - **[F3]** Switch to UAV  
     - **[F4]** \<ViewDistance\>
-        - **[F1]** ViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Minus)
-        - **[F2]** ObjectViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Minus)
+        - **[F1]** ViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
+        - **[F2]** ObjectViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
         - **[F3]** Sync ObjectViewDistance
         - **[F4]** Reset ViewDistance
     - **[F5]** Use Terrain/Line Intersect for Distance Measuring Tool

@@ -162,6 +162,10 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     };
 }] call CFUNC(addEventhandler);
 
+[QGVAR(firedEHRemoteBombFix), {
+    (_this select 0) call FUNC(firedEH);
+}] call CFUNC(addEventHandler);
+
 GVAR(lastFrameDataUpdate) = diag_frameNo;
 [QGVAR(RequestCameraState), {
     if (GVAR(lastFrameDataUpdate) == diag_frameNo) exitWith {};
@@ -273,19 +277,17 @@ private _fnc_init = {
             GVAR(PlanningModeDrawing) = false;
         };
     }];
+
     ["enableSimulation", [CLib_Player, false]] call CFUNC(serverEvent);
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
 
     call FUNC(registerMenus);
-
     call FUNC(buildUI);
-
-    QGVAR(updateMenu) call CFUNC(localEvent);
-
     [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
+    QGVAR(updateMenu) call CFUNC(localEvent);
     QGVAR(spectatorOpened) call CFUNC(localEvent);
-
+    [QGVAR(RegisterStreamator), CLib_Player] call CFUNC(serverEvent);
 };
 
 if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {

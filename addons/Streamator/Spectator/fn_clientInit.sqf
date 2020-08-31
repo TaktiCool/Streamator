@@ -22,6 +22,16 @@ GVAR(aceSpectatorLoaded) = isClass (configFile >> "CfgPatches" >> "ace_spectator
         "initializeSpectator" call CFUNC(localEvent);
     };
     CLib_Player setVariable [QGVAR(isPlayer), true, true];
+    CLib_Player addEventhandler ["FiredMan", {
+        params ["_unit", "_weapon", "", "", "_ammo", "", "_projectile"];
+        if (_ammo isKindOf "BombCore") then {
+            if (isNull _projectile) then {
+                _projectile = (getPos _unit) nearestObject _ammo;
+            };
+            [QGVAR(firedEHRemoteBombFix), GVAR(Streamators), [_unit, _weapon, _projectile, _ammo]] call CFUNC(targetEvent);
+        };
+
+    }];
 }] call CFUNC(addEventhandler);
 
 ["terminateSpectator", {
