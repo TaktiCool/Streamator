@@ -480,7 +480,7 @@ private _fnc_renderViewDistance = {
     } else {
         _name = "Use Terrain Intersect";
     };
-    GVAR(MapOpen)
+    true;
 }] call FUNC(addMenuItem);
 
 ["Fix Camera", "MAIN/MISC", DIK_F12, {

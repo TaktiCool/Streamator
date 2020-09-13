@@ -29,23 +29,32 @@ params [
 private _return = switch (_keyCode) do {
     case DIK_LSHIFT: { // LShift
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraSpeedMode);
         GVAR(CameraSpeedMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
-        QGVAR(updateMenu) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraSmoothingMode);
         GVAR(CameraSmoothingMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
-        QGVAR(updateMenu) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_LALT: { // LALT
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraZoomMode);
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
-        QGVAR(updateMenu) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_ESCAPE: { // ESC

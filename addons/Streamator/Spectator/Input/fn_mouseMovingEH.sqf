@@ -24,23 +24,13 @@ params [
 if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
     if (GVAR(MapOpen)) exitWith {};
     if (GVAR(MeasureDistance)) exitWith {
-        private _endPosition = screenToWorld getMousePosition;
-        private _startPosition = positionCameraToWorld [0, 0, 0];
-        private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
-        if !(_intersectArray isEqualTo []) then {
-            (_intersectArray select 0) params ["_intersectPosition"];
-            _endPosition = ASLtoAGL _intersectPosition;
-        };
+        private _endPosition = call FUNC(getMousePositionInWorld);
         GVAR(MeasureDistancePositions) set [1, _endPosition];
     };
     if (GVAR(PlanningModeDrawing)) exitWith {
         private _endPosition = screenToWorld getMousePosition;
         private _startPosition = positionCameraToWorld [0, 0, 0];
-        private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
-        if !(_intersectArray isEqualTo []) then {
-            (_intersectArray select 0) params ["_intersectPosition"];
-            _endPosition = ASLtoAGL _intersectPosition;
-        };
+        private _endPosition = call FUNC(getMousePositionInWorld);
 
         [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };

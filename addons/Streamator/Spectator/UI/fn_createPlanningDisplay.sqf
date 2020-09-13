@@ -26,13 +26,7 @@ if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
             if (_button == 0 && _ctrl) exitWith {
                 GVAR(MeasureDistance) = true;
                 GVAR(PlanningModeDrawing) = false;
-                private _endPosition = screenToWorld getMousePosition;
-                private _startPosition = positionCameraToWorld [0, 0, 0];
-                private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
-                if !(_intersectArray isEqualTo []) then {
-                    (_intersectArray select 0) params ["_intersectPosition"];
-                    _endPosition = ASLtoAGL _intersectPosition;
-                };
+                private _endPosition = call FUNC(getMousePositionInWorld);
                 GVAR(MeasureDistancePositions) = [_endPosition, _endPosition];
                 true;
             };
@@ -53,6 +47,8 @@ if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
             };
             if (_button == 0) exitWith {
                 GVAR(PlanningModeDrawing) = false;
+                GVAR(MeasureDistance) = false;
+                GVAR(MeasureDistancePositions) = [];
                 true;
             };
             true;

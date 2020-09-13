@@ -183,6 +183,10 @@ _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {
     (_this select 1) params ["_ctrl"];
+
+    profileNamespace setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+    saveProfileNamespace;
+
     if (GVAR(PlanningModeChannel) == 0) then {
         _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
     } else {

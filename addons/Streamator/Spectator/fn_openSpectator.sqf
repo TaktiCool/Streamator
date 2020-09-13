@@ -101,9 +101,27 @@ GVAR(UnitInfoTarget) = objNull;
 GVAR(RenderAIUnits) = profileNamespace getVariable [QGVAR(RenderAIUnits), false];
 
 GVAR(PlanningModeChannel) = 0;
-// ["#FF0000","#FFFF00","#0033FF","#CC66FF","#66FF66","#FF6600","#FFFFFF","#6699FF","#00FFFF","#99FF66","#339933","#FF0066","#CC3300","#0033CC"]
-GVAR(PlanningModeColorRGB) = [[1,0,0],[1,1,0],[0,0.2,1],[0.8,0.4,1],[0.4,1,0.4],[1,0.4,0],[1,1,1],[0.4,0.6,1],[0,1,1],[0.6,1,0.4],[0.2,0.6,0.2],[1,0,0.4],[0.8,0.2,0],[0,0.2,0.8]];
-GVAR(PlanningModeColor) = floor (random (count GVAR(PlanningModeColorRGB)));
+GVAR(PlanningModeColorRGB) = [
+    [1,0,0,1],       // #FF0000
+    [1,1,0,1],       // #FFFF00
+    [0,0.2,1,1],     // #0033FF
+    [0.8,0.4,1,1],   // #CC66FF
+    [0.4,1,0.4,1],   // #66FF66
+    [1,0.4,0,1],     // #FF6600
+    [1,1,1,1],       // #FFFFFF
+    [0.4,0.6,1,1],   // #6699FF
+    [0,1,1,1],       // #00FFFF
+    [0.6,1,0.4,1],   // #99FF66
+    [0.2,0.6,0.2,1], // #339933
+    [1,0,0.4,1],     // #FF0066
+    [0.8,0.2,0,1],   // #CC3300
+    [0,0.2,0.8,1]    // #0033CC
+];
+private _colorCount = count GVAR(PlanningModeColorRGB);
+GVAR(PlanningModeColor) = profileNamespace getVariable [QGVAR(PlanningModeColor), floor (random _colorCount)];
+profileNamespace setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+saveProfileNamespace;
+
 CLib_Player setVariable [QGVAR(PlanningModeColor), GVAR(PlanningModeColor), true];
 
 GVAR(PlanningModeColorHTML) = GVAR(PlanningModeColorRGB) apply {_x call BIS_fnc_colorRGBtoHTML;};
