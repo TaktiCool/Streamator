@@ -56,7 +56,7 @@ steps_linux = [
     "sed -i -r -s 's/#define MAJOR {{semver.major}}/#define MAJOR 0/g' addons/Streamator/macros.hpp",
     "sed -i -r -s 's/#define MINOR {{semver.minor}}/#define MINOR 0/g' addons/Streamator/macros.hpp",
     "sed -i -r -s 's/#define PATCHLVL {{semver.patch}}/#define PATCHLVL 0/g' addons/Streamator/macros.hpp",
-    "sed -i -r -s 's/#define PATCHLVL {{semver.build}}/#define BUILD 0/g' addons/Streamator/macros.hpp",
+    "sed -i -r -s 's/#define BUILD {{semver.build}}/#define BUILD 0/g' addons/Streamator/macros.hpp",
 ]
 steps_windows = [
     "echo 'Unsetting version'",
