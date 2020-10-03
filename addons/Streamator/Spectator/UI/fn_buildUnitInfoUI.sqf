@@ -271,11 +271,16 @@ private _unitInfoAllCtrls = [
 
     // set health
     private _health = 0;
-    private _c = {
-        _health = _health + _x;
-        true
-    } count ((getAllHitPointsDamage _unit) select 2);
-    _health = _health/_c;
+    private _damages = getAllHitPointsDamage _unit;
+    if (_damages isEqualTo []) then {
+        _health = damage _unit;
+    } else {
+        private _c = {
+            _health = _health + _x;
+            true
+        } count (_damages select 2);
+        _health = _health/_c;
+    };
     _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcons = [];
