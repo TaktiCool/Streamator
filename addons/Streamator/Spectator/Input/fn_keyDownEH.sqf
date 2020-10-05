@@ -137,7 +137,7 @@ private _return = switch (_keyCode) do {
         call FUNC(setVisionMode);
         true;
     };
-    case DIK_V: {
+    case DIK_V: { // V
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_shift) exitWith {
             GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
@@ -174,7 +174,18 @@ private _return = switch (_keyCode) do {
             };
         };
     };
-
+    case DIK_MULTIPLY: { // NUM *
+        if (!isNull GVAR(CameraFollowTarget)) then {
+            if (GVAR(UnitInfoOpen)) then {
+                QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+            } else {
+                [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+            };
+        } else {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+        };
+        QGVAR(updateMenu) call CFUNC(localEvent);
+    };
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
             GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;

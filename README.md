@@ -46,6 +46,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
+**`NUMPAD *`** | Toggle Unit Chyron | Open or Closes Unit Chyron
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
 **`ALT`** | Smooth Transition Modifier | When Pressed While Changing Camera Targets a Smooth Transition is done
 
