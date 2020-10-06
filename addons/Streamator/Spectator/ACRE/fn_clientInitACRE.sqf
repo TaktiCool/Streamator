@@ -49,7 +49,7 @@ LOG("ACRE2 Detected");
 
     ["acre_remoteStartedSpeaking", {
         params ["_unit", "_isRadio", "_radioID"];
-        if (_unit == CLib_Player || { _isRadio == 0 } || { isNull GVAR(RadioFollowTarget) }) exitWith {};
+        if (_unit == CLib_Player || { _isRadio != 1 } || { isNull GVAR(RadioFollowTarget) }) exitWith {};
         private _availability = [[_radioID], GVAR(CurrentRadioList), true] call acre_sys_modes_fnc_checkAvailability;
         if (((_availability select 0) select 1) isEqualTo []) exitWith {};
         private _radioIDLocal = (((_availability select 0) select 1) select 0);
