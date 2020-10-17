@@ -152,8 +152,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     params ["_unit", "_weapon","_projectile", "_ammo"];
     GVAR(lastUnitShooting) = _unit;
     _unit setVariable [QGVAR(lastShot), time];
-    private _shots = _unit getVariable [QGVAR(shotCount), 0];
-    _unit setVariable [QGVAR(shotCount), _shots + 1];
+    _unit setVariable [QGVAR(shotCount), (_unit getVariable [QGVAR(shotCount), 0]) + 1];
     if (GVAR(OverlayBulletTracer)) then {
         if (GVAR(BulletTracers) findIf {(_x select 2) isEqualTo _projectile} != -1) exitWith {};
         if (isNull _projectile) then {

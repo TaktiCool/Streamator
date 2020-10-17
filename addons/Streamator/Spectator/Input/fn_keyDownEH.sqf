@@ -234,8 +234,7 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD2;
     case DIK_NUMPAD3;
     case DIK_NUMPAD4;
-    case DIK_NUMPAD5;
-    case DIK_NUMPAD6: {
+    case DIK_NUMPAD5: {
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
