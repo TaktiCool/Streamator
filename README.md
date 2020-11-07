@@ -78,64 +78,64 @@ Key Binding | Short Description | Remarks
 **`F5`** | Set Radio Follow Target | Set Current selected Search Entry Radio Follow Target
 
 # MENU SYSTEM
-- **[F1]** \<Overlays\>  
-    - **[Esc]** Back  
-    - **[F1]** Group Markers  
-    - **[F2]** Unit Markers  
-    - **[F3]** Player Markers  
-    - **[F4]** Planning Mode  
-    - **[F5]** Bullet Tracers  
-    - **[F6]** Laser Targets  
-    - **[F7]** Custom Markers  
-- **[F2]** \<Camera Modes\>  
-    - **[Esc]** Back  
-    - **[F1]** Free  
-    - **[F2]** Follow  
-    - **[F3]** Shoulder  
-    - **[F4]** Topdown  
-    - **[F5]** FPS  
-    - **[F6]** Orbit  
-- **[F3]** \<Vision Modes\>  
-    - **[Esc]** Back  
-    - **[F1]** Normal  
-    - **[F2]** NVG  
-    - **[F3]** Thermal  
-    - **[F4]** \<Thermal Modes\>  
-        - **[Esc]** Back  
-        - **[F1]** Thermal (W)  
-        - **[F2]** Thermal (B)  
-        - **[F3]** Thermal (G)  
-        - **[F4]** Thermal (BG)  
-        - **[F5]** Thermal (R)  
-        - **[F6]** Thermal (BR)  
-        - **[F7]** Thermal (WR)  
-        - **[F8]** Thermal (RGW)  
-- **[F4]** \<Minimap\>  
-    - **[Esc]** Back  
-    - **[F1]** Show/Hide Minimap  
-    - **[F2]** Center On Camera  
-    - **[F2]** Render FOV Cone  
-- **[F5]** \<Radio\>  
-    - **[Esc]** Back  
-    - **[F1]** Toggle Radio Overlay  
-    - **[F2]** Target current Camera target  
-- **[F6]** \<Misc\>  
-    - **[F1]** Render AI  
-    - **[F2]** Unit Chyron  
-    - **[F3]** Switch to UAV  
+- **[F1]** \<Overlays\>
+    - **[Esc]** Back
+    - **[F1]** Group Markers
+    - **[F2]** Unit Markers
+    - **[F3]** Player Markers
+    - **[F4]** Planning Mode
+    - **[F5]** Bullet Tracers
+    - **[F6]** Laser Targets
+    - **[F7]** Custom Markers
+- **[F2]** \<Camera Modes\>
+    - **[Esc]** Back
+    - **[F1]** Free
+    - **[F2]** Follow
+    - **[F3]** Shoulder
+    - **[F4]** Topdown
+    - **[F5]** FPS
+    - **[F6]** Orbit
+- **[F3]** \<Vision Modes\>
+    - **[Esc]** Back
+    - **[F1]** Normal
+    - **[F2]** NVG
+    - **[F3]** Thermal
+    - **[F4]** \<Thermal Modes\>
+        - **[Esc]** Back
+        - **[F1]** Thermal (W)
+        - **[F2]** Thermal (B)
+        - **[F3]** Thermal (G)
+        - **[F4]** Thermal (BG)
+        - **[F5]** Thermal (R)
+        - **[F6]** Thermal (BR)
+        - **[F7]** Thermal (WR)
+        - **[F8]** Thermal (RGW)
+- **[F4]** \<Minimap\>
+    - **[Esc]** Back
+    - **[F1]** Show/Hide Minimap
+    - **[F2]** Center On Camera
+    - **[F3]** Render FOV Cone
+- **[F5]** \<Radio\>
+    - **[Esc]** Back
+    - **[F1]** Toggle Radio Overlay
+    - **[F2]** Target current Camera target
+- **[F6]** \<Crew\>
+    - **[F1]** Commander
+    - **[F2]** Gunner
+    - **[F3]** Driver
+    - **[F4]** Vehicle
+    - **[F5]** Next Crew
+- **[F7]** \<Misc\>
+    - **[F1]** Render AI
+    - **[F2]** Unit Chyron
+    - **[F3]** Switch to UAV
     - **[F4]** \<ViewDistance\>
         - **[F1]** ViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
         - **[F2]** ObjectViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
         - **[F3]** Sync ObjectViewDistance
         - **[F4]** Reset ViewDistance
     - **[F5]** Use Terrain/Line Intersect for Distance Measuring Tool
-    - **[F12]** Fix Camera  
-- **[F7]** \<Crew\>  
-    - **[F1]** Commander
-    - **[F2]** Gunner
-    - **[F3]** Driver
-    - **[F4]** Vehicle
-    - **[F5]** Next Crew
+    - **[F12]** Fix Camera
 
 # Creators Manual
 TBD
