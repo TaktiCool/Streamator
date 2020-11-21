@@ -43,10 +43,10 @@ _ctrlMinimapTitle ctrlSetText "Minimap";
 _ctrlMinimapTitle ctrlCommit 0;
 
 private _ctrlBearings = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
-_ctrlBearings ctrlSetPosition [PX(16.5), 0, PX(10), PY(3)];
+_ctrlBearings ctrlSetPosition [PX(19), 0, PX(5.5), PY(3)];
 _ctrlBearings ctrlSetFontHeight PY(2);
 _ctrlBearings ctrlSetFont "RobotoCondensedBold";
-_ctrlBearings ctrlSetText "Bearings: NW 000°";
+_ctrlBearings ctrlSetText "NW 000°";
 _ctrlBearings ctrlCommit 0;
 
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
@@ -89,13 +89,13 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     };
     private _text = switch (true) do {
         case (_lookDir < 10): {
-            format ["Dir: %2 00%1°", floor (getDir GVAR(Camera)), _bearings];
+            format ["%2 00%1°", floor (getDir GVAR(Camera)), _bearings];
         };
         case (_lookDir < 100): {
-            format ["Dir: %2 0%1°", floor (getDir GVAR(Camera)), _bearings];
+            format ["%2 0%1°", floor (getDir GVAR(Camera)), _bearings];
         };
         default {
-             format ["Dir: %2 %1°", floor (getDir GVAR(Camera)), _bearings];
+             format ["%2 %1°", floor (getDir GVAR(Camera)), _bearings];
         };
     };
     _ctrlBearings ctrlSetText _text;
