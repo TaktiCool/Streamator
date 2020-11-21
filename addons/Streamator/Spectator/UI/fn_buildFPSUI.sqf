@@ -35,14 +35,73 @@ _ctrlMinimapBackground ctrlSetPosition [0, 0, PX(25), PY(28)];
 _ctrlMinimapBackground ctrlSetText "#(argb,8,8,3)color(0.1,0.1,0.1,0.75)";
 _ctrlMinimapBackground ctrlCommit 0;
 
+private _ctrlMinimapTitle = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
+_ctrlMinimapTitle ctrlSetPosition [0, 0, PX(15), PY(3)];
+_ctrlMinimapTitle ctrlSetFontHeight PY(2);
+_ctrlMinimapTitle ctrlSetFont "RobotoCondensedBold";
+_ctrlMinimapTitle ctrlSetText "Minimap";
+_ctrlMinimapTitle ctrlCommit 0;
+
+private _ctrlBearings = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
+_ctrlBearings ctrlSetPosition [PX(16.5), 0, PX(10), PY(3)];
+_ctrlBearings ctrlSetFontHeight PY(2);
+_ctrlBearings ctrlSetFont "RobotoCondensedBold";
+_ctrlBearings ctrlSetText "Bearings: NW 000°";
+_ctrlBearings ctrlCommit 0;
+
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
 _ctrlMinimap ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
+
+_ctrlMinimap setVariable [QGVAR(ctrlBearings), _ctrlBearings];
+
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
-    private _mapPosition = ctrlPosition _map;
 
+    private _ctrlBearings = _map getVariable [QGVAR(ctrlBearings), controlNull];
+    private _lookDir = getDir GVAR(Camera);
+    private _bearings = switch (true) do {
+        case (_lookDir > 22.5 && _lookDir < 67.5): {
+            "NE"
+        };
+        case (_lookDir > 67.5 && _lookDir < 122.5): {
+            "E"
+        };
+        case (_lookDir > 122.5 && _lookDir < 167.5): {
+            "SE"
+        };
+        case (_lookDir > 167.5 && _lookDir < 212.5): {
+            "S"
+        };
+        case (_lookDir > 212.5 && _lookDir < 257.5): {
+            "SW"
+        };
+        case (_lookDir > 257.5 && _lookDir < 302.5): {
+            "W"
+        };
+        case (_lookDir > 302.5 && _lookDir < 347.5): {
+            "NW"
+        };
+        default {
+            "N"
+        };
+    };
+    private _text = switch (true) do {
+        case (_lookDir < 10): {
+            format ["Dir: %2 00%1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+        case (_lookDir < 100): {
+            format ["Dir: %2 0%1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+        default {
+             format ["Dir: %2 %1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+    };
+    _ctrlBearings ctrlSetText _text;
+    _ctrlBearings ctrlCommit 0;
+
+    private _mapPosition = ctrlPosition _map;
     private _position = positionCameraToWorld [0, 0, 0];
     private _velocity = GVAR(CameraSpeed) / 16;
     switch (true) do {
@@ -95,13 +154,6 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
         _map drawTriangle [_vertices, [1,1,1,1], "#(rgb,1,1,1)color(0.2,0.25,0.25,0.25)"];
     };
 }];
-
-private _ctrlMinimapTitle = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
-_ctrlMinimapTitle ctrlSetPosition [0, 0, PX(15), PY(3)];
-_ctrlMinimapTitle ctrlSetFontHeight PY(2);
-_ctrlMinimapTitle ctrlSetFont "RobotoCondensedBold";
-_ctrlMinimapTitle ctrlSetText "Minimap";
-_ctrlMinimapTitle ctrlCommit 0;
 
 [QGVAR(CameraTargetChanged), {
     (_this select 0) params ["_cameraTarget"];
