@@ -93,19 +93,25 @@ _mapDisplay displayAddEventHandler ["KeyDown", {
 
 _map ctrlAddEventHandler ["MouseMoving", {
     params ["_map", "_xPos", "_yPos"];
+    if (GVAR(MeasureDistance)) exitWith {
+        GVAR(MeasureDistancePositions) set [1, _map ctrlMapScreenToWorld [_xpos, _ypos]];
+    };
     if (GVAR(InputMode) == INPUTMODE_PLANINGMODE && GVAR(PlanningModeDrawing)) exitWith {
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
         _pos set [2, 0];
         [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
-    if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {};
-    if (GVAR(MeasureDistance)) exitWith {
-        GVAR(MeasureDistancePositions) set [1, _map ctrlMapScreenToWorld [_xpos, _ypos]];
-    };
+
 }];
 
 _map ctrlAddEventHandler  ["MouseButtonDown", {
     params ["_map", ["_button", -1, [0]], "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
+    if (_button == 0 && _ctrl) exitWith {
+        GVAR(MeasureDistance) = true;
+        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
+        GVAR(MeasureDistancePositions) = [_pos, _pos];
+        true;
+    };
     if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {
         GVAR(PlanningModeDrawing) = true;
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
@@ -113,16 +119,15 @@ _map ctrlAddEventHandler  ["MouseButtonDown", {
         [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
         true;
     };
-    if (_button == 0 && _ctrl) exitWith {
-        GVAR(MeasureDistance) = true;
-        private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
-        GVAR(MeasureDistancePositions) = [_pos, _pos];
-        true;
-    };
     true;
 }];
 _map ctrlAddEventHandler  ["MouseButtonUp", {
     params ["_map", ["_button", -1, [0]], "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
+    if (_button == 0 && GVAR(MeasureDistance)) exitWith {
+        GVAR(MeasureDistance) = false;
+        GVAR(MeasureDistancePositions) = [];
+        true;
+    };
     if (_button == 0 && GVAR(InputMode) == INPUTMODE_PLANINGMODE) exitWith {
         GVAR(PlanningModeDrawing) = false;
         true;
@@ -133,11 +138,6 @@ _map ctrlAddEventHandler  ["MouseButtonUp", {
         _pos pushBack (50 + getTerrainHeightASL _pos);
         [objNull, CAMERAMODE_FREE] call FUNC(setCameraTarget);
         GVAR(CameraPos) = _pos;
-        true;
-    };
-    if (_button == 0 && GVAR(MeasureDistance)) exitWith {
-        GVAR(MeasureDistance) = false;
-        GVAR(MeasureDistancePositions) = [];
         true;
     };
     true;
