@@ -29,6 +29,7 @@ GVAR(processedIcons) = [];
     && (damage _vehicle < 1)
     && _vehicle isKindOf "AllVehicles"
     && !isObjectHidden _vehicle
+    && simulationEnabled _vehicle
 }, QFUNC(isValidVehicle)] call CFUNC(compileFinal);
 
 [QGVAR(updateIcons), {

@@ -77,7 +77,11 @@ if !(_units isEqualTo []) then {
 if !(_vehicles isEqualTo []) then {
     {
         private _iconId = toLower format [QGVAR(IconId_Vehicle_%1), _x];
-        if !(_iconId in GVAR(processedIcons)) then {
+        if (
+            !(_iconId in GVAR(processedIcons))
+            && (locked _x) <= 1
+            && _x getVariable [QGVAR(hideAsEmpty), false]
+        ) then {
             GVAR(processedIcons) pushBack _iconId;
             // DUMP("EMPTY VEHICLE ADDED: " + _iconId);
             [_x, _iconId, true] call FUNC(addVehicleToTracker);
