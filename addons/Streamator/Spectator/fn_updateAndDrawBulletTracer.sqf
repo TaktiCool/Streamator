@@ -29,8 +29,8 @@ private _ifSkipUpdate = if ((diag_frameno mod 3) == 0);
                 _segments deleteAt 0;
             };
             _x set [3, _segments];
-            [_x, _arg] call _bulletDrawCall;
         };
+        [_x, _arg] call _bulletDrawCall;
     } else {
         _deleted = true;
         GVAR(BulletTracers) set [_forEachIndex, objNull];
