@@ -14,44 +14,30 @@
     None
 */
 params ["_map"];
-private _deleted = false;
+
+[{
+    _this params ["_data", "_map"];
+    _data params ["_color", "_startPos", "_projectile", ["_segments", []]];
+    private _segmentCount = count _segments - 1;
+    {
+        _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
+        _map drawLine [_x select 0, _x select 1, _color];
+    } forEach _segments;
+}, {
+    _this params ["_projectile", "_map"];
+    _map drawIcon ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual _projectile, 25, 25, 0, ""];
+}, _map] call FUNC(updateBulletTracer);
+
 {
     _x params ["_color", "_startPos", "_projectile", ["_segments", []]];
-    if (alive _projectile) then {
-        if ((diag_frameno mod 3) == 0) then {
-            if !(_segments isEqualTo []) then {
-                _startPos = _segments select ((count _segments) -1) select 1;
-            };
-            private _index = _segments pushBack [_startPos, ASLToAGL getPosASL _projectile];
-            if (_index >= TRACER_SEGMENT_COUNT) then {
-                _segments deleteAt 0;
-            };
-            _x set [3, _segments];
-        };
-        private _segmentCount = count _segments - 1;
-        {
-            _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
-            _map drawLine [_x select 0, _x select 1, _color];
-        } forEach _segments;
-    } else {
-        _deleted = true;
-        GVAR(BulletTracers) set [_forEachIndex, objNull];
-    };
+    private _segmentCount = count _segments - 1;
+    {
+        _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
+        _map drawLine [_x select 0, _x select 1, _color];
+    } forEach _segments;
 } forEach GVAR(BulletTracers);
 
-if (_deleted) then {
-    GVAR(BulletTracers) = GVAR(BulletTracers) - [objNull];
-};
-_deleted = false;
 {
-    if (alive _x) then {
-        _map drawIcon ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPos _x, 25, 25, 0, ""];
-    } else {
-        _deleted = true;
-        GVAR(ThrownTracked) set [_forEachIndex, objNull];
-    };
+    _x params ["_projectile"];
+    _map drawIcon ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual _projectile, 25, 25, 0, ""];
 } forEach GVAR(ThrownTracked);
-
-if (_deleted) then {
-    GVAR(ThrownTracked) = GVAR(ThrownTracked) - [objNull];
-};
