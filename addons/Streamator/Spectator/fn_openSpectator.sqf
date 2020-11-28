@@ -159,7 +159,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
             _projectile = (getPos _unit) nearestObject _ammo;
         };
         if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-            GVAR(ThrownTracked) pushBack [_projectile, time];
+            GVAR(ThrownTracked) pushBack [_projectile, time + 10];
         };
         private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
         private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
@@ -283,7 +283,7 @@ private _fnc_init = {
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
             if (GVAR(OverlayBulletTracer)) then {
-                GVAR(ThrownTracked) pushBack [_projectile, time];
+                GVAR(ThrownTracked) pushBack [_projectile, time + 10];
             };
         }] call CFUNC(addEventHandler);
     };

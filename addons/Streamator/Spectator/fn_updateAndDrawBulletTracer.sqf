@@ -44,7 +44,7 @@ if (_deleted) then {
 _deleted = false;
 {
     _x params ["_projectile", "_time"];
-    if (alive _projectile && _time < time) then {
+    if (alive _projectile && _time > time) then {
         [_projectile, _arg] call _thrownDrawCall;
     } else {
         _deleted = true;
