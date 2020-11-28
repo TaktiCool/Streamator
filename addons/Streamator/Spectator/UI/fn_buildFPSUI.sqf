@@ -49,12 +49,20 @@ _ctrlBearings ctrlSetFont "RobotoCondensedBold";
 _ctrlBearings ctrlSetText "NW 000°";
 _ctrlBearings ctrlCommit 0;
 
+private _ctrlTime = _display ctrlCreate ["RscTitle", -1, _ctrlGrpMinimap];
+_ctrlTime ctrlSetPosition [PX(10), 0, PX(4), PY(3)];
+_ctrlTime ctrlSetFontHeight PY(2);
+_ctrlTime ctrlSetFont "RobotoCondensedBold";
+_ctrlTime ctrlSetText "00:00";
+_ctrlTime ctrlCommit 0;
+
 private _ctrlMinimap = _display ctrlCreate ["RscMapControl", -1, _ctrlGrpMinimap];
 _ctrlMinimap ctrlSetPosition [safeZoneX + safeZoneW - PX(BORDERWIDTH + 2.6 + 25), safeZoneY + safeZoneH - PY(BORDERWIDTH + 37), PX(25), 0];
 _ctrlMinimap ctrlCommit 0;
 [_ctrlMinimap] call CFUNC(registerMapControl);
 
 _ctrlMinimap setVariable [QGVAR(ctrlBearings), _ctrlBearings];
+_ctrlMinimap setVariable [QGVAR(ctrlTime), _ctrlTime];
 
 _ctrlMinimap ctrlAddEventHandler ["Draw", {
     params [["_map", controlNull, [controlNull]]];
@@ -100,6 +108,10 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
     };
     _ctrlBearings ctrlSetText _text;
     _ctrlBearings ctrlCommit 0;
+
+    private _ctrlTime = _map getVariable [QGVAR(ctrlTime), controlNull];
+    _ctrlTime ctrlSetText ([dayTime, "HH:MM"] call BIS_fnc_timeToString);
+    _ctrlTime ctrlCommit 0;
 
     private _mapPosition = ctrlPosition _map;
     private _position = positionCameraToWorld [0, 0, 0];
