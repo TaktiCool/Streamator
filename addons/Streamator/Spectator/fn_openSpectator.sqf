@@ -169,6 +169,50 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     };
 }, QFUNC(firedEH)] call CFUNC(compileFinal);
 
+
+[{
+    params [["_direction", 0]];
+    private _bearings = switch (true) do {
+        case (_lookDir > 22.5 && _lookDir < 67.5): {
+            "NE"
+        };
+        case (_lookDir > 67.5 && _lookDir < 122.5): {
+            "E"
+        };
+        case (_lookDir > 122.5 && _lookDir < 167.5): {
+            "SE"
+        };
+        case (_lookDir > 167.5 && _lookDir < 212.5): {
+            "S"
+        };
+        case (_lookDir > 212.5 && _lookDir < 257.5): {
+            "SW"
+        };
+        case (_lookDir > 257.5 && _lookDir < 302.5): {
+            "W"
+        };
+        case (_lookDir > 302.5 && _lookDir < 347.5): {
+            "NW"
+        };
+        default {
+            "N"
+        };
+    };
+
+    private _text = switch (true) do {
+        case (_lookDir < 10): {
+            format ["%2 00%1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+        case (_lookDir < 100): {
+            format ["%2 0%1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+        default {
+             format ["%2 %1°", floor (getDir GVAR(Camera)), _bearings];
+        };
+    };
+
+    _text;
+}, QFUNC(formatDirection)] call CFUNC(compileFinal);
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
