@@ -159,7 +159,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
             _projectile = (getPos _unit) nearestObject _ammo;
         };
         if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-            GVAR(ThrownTracked) pushBack _projectile;
+            GVAR(ThrownTracked) pushBack [_projectile, time];
         };
         private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
         private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
@@ -173,25 +173,25 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 [{
     params [["_direction", 0]];
     private _bearings = switch (true) do {
-        case (_lookDir > 22.5 && _lookDir < 67.5): {
+        case (_direction > 22.5 && _direction < 67.5): {
             "NE"
         };
-        case (_lookDir > 67.5 && _lookDir < 122.5): {
+        case (_direction > 67.5 && _direction < 122.5): {
             "E"
         };
-        case (_lookDir > 122.5 && _lookDir < 167.5): {
+        case (_direction > 122.5 && _direction < 167.5): {
             "SE"
         };
-        case (_lookDir > 167.5 && _lookDir < 212.5): {
+        case (_direction > 167.5 && _direction < 212.5): {
             "S"
         };
-        case (_lookDir > 212.5 && _lookDir < 257.5): {
+        case (_direction > 212.5 && _direction < 257.5): {
             "SW"
         };
-        case (_lookDir > 257.5 && _lookDir < 302.5): {
+        case (_direction > 257.5 && _direction < 302.5): {
             "W"
         };
-        case (_lookDir > 302.5 && _lookDir < 347.5): {
+        case (_direction > 302.5 && _direction < 347.5): {
             "NW"
         };
         default {
@@ -200,14 +200,14 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     };
 
     private _text = switch (true) do {
-        case (_lookDir < 10): {
-            format ["%2 00%1°", floor (getDir GVAR(Camera)), _bearings];
+        case (_direction < 10): {
+            format ["%2 00%1°", floor _direction, _bearings];
         };
-        case (_lookDir < 100): {
-            format ["%2 0%1°", floor (getDir GVAR(Camera)), _bearings];
+        case (_direction < 100): {
+            format ["%2 0%1°", floor _direction, _bearings];
         };
         default {
-             format ["%2 %1°", floor (getDir GVAR(Camera)), _bearings];
+             format ["%2 %1°", floor _direction, _bearings];
         };
     };
 
@@ -283,7 +283,7 @@ private _fnc_init = {
             private _shots = _unit getVariable [QGVAR(shotCount), 0];
             _unit setVariable [QGVAR(shotCount), _shots + 1];
             if (GVAR(OverlayBulletTracer)) then {
-                GVAR(ThrownTracked) pushBack _projectile;
+                GVAR(ThrownTracked) pushBack [_projectile, time];
             };
         }] call CFUNC(addEventHandler);
     };
