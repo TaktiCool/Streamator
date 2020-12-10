@@ -172,33 +172,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
 [{
     params [["_direction", 0]];
-    private _bearings = switch (true) do {
-        case (_direction > 22.5 && _direction < 67.5): {
-            "NE"
-        };
-        case (_direction > 67.5 && _direction < 122.5): {
-            "E"
-        };
-        case (_direction > 122.5 && _direction < 167.5): {
-            "SE"
-        };
-        case (_direction > 167.5 && _direction < 212.5): {
-            "S"
-        };
-        case (_direction > 212.5 && _direction < 257.5): {
-            "SW"
-        };
-        case (_direction > 257.5 && _direction < 302.5): {
-            "W"
-        };
-        case (_direction > 302.5 && _direction < 347.5): {
-            "NW"
-        };
-        default {
-            "N"
-        };
-    };
-
+    private _bearings = ["N ","NE","E ","SE","S ","SW","W ","NW","N "] select round (_direction / 45);
     private _text = switch (true) do {
         case (_direction < 10): {
             format ["%2 00%1°", floor _direction, _bearings];
