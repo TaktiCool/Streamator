@@ -138,8 +138,6 @@ GVAR(TopDownOffset) = [0, 0, 100];
 GVAR(SyncObjectViewDistance) = true;
 GVAR(PlaningModeUpdateTime) = 0.05;
 
-GVAR(smallTextSize) = PY(2) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
-
 if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)))) then {
     GVAR(PlaningModeUpdateTime) = getNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)));
 };

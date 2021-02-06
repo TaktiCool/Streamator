@@ -23,13 +23,13 @@ if (_entry isEqualTo []) exitWith {
 };
 private _ret = "";
 if (_path == "MAIN") then {
-    _ret = format [_mainPrefixText, GVAR(smallTextSize)];
+    _ret = _mainPrefixText;
 };
 
 {
     _x params ["_dik", "_name", "_onUse", "_onRender", "_hasSubmenus", "_args"];
     private _color = "#ffffff";
-    private _style = "<t size='%3' color='%4'>[%1] %2 </t>";
+    private _style = "<t color='%3'>[%1] %2 </t>";
     if !(_args call _onRender) then {
         _color = "#808080";
     };
@@ -40,6 +40,6 @@ if (_path == "MAIN") then {
     if (_hasSubmenus) then {
         _name = format ["&lt;%1&gt;", _name];
     };
-    _ret = _ret + format [_style, _keyName, _name, GVAR(smallTextSize), _color];
+    _ret = _ret + format [_style, _keyName, _name, _color];
 } forEach _entry;
 _ret;

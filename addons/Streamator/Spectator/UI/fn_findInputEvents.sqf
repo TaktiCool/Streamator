@@ -106,7 +106,7 @@ params ["_ctrlInfo"];
     private _str = switch (GVAR(InputMode)) do {
         case 1: { // Search FOLLOW Target
             private _searchStr = GVAR(InputScratchpad);
-            private _temp = format ["<t size='%1' color='#cccccc'>Search for Target: </t>", GVAR(smallTextSize)];
+            private _temp = "<t color='#cccccc'>Search for Target: </t>";
             if (_searchStr != "") then {
                 private _guess = +GVAR(InputGuess);
                 if !(_guess isEqualTo []) then {
@@ -121,26 +121,23 @@ params ["_ctrlInfo"];
                         switch (typeName _target) do {
                             case ("OBJECT"): {
                                 format [
-                                    "<t size='%3' color='%1'>%2</t>",
+                                    "<t color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side group _target, "#ffffff"],
-                                    _name,
-                                    GVAR(smallTextSize)
+                                    _name
                                 ]
                             };
                             case ("GROUP"): {
                                 format [
-                                    "<t size='%3' color='%1'>%2</t>",
+                                    "<t color='%1'>%2</t>",
                                     GVAR(SideColorsString) getVariable [str side _target, "#ffffff"],
-                                    _name,
-                                    GVAR(smallTextSize)
+                                    _name
                                 ]
                             };
                             default {
                                 format [
-                                    "<t size='%3' color='%1'>%2</t>",
+                                    "<t color='%1'>%2</t>",
                                     "#ffffff",
-                                    _name,
-                                    GVAR(smallTextSize)
+                                    _name
                                 ]
                             };
                         };
@@ -156,26 +153,26 @@ params ["_ctrlInfo"];
                     };
 
 
-                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0]), GVAR(smallTextSize)];
-                    _temp = _temp + format ["<t size='%3' color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr]), GVAR(smallTextSize)];
-                    _temp = _temp + format ["<t size='%3' color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr]), GVAR(smallTextSize)];
+                    _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
+                    _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
+                    _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr])];
                     if (!(_guessStr isEqualTo [])) then {
-                        _temp = _temp + (format ["<t size='%1' color='#cccccc'> | ", GVAR(smallTextSize)]) + (_guessStr joinString " | ") + "</t>";
+                        _temp = _temp + ("<t color='#cccccc'> | ") + (_guessStr joinString " | ") + "</t>";
                     };
                 } else {
-                    _temp = _temp + format ["<t size='%1'>%2</>| <t size='%1' color='#cccccc'>NO RESULT</t>", GVAR(smallTextSize), _searchStr];
+                    _temp = _temp + format ["%1 | <t color='#cccccc'>NO RESULT</t>", _searchStr];
                 };
             } else {
-                _temp = _temp + format ["<t size='%1'>%2</>| ", GVAR(smallTextSize) ,_searchStr];
+                _temp = _temp + format ["%1 | ", _searchStr];
             };
 
             _temp
         };
         default {
             if (GVAR(MapOpen)) then {
-                [GVAR(currentMenuPath), "<t size='%1'>[ALT+LMB] Teleport [M] Close Map </t> |  "] call FUNC(renderMenu);
+                [GVAR(currentMenuPath), "[ALT+LMB] Teleport [M] Close Map | "] call FUNC(renderMenu);
             } else {
-                [GVAR(currentMenuPath), "<t size='%1'>[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map </t> |  "] call FUNC(renderMenu);
+                [GVAR(currentMenuPath), "[F] Follow Cursor Target [CTRL + F] Follow Unit/Squad/Objective [M] Map | "] call FUNC(renderMenu);
             };
         };
     };
