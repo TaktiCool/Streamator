@@ -45,8 +45,10 @@ GVAR(aceSpectatorLoaded) = isClass (configFile >> "CfgPatches" >> "ace_spectator
 CLib_Player setVariable [QGVAR(isPlayer), true, true];
 
 ["playerChanged", {
-    (_this select 0) params ["_newPlayer"];
-    _newPlayer setVariable [QGVAR(isPlayer), true, true];
+    (_this select 0) params ["_newPlayer", "_oldPlayer"];
+    if (_newPlayer == player) then {
+        _newPlayer setVariable [QGVAR(isPlayer), true, true];
+    };
     call FUNC(updateLocalMapMarkers);
 }] call CFUNC(addEventhandler);
 
@@ -60,7 +62,7 @@ GVAR(allMapMarkers) = [];
 #define Channel_Side "1"
 #define Channel_Command "2"
 
-DFUNC(collectMarkerData) = {
+[{
     params ["_marker", ["_forceSideColor", false]];
     [
         markerText _marker,
@@ -68,10 +70,10 @@ DFUNC(collectMarkerData) = {
         markerDir _marker,
         getText ([(configFile >> "CfgMarkers" >> markerType _marker >> "icon"), (configFile >> "CfgMarkers" >> markerType _marker >> "texture")] select (isText (configFile >> "CfgMarkers" >> markerType _marker >> "texture"))),
         [(configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA, side CLib_Player] select _forceSideColor
-    ]
-};
+    ];
+}, QFUNC(collectMarkerData)] call CFUNC(compileFinal);
 
-DFUNC(bindMarkerEH) = {
+[{
     [{
         if (_this == 53 && getClientState == "BRIEFING READ") exitWith {};
         private _display = findDisplay _this;
@@ -125,9 +127,9 @@ DFUNC(bindMarkerEH) = {
         if (_this == 53 && getClientState == "BRIEFING READ") exitWith { false };
         !(isNull (findDisplay _this))
     }, _this] call CFUNC(waitUntil);
-};
+}, QFUNC(bindMarkerEH)] call CFUNC(compileFinal);
 
-DFUNC(updateLocalMapMarkers) = {
+[{
     private _markers = allMapMarkers select {
         (_x splitString "#/") params ["_userDef", "", "", "_channel"];
         _userDef == "_USER_DEFINED "
@@ -136,7 +138,7 @@ DFUNC(updateLocalMapMarkers) = {
     _markers = _markers apply { _x call FUNC(collectMarkerData); };
     if (_markers isEqualTo (CLib_Player getVariable [QGVAR(mapMarkers), []])) exitWith {};
     CLib_Player setVariable [QGVAR(mapMarkers), _markers, true];
-};
+}, QFUNC(updateLocalMapMarkers)] call CFUNC(compileFinal);
 
 ["allMapMarkersChanged", {
     call FUNC(updateLocalMapMarkers);

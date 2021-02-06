@@ -14,17 +14,13 @@
     None
 */
 if (floor(time) % 1 == 0) then {
-    GVAR(LaserTargets) = entities "LaserTarget";
+    call FUNC(collectLaserTargets);
 };
 {
-    private _target = _x;
-    if !(isNull _target) then {
-        private _text = "Laser Target";
-        if (GVAR(aceLoaded)) then {
-            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
-        };
-        private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
-        private _pos = ASLToAGL getPosASL _target;
+    if !(isNull _x) then {
+        private _text = _x getVariable [QGVAR(LaserTargetText), "Laser Target"];
+        private _pos = ASLToAGL getPosASL _x;
+        private _index = allPlayers findIf {(laserTarget _x) isEqualTo _x};
         if (_index != -1) then {
             drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), _pos, [1, 0, 0, 1]];
         };

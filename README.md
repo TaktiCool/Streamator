@@ -135,6 +135,7 @@ Key Binding | Short Description | Remarks
         - **[F3]** Sync ObjectViewDistance
         - **[F4]** Reset ViewDistance
     - **[F5]** Use Terrain/Line Intersect for Distance Measuring Tool
+    - **[F6]** Show Laser Codes (ACE Only)
     - **[F12]** Fix Camera
 
 # Creators Manual

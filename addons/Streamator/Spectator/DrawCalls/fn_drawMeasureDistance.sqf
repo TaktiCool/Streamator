@@ -17,13 +17,21 @@ params ["_map", "_textSize"];
 GVAR(MeasureDistancePositions) params ["_pos1", "_pos2"];
 _pos1 set [2, (getTerrainHeightASL _pos1) + 2];
 _pos2 set [2, (getTerrainHeightASL _pos2) + 2];
-private _distance = (_pos1 distance2D _pos2);
 
+private _heightDiff = (_pos1 select 2) - (_pos2 select 2);
+private _heightDiffChar = "^";
+if (_heightDiff > 0) then {
+    _heightDiffChar = "v";
+};
+_heightDiff = abs _heightDiff;
+_heightDiff = floor _heightDiff;
+
+private _distance = (_pos1 distance2D _pos2);
 _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos1, 12.5, 12.5, 0, ""];
 _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos1, 12.5, 12.5, 0, format ["Direction %1", (_pos1 getDir _pos2) call FUNC(formatDirection)], 2, _textSize, TEXT_FONT];
 
 _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _pos2, 12.5, 12.5, 0, ""];
-_map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos2, 12.5, 12.5, 0, format ["Distance %1m", _distance toFixed 1], 2, _textSize, TEXT_FONT];
+_map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _pos2, 12.5, 12.5, 0, format ["Distance %1m | %3 %2m", _distance toFixed 1, _heightDiff, _heightDiffChar], 2, _textSize, TEXT_FONT];
 
 private _interSectPos = [];
 if (GVAR(useTerrainIntersect)) then {

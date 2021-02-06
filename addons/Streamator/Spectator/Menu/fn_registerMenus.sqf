@@ -483,6 +483,13 @@ private _fnc_renderViewDistance = {
     true;
 }] call FUNC(addMenuItem);
 
+if (GVAR(aceLoaded)) then {
+    ["Show Laser Code", "MAIN/MISC", DIK_F6, {
+        GVAR(showLaserCode) = !GVAR(showLaserCode);
+        true
+    }] call FUNC(addMenuItem);
+};
+
 ["Fix Camera", "MAIN/MISC", DIK_F12, {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;

@@ -87,6 +87,7 @@ GVAR(OverlayPlanningMode) = true;
 GVAR(OverlayPlayerMarkers) = true;
 GVAR(OverlayLaserTargets) = true;
 GVAR(RadioIconsVisible) = true;
+GVAR(showLaserCode) = true;
 
 GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";
@@ -149,6 +150,21 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 }] call CFUNC(addEventhandler);
 
 [{
+    GVAR(LaserTargets) = entities "LaserTarget";
+    {
+        private _text = "Laser Target";
+        private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
+        if (GVAR(aceLoaded) && GVAR(showLaserCode)) then {
+            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
+        } else {
+            _text = format ["%2 - %2", _text, (allPlayers select _index) call CFUNC(name)];
+        };
+        _x setVariable [QGVAR(LaserTargetText), _text];
+    } forEach GVAR(LaserTargets);
+}, QFUNC(collectLaserTargets)] call CFUNC(compileFinal);
+
+
+[{
     params ["_unit", "_weapon","_projectile", "_ammo"];
     GVAR(lastUnitShooting) = _unit;
     _unit setVariable [QGVAR(lastShot), time];
@@ -168,7 +184,6 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
         };
     };
 }, QFUNC(firedEH)] call CFUNC(compileFinal);
-
 
 [{
     params [["_direction", 0]];
