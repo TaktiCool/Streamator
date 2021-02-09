@@ -73,7 +73,6 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
         private _ctrlSquadName = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_SquadName), _idd], controlNull];
         private _ctrlBgBottom = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_BgBottom), _idd], controlNull];
         private _ctrlMemberList = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_MemberList), _idd], controlNull];
-        private _textSize = PY(1.8) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
         if (isNull _ctrlGrp) then {
             _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1];
             _ctrlGrp ctrlSetFade 0;

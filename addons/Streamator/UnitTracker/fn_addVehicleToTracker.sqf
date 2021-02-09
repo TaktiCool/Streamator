@@ -56,7 +56,6 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
         private _ctrlTotalSeats = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_TotalSeats), _idd], controlNull];
         private _ctrlBgBottom = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_BgBottom), _idd], controlNull];
         private _ctrlMemberList = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_MemberList), _idd], controlNull];
-        private _textSize = PY(1.8) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
         if (isNull _ctrlGrp) then {
             _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1];
             _ctrlGrp ctrlSetFade 0;
@@ -82,7 +81,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
 
             _ctrlTotalSeats = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
             _ctrlTotalSeats ctrlSetFontHeight PY(1.8);
-            _ctrlTotalSeats ctrlSetPosition [PX(16.5), PY(0), PX(5), PY(2)];
+            _ctrlTotalSeats ctrlSetPosition [PX(16.5), PY(0), PX(6), PY(2)];
             _ctrlTotalSeats ctrlSetFont "PuristaMedium";
             _ctrlTotalSeats ctrlSetTextColor [0.5, 0.5, 0.5, 1];
             _ctrlTotalSeats ctrlSetStructuredText parseText "ALPHA";
@@ -116,7 +115,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
             }
         } count _units;
 
-        _ctrlTotalSeats ctrlSetStructuredText parseText format ["<t size=""%1"" align=""right"">%2 / %3</t>", _textSize, _unitCount, _maxCrewSize];
+        _ctrlTotalSeats ctrlSetStructuredText parseText format ["<t align=""right"">%1 / %2</t>", _unitCount, _maxCrewSize];
 
         _ctrlMemberList ctrlSetStructuredText parseText _crewUnits;
 
@@ -149,7 +148,6 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
             if (isNull _grp || (_map == ((findDisplay 12) displayCtrl 51) && !visibleMap) || isNull _map) exitWith {
                 _id call CFUNC(removePerFrameHandler);
                 _grp ctrlShow false;
-                //ctrlDelete _grp;
                 _grp ctrlCommit 0;
             };
 
