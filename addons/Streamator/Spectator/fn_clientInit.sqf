@@ -15,8 +15,14 @@
 */
 
 GVAR(aceLoaded) = isClass (configFile >> "CfgPatches" >> "ace_main");
-GVAR(aceMapGesturesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_map_gestures");
+GVAR(aceLaserLoaded) = isClass (configFile >> "CfgPatches" >> "ace_laser");
+GVAR(aceMedicalLoaded) = isClass (configFile >> "CfgPatches" >> "ace_medical");
+GVAR(aceHearingLoaded) = isClass (configFile >> "CfgPatches" >> "ace_hearing");
+GVAR(aceGogglesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_goggles");
 GVAR(aceSpectatorLoaded) = isClass (configFile >> "CfgPatches" >> "ace_spectator");
+GVAR(aceMapGesturesLoaded) = isClass (configFile >> "CfgPatches" >> "ace_map_gestures");
+GVAR(aceAdvancedThrowingLoaded) = isClass (configFile >> "CfgPatches" >> "ace_advanced_throwing");
+
 ["missionStarted", {
     if (CLib_Player call Streamator_fnc_isSpectator) then {
         "initializeSpectator" call CFUNC(localEvent);
@@ -52,7 +58,7 @@ CLib_Player setVariable [QGVAR(isPlayer), true, true];
     call FUNC(updateLocalMapMarkers);
 }] call CFUNC(addEventhandler);
 
-if (GVAR(ace_Loaded)) then {
+if (GVAR(aceAdvancedThrowingLoaded)) then {
     ["ace_throwableThrown", {
         ["ace_throwableThrown", _this] call CFUNC(globalEvent);
     }] call CBA_fnc_addEventHandler;

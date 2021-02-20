@@ -285,7 +285,7 @@ private _unitInfoAllCtrls = [
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcons = [];
     if (_unit isKindOf "CAManBase") then {
-        if (GVAR(aceLoaded)) then {
+        if (GVAR(aceMedicalLoaded)) then {
             _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
             if (_unit getVariable ["ace_medical_woundBleeding", 0] > 0) then {
                 _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa";

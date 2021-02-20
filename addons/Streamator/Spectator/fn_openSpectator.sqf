@@ -34,6 +34,14 @@ if (isNil QGVAR(PositionMemory)) then {
     GVAR(PositionMemory) = false call CFUNC(createNamespace);
 };
 
+
+if (GVAR(aceMapGesturesLoaded)) then {
+    GVAR(ace_map_gestures_color_namespace) = missionNamespace getVariable ["ace_map_gestures_GroupColorCfgMappingNew", objNull];
+    GVAR(ace_map_gestures_defaultLeadColor) = missionNamespace getVariable ["ace_map_gestures_defaultLeadColor", [1,0.88,0,0.95]];
+    GVAR(ace_map_gestures_defaultColor) = missionNamespace getVariable ["ace_map_gestures_defaultColor", [1,0.88,0,0.7]];
+    GVAR(ace_map_gestures_nameTextColor) = missionName getVariable ["ace_map_gestures_nameTextColor", [0.2,0.2,0.2,0.3]];
+
+};
 GVAR(Camera) = objNull;
 
 GVAR(CameraPos) = [0, 0, 0];
@@ -154,7 +162,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     {
         private _text = "Laser Target";
         private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
-        if (GVAR(aceLoaded) && GVAR(showLaserCode)) then {
+        if (GVAR(aceLaserLoaded) && GVAR(showLaserCode)) then {
             _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
         } else {
             _text = format ["%2 - %2", _text, (allPlayers select _index) call CFUNC(name)];
@@ -202,6 +210,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
     _text;
 }, QFUNC(formatDirection)] call CFUNC(compileFinal);
+
 ["entityCreated", {
     (_this select 0) params ["_target"];
     if (_target isKindOf "CAManBase") then {
@@ -214,6 +223,17 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 
 [QGVAR(firedEHRemoteBombFix), {
     (_this select 0) call FUNC(firedEH);
+}] call CFUNC(addEventHandler);
+
+["ace_throwableThrown", {
+    (_this select 0) params["_unit", "_projectile"];
+    GVAR(lastUnitShooting) = _unit;
+    _unit setVariable [QGVAR(lastShot), time];
+    private _shots = _unit getVariable [QGVAR(shotCount), 0];
+    _unit setVariable [QGVAR(shotCount), _shots + 1];
+    if (GVAR(OverlayBulletTracer)) then {
+        GVAR(ThrownTracked) pushBack [_projectile, time + 10];
+    };
 }] call CFUNC(addEventHandler);
 
 GVAR(lastFrameDataUpdate) = diag_frameNo;
@@ -253,29 +273,36 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
     }, 3] call CFUNC(wait);
 }, QFUNC(updateSpectatorArray)] call CFUNC(compileFinal);
 
-private _fnc_init = {
-
-    if (GVAR(aceLoaded)) then {
-        [CLib_Player] call ace_hearing_fnc_putInEarplugs;
-
-        CLib_Player setVariable ["ace_medical_allowdamage", false];
-        ACE_Hearing_deafnessDV = 0;
-        ACE_Hearing_volume = 1;
-        call ace_goggles_fnc_removeGlassesEffect;
-        CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
-        ace_goggles_PostProcess ppEffectEnable false;
-        ace_goggles_PostProcessEyes ppEffectEnable false;
-        ["ace_throwableThrown", {
-            (_this select 0) params["_unit", "_projectile"];
-            GVAR(lastUnitShooting) = _unit;
-            _unit setVariable [QGVAR(lastShot), time];
-            private _shots = _unit getVariable [QGVAR(shotCount), 0];
-            _unit setVariable [QGVAR(shotCount), _shots + 1];
-            if (GVAR(OverlayBulletTracer)) then {
-                GVAR(ThrownTracked) pushBack [_projectile, time + 10];
-            };
-        }] call CFUNC(addEventHandler);
+[{
+    private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
+    if !(isNull GVAR(CameraFollowTarget)) then {
+        _players append (GVAR(CameraFollowTarget) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange]);
+        _players pushBackUnique GVAR(CameraFollowTarget);
+        _players append (crew vehicle GVAR(CameraFollowTarget));
     };
+    _players = _players arrayIntersect _players;
+    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
+}, QFUNC(getNearByTransmitingPlayers)] call CFUNC(compileFinal);
+
+
+private _fnc_init = {
+    if (GVAR(aceLoaded)) then {
+        if (GVAR(aceHearingLoaded)) then {
+            [CLib_Player] call ace_hearing_fnc_putInEarplugs;
+            ACE_Hearing_deafnessDV = 0;
+            ACE_Hearing_volume = 1;
+        };
+        if (GVAR(aceMedicalLoaded)) then {
+            CLib_Player setVariable ["ace_medical_allowdamage", false];
+        };
+        if (GVAR(aceGogglesLoaded)) then {
+            call ace_goggles_fnc_removeGlassesEffect;
+            CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
+            ace_goggles_PostProcess ppEffectEnable false;
+            ace_goggles_PostProcessEyes ppEffectEnable false;
+        };
+    };
+
     if (goggles CLib_Player != "") then {
         removeGoggles CLib_Player;
     };
@@ -284,15 +311,21 @@ private _fnc_init = {
         if (goggles CLib_Player != "") then {
             removeGoggles CLib_Player;
         };
-        if (GVAR(aceLoaded)) then {
+
+        if (GVAR(aceMedicalLoaded)) then {
             CLib_Player setVariable ["ace_medical_allowdamage", false];
+        };
+        if (GVAR(aceHearingLoaded)) then {
             ACE_Hearing_deafnessDV = 0;
             ACE_Hearing_volume = 1;
+        };
+        if (GVAR(aceGogglesLoaded)) then {
             call ace_goggles_fnc_removeGlassesEffect;
             CLib_Player setVariable ["ace_goggles_Condition", [false,[false,0,0,0],false]];
             ace_goggles_PostProcess ppEffectEnable false;
             ace_goggles_PostProcessEyes ppEffectEnable false;
         };
+
         CLib_Player allowDamage false;
         CLib_Player setDamage 0;
         #ifndef ISDEV
@@ -358,18 +391,6 @@ call FUNC(updateSpectatorArray);
         _angle = (positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 1]);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
-
-
-DFUNC(getNearByTransmitingPlayers) = {
-    private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
-    if !(isNull GVAR(CameraFollowTarget)) then {
-        _players append (GVAR(CameraFollowTarget) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange]);
-        _players pushBackUnique GVAR(CameraFollowTarget);
-        _players append (crew vehicle GVAR(CameraFollowTarget));
-    };
-    _players = _players arrayIntersect _players;
-    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
-} call CFUNC(CompileFinal);
 
 if (GVAR(aceSpectatorLoaded)) then {
     ["ace_spectatorSet", {
