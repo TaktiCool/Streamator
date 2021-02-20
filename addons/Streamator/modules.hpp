@@ -66,7 +66,6 @@ class CfgCLibModules {
             };
             FNC(cameraUpdateLoop);
             FNC(clientInit);
-            FNC(closeSpectator);
             FNC(getDefaultIcon);
             FNC(getMousePositionInWorld);
             FNC(getUnitType);
