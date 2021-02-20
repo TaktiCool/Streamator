@@ -39,8 +39,7 @@ if (GVAR(aceMapGesturesLoaded)) then {
     GVAR(ace_map_gestures_color_namespace) = missionNamespace getVariable ["ace_map_gestures_GroupColorCfgMappingNew", objNull];
     GVAR(ace_map_gestures_defaultLeadColor) = missionNamespace getVariable ["ace_map_gestures_defaultLeadColor", [1,0.88,0,0.95]];
     GVAR(ace_map_gestures_defaultColor) = missionNamespace getVariable ["ace_map_gestures_defaultColor", [1,0.88,0,0.7]];
-    GVAR(ace_map_gestures_nameTextColor) = missionName getVariable ["ace_map_gestures_nameTextColor", [0.2,0.2,0.2,0.3]];
-
+    GVAR(ace_map_gestures_nameTextColor) = missionNamespace getVariable ["ace_map_gestures_nameTextColor", [0.2,0.2,0.2,0.3]];
 };
 GVAR(Camera) = objNull;
 
