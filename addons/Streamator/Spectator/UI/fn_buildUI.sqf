@@ -54,14 +54,16 @@ _ctrlGrp ctrlCommit 0;
 // Create Mode
 private _ctrlInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlInfo ctrlSetPosition [PX(0.3 + BORDERWIDTH), PY(0.3), safeZoneW - PX(2 * (0.3 + BORDERWIDTH)), PY(1.8)];
+_ctrlInfo ctrlSetFontHeight PY(2);
 _ctrlInfo ctrlSetFont "RobotoCondensed";
 _ctrlInfo ctrlSetText (GVAR(currentMenuPath) call FUNC(renderMenu));
 _ctrlInfo ctrlCommit 0;
 
 private _ctrlCameraMode = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlCameraMode ctrlSetPosition [safeZoneW - PX(31),  PY(0.3), PX(30), PY(1.8)];
+_ctrlCameraMode ctrlSetFontHeight PY(2);
 _ctrlCameraMode ctrlSetFont "RobotoCondensedBold";
-_ctrlCameraMode ctrlSetStructuredText parseText format ["<t align='right' size='%1'>FREE</t>", GVAR(smallTextSize)];
+_ctrlCameraMode ctrlSetStructuredText parseText "<t align='right'>FREE</t>";
 _ctrlCameraMode ctrlCommit 0;
 
 private _ctrlTargetInfo = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
@@ -177,7 +179,8 @@ _ctrlFOVDefaultLine ctrlCommit 0;
 private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
+_ctrlPlanningChannel ctrlSetFontHeight PY(2);
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {
@@ -187,9 +190,9 @@ _ctrlPlanningChannel ctrlCommit 0;
     saveProfileNamespace;
 
     if (GVAR(PlanningModeChannel) == 0) then {
-        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1 | </t><t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
     } else {
-        _ctrl ctrlSetStructuredText parseText format ["<t size='%5' color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor), GVAR(smallTextSize)];
+        _ctrl ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1 | </t><t color='%3'>Color: %4</t>", GVAR(PlanningModeChannel), ["#ffffff", "#ffffff", "#3CB371"]select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
     };
     _ctrl ctrlCommit 0;
 }, _ctrlPlanningChannel] call CFUNC(addEventhandler);
@@ -278,7 +281,7 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
     private _textMode = ["FREE", "FOLLOW [%1]", "SHOULDER [%1]", "TOPDOWN [%1]", "FIRST PERSON [%1]", "ORBIT [%1]"]  select (_mode - 1);
     _textMode = format [_textMode, GVAR(CameraFollowTarget) call CFUNC(name)];
-    _ctrl ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1</t>", _textMode, GVAR(smallTextSize)];
+    _ctrl ctrlSetStructuredText parseText format ["<t align='right'>%1</t>", _textMode];
     _ctrl ctrlCommit 0;
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
@@ -334,7 +337,7 @@ _ctrlInfo call FUNC(findInputEvents);
     if (isNull GVAR(CameraFollowTarget)) then {
         _ctrlTargetSpeedInfo ctrlSetText "";
     } else {
-        _ctrlTargetSpeedInfo ctrlSetStructuredText parseText format ["<t size='%2' align='right'>%1 km/h</t>", abs (floor (speed (vehicle GVAR(CameraFollowTarget)))), GVAR(smallTextSize)];
+        _ctrlTargetSpeedInfo ctrlSetStructuredText parseText format ["<t align='right'>%1 km/h</t>", abs (floor (speed (vehicle GVAR(CameraFollowTarget))))];
     };
     _ctrlTargetSpeedInfo ctrlCommit 0;
 }, 0, [_ctrlFOVBarCurrent, _ctrlTargetSpeedInfo]] call CFUNC(addPerFrameHandler);
