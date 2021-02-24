@@ -64,7 +64,7 @@ params ["_ctrlInfo"];
                     };
                 } forEach _searchableUnits;
 
-                if !(_guess isEqualTo []) then {
+                if (_guess isNotEqualTo []) then {
                     _guess = _guess apply {
                         _x params ["", "_data"];
                         if (_data isEqualType [] && {!(_data isEqualTypeArray [0,0,0])}) then {
@@ -109,7 +109,7 @@ params ["_ctrlInfo"];
             private _temp = "<t color='#cccccc'>Search for Target: </t>";
             if (_searchStr != "") then {
                 private _guess = +GVAR(InputGuess);
-                if !(_guess isEqualTo []) then {
+                if (_guess isNotEqualTo []) then {
                     if (GVAR(InputGuessIndex) >= count _guess) then {
                         GVAR(InputGuessIndex) = 0;
                     };
@@ -156,7 +156,7 @@ params ["_ctrlInfo"];
                     _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [0, _bestGuess select 0])];
                     _temp = _temp + format ["<t color='#ffffff' shadowColor='%1' shadow='1'>%2</t>", _color, ((_bestGuess select 2) select [_bestGuess select 0, count _searchStr])];
                     _temp = _temp + format ["<t color='%1'>%2</t>", _color, ((_bestGuess select 2) select [(_bestGuess select 0) + count _searchStr])];
-                    if (!(_guessStr isEqualTo [])) then {
+                    if (_guessStr isNotEqualTo []) then {
                         _temp = _temp + ("<t color='#cccccc'> | ") + (_guessStr joinString " | ") + "</t>";
                     };
                 } else {

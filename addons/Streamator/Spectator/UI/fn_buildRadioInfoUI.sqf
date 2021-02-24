@@ -117,7 +117,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _element = controlNull;
     {
         private _data = _x getVariable [QGVAR(data), []];
-        if !(_data isEqualTo []) then {
+        if (_data isNotEqualTo []) then {
             if (_data isEqualTo [_unit, _uid]) then {
                 _elementFound = true;
                 _element = _x;
@@ -162,7 +162,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
     private _element = [];
     {
         private _data = _x getVariable [QGVAR(data), []];
-        if !(_data isEqualTo []) then {
+        if (_data isNotEqualTo []) then {
             if !((_data select 1) in _radioInformation) then {
                 private _pos = ctrlPosition _x;
                 _pos set [1, (_pos select 1) - PY(4*_elementFound)];

@@ -103,7 +103,7 @@ private _return = switch (_keyCode) do {
             [GVAR(lastUnitShooting), [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE)] call FUNC(setCameraTarget);
             true;
         };
-        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {(GVAR(CursorTarget) isNotEqualTo GVAR(CameraFollowTarget))}}) then {
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
             [GVAR(CursorTarget), CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
         } else {
@@ -238,7 +238,7 @@ private _return = switch (_keyCode) do {
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
-            if !(GVAR(InputGuess) isEqualTo []) then {
+            if (GVAR(InputGuess) isNotEqualTo []) then {
                 _newCameraTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
             };
             GVAR(InputMode) = INPUTMODE_MOVE;

@@ -30,11 +30,11 @@ private _object = lineIntersectsSurfaces [
     false
 ];
 
-if !(_object isEqualTo []) then {
+if (_object isNotEqualTo []) then {
     _nextTarget = (_object select 0) select 2;
 };
 
-if !(_nextTarget isEqualTo GVAR(CursorTarget)) then {
+if (_nextTarget isNotEqualTo GVAR(CursorTarget)) then {
     if (!(isNull _nextTarget) || (time - GVAR(lastCursorTarget)) >= 1) then {
         GVAR(CursorTarget) = _nextTarget;
         [QGVAR(CursorTargetChanged), _nextTarget] call CFUNC(localEvent);
@@ -69,6 +69,6 @@ if (GVAR(OverlayBulletTracer)) then {
     call FUNC(draw3dBullets);
 };
 
-if (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) then {
+if (GVAR(MeasureDistance) && {(GVAR(MeasureDistancePositions) isNotEqualTo [])}) then {
     call FUNC(draw3dMeasureDistance);
 };

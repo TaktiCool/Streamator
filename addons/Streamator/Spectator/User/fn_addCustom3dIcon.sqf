@@ -22,7 +22,7 @@ private _buildedIcons = [];
     private _codeStr = {
         if (GVAR(hideUI)) then {false} else {GVAR(OverlayCustomMarker)};
     } call CFUNC(codeToString);
-    if !(_code isEqualTo {}) then {
+    if (_code isNotEqualTo {}) then {
         private _strCond = _code call CFUNC(codeToString);
         _codeStr = format ["
             private _shouldDraw = call {%1};

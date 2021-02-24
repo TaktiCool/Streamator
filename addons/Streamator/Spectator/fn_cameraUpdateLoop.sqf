@@ -60,7 +60,7 @@ private _cameraFollowTarget = GVAR(CameraFollowTarget);
 
 if (_cameraMode == CAMERAMODE_FOLLOW && { GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator }) then {
     private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
-    if !(_state isEqualTo []) then {
+    if (_state isNotEqualTo []) then {
         _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime", "_shoulderOffset", "_dirOffset", "_pitchOffset", "_topdownOffset"];
         _cameraMode = _mode;
         GVAR(CameraDir) = _dir;

@@ -37,7 +37,7 @@ if (GVAR(OverlayPlayerMarkers)) then {
     [_map, _textSize] call FUNC(drawMarkers);
 };
 
-if  (GVAR(MeasureDistance) && {!(GVAR(MeasureDistancePositions) isEqualTo [])}) then {
+if  (GVAR(MeasureDistance) && {(GVAR(MeasureDistancePositions) isNotEqualTo [])}) then {
     [_map, _textSize] call FUNC(drawMeasureDistance);
 };
 

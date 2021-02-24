@@ -23,7 +23,7 @@ if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) t
         } else {
             private _endPosition = screenToWorld getMousePosition;
             private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _endPosition, objNull, objNull, true, 1, "GEOM", "NONE", false];
-            if !(_intersectArray isEqualTo []) then {
+            if (_intersectArray isNotEqualTo []) then {
                 (_intersectArray select 0) params ["_intersectPosition"];
                 _endPosition = ASLtoAGL _intersectPosition;
             };
@@ -42,7 +42,7 @@ if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) t
             _cursorHistory pushBackUnique _cursorPos;
         } else {
             private _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
-            if !(_lastPosition isEqualTo _cursorPos) then {
+            if (_lastPosition isNotEqualTo _cursorPos) then {
                 _lastPosition params ["_lasttime", "_lastpos"];
                 if ((_newtime - _lasttime) < 0.2) then {
                     _lastpos = AGLtoASL _lastpos;

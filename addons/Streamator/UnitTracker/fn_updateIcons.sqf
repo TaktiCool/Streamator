@@ -28,7 +28,7 @@ _units = _units select { _x getVariable [QEGVAR(Spectator,isValidUnit), false] }
 _units = _units arrayIntersect _units;
 private _vehicles = (vehicles select { _x call FUNC(isValidVehicle) });
 
-if !(_units isEqualTo []) then {
+if (_units isNotEqualTo []) then {
     {
         if (isNull objectParent _x) then { // Infantry
             private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _x, (group _x)];
@@ -74,7 +74,7 @@ if !(_units isEqualTo []) then {
     } forEach _units;
 };
 
-if !(_vehicles isEqualTo []) then {
+if (_vehicles isNotEqualTo []) then {
     {
         private _iconId = toLower format [QGVAR(IconId_Vehicle_%1), _x];
         if (

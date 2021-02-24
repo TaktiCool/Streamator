@@ -17,7 +17,7 @@ params ["_map", "_textSize"];
 // Iterate over all nearby players and render their pointer if player is transmitting.
 {
     private _pos = _x getVariable "ace_map_gestures_pointPosition";
-    if (!isNil "_pos" && {!(_pos isEqualTo [])}) then {
+    if (!isNil "_pos" && {_pos isNotEqualTo []}) then {
         private _grpName = groupID (group _x);
 
         // If color settings for the group exist, then use those, otherwise fall back to the default colors

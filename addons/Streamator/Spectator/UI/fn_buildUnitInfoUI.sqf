@@ -457,7 +457,7 @@ private _unitInfoAllCtrls = [
     };
     if !(_unit isKindOf "CAManBase") then {
         private _crew = crew _unit;
-        if !(_crew isEqualTo []) then {
+        if (_crew isNotEqualTo []) then {
             _unit = _crew select 0;
         };
     };

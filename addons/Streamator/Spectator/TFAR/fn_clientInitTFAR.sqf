@@ -29,14 +29,14 @@ LOG("TFAR Stable Detected");
 
     [{
         if !(alive GVAR(RadioFollowTarget)) exitWith {
-            if !(GVAR(RadioInformationPrev) isEqualTo []) then {
+            if (GVAR(RadioInformationPrev) isNotEqualTo []) then {
                 [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
                 [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
                 GVAR(RadioInformationPrev) = [];
             };
         };
         private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
-        if !(_data isEqualTo GVAR(RadioInformationPrev)) then {
+        if (_data isNotEqualTo GVAR(RadioInformationPrev)) then {
             if (GVAR(RadioInformationPrev) isEqualTo []) then {
                 [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
             } else {

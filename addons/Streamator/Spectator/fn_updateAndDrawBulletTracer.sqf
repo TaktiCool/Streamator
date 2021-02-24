@@ -21,7 +21,7 @@ private _ifSkipUpdate = if ((diag_frameno mod 3) == 0);
     _x params ["_color", "_startPos", "_projectile", ["_segments", []]];
     if (alive _projectile) then {
         _ifSkipUpdate then {
-            if !(_segments isEqualTo []) then {
+            if (_segments isNotEqualTo []) then {
                 _startPos = _segments select ((count _segments) -1) select 1;
             };
             private _index = _segments pushBack [_startPos, getPosVisual _projectile];

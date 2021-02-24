@@ -36,12 +36,12 @@ _map drawIcon ["a3\ui_f\data\Map\Markers\System\dummy_ca.paa", [1, 1, 1, 1], _po
 private _interSectPos = [];
 if (GVAR(useTerrainIntersect)) then {
     private _ti = terrainIntersectAtASL [_pos1, _pos2];
-    if !(_ti isEqualTo [0,0,0]) then {
+    if (_ti isNotEqualTo [0,0,0]) then {
         _interSectPos = _ti;
     };
 } else {
     private _lis = lineIntersectsSurfaces [_pos1, _pos2];
-    if !(_lis isEqualTo []) then {
+    if (_lis isNotEqualTo []) then {
         _interSectPos = (_lis select 0) select 0;
     };
 };

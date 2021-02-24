@@ -17,7 +17,7 @@ private _endPosition = screenToWorld getMousePosition;
 private _startPosition = positionCameraToWorld [0, 0, 0];
 if (GVAR(useTerrainIntersect)) then {
     private _intersectArray = lineIntersectsSurfaces [AGLToASL _startPosition, AGLToASL _endPosition];
-    if !(_intersectArray isEqualTo []) then {
+    if (_intersectArray isNotEqualTo []) then {
         (_intersectArray select 0) params ["_intersectPosition"];
         _endPosition = ASLtoAGL _intersectPosition;
     };
