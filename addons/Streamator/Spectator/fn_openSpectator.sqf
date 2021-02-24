@@ -201,7 +201,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
             format ["%2 0%1°", floor _direction, _bearings];
         };
         default {
-             format ["%2 %1°", floor _direction, _bearings];
+            format ["%2 %1°", floor _direction, _bearings];
         };
     };
 

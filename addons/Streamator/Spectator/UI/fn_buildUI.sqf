@@ -169,7 +169,7 @@ _ctrlFOVLabel ctrlCommit 0;
 private _ctrlFOVDefaultLine = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVDefaultLine ctrlSetPosition [
     safeZoneW - PX(BORDERWIDTH * 3 / 4),
-     PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    PY(14 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
     PX(BORDERWIDTH / 2),
     PY(0.2)
 ];
@@ -296,7 +296,7 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     if (GVAR(CameraSmoothingMode)) then {
         _ctrlMouseSmoothingLabel ctrlSetTextColor [0, 1, 0, 1];
     } else {
-         _ctrlMouseSmoothingLabel ctrlSetTextColor [1, 1, 1, 1];
+        _ctrlMouseSmoothingLabel ctrlSetTextColor [1, 1, 1, 1];
     };
     if (GVAR(CameraZoomMode)) then {
         _ctrlFOVLabel ctrlSetTextColor [0, 1, 0, 1];

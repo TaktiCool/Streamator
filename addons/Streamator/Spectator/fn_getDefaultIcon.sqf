@@ -29,5 +29,5 @@ switch (_side) do {
     };
     default {
         "\A3\ui_f\data\map\markers\nato\n_unknown.paa"
-     };
+    };
 };

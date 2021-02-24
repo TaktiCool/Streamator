@@ -39,6 +39,6 @@ private _sqrtFOV = sqrt(_fov);
     } forEach _cursorHistory;
 } forEach ((GVAR(allSpectators) + [CLib_Player]) select {
     (GVAR(PlanningModeChannel) == 0)
-     || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
-     || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
+    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
 });
