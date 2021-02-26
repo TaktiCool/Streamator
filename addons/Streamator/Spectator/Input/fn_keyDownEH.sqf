@@ -29,20 +29,32 @@ params [
 private _return = switch (_keyCode) do {
     case DIK_LSHIFT: { // LShift
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraSpeedMode);
         GVAR(CameraSpeedMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraSmoothingMode);
         GVAR(CameraSmoothingMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_LALT: { // LALT
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraZoomMode);
         GVAR(CameraZoomMode) = true;
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
         false;
     };
     case DIK_ESCAPE: { // ESC
@@ -91,7 +103,7 @@ private _return = switch (_keyCode) do {
             [GVAR(lastUnitShooting), [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE)] call FUNC(setCameraTarget);
             true;
         };
-        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {!(GVAR(CursorTarget) isEqualTo GVAR(CameraFollowTarget))}}) then {
+        if (!isNull GVAR(CursorTarget) && {GVAR(CursorTarget) isKindOf "AllVehicles" && {(GVAR(CursorTarget) isNotEqualTo GVAR(CameraFollowTarget))}}) then {
             GVAR(CameraRelPos) = getPosASLVisual GVAR(Camera) vectorDiff getPosASLVisual GVAR(CursorTarget);
             [GVAR(CursorTarget), CAMERAMODE_FOLLOW] call FUNC(setCameraTarget);
         } else {
@@ -125,7 +137,7 @@ private _return = switch (_keyCode) do {
         call FUNC(setVisionMode);
         true;
     };
-    case DIK_V: {
+    case DIK_V: { // V
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_shift) exitWith {
             GVAR(CenterMinimapOnCameraPositon) = !GVAR(CenterMinimapOnCameraPositon);
@@ -162,7 +174,18 @@ private _return = switch (_keyCode) do {
             };
         };
     };
-
+    case DIK_MULTIPLY: { // NUM *
+        if (!isNull GVAR(CameraFollowTarget)) then {
+            if (GVAR(UnitInfoOpen)) then {
+                QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+            } else {
+                [QGVAR(OpenUnitInfo), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
+            };
+        } else {
+            QGVAR(CloseUnitInfo) call CFUNC(localEvent);
+        };
+        QGVAR(updateMenu) call CFUNC(localEvent);
+    };
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
             GVAR(PlanningModeColor) = (GVAR(PlanningModeColor) - 1) max 0;
@@ -211,12 +234,11 @@ private _return = switch (_keyCode) do {
     case DIK_NUMPAD2;
     case DIK_NUMPAD3;
     case DIK_NUMPAD4;
-    case DIK_NUMPAD5;
-    case DIK_NUMPAD6: {
+    case DIK_NUMPAD5: {
         if (GVAR(InputMode) == INPUTMODE_MOVE && _keyCode == DIK_RETURN) exitWith {false};
         private _newCameraTarget = GVAR(CameraFollowTarget);
         if (GVAR(InputMode) == INPUTMODE_SEARCH) then {
-            if !(GVAR(InputGuess) isEqualTo []) then {
+            if (GVAR(InputGuess) isNotEqualTo []) then {
                 _newCameraTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
             };
             GVAR(InputMode) = INPUTMODE_MOVE;
@@ -242,7 +264,6 @@ private _return = switch (_keyCode) do {
             case DIK_NUMPAD3: {CAMERAMODE_TOPDOWN};
             case DIK_NUMPAD4: {CAMERAMODE_FPS};
             case DIK_NUMPAD5: {CAMERAMODE_ORBIT};
-            case DIK_NUMPAD6: {CAMERAMODE_UAV};
         };
         [_newCameraTarget, _cameraMode, _alt] call FUNC(setCameraTarget);
         true;
@@ -255,10 +276,15 @@ private _return = switch (_keyCode) do {
 if (!_return && GVAR(InputMode) != INPUTMODE_SEARCH) then {
     _return = [GVAR(currentMenuPath), _keyCode] call FUNC(executeEntry);
 };
-if (_keyCode >= DIK_F1 && _keyCode <= DIK_F12) then {
-    _return = true;
-};
+
 if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
+    if (_keyCode == DIK_F5) exitWith {
+        private _newRadioTarget = ((GVAR(InputGuess) select GVAR(InputGuessIndex)) select 1);
+        if (_newRadioTarget isEqualType objNull) then {
+            _newRadioTarget call FUNC(setRadioFollowTarget);
+            _return = true;
+        };
+    };
     private _char = [_keyCode, _shift] call FUNC(dik2char);
     if (_char != "") then {
         GVAR(InputScratchpad) = GVAR(InputScratchpad) + _char;
@@ -274,5 +300,7 @@ if (!_return && GVAR(InputMode) == INPUTMODE_SEARCH) then {
         };
     };
 };
-
+if (_keyCode >= DIK_F1 && _keyCode <= DIK_F12) then {
+    _return = true;
+};
 _return

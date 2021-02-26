@@ -71,12 +71,8 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
         private _ctrlGrp = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_Group), _idd], controlNull];
         private _ctrlSquadName = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_SquadName), _idd], controlNull];
-        // private _ctrlSquadType = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_SquadType), _idd], controlNull];
-        // private _ctrlSquadDescription = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_SquadDescription), _idd], controlNull];
-        // private _ctrlSquadMemberCount = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_SquadMemberCount), _idd], controlNull];
         private _ctrlBgBottom = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_BgBottom), _idd], controlNull];
         private _ctrlMemberList = uiNamespace getVariable [format [UIVAR(GroupInfo_%1_MemberList), _idd], controlNull];
-        private _textSize = PY(1.8) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
         if (isNull _ctrlGrp) then {
             _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1];
             _ctrlGrp ctrlSetFade 0;
@@ -101,7 +97,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
             uiNamespace setVariable [format [UIVAR(GroupInfo_%1_SquadName), _idd], _ctrlSquadName];
 
             _ctrlMemberList = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-            _ctrlMemberList ctrlSetFontHeight PY(4);
+            _ctrlMemberList ctrlSetFontHeight PY(1.8);
             _ctrlMemberList ctrlSetPosition [0, PY(2.4), PX(22), PY(11.9)];
             _ctrlMemberList ctrlSetFont "PuristaMedium";
             _ctrlMemberList ctrlSetTextColor [1, 1, 1, 1];
@@ -119,12 +115,12 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
         private _squadUnits = "";
         private _unitCount = {
-            private _kitIcon = _x call EFUNC(Spectator,getUnitType);
-            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon select 0, [_x] call CFUNC(name)];
+            private _unitType = _x call EFUNC(Spectator,getUnitType);
+            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _unitType select 0, [_x] call CFUNC(name)];
             true;
         } count _units;
 
-        _ctrlMemberList ctrlSetStructuredText parseText format ["<t size=""%1"">%2</t>", _textSize, _squadUnits];
+        _ctrlMemberList ctrlSetStructuredText parseText _squadUnits;
 
         _ctrlBgBottom ctrlSetPosition [0, PY(2.2), PX(22), _unitCount * PY(1.8) + PY(0.4)];
 

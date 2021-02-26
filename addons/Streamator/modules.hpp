@@ -14,6 +14,20 @@ class CfgCLibModules {
                 FNC(draw3dEH);
                 FNC(drawEH);
             };
+            MODULE(DrawCalls) {
+                FNC(draw3dBullets);
+                FNC(draw3dGroups);
+                FNC(draw3dLaserTargets);
+                FNC(draw3dMeasureDistance);
+                FNC(draw3dPlanning);
+                FNC(draw3dUnits);
+                FNC(drawAceMapGestures);
+                FNC(drawBullets);
+                FNC(drawLaserTargets);
+                FNC(drawMarkers);
+                FNC(drawMeasureDistance);
+                FNC(drawPlanning);
+            };
             MODULE(TFAR) {
                 FNC(clientInitTFAR);
                 FNC(getTFARFrequency);
@@ -52,8 +66,8 @@ class CfgCLibModules {
             };
             FNC(cameraUpdateLoop);
             FNC(clientInit);
-            FNC(closeSpectator);
             FNC(getDefaultIcon);
+            FNC(getMousePositionInWorld);
             FNC(getUnitType);
             FNC(isValidUnit);
             FNC(openSpectator);
@@ -62,6 +76,8 @@ class CfgCLibModules {
             FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
+            FNC(updateAndDrawBulletTracer);
+            FNC(updatePlanningMarkers);
         };
 
         // UnitTracker

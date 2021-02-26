@@ -271,16 +271,21 @@ private _unitInfoAllCtrls = [
 
     // set health
     private _health = 0;
-    private _c = {
-        _health = _health + _x;
-        true
-    } count ((getAllHitPointsDamage _unit) select 2);
-    _health = _health/_c;
+    private _damages = getAllHitPointsDamage _unit;
+    if (_damages isEqualTo []) then {
+        _health = damage _unit;
+    } else {
+        private _c = {
+            _health = _health + _x;
+            true
+        } count (_damages select 2);
+        _health = _health/_c;
+    };
     _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcons = [];
     if (_unit isKindOf "CAManBase") then {
-        if (GVAR(aceLoaded)) then {
+        if (GVAR(aceMedicalLoaded)) then {
             _health = linearConversion [6, 3, _unit getVariable ["ace_medical_bloodVolume", 6], 0, 1];
             if (_unit getVariable ["ace_medical_woundBleeding", 0] > 0) then {
                 _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa";
@@ -452,7 +457,7 @@ private _unitInfoAllCtrls = [
     };
     if !(_unit isKindOf "CAManBase") then {
         private _crew = crew _unit;
-        if !(_crew isEqualTo []) then {
+        if (_crew isNotEqualTo []) then {
             _unit = _crew select 0;
         };
     };

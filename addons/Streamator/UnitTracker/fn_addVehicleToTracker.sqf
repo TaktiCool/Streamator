@@ -56,7 +56,6 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
         private _ctrlTotalSeats = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_TotalSeats), _idd], controlNull];
         private _ctrlBgBottom = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_BgBottom), _idd], controlNull];
         private _ctrlMemberList = uiNamespace getVariable [format [UIVAR(VehicleInfo_%1_MemberList), _idd], controlNull];
-        private _textSize = PY(1.8) / (((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25) * 1);
         if (isNull _ctrlGrp) then {
             _ctrlGrp = _display ctrlCreate ["RscControlsGroupNoScrollbars", -1];
             _ctrlGrp ctrlSetFade 0;
@@ -82,14 +81,14 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
 
             _ctrlTotalSeats = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
             _ctrlTotalSeats ctrlSetFontHeight PY(1.8);
-            _ctrlTotalSeats ctrlSetPosition [PX(16.5), PY(0), PX(5), PY(2)];
+            _ctrlTotalSeats ctrlSetPosition [PX(16.5), PY(0), PX(6), PY(2)];
             _ctrlTotalSeats ctrlSetFont "PuristaMedium";
             _ctrlTotalSeats ctrlSetTextColor [0.5, 0.5, 0.5, 1];
             _ctrlTotalSeats ctrlSetStructuredText parseText "ALPHA";
             uiNamespace setVariable [format [UIVAR(VehicleInfo_%1_TotalSeats), _idd], _ctrlTotalSeats];
 
             _ctrlMemberList = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
-            _ctrlMemberList ctrlSetFontHeight PY(4);
+            _ctrlMemberList ctrlSetFontHeight PY(1.8);
             _ctrlMemberList ctrlSetPosition [0, PY(2.4), PX(21.5), PY(11.9)];
             _ctrlMemberList ctrlSetFont "PuristaMedium";
             _ctrlMemberList ctrlSetTextColor [1, 1, 1, 1];
@@ -108,17 +107,17 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
         private _crewUnits = "";
         private _unitCount = {
             if (alive _x) then {
-                private _kitIcon = _x call EFUNC(Spectator,getUnitType);
-                _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _kitIcon select 0, [_x] call CFUNC(name)];
+                private _unitType = _x call EFUNC(Spectator,getUnitType);
+                _crewUnits = _crewUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _unitType select 0, [_x] call CFUNC(name)];
                 true;
             } else {
                 false;
             }
         } count _units;
 
-        _ctrlTotalSeats ctrlSetStructuredText parseText format ["<t size=""%1"" align=""right"">%2 / %3</t>", _textSize, _unitCount, _maxCrewSize];
+        _ctrlTotalSeats ctrlSetStructuredText parseText format ["<t align=""right"">%1 / %2</t>", _unitCount, _maxCrewSize];
 
-        _ctrlMemberList ctrlSetStructuredText parseText format ["<t size=""%1"">%2</t>", _textSize, _crewUnits];
+        _ctrlMemberList ctrlSetStructuredText parseText _crewUnits;
 
         _ctrlBgBottom ctrlSetPosition [0, PY(2.2), PX(22), _unitCount * PY(1.8) + PY(0.4)];
         _ctrlBgBottom ctrlShow (_unitCount > 0);
@@ -149,7 +148,6 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
             if (isNull _grp || (_map == ((findDisplay 12) displayCtrl 51) && !visibleMap) || isNull _map) exitWith {
                 _id call CFUNC(removePerFrameHandler);
                 _grp ctrlShow false;
-                //ctrlDelete _grp;
                 _grp ctrlCommit 0;
             };
 

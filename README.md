@@ -8,12 +8,11 @@ The camera mode is shown on the top right.
 Mode | Description
 ---|---
 **FREE** | Free movement of the camera.
-**FOLLOW [&lt;Object&gt;]** | The camera is moving relatively to a focused object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focused spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focusing. It can be refreshed by pressing the R key.
-**FIRST PERSON [&lt;Object&gt;]** | First Person View Mode to see what the player sees
-**SHOULDER [&lt;Object&gt;]** | Over the Shoulder View with Camera Offset and Direction offset
-**TOPDOWN [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
-**ORBIT [&lt;Object&gt;]** | Topdown View Mode to Overview a Unit Movements
-**UAV [&lt;Object&gt;]** | View of the Followed Units UAV if one is connected
+**FOLLOW [\<Object\>]** | The camera is moving relatively to a focused object.<br>***Special Remarks:***<br>If the &lt;Object&gt; is a spectator, the current camera state (position, view angle etc.) of the focused spectator is transferred to your camera. To limit network traffic, this is done only at the moment of focusing. It can be refreshed by pressing the R key.
+**FIRST PERSON [\<Object\>]** | First Person View Mode to see what the player sees
+**SHOULDER [\<Object\>]** | Over the Shoulder View with Camera Offset and Direction offset
+**TOPDOWN [\<Object\>]** | Topdown View Mode to Overview a Unit Movements
+**ORBIT [\<Object\>]** | Topdown View Mode to Overview a Unit Movements
 
 ## 3D VIEW
 Key Binding | Short Description | Remarks
@@ -47,7 +46,7 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | Topdown View | Toggles to TopDown View
 **`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
-**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
+**`NUMPAD *`** | Toggle Unit Chyron | Open or Closes Unit Chyron
 **`Scrollwheel`** | Camera Height in TopDown View | Adjusts the Camera Height in TopDown Camera Mode
 **`ALT`** | Smooth Transition Modifier | When Pressed While Changing Camera Targets a Smooth Transition is done
 
@@ -62,6 +61,7 @@ Hover Marker | Shows unit/group/vehicle information | units: unit name<br>groups
 **`PAGE UP`** | Increase Planning Mode Channel | Increase Planning Mode Channel
 **`PAGE DOWN`** | Decrease Planning Mode Channel | Decrease Planning Mode Channel
 **`LMB`** | Drawing in Planning Mode | Drawing in Planning Mode
+**`CTRL`** + **`LMB`** | Distance Measuring | Measure Distance Between 2 Points
 
 ## Search Mode
 Key Binding | Short Description | Remarks
@@ -73,55 +73,70 @@ Key Binding | Short Description | Remarks
 **`NUMPAD 3`** | Topdown View | Toggles to Topdown View
 **`NUMPAD 4`** | First Person View | Toggles to First Person View
 **`NUMPAD 5`** | Orbit View | Toggles to Orbit View
-**`NUMPAD 6`** | UAV View | Toggles to A UAVs view if the current Vehicle is a UAV or the current Unit is connected to a UAV
 **`TAB`** | Cycle to Search Entry Right | Switches to the Next Searched Result
 **`SHIFT`** + **`TAB`** | Cycle to Search Entry Left | Switches to the Next Searched Result
+**`F5`** | Set Radio Follow Target | Set Current selected Search Entry Radio Follow Target
 
 # MENU SYSTEM
-**[F1]** <Overlays>
-    **[Esc]** Back
-    **[F1]** Group Markers
-    **[F2]** Unit Markers
-    **[F3]** Player Markers
-    **[F4]** Planning Mode
-    **[F5]** Bullet Tracers
-    **[F6]** Laser Targets
-    **[F7]** Custom Markers
-**[F2]** <Camera Modes>
-    **[Esc]** Back
-    **[F1]** Free
-    **[F2]** Follow
-    **[F3]** Shoulder
-    **[F4]** Topdown
-    **[F5]** FPS
-    **[F6]** Orbit
-    **[F7]** UAV
-**[F3]** <Vision Modes>
-    **[Esc]** Back
-    **[F1]** Normal
-    **[F2]** NVG
-    **[F3]** Thermal
-    **[F4]** <Thermal Modes>
-        **[Esc]** Back
-        **[F1]** Thermal (W)
-        **[F2]** Thermal (B)
-        **[F3]** Thermal (G)
-        **[F4]** Thermal (BG)
-        **[F5]** Thermal (R)
-        **[F6]** Thermal (BR)
-        **[F7]** Thermal (WR)
-        **[F8]** Thermal (RGW)
-**[F4]** <Minimap>
-    **[Esc]** Back
-    **[F1]** Toggle
-    **[F2]** Toggle View Mode
-**[F5]** <Radio>
-    **[Esc]** Back
-    **[F1]** Toggle Radio Overlay
-    **[F2]** Target current Camera target
-**[F6]** Toggle AI
-**[F7]** Unit Chyron
-**[F8]** Fix Camera
+- **[F1]** \<Overlays\>
+    - **[Esc]** Back
+    - **[F1]** Group Markers
+    - **[F2]** Unit Markers
+    - **[F3]** Player Markers
+    - **[F4]** Planning Mode
+    - **[F5]** Bullet Tracers
+    - **[F6]** Laser Targets
+    - **[F7]** Custom Markers
+- **[F2]** \<Camera Modes\>
+    - **[Esc]** Back
+    - **[F1]** Free
+    - **[F2]** Follow
+    - **[F3]** Shoulder
+    - **[F4]** Topdown
+    - **[F5]** FPS
+    - **[F6]** Orbit
+- **[F3]** \<Vision Modes\>
+    - **[Esc]** Back
+    - **[F1]** Normal
+    - **[F2]** NVG
+    - **[F3]** Thermal
+    - **[F4]** \<Thermal Modes\>
+        - **[Esc]** Back
+        - **[F1]** Thermal (W)
+        - **[F2]** Thermal (B)
+        - **[F3]** Thermal (G)
+        - **[F4]** Thermal (BG)
+        - **[F5]** Thermal (R)
+        - **[F6]** Thermal (BR)
+        - **[F7]** Thermal (WR)
+        - **[F8]** Thermal (RGW)
+- **[F4]** \<Minimap\>
+    - **[Esc]** Back
+    - **[F1]** Show/Hide Minimap
+    - **[F2]** Center On Camera
+    - **[F3]** Render FOV Cone
+- **[F5]** \<Radio\>
+    - **[Esc]** Back
+    - **[F1]** Toggle Radio Overlay
+    - **[F2]** Target current Camera target
+- **[F6]** \<Crew\>
+    - **[F1]** Commander
+    - **[F2]** Gunner
+    - **[F3]** Driver
+    - **[F4]** Vehicle
+    - **[F5]** Next Crew
+- **[F7]** \<Misc\>
+    - **[F1]** Render AI
+    - **[F2]** Unit Chyron
+    - **[F3]** Switch to UAV
+    - **[F4]** \<ViewDistance\>
+        - **[F1]** ViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
+        - **[F2]** ObjectViewDistance (Normal 100; Shift 1000; Ctrl 10; Alt Substract)
+        - **[F3]** Sync ObjectViewDistance
+        - **[F4]** Reset ViewDistance
+    - **[F5]** Use Terrain/Line Intersect for Distance Measuring Tool
+    - **[F6]** Show Laser Codes (ACE Only)
+    - **[F12]** Fix Camera
 
 # Creators Manual
 TBD

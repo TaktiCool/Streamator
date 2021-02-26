@@ -22,18 +22,40 @@ if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         _display displayAddEventHandler ["KeyUp", {_this call FUNC(keyUpEH)}];
         _display displayAddEventHandler ["MouseZChanged", {_this call FUNC(mouseWheelEH)}];
         _display displayAddEventHandler ["MouseButtonDown", {
-            params ["", ["_button", -1, [0]]];
-            if (_button == 0) then {
-                GVAR(PlanningModeDrawing) = true;
+            params ["", ["_button", -1, [0]], "", "", "", "_ctrl"];
+            if (_button == 0 && _ctrl) exitWith {
+                GVAR(MeasureDistance) = true;
+                GVAR(PlanningModeDrawing) = false;
+                private _endPosition = call FUNC(getMousePositionInWorld);
+                GVAR(MeasureDistancePositions) = [_endPosition, _endPosition];
+                true;
             };
+            if (_button == 0) exitWith {
+                GVAR(MeasureDistance) = false;
+                GVAR(MeasureDistancePositions) = [];
+                GVAR(PlanningModeDrawing) = true;
+                true;
+            };
+            true;
         }];
         _display displayAddEventHandler ["MouseButtonUp", {
-            params ["", ["_button", -1, [0]]];
-            if (_button == 0) then {
-                GVAR(PlanningModeDrawing) = false;
+            params ["", ["_button", -1, [0]], "", "", "", "_ctrl"];
+            if (_button == 0 && _ctrl) exitWith {
+                GVAR(MeasureDistance) = false;
+                GVAR(MeasureDistancePositions) = [];
+                true;
             };
+            if (_button == 0) exitWith {
+                GVAR(PlanningModeDrawing) = false;
+                GVAR(MeasureDistance) = false;
+                GVAR(MeasureDistancePositions) = [];
+                true;
+            };
+            true;
         }];
         _display displayAddEventHandler ["Unload", {
+            GVAR(MeasureDistance) = false;
+            GVAR(MeasureDistancePositions) = [];
             if (!GVAR(MapOpen)) then {
                 GVAR(InputMode) = INPUTMODE_MOVE;
                 [QGVAR(InputModeChanged), GVAR(InputMode)] call CFUNC(localEvent);

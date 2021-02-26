@@ -60,7 +60,7 @@ private _cameraFollowTarget = GVAR(CameraFollowTarget);
 
 if (_cameraMode == CAMERAMODE_FOLLOW && { GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator }) then {
     private _state = GVAR(CameraFollowTarget) getVariable [QGVAR(State), []];
-    if !(_state isEqualTo []) then {
+    if (_state isNotEqualTo []) then {
         _state params ["_mode", "_rfollowTarget", "_pos", "_relPos", "_dir", "_pitch", "_fov", "_vision", "_smoothingTime", "_shoulderOffset", "_dirOffset", "_pitchOffset", "_topdownOffset"];
         _cameraMode = _mode;
         GVAR(CameraDir) = _dir;
@@ -191,19 +191,6 @@ switch (_cameraMode) do {
         GVAR(CameraRelPos) = _norm vectorMultiply (_mag max 0.5);
         GVAR(CameraPitch) = -asin (((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos)) min 1);
         GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
-    };
-    case CAMERAMODE_UAV: {
-
-        private _vehicleConfig = configFile >> "CfgVehicles" >> (typeof GVAR(UAVCameraTarget));
-
-        private _posSelection = getText (_vehicleConfig >> "uavCameraGunnerPos");
-        private _dirSelection = getText (_vehicleConfig >> "uavCameraGunnerDir");
-
-        GVAR(Camera) camSetFov GVAR(CameraFOV);
-
-        private _dir = (GVAR(UAVCameraTarget) selectionPosition _posSelection) vectorFromTo (GVAR(UAVCameraTarget) selectionPosition _dirSelection);
-        GVAR(Camera) setVectorDirAndUp [_dir, _dir vectorCrossProduct [-(_dir select 1), _dir select 0, 0]];
-        breakOut SCRIPTSCOPENAME;
     };
 };
 
