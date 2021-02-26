@@ -119,6 +119,9 @@ Key Binding | Short Description | Remarks
     - **[Esc]** Back
     - **[F1]** Toggle Radio Overlay
     - **[F2]** Target current Camera target
+    - **[F3]** Radio Volume Down/Up (ACRE2 Only)
+    - **[F3]** Radio Volume Up  (TFAR Only)
+    - **[F4]** Radio Volume Down  (TFAR Only)
 - **[F6]** \<Crew\>
     - **[F1]** Commander
     - **[F2]** Gunner
