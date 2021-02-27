@@ -30,19 +30,26 @@ LOG("TFAR Stable Detected");
     [{
         if !(alive GVAR(RadioFollowTarget)) exitWith {
             if (GVAR(RadioInformationPrev) isNotEqualTo []) then {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+                private _radioInformationPrev = (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1);
+                _radioInformationPrev = _radioInformationPrev apply { if (_x isEqualType "") then { _x } else { _x select 0 }; };
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, [], _radioInformations]] call CFUNC(serverEvent);
                 [QGVAR(radioInformationChanged), []] call CFUNC(localEvent);
                 GVAR(RadioInformationPrev) = [];
             };
         };
         private _data = GVAR(RadioFollowTarget) getVariable [QGVAR(RadioInformation), [["No_SW_Radio"], ["No_LR_Radio"]]];
         if (_data isNotEqualTo GVAR(RadioInformationPrev)) then {
+            private _radioInformation = (_data select 0) + (_data select 1);
+            _radioInformation = _radioInformation apply { if (_x isEqualType "") then { _x } else { _x select 0 }; };
+
             if (GVAR(RadioInformationPrev) isEqualTo []) then {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), []]] call CFUNC(serverEvent);
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, _radioInformation, []]] call CFUNC(serverEvent);
             } else {
-                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, (_data select 0) + (_data select 1), (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1)]] call CFUNC(serverEvent);
+                private _radioInformationPrev = (GVAR(RadioInformationPrev) select 0) + (GVAR(RadioInformationPrev) select 1);
+                _radioInformationPrev = _radioInformationPrev apply { if (_x isEqualType "") then { _x } else { _x select 0 }; };
+                [QGVAR(spectatorRadioInformationChanged), [CLib_Player, _radioInformation, _radioInformationPrev]] call CFUNC(serverEvent);
             };
-            [QGVAR(radioInformationChanged), (_data select 0) + (_data select 1)] call CFUNC(localEvent);
+            [QGVAR(radioInformationChanged), _radioInformation] call CFUNC(localEvent);
             GVAR(RadioInformationPrev) = +_data;
         };
         _data params ["_freqSW", "_freqLR"];
@@ -59,7 +66,7 @@ LOG("TFAR Stable Detected");
             str(_freqLR), // list of long range frequencies to set (including volume and stero info)
             true, // Set player's state to "alive"
             0, // set player's voice volume
-            TFAR_player_name, // The player's nickname
+            profileName, // The player's nickname
             waves, // The waves level
             0, // The terrainIntersectionCoefficient
             1.0, // The global volume
@@ -70,7 +77,7 @@ LOG("TFAR Stable Detected");
         DUMP("Listen To Radio: " + _result + " " + _request);
         TFAR_core_VehicleConfigCacheNamespace setVariable ["TFAR_fnc_sendFrequencyInfo_lastExec", diag_tickTime + 5];
 
-    }, 0.5] call CFUNC(addPerFrameHandler);
+    }, 0.3] call CFUNC(addPerFrameHandler);
 
     [QGVAR(radioFollowTargetChanged), {
         (_this select 0) params ["_unit"];
@@ -83,8 +90,8 @@ LOG("TFAR Stable Detected");
         (_this select 0) params ["_freq", "_tangentPressed", "_unit"];
         GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
-        _swFreqs = _swFreqs apply {[_x] call FUNC(getTFARFrequency)};
-        _lrFreqs = _lrFreqs apply {[_x] call FUNC(getTFARFrequency)};
+        _swFreqs = _swFreqs apply {[_x select 0] call FUNC(getTFARFrequency)};
+        _lrFreqs = _lrFreqs apply {[_x select 0] call FUNC(getTFARFrequency)};
 
         private _icon = "";
         if (_freq in _swFreqs) then {
@@ -121,17 +128,17 @@ private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange
 
     private _freq = switch (_radioType) do {
         case (0): {
-            if !(_additional) then {
-                format ["%1%2", _radio call TFAR_fnc_getSwFrequency, _radio call TFAR_fnc_getSwRadioCode];
-            } else {
+            if (_additional) then {
                 format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalSwChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getSwRadioCode];
+            } else {
+                format ["%1%2", _radio call TFAR_fnc_getSwFrequency, _radio call TFAR_fnc_getSwRadioCode];
             };
         };
         case (1): {
-            if !(_additional) then {
-                format ["%1%2", _radio call TFAR_fnc_getLrFrequency, _radio call TFAR_fnc_getLrRadioCode];
-            } else {
+            if (_additional) then {
                 format ["%1%2", [_radio, (_radio call TFAR_fnc_getAdditionalLrChannel) + 1] call TFAR_fnc_GetChannelFrequency, _radio call TFAR_fnc_getLrRadioCode];
+            } else {
+                format ["%1%2", _radio call TFAR_fnc_getLrFrequency, _radio call TFAR_fnc_getLrRadioCode];
             };
         };
         default {

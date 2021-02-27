@@ -23,8 +23,8 @@ publicVariable QGVAR(radioNamespace);
 [QGVAR(spectatorRadioInformationChanged), {
     (_this select 0) params ["_unit", "_data", "_oldData"];
 
-    _data = _data apply {[_x select 0] call FUNC(getTFARFrequency)};
-    _oldData = _oldData apply {[_x select 0] call FUNC(getTFARFrequency)};
+    _data = _data apply {[_x] call FUNC(getTFARFrequency)};
+    _oldData = _oldData apply {[_x] call FUNC(getTFARFrequency)};
 
     private _notChanged = _data arrayIntersect _oldData;
     _notChanged append ["No_SW_Radio", "No_LR_Radio"];
