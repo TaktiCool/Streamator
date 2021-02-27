@@ -179,15 +179,9 @@ private _fnc_onRenderThermalVision = {
     };
     true
 };
-// Thermal Vision Submenu Entries
-["Thermal (W)", "MAIN/VISION/THERMALMODES", DIK_F1, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 0] call FUNC(addMenuItem);
-["Thermal (B)", "MAIN/VISION/THERMALMODES", DIK_F2, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 1] call FUNC(addMenuItem);
-["Thermal (G)", "MAIN/VISION/THERMALMODES", DIK_F3, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 2] call FUNC(addMenuItem);
-["Thermal (BG)", "MAIN/VISION/THERMALMODES", DIK_F4, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 3] call FUNC(addMenuItem);
-["Thermal (R)", "MAIN/VISION/THERMALMODES", DIK_F5, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 4] call FUNC(addMenuItem);
-["Thermal (BR)", "MAIN/VISION/THERMALMODES", DIK_F6, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 5] call FUNC(addMenuItem);
-["Thermal (WR)", "MAIN/VISION/THERMALMODES", DIK_F7, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 6] call FUNC(addMenuItem);
-["Thermal (RGW)", "MAIN/VISION/THERMALMODES", DIK_F8, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, 7] call FUNC(addMenuItem);
+{
+    [_x, "MAIN/VISION/THERMALMODES", DIK_F1 + _forEachIndex, _fnc_setThermalMode, _fnc_onRenderThermalVision, false, _forEachIndex] call FUNC(addMenuItem);
+} forEach ["Thermal (W)", "Thermal (B)", "Thermal (G)", "Thermal (BG)", "Thermal (R)", "Thermal (BR)", "Thermal (WR)", "Thermal (RGW)"];
 
 // Minimap
 ["Minimap", "MAIN", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MINIMAP"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
@@ -223,7 +217,6 @@ private _fnc_onRenderThermalVision = {
     };
     true
 }] call FUNC(addMenuItem);
-
 
 if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
     // Radio
@@ -266,8 +259,10 @@ if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
     if (GVAR(ACRELoaded)) then {
         ["Radio Volume Down", "MAIN/RADIO", DIK_F3, {
             acre_sys_core_lowered = !acre_sys_core_lowered;
+            true;
         }, {
             _name = ["Radio Volume Down", "Radio Volume Up"] select acre_sys_core_lowered;
+            true
         }] call FUNC(addMenuItem);
     };
 
@@ -278,6 +273,7 @@ if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
         }, {
             _name = format ["Radio Volume Up (%1)", GVAR(TFARRadioVolume)];
             GVAR(TFARRadioVolume) != 10;
+            true
         }] call FUNC(addMenuItem);
 
         ["Radio Volume Down", "MAIN/RADIO", DIK_F4, {
@@ -286,6 +282,7 @@ if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
         }, {
             _name = format ["Radio Volume Down (%1)", GVAR(TFARRadioVolume)];
             GVAR(TFARRadioVolume) != 0;
+            true
         }] call FUNC(addMenuItem);
     };
 };
