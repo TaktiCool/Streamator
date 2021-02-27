@@ -20,8 +20,7 @@ check = [
 
 postbuild = [
     "!version_unset",
-    "!uncomment_isdev",
-    "!buildMissions"
+    "!uncomment_isdev"
 ]
 
 releasebuild = [
@@ -95,19 +94,5 @@ steps_windows = [
     "powershell -Command foreach ($f in 'addons/Streamator/macros.hpp') {(Get-Content $f) -replace '// #define ISDEV', '#define ISDEV' -join \"`n\" ^| Set-Content -NoNewline $f; Add-Content -NoNewline \"`n\" $f}",
 ]
 
-only_release = true
-show_output = true
-
-[scripts.buildMissions]
-steps_linux = [
-    "hemtt mission_generate TestMission_Acre.Stratis",
-    "hemtt mission_generate TestMission_TFAR.Stratis",
-    "hemtt mission_generate TestMission_Vanilla.Stratis",
-]
-steps_windows = [
-    "hemtt mission_generate TestMission_Acre.Stratis",
-    "hemtt mission_generate TestMission_TFAR.Stratis",
-    "hemtt mission_generate TestMission_Vanilla.Stratis",
-]
 only_release = true
 show_output = true
