@@ -75,7 +75,7 @@ GVAR(allMapMarkers) = [];
         markerPos _marker,
         markerDir _marker,
         getText ([(configFile >> "CfgMarkers" >> markerType _marker >> "icon"), (configFile >> "CfgMarkers" >> markerType _marker >> "texture")] select (isText (configFile >> "CfgMarkers" >> markerType _marker >> "texture"))),
-        [(configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA, side CLib_Player] select _forceSideColor
+        [(configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA, side (group CLib_Player)] select _forceSideColor
     ];
 }, QFUNC(collectMarkerData)] call CFUNC(compileFinal);
 

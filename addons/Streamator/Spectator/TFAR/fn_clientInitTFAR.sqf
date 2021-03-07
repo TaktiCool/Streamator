@@ -90,8 +90,12 @@ LOG("TFAR Stable Detected");
         (_this select 0) params ["_freq", "_tangentPressed", "_unit"];
         GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
-        _swFreqs = _swFreqs apply {[_x select 0] call FUNC(getTFARFrequency)};
-        _lrFreqs = _lrFreqs apply {[_x select 0] call FUNC(getTFARFrequency)};
+        _swFreqs = _swFreqs apply {
+             if (_x isEqualType "") then { _x } else { [_x select 0] call FUNC(getTFARFrequency) };
+        };
+        _lrFreqs = _lrFreqs apply {
+            if (_x isEqualType "") then { _x } else { [_x select 0] call FUNC(getTFARFrequency) };
+        };
 
         private _icon = "";
         if (_freq in _swFreqs) then {
@@ -109,7 +113,7 @@ LOG("TFAR Stable Detected");
     }] call CFUNC(addEventHandler);
 }] call CFUNC(addEventhandler);
 
-private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet", "OnFrequencyChangedFromUI"];
+private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange","OnLRchannelSet","OnSWchannelSet", "OnFrequencyChangedFromUI", "OnFrequencyChanged", "OnSpeakVolumeModifierReleased", "newLRSettingsAssigned"];
 
 {
     [format [QGVAR(%1), _x], _x, {
@@ -121,7 +125,7 @@ private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange
     [_x, {
         call FUNC(updateTFARFreq);
     }] call CFUNC(addEventhandler);
-} forEach ["vehicleChanged", "playerChanged", "Respawn"];
+} forEach ["vehicleChanged", "playerChanged", "Respawn", "playerInventoryChanged"];
 
 [QGVAR(OnTangent), "OnTangent", {
     params ["", "_radio", "_radioType", "_additional", "_tangentPressed"];

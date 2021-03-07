@@ -182,7 +182,7 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
         if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
             GVAR(ThrownTracked) pushBack [_projectile, time + 10];
         };
-        private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
+        private _color = +(GVAR(SideColorsArray) getVariable [str (side (group _unit)), [0.4, 0, 0.5, 1]]);
         private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
         if (_index > diag_fps) then {
             GVAR(BulletTracers) deleteAt 0;

@@ -13,7 +13,6 @@
     Returns:
     None
 */
-
 TFAR_Core_VehicleConfigCacheNamespace setVariable ["TFAR_fnc_radiosList_lastCache", 0];
 
 private _freqSW = [];
@@ -45,4 +44,8 @@ if (_freqSW isEqualTo []) then {
 if (_freqLR isEqualTo []) then {
     _freqLR pushBackUnique "No_LR_Radio";
 };
-CLib_Player setVariable [QGVAR(RadioInformation), [_freqSW, _freqLR], true];
+private _data = [_freqSW, _freqLR];
+private _oldData = CLib_Player getVariable [QGVAR(RadioInformation), []];
+if (_oldData isNotEqualTo _data) then {
+    CLib_Player setVariable [QGVAR(RadioInformation), _data, true];
+};
