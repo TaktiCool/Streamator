@@ -18,6 +18,5 @@ params [["_unit", objNull]];
 if !(_unit getVariable [QGVAR(isPlayer), false] || GVAR(RenderAIUnits)) exitWith { false };
 
 !(side _unit in [sideLogic, sideUnknown])
-&& alive _unit
 && simulationEnabled _unit
 && !isObjectHidden _unit
