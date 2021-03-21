@@ -89,7 +89,7 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
         };
         case !(isNull GVAR(CameraFollowTarget)): {
             private _target = vehicle GVAR(CameraFollowTarget);
-            _position = getPos _target;
+            _position = getPosVisual _target;
             _velocity = (speed _target) min 80;
         };
     };

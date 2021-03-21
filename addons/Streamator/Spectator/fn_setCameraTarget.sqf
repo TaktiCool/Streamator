@@ -79,6 +79,20 @@ if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
 };
 
+switch (_cameraMode) do {
+    case (CAMERAMODE_SHOULDER): {
+        GVAR(ShoulderOffset) = _unit call FUNC(GetDefaultShoulderOffset);
+    };
+    case CAMERAMODE_TOPDOWN: {
+        GVAR(TopDownOffset) = [0, 0, 100];
+        true;
+    };
+    case CAMERAMODE_ORBIT: {
+        GVAR(CameraRelPos) = [0, 10, 10];
+        true;
+    };
+};
+
 GVAR(CameraMode) = _cameraMode;
 QGVAR(updateMenu) call CFUNC(localEvent);
 [QGVAR(CameraModeChanged), GVAR(CameraMode)] call CFUNC(localEvent);

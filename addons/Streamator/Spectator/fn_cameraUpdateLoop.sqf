@@ -142,9 +142,9 @@ switch (_cameraMode) do {
         GVAR(CameraPos) = getPosASLVisual _cameraFollowTarget vectorAdd GVAR(CameraRelPos);
     };
     case CAMERAMODE_SHOULDER: { // Over Shoulder
-        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
+        GVAR(ShoulderOffset) = GVAR(ShoulderOffset) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPitch) = -(asin ([0, 1, 0] vectorDotProduct (vectorNormalized ((_cameraFollowTarget selectionPosition "camera") vectorDiff (_cameraFollowTarget selectionPosition "pelvis")))));
-        private _offset = +GVAR(ShoulderOffSet);
+        private _offset = +GVAR(ShoulderOffset);
         _offset set [1, (_offset select 1) * cos GVAR(CameraPitch) - (_offset select 2) * sin GVAR(CameraPitch)];
         _offset set [2, (_offset select 1) * sin GVAR(CameraPitch) + (_offset select 2) * cos GVAR(CameraPitch)];
         GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld ((_cameraFollowTarget selectionPosition "camera") vectorAdd _offset));

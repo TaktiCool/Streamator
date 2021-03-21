@@ -152,27 +152,14 @@ private _return = switch (_keyCode) do {
     case DIK_R: { // R
         if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
         if (isNull GVAR(CameraFollowTarget)) exitWith {false};
-        switch (GVAR(CameraMode)) do {
-            case CAMERAMODE_FOLLOW: {
-                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
-                true;
-            };
-            case CAMERAMODE_SHOULDER: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
-                true;
-            };
-            case CAMERAMODE_TOPDOWN: {
-                GVAR(TopDownOffset) = [0, 0, 100];
-                true;
-            };
-            case CAMERAMODE_ORBIT: {
-                GVAR(CameraRelPos) = [0, 10, 10];
-                true;
-            };
-            default {
-                false;
-            };
+        if (GVAR(CameraMode) == CAEMRAMODE_FREE) exitWith {
+            GVAR(Camera) cameraEffect ["internal", "back"];
+            switchCamera CLib_Player;
+            cameraEffectEnableHUD true;
+            true;
         };
+        [GVAR(CameraFollowTarget), GVAR(CameraMode)] call FUNC(setCameraTarget);
+        true;
     };
     case DIK_MULTIPLY: { // NUM *
         if (!isNull GVAR(CameraFollowTarget)) then {

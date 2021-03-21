@@ -141,7 +141,7 @@ GVAR(RadioInformationPrev) = [];
 GVAR(OverlayBulletTracer) = false;
 GVAR(BulletTracers) = [];
 GVAR(ThrownTracked) = [];
-GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
+GVAR(ShoulderOffset) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 
 GVAR(SyncObjectViewDistance) = true;
@@ -257,7 +257,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
         GVAR(CameraFOV),
         GVAR(CameraVision),
         GVAR(CameraSmoothingTime),
-        GVAR(ShoulderOffSet),
+        GVAR(ShoulderOffset),
         GVAR(CameraDirOffset),
         GVAR(CameraPitchOffset),
         GVAR(TopdownOffset)
@@ -421,6 +421,35 @@ if (GVAR(aceSpectatorLoaded)) then {
     } foreach _allUnits;
 
 }, QFUNC(UpdateValidUnits)] call CFUNC(CompileFinal);
+
+[{
+    params [["_target", objNull, [objNull]]];
+
+    // TODO: Find Offset Code for helicopters
+    switch (true) do {
+        case ((vehicle _target) isKindOf "Plane"): {
+            private _bb = 0 boundingBoxReal (driver (vehicle _target));
+            private _offset = [_bb select 1 select 0, _bb select 1 select 1,_bb select 1 select 2];
+            _offset
+        };
+        case ((vehicle _target) isKindOf "Helicopter"): {
+            private _bb = 0 boundingBoxReal (vehicle Streamator_Spectator_CameraFollowTarget);
+            [(_bb select 1 select 0)*0.3, -(_bb select 1 select 1)*0.1,(_bb select 1 select 2)*0.2];
+        };
+        case !((vehicle _target) isKindOf "CAManBase"): {
+            private _bb = 0 boundingBoxReal _target;
+            [(_bb select 1 select 0), (_bb select 0 select 1), 0];
+        };
+        case (_target isKindOf "CAManBase"): {
+            private _bb = 0 boundingBoxReal _target;
+            [(_bb select 1 select 0)/2.5, (_bb select 0 select 1)/2.5, (_bb select 0 select 1)/5];
+        };
+        default {
+            private _bb = 0 boundingBoxReal _target;
+            [(_bb select 1 select 0), (_bb select 0 select 1), 0];
+        };
+    };
+}, QFUNC(GetDefaultShoulderOffset)] call CFUNC(CompileFinal);
 
 [{
     call FUNC(UpdateValidUnits);

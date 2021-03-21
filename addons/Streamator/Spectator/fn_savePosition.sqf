@@ -26,7 +26,7 @@ private _element = [
     GVAR(CameraPitchOffset),
     GVAR(CameraFOV),
     GVAR(CameraVision),
-    GVAR(ShoulderOffSet),
+    GVAR(ShoulderOffset),
     GVAR(TopDownOffset)
 ];
 GVAR(PositionMemory) setVariable [str _slot, _element];
