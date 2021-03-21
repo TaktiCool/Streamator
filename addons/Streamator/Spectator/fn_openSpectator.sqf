@@ -96,7 +96,7 @@ GVAR(OverlayPlanningMode) = true;
 GVAR(OverlayPlayerMarkers) = true;
 GVAR(OverlayLaserTargets) = true;
 GVAR(RadioIconsVisible) = true;
-GVAR(showLaserCode) = true;
+GVAR(showLaserCode) = false;
 
 GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";
@@ -159,12 +159,21 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 [{
     GVAR(LaserTargets) = entities "LaserTarget";
     {
+        private _target = _x;
         private _text = "Laser Target";
-        private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
-        if (GVAR(aceLaserLoaded) && GVAR(showLaserCode)) then {
-            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
-        } else {
-            _text = format ["%2 - %2", _text, (allPlayers select _index) call CFUNC(name)];
+        private _2ndValueSet = false;
+        if (GVAR(showLaserCode)) then {
+            private _laserCode = _target getVariable "ace_laser_code";
+            if (!isNil "_laserCode") then {
+                _text = format ["%1 - %2", _text, _laserCode];
+                _2ndValueSet = true;
+            };
+        };
+        if !(_2ndValueSet) then {
+            private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
+            if (_index != -1) then {
+                _text = format ["%1 - %2", _text, (allPlayers select _index) call CFUNC(name)];
+            };
         };
         _x setVariable [QGVAR(LaserTargetText), _text];
     } forEach GVAR(LaserTargets);
@@ -402,7 +411,7 @@ if (GVAR(aceSpectatorLoaded)) then {
     }] call CBA_fnc_addEventHandler;
 };
 
-DFUNC(UpdateValidUnits) = {
+[{
     private _allUnits = allUnits;
     _allUnits append allUnitsUAV;
     _allUnits append allDead;
@@ -411,7 +420,7 @@ DFUNC(UpdateValidUnits) = {
         _x setVariable [QGVAR(isValidUnit), _x call FUNC(isValidUnit)];
     } foreach _allUnits;
 
-} call CFUNC(CompileFinal);
+}, QFUNC(UpdateValidUnits)] call CFUNC(CompileFinal);
 
 [{
     call FUNC(UpdateValidUnits);
