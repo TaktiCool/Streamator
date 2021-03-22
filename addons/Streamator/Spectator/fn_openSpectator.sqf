@@ -179,6 +179,13 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
     } forEach GVAR(LaserTargets);
 }, QFUNC(collectLaserTargets)] call CFUNC(compileFinal);
 
+[{
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    switchCamera CLib_Player;
+    cameraEffectEnableHUD true;
+    DUMP("Camera Fix Executed");
+    true;
+}, QFUNC(fixCamera)] call CFUNC(compileFinal);
 
 [{
     params ["_unit", "_weapon","_projectile", "_ammo"];
@@ -292,7 +299,6 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
     _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
 }, QFUNC(getNearByTransmitingPlayers)] call CFUNC(compileFinal);
 
-
 private _fnc_init = {
     if (GVAR(aceLoaded)) then {
         if (GVAR(aceHearingLoaded)) then {
@@ -346,9 +352,7 @@ private _fnc_init = {
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
     CLib_Player addEventHandler ["HandleDamage", {0}];
-    if (GVAR(aceSpectatorLoaded)) then {
-        [false] call ace_spectator_fnc_setSpectator;
-    };
+
     // Disable BI
     ["Terminate"] call BIS_fnc_EGSpectator;
 
@@ -375,6 +379,14 @@ private _fnc_init = {
     call FUNC(registerMenus);
     call FUNC(buildUI);
     [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
+
+    [{
+        [{
+            call FUNC(fixCamera);
+        }, {
+            (getPos GVAR(Camera)) distance (positionCameraToWorld [0,0,0]) > 2;
+        }] call CFUNC(waitUntil);
+    }, 0.5] call CFUNC(wait);
 
     QGVAR(updateMenu) call CFUNC(localEvent);
     QGVAR(spectatorOpened) call CFUNC(localEvent);

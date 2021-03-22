@@ -513,8 +513,6 @@ if (GVAR(aceLaserLoaded)) then {
 };
 
 ["Fix Camera", "MAIN/MISC", DIK_F12, {
-    GVAR(Camera) cameraEffect ["internal", "back"];
-    switchCamera CLib_Player;
-    cameraEffectEnableHUD true;
+    call FUNC(fixCamera);
     true
 }, {!GVAR(MapOpen)}] call FUNC(addMenuItem);

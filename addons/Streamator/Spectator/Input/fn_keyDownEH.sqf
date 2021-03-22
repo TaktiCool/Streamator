@@ -152,9 +152,7 @@ private _return = switch (_keyCode) do {
     case DIK_R: { // R
         if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
         if (GVAR(CameraMode) == CAMERAMODE_FREE) exitWith {
-            GVAR(Camera) cameraEffect ["internal", "back"];
-            switchCamera CLib_Player;
-            cameraEffectEnableHUD true;
+            call FUNC(fixCamera);
             true;
         };
         if (isNull GVAR(CameraFollowTarget)) exitWith {false};
