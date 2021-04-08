@@ -23,7 +23,7 @@ GVAR(currentMenuPath) = "MAIN";
 ["Group Markers", "MAIN/OVERLAYS", DIK_F1, {
     GVAR(OverlayGroupMarker) = !GVAR(OverlayGroupMarker);
     QGVAR(updateMenu) call CFUNC(localEvent);
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
     true
 }, {
     if (GVAR(OverlayGroupMarker)) then {
@@ -34,7 +34,7 @@ GVAR(currentMenuPath) = "MAIN";
 ["Unit Markers", "MAIN/OVERLAYS", DIK_F2, {
     GVAR(OverlayUnitMarker) = !GVAR(OverlayUnitMarker);
     QGVAR(updateMenu) call CFUNC(localEvent);
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
     true
 }, {
     if (GVAR(OverlayUnitMarker)) then {
@@ -82,7 +82,7 @@ GVAR(currentMenuPath) = "MAIN";
 ["Custom Markers", "MAIN/OVERLAYS", DIK_F7, {
     GVAR(OverlayCustomMarker) = !GVAR(OverlayCustomMarker);
     QGVAR(updateMenu) call CFUNC(localEvent);
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
     true
 }, {
     if (GVAR(OverlayCustomMarker)) then {
@@ -273,7 +273,6 @@ if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
         }, {
             _name = format ["Radio Volume Up (%1)", GVAR(TFARRadioVolume)];
             GVAR(TFARRadioVolume) != 10;
-            true
         }] call FUNC(addMenuItem);
 
         ["Radio Volume Down", "MAIN/RADIO", DIK_F4, {
@@ -282,7 +281,6 @@ if (GVAR(TFARLoaded) || GVAR(ACRELoaded)) then {
         }, {
             _name = format ["Radio Volume Down (%1)", GVAR(TFARRadioVolume)];
             GVAR(TFARRadioVolume) != 0;
-            true
         }] call FUNC(addMenuItem);
     };
 };
@@ -385,7 +383,7 @@ private _fnc_onRenderCrew = {
     GVAR(RenderAIUnits) = !GVAR(RenderAIUnits);
     profileNamespace setVariable [QGVAR(RenderAIUnits), GVAR(RenderAIUnits)];
     saveProfileNamespace;
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
     QEGVAR(UnitTracker,updateIcons) call CFUNC(localEvent);
     true
 }, {

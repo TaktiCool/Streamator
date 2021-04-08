@@ -81,7 +81,7 @@ if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
 
 switch (_cameraMode) do {
     case (CAMERAMODE_SHOULDER): {
-        GVAR(ShoulderOffset) = _unit call FUNC(GetDefaultShoulderOffset);
+        GVAR(ShoulderOffset) = _unit call FUNC(getDefaultShoulderOffset);
     };
     case CAMERAMODE_TOPDOWN: {
         GVAR(TopDownOffset) = [0, 0, 100];

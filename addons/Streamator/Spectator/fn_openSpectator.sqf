@@ -157,74 +157,11 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 }] call CFUNC(addEventhandler);
 
 [{
-    GVAR(LaserTargets) = entities "LaserTarget";
-    {
-        private _target = _x;
-        private _text = "Laser Target";
-        private _2ndValueSet = false;
-        if (GVAR(showLaserCode)) then {
-            private _laserCode = _target getVariable "ace_laser_code";
-            if (!isNil "_laserCode") then {
-                _text = format ["%1 - %2", _text, _laserCode];
-                _2ndValueSet = true;
-            };
-        };
-        if !(_2ndValueSet) then {
-            private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
-            if (_index != -1) then {
-                _text = format ["%1 - %2", _text, (allPlayers select _index) call CFUNC(name)];
-            };
-        };
-        _x setVariable [QGVAR(LaserTargetText), _text];
-    } forEach GVAR(LaserTargets);
-}, QFUNC(collectLaserTargets)] call CFUNC(compileFinal);
-
-[{
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
     DUMP("Camera Fix Executed");
-    true;
 }, QFUNC(fixCamera)] call CFUNC(compileFinal);
-
-[{
-    params ["_unit", "_weapon","_projectile", "_ammo"];
-    GVAR(lastUnitShooting) = _unit;
-    _unit setVariable [QGVAR(lastShot), time];
-    _unit setVariable [QGVAR(shotCount), (_unit getVariable [QGVAR(shotCount), 0]) + 1];
-    if (GVAR(OverlayBulletTracer)) then {
-        if (GVAR(BulletTracers) findIf {(_x select 2) isEqualTo _projectile} != -1) exitWith {};
-        if (isNull _projectile) then {
-            _projectile = (getPos _unit) nearestObject _ammo;
-        };
-        if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-            GVAR(ThrownTracked) pushBack [_projectile, time + 10];
-        };
-        private _color = +(GVAR(SideColorsArray) getVariable [str (side (group _unit)), [0.4, 0, 0.5, 1]]);
-        private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
-        if (_index > diag_fps) then {
-            GVAR(BulletTracers) deleteAt 0;
-        };
-    };
-}, QFUNC(firedEH)] call CFUNC(compileFinal);
-
-[{
-    params [["_direction", 0]];
-    private _bearings = ["N ","NE","E ","SE","S ","SW","W ","NW","N "] select round (_direction / 45);
-    private _text = switch (true) do {
-        case (_direction < 10): {
-            format ["%2 00%1°", floor _direction, _bearings];
-        };
-        case (_direction < 100): {
-            format ["%2 0%1°", floor _direction, _bearings];
-        };
-        default {
-            format ["%2 %1°", floor _direction, _bearings];
-        };
-    };
-
-    _text;
-}, QFUNC(formatDirection)] call CFUNC(compileFinal);
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
@@ -274,7 +211,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
 
 
 [{
-    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_Player});
+    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
@@ -287,17 +224,6 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
         call FUNC(updateSpectatorArray);
     }, 3] call CFUNC(wait);
 }, QFUNC(updateSpectatorArray)] call CFUNC(compileFinal);
-
-[{
-    private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
-    if !(isNull GVAR(CameraFollowTarget)) then {
-        _players append (GVAR(CameraFollowTarget) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange]);
-        _players pushBackUnique GVAR(CameraFollowTarget);
-        _players append (crew vehicle GVAR(CameraFollowTarget));
-    };
-    _players = _players arrayIntersect _players;
-    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
-}, QFUNC(getNearByTransmitingPlayers)] call CFUNC(compileFinal);
 
 private _fnc_init = {
     if (GVAR(aceLoaded)) then {
@@ -393,6 +319,17 @@ private _fnc_init = {
     [QGVAR(RegisterStreamator), CLib_Player] call CFUNC(serverEvent);
 };
 
+if (GVAR(aceSpectatorLoaded)) then {
+    ["ace_spectatorSet", {
+        params ["", "_player"];
+        if (_player isEqualTo player && !isNull GVAR(Camera)) then {
+            GVAR(Camera) cameraEffect ["internal", "back"];
+            switchCamera CLib_Player;
+            cameraEffectEnableHUD true;
+        };
+    }] call CBA_fnc_addEventHandler;
+};
+
 if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
     [_fnc_init, {
         (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
@@ -412,58 +349,7 @@ call FUNC(updateSpectatorArray);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
 
-if (GVAR(aceSpectatorLoaded)) then {
-    ["ace_spectatorSet", {
-        params ["", "_player"];
-        if (_player isEqualTo player && !isNull GVAR(Camera)) then {
-            GVAR(Camera) cameraEffect ["internal", "back"];
-            switchCamera CLib_Player;
-            cameraEffectEnableHUD true;
-        };
-    }] call CBA_fnc_addEventHandler;
-};
-
 [{
-    private _allUnits = allUnits;
-    _allUnits append allUnitsUAV;
-    _allUnits append allDead;
-    _allUnits = _allUnits arrayIntersect _allUnits;
-    {
-        _x setVariable [QGVAR(isValidUnit), _x call FUNC(isValidUnit)];
-    } foreach _allUnits;
-
-}, QFUNC(UpdateValidUnits)] call CFUNC(CompileFinal);
-
-[{
-    params [["_target", objNull, [objNull]]];
-
-    // TODO: Find Offset Code for helicopters
-    switch (true) do {
-        case ((vehicle _target) isKindOf "Plane"): {
-            private _bb = 0 boundingBoxReal (driver (vehicle _target));
-            private _offset = [_bb select 1 select 0, _bb select 1 select 1,_bb select 1 select 2];
-            _offset
-        };
-        case ((vehicle _target) isKindOf "Helicopter"): {
-            private _bb = 0 boundingBoxReal (vehicle Streamator_Spectator_CameraFollowTarget);
-            [(_bb select 1 select 0)*0.3, -(_bb select 1 select 1)*0.1,(_bb select 1 select 2)*0.2];
-        };
-        case !((vehicle _target) isKindOf "CAManBase"): {
-            private _bb = 0 boundingBoxReal _target;
-            [(_bb select 1 select 0), (_bb select 0 select 1), 0];
-        };
-        case (_target isKindOf "CAManBase"): {
-            private _bb = 0 boundingBoxReal _target;
-            [(_bb select 1 select 0)/2.5, (_bb select 0 select 1)/2.5, (_bb select 0 select 1)/5];
-        };
-        default {
-            private _bb = 0 boundingBoxReal _target;
-            [(_bb select 1 select 0), (_bb select 0 select 1), 0];
-        };
-    };
-}, QFUNC(GetDefaultShoulderOffset)] call CFUNC(CompileFinal);
-
-[{
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
 }, 1] call CFUNC(addPerframeHandler);
-call FUNC(UpdateValidUnits);
+call FUNC(updateValidUnits);

@@ -83,7 +83,7 @@
     #define USE_COMPRESSION(var) var && (!isNil QCGVAR(useCompression) && {CGVAR(useCompression)})
 #endif
 
-#define SCRIPTSCOPENAME (_fnc_scriptName + "_Main")
 #define FUNCTIONNAME _fnc_scriptName
+#define SCRIPTSCOPENAME (FUNCTIONNAME + "_Main")
 
 #define RELDIR(pos1,pos2) (((pos1 getRelDir pos2) + 180) % 360 - 180)

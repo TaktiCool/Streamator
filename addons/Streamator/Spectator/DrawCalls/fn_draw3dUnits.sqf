@@ -48,7 +48,7 @@ private _objViewDistance = getObjectViewDistance select 0;
                 default {
                     private _type = _x getVariable QGVAR(unitType);
                     if (isNil "_type" || { (_type select 1) <= time }) then {
-                        _type = [_x call FUNC(getUnitType), time + 60];
+                        _type = [_x call FUNC(getUnitType), time + 15 + random 5];
                         _x setVariable [QGVAR(unitType), _type];
                     };
                     _type select 0
@@ -64,7 +64,7 @@ private _objViewDistance = getObjectViewDistance select 0;
             private _pos = _headPosition vectorAdd [0, 0, (0.4 max 0.25*((_distance/2)^0.8)) min 1.5];
 
             private _scale = 1 + 0.4 * (1 - _shotFactor);
-            if (_x == GVAR(CursorTarget) && { _x != GVAR(CameraFollowTarget) }) then {
+            if (_x isEqualTo GVAR(CursorTarget) && { _x isNotEqualTo GVAR(CameraFollowTarget) }) then {
                 drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, _size * _scale * 1.4, _size * _scale * 1.4, 0];
             };
             drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, _size * _scale, _size * _scale, 0];
@@ -77,7 +77,7 @@ private _objViewDistance = getObjectViewDistance select 0;
                 _sideColor set [3, 0.4];
                 private _scale = 1 + 0.4 * (1 - _shotFactor);
                 private _pos = (_x modelToWorldVisual (_x selectionPosition "pelvis"));
-                if (_x == GVAR(CursorTarget) && { _x != GVAR(CameraFollowTarget) }) then {
+                if (_x == GVAR(CursorTarget) && { _x isNotEqualTo GVAR(CameraFollowTarget) }) then {
                     drawIcon3D ["a3\ui_f\data\igui\cfg\cursors\selectover_ca.paa", [1,1,1,1], _pos, 0.4*1.4, 0.4*1.4, 0];
                 };
                 drawIcon3D ["a3\ui_f_curator\data\cfgcurator\entity_selected_ca.paa", _sideColor, _pos, 0.4*_scale, 0.4*_scale, 0];

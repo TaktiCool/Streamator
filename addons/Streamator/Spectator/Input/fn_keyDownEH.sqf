@@ -84,7 +84,7 @@ private _return = switch (_keyCode) do {
     case DIK_BACKSPACE: { // BACKSPACE
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
+        call FUNC(updateValidUnits);
         true;
     };
     case DIK_M: { // M: Map

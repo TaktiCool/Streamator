@@ -27,6 +27,7 @@ class CfgCLibModules {
                 FNC(drawMarkers);
                 FNC(drawMeasureDistance);
                 FNC(drawPlanning);
+                FNC(updateAndDrawBulletTracer);
             };
             MODULE(TFAR) {
                 FNC(clientInitTFAR);
@@ -53,6 +54,12 @@ class CfgCLibModules {
                 FNC(mouseMovingEH);
                 FNC(mouseWheelEH);
             };
+            MODULE(Marker) {
+                FNC(bindMarkerEH);
+                FNC(clientInitMarker);
+                FNC(collectMarkerData);
+                FNC(updateLocalMapMarkers);
+            };
             MODULE(Menu) {
                 FNC(addMenuItem);
                 FNC(executeEntry);
@@ -66,8 +73,13 @@ class CfgCLibModules {
             };
             FNC(cameraUpdateLoop);
             FNC(clientInit);
+            FNC(collectLaserTargets);
+            FNC(firedEH);
+            FNC(formatDirection);
             FNC(getDefaultIcon);
+            FNC(getDefaultShoulderOffset);
             FNC(getMousePositionInWorld);
+            FNC(getNearByTransmitingPlayers);
             FNC(getUnitType);
             FNC(isValidUnit);
             FNC(openSpectator);
@@ -76,8 +88,8 @@ class CfgCLibModules {
             FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
-            FNC(updateAndDrawBulletTracer);
             FNC(updatePlanningMarkers);
+            FNC(updateValidUnits);
         };
 
         // UnitTracker

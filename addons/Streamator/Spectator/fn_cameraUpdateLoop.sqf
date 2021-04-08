@@ -112,7 +112,7 @@ if (_cameraFollowTarget call Streamator_fnc_isSpectator && { _cameraMode > CAMER
 };
 
 
-if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) != cameraOn }) exitWith {
+if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) isNotEqualTo cameraOn }) exitWith {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
@@ -162,7 +162,7 @@ switch (_cameraMode) do {
     case CAMERAMODE_FPS: { // FPS
         if !(cameraOn in [CLib_Player, GVAR(Camera)]) then {
             /*
-            if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget != cameraOn) then {
+            if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget isNotEqualTo cameraOn) then {
                 GVAR(CameraFollowTarget) = cameraOn;
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);
