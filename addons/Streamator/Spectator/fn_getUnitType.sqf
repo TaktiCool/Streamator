@@ -25,7 +25,8 @@ if !(isNil "_customIcon") exitWith {
 
 
 if !(isNull objectParent _unit) then {
-    private _crewInfo = ((fullCrew (vehicle _unit)) select {_x select 0 isEqualTo _unit}) select 0;
+    private _vehicle = vehicle _unit;
+    private _crewInfo = ((fullCrew _vehicle) select {(_x select 0) isEqualTo _unit}) select 0;
     _crewInfo params ["", "_role", "", "", "_isTurret"];
 
     if (_role == "driver") then {

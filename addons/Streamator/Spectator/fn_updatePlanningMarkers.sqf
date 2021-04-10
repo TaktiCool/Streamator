@@ -13,7 +13,7 @@
     Returns:
     None
 */
-params ["_serverTime"];
+params ["_serverTime", ["_cameraPosition", [0, 0, 0]]];
 
 if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) then {
     (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
@@ -62,7 +62,7 @@ if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) t
         };
     };
     {
-        _x params ["_time", "_pos"];
+        _x params ["_time"];
 
         private _alpha = 1 - (_serverTime - _time) max 0;
         if (_alpha == 0) then {

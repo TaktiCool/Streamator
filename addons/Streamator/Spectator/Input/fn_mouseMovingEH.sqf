@@ -28,10 +28,7 @@ if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
         GVAR(MeasureDistancePositions) set [1, _endPosition];
     };
     if (GVAR(PlanningModeDrawing)) exitWith {
-        private _endPosition = screenToWorld getMousePosition;
-        private _startPosition = positionCameraToWorld [0, 0, 0];
         private _endPosition = call FUNC(getMousePositionInWorld);
-
         [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
     };
 

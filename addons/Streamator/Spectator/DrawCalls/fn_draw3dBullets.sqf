@@ -15,7 +15,7 @@
 */
 
 [{
-    (_this select 0) params ["_color", "_startPos", "_projectile", ["_segments", []]];
+    (_this select 0) params ["_color", "", "_projectile", ["_segments", []]];
     if ((_projectile distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
         private _segmentCount = count _segments - 1;
         {
@@ -24,7 +24,10 @@
         } forEach _segments;
     };
 }, {
-    if (((_this select 0) distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
-        drawIcon3D ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual (_this select 0), 0.6, 0.6, 0, ""];
+    params ["_projectile"];
+    if ((_projectile distance (positionCameraToWorld [0, 0, 0])) < viewDistance && {
+        (lineIntersectsSurfaces [getPosASL _projectile, AGLToASL positionCameraToWorld [0,0,0]]) isEqualTo []
+    }) then {
+        drawIcon3D ["A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_connect_ca.paa", [1,0,0,1], getPosVisual _projectile, 0.6, 0.6, 0, ""];
     };
 }] call FUNC(updateAndDrawBulletTracer);

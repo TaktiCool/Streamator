@@ -17,7 +17,7 @@ params ["_map"];
 
 [{
     _this params ["_data", "_map"];
-    _data params ["_color", "_startPos", "_projectile", ["_segments", []]];
+    _data params ["_color", "", "_projectile", ["_segments", []]];
     private _segmentCount = count _segments - 1;
     {
         _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];

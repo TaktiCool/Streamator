@@ -27,7 +27,7 @@ if (_path == "MAIN") then {
 };
 
 {
-    _x params ["_dik", "_name", "_onUse", "_onRender", "_hasSubmenus", "_args"];
+    _x params ["_dik", "_name", "", "_onRender", "_hasSubmenus", "_args"];
     private _color = "#ffffff";
     private _style = "<t color='%3'>[%1] %2 </t>";
     if !(_args call _onRender) then {
