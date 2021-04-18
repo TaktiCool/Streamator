@@ -36,13 +36,15 @@ private _objViewDistance = getObjectViewDistance select 0;
             private _nametagVisibility = 1 - (((_screenPos distance [0.5, 0.5])/_viewRecBase)^2 min 1);
             private _alpha = (0.3+0.7*_visibility)*(0.5+0.5*_nametagVisibility);
             if (_alpha == 0) exitWith {};
-
-
+            private _side = side (group _x);
             private _iconType = switch (lifeState _x) do {
                 case ("INCAPACITATED"): {
                     ["\A3\ui_f\data\igui\cfg\revive\overlayicons\u100_ca.paa", 1.75];
                 };
+                case ("DEAD-RESPAWN");
+                case ("DEAD-SWITCHING");
                 case ("DEAD"): {
+                    _side = sideUnknown;
                     ["\a3\ui_f_curator\data\cfgmarkers\kia_ca.paa", 1];
                 };
                 default {
@@ -56,7 +58,9 @@ private _objViewDistance = getObjectViewDistance select 0;
             };
             _iconType params ["_icon", "_iconRelSize"];
 
-            private _sideColor = +(GVAR(SideColorsArray) getVariable [str side (group _x), [1, 1, 1, 1]]);
+
+            private _sideColor = +(GVAR(SideColorsArray) getVariable [str _side, [1, 1, 1, 1]]);
+
             private _shotFactor = 2 * (time - (_x getVariable [QGVAR(lastShot), 0])) min 1;
             _sideColor set [3, 0.7 + 0.3 * _shotFactor];
             _sideColor set [3, _alpha];
