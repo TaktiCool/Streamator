@@ -74,7 +74,7 @@ private _return = switch (_keyCode) do {
             if (GVAR(InputGuessIndex) >= count GVAR(InputGuess)) then {
                 GVAR(InputGuessIndex) = 0;
             };
-            [QGVAR(updateMenu)] call CFUNC(localEvent);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             true
         };
         GVAR(CameraFOV) = 0.75;
@@ -206,7 +206,7 @@ private _return = switch (_keyCode) do {
     case DIK_0: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_ctrl) then {
-            [_keyCode] call FUNC(savePosition);
+            _keyCode call FUNC(savePosition);
         } else {
             [_keyCode, _alt] call FUNC(restorePosition);
         };

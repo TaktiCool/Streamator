@@ -19,7 +19,7 @@ private _color = EGVAR(Spectator,SideColorsArray) getVariable [str side _group, 
 
 private _groupMapIcon = _group getVariable QEGVAR(Spectator,GroupIcon);
 if (isNil "_groupMapIcon") then {
-    _groupMapIcon = [side _group] call EFUNC(Spectator,getDefaultIcon);
+    _groupMapIcon = (side _group) call EFUNC(Spectator,getDefaultIcon);
     _group setVariable [QEGVAR(Spectator,GroupIcon), _groupMapIcon];
 };
 
@@ -116,7 +116,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
         private _squadUnits = "";
         private _unitCount = {
             private _unitType = _x call EFUNC(Spectator,getUnitType);
-            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _unitType select 0, [_x] call CFUNC(name)];
+            _squadUnits = _squadUnits + format ["<img size='0.7' color='#ffffff' image='%1'/> %2<br />", _unitType select 0, _x call CFUNC(name)];
             true;
         } count _units;
 

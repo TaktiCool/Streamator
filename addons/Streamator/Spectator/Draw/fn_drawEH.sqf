@@ -30,7 +30,7 @@ if (GVAR(OverlayLaserTargets)) then {
 };
 
 if (GVAR(OverlayBulletTracer)) then {
-    [_map] call FUNC(drawBullets);
+    _map call FUNC(drawBullets);
 };
 
 if (GVAR(OverlayPlayerMarkers)) then {
@@ -42,5 +42,5 @@ if  (GVAR(MeasureDistance) && {(GVAR(MeasureDistancePositions) isNotEqualTo [])}
 };
 
 if (GVAR(aceMapGesturesLoaded)) then {
-    [_map] call FUNC(drawAceMapGestures);
+    _map call FUNC(drawAceMapGestures);
 };

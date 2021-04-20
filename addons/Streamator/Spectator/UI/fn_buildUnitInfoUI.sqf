@@ -253,14 +253,17 @@ private _unitInfoAllCtrls = [
     private _squadName = "";
     private _squadParams = squadParams _unit;
     if (_squadParams isEqualTo []) then {
-        private _image = [_unit] call BIS_fnc_getUnitInsignia;
-        if (_image != "") then {
+        private _image = _unit call BIS_fnc_getUnitInsignia;
+        if (_image != "" && fileExists _image) then {
             _squadImage = _image;
         };
     } else {
         _squadParams = _squadParams select 0;
         _squadName = toUpper (_squadParams select 1);
-        private _squadImage = _squadParams select 4;
+        private _image = _squadParams select 4;
+        if (_image != "" && fileExists _image) then {
+            _squadImage = _image;
+        };
     };
 
     _ctrlSquadName ctrlSetText _squadName;
@@ -270,17 +273,7 @@ private _unitInfoAllCtrls = [
     _ctrlSquadPicture ctrlCommit 0;
 
     // set health
-    private _health = 0;
-    private _damages = getAllHitPointsDamage _unit;
-    if (_damages isEqualTo []) then {
-        _health = damage _unit;
-    } else {
-        private _c = {
-            _health = _health + _x;
-            true
-        } count (_damages select 2);
-        _health = _health/_c;
-    };
+    private _health = damage _unit;
     _ctrlHealthValue ctrlSetText format ["%1", round ((1 - _health) * 100)];
     _ctrlHealthValue ctrlCommit 0;
     private _healthIcons = [];
@@ -302,9 +295,7 @@ private _unitInfoAllCtrls = [
                 _healthIcons pushBack "\A3\ui_f\data\IGUI\Cfg\Revive\overlayIcons\u100_ca.paa";
             };
             default {
-                if (_healthIcons isEqualTo []) then {
-                    _healthIcons pushBack "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
-                };
+                _healthIcons pushBack "\A3\Ui_f\Data\igui\cfg\holdactions\holdaction_revive_ca.paa";
             };
         };
     };

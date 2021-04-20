@@ -17,7 +17,7 @@ GVAR(ACRELoaded) = isClass (configFile >> "CfgPatches" >> "acre_main");
 if !(GVAR(ACRELoaded)) exitWith {};
 LOG("ACRE2 Detected");
 [QGVAR(spectatorOpened), {
-    [true] call acre_api_fnc_setSpectator;
+    true call acre_api_fnc_setSpectator;
 
     GVAR(CurrentRadioList) = [];
 
@@ -27,7 +27,7 @@ LOG("ACRE2 Detected");
 
     [{
         if (!ACRE_IS_SPECTATOR) then {
-            [true] call acre_api_fnc_setSpectator;
+            true call acre_api_fnc_setSpectator;
         };
 
         private _targetRadios = GVAR(RadioFollowTarget) getVariable [QGVAR(ACRE_Radios), []];
@@ -38,7 +38,7 @@ LOG("ACRE2 Detected");
             } forEach ([GVAR(RadioFollowTarget)] call acre_api_fnc_getVehicleRacks);
         };
         if (_targetRadios isEqualTo GVAR(CurrentRadioList)) exitWith {};
-        [CLib_Player] call acre_api_fnc_removeAllSpectatorRadios;
+        CLib_Player call acre_api_fnc_removeAllSpectatorRadios;
         {
             [CLib_Player, _x] call acre_api_fnc_addSpectatorRadio;
         } forEach _targetRadios;

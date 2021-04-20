@@ -38,7 +38,7 @@ _allGroups = _allGroups arrayIntersect _allGroups;
         if (_alpha == 0) exitWith {};
         private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
         if (isNil "_groupMapIcon") then {
-            _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
+            _groupMapIcon = (side _x) call FUNC(getDefaultIcon);
             _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
         };
         private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);

@@ -40,10 +40,6 @@ GVAR(aceAdvancedThrowingLoaded) = isClass (configFile >> "CfgPatches" >> "ace_ad
     }];
 }] call CFUNC(addEventhandler);
 
-["terminateSpectator", {
-    call FUNC(closeSpectator);
-}] call CFUNC(addEventhandler);
-
 ["initializeSpectator", {
     call FUNC(openSpectator);
 }] call CFUNC(addEventhandler);

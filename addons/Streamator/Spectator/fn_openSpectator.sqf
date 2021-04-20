@@ -280,7 +280,7 @@ private _fnc_init = {
     CLib_Player addEventHandler ["HandleDamage", {0}];
 
     // Disable BI
-    ["Terminate"] call BIS_fnc_EGSpectator;
+    "Terminate" call BIS_fnc_EGSpectator;
 
     (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];

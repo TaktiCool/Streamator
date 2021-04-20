@@ -21,7 +21,7 @@ if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
 
     if (_target isEqualType objNull) then {
-        [_target] call FUNC(setCameraTarget);
+        _target call FUNC(setCameraTarget);
 
         GVAR(CameraRelPos) set [2, 0];
         GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply _targetDistance;

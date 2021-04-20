@@ -91,10 +91,10 @@ LOG("TFAR Stable Detected");
         GVAR(RadioInformationPrev) params [["_swFreqs", []], ["_lrFreqs", []]];
 
         _swFreqs = _swFreqs apply {
-             if (_x isEqualType "") then { _x } else { [_x select 0] call FUNC(getTFARFrequency) };
+             if (_x isEqualType "") then { _x } else { _x select 0 call FUNC(getTFARFrequency) };
         };
         _lrFreqs = _lrFreqs apply {
-            if (_x isEqualType "") then { _x } else { [_x select 0] call FUNC(getTFARFrequency) };
+            if (_x isEqualType "") then { _x } else { _x select 0 call FUNC(getTFARFrequency) };
         };
 
         private _icon = "";
