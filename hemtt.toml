@@ -4,7 +4,7 @@ modname = "Streamator"
 prefix = ""
 author = "Streamator Team"
 sig_version = 3
-version = "0.4.0.352"
+version = "0.5.0.369"
 reuse_private_key = false
 files = [
     "mod.cpp",
