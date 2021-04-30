@@ -15,7 +15,7 @@
 */
 params ["_cameraPosition", "_fov"];
 private _serverTime = [time, serverTime] select isMultiplayer;
-_serverTime call FUNC(updatePlanningMarkers);
+[_serverTime, _cameraPosition] call FUNC(updatePlanningMarkers);
 
 private _sqrtFOV = sqrt(_fov);
 

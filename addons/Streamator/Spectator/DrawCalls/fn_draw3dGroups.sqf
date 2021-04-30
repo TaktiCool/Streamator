@@ -24,7 +24,7 @@ _allGroups append (allUnitsUAV apply { group _x });
 _allGroups = _allGroups arrayIntersect _allGroups;
 {
     private _leader = leader _x;
-    if (_leader getVariable [QGVAR(isValidUnit), false]) then {
+    if (_leader getVariable [QGVAR(isValidUnit), false] && alive _leader) then {
         private _distance = _cameraPosition distance _leader;
         _distance = _distance / _fov;
 
@@ -38,7 +38,7 @@ _allGroups = _allGroups arrayIntersect _allGroups;
         if (_alpha == 0) exitWith {};
         private _groupMapIcon = _x getVariable QGVAR(GroupIcon);
         if (isNil "_groupMapIcon") then {
-            _groupMapIcon = [side _x] call FUNC(getDefaultIcon);
+            _groupMapIcon = (side _x) call FUNC(getDefaultIcon);
             _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
         };
         private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);

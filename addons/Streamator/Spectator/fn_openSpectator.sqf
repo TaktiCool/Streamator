@@ -20,6 +20,7 @@ if (isNil QGVAR(SideColorsArray)) then {
     GVAR(SideColorsArray) setVariable [str east, [0.6, 0, 0, 1]];
     GVAR(SideColorsArray) setVariable [str independent, [0, 0.5, 0, 1]];
     GVAR(SideColorsArray) setVariable [str civilian, [0.4, 0, 0.5, 1]];
+    GVAR(SideColorsArray) setVariable [str sideUnknown, [0.3, 0.3, 0.3, 1]];
 };
 
 if (isNil QGVAR(SideColorsString)) then {
@@ -28,6 +29,7 @@ if (isNil QGVAR(SideColorsString)) then {
     GVAR(SideColorsString) setVariable [str east, "#CC3333"];
     GVAR(SideColorsString) setVariable [str independent, "#33CC33"];
     GVAR(SideColorsString) setVariable [str civilian, "#CC33CC"];
+    GVAR(SideColorsString) setVariable [str sideUnknown, "#4C4C4C"];
 };
 
 if (isNil QGVAR(PositionMemory)) then {
@@ -94,7 +96,7 @@ GVAR(OverlayPlanningMode) = true;
 GVAR(OverlayPlayerMarkers) = true;
 GVAR(OverlayLaserTargets) = true;
 GVAR(RadioIconsVisible) = true;
-GVAR(showLaserCode) = true;
+GVAR(showLaserCode) = false;
 
 GVAR(InputMode) = INPUTMODE_MOVE;
 GVAR(InputScratchpad) = "";
@@ -139,7 +141,7 @@ GVAR(RadioInformationPrev) = [];
 GVAR(OverlayBulletTracer) = false;
 GVAR(BulletTracers) = [];
 GVAR(ThrownTracked) = [];
-GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
+GVAR(ShoulderOffset) = [0.4,-0.5,-0.3];
 GVAR(TopDownOffset) = [0, 0, 100];
 
 GVAR(SyncObjectViewDistance) = true;
@@ -155,58 +157,11 @@ if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime))))
 }] call CFUNC(addEventhandler);
 
 [{
-    GVAR(LaserTargets) = entities "LaserTarget";
-    {
-        private _text = "Laser Target";
-        private _index = allPlayers findIf {(laserTarget _x) isEqualTo _target};
-        if (GVAR(aceLaserLoaded) && GVAR(showLaserCode)) then {
-            _text = format ["%1 - %2", _text, _target getVariable ["ace_laser_code", ACE_DEFAULT_LASER_CODE]];
-        } else {
-            _text = format ["%2 - %2", _text, (allPlayers select _index) call CFUNC(name)];
-        };
-        _x setVariable [QGVAR(LaserTargetText), _text];
-    } forEach GVAR(LaserTargets);
-}, QFUNC(collectLaserTargets)] call CFUNC(compileFinal);
-
-
-[{
-    params ["_unit", "_weapon","_projectile", "_ammo"];
-    GVAR(lastUnitShooting) = _unit;
-    _unit setVariable [QGVAR(lastShot), time];
-    _unit setVariable [QGVAR(shotCount), (_unit getVariable [QGVAR(shotCount), 0]) + 1];
-    if (GVAR(OverlayBulletTracer)) then {
-        if (GVAR(BulletTracers) findIf {(_x select 2) isEqualTo _projectile} != -1) exitWith {};
-        if (isNull _projectile) then {
-            _projectile = (getPos _unit) nearestObject _ammo;
-        };
-        if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
-            GVAR(ThrownTracked) pushBack [_projectile, time + 10];
-        };
-        private _color = +(GVAR(SideColorsArray) getVariable [str (side _unit), [0.4, 0, 0.5, 1]]);
-        private _index = GVAR(BulletTracers) pushBack [_color, getPos _projectile, _projectile];
-        if (_index > diag_fps) then {
-            GVAR(BulletTracers) deleteAt 0;
-        };
-    };
-}, QFUNC(firedEH)] call CFUNC(compileFinal);
-
-[{
-    params [["_direction", 0]];
-    private _bearings = ["N ","NE","E ","SE","S ","SW","W ","NW","N "] select round (_direction / 45);
-    private _text = switch (true) do {
-        case (_direction < 10): {
-            format ["%2 00%1°", floor _direction, _bearings];
-        };
-        case (_direction < 100): {
-            format ["%2 0%1°", floor _direction, _bearings];
-        };
-        default {
-            format ["%2 %1°", floor _direction, _bearings];
-        };
-    };
-
-    _text;
-}, QFUNC(formatDirection)] call CFUNC(compileFinal);
+    GVAR(Camera) cameraEffect ["internal", "back"];
+    switchCamera CLib_Player;
+    cameraEffectEnableHUD true;
+    DUMP("Camera Fix Executed");
+}, QFUNC(fixCamera)] call CFUNC(compileFinal);
 
 ["entityCreated", {
     (_this select 0) params ["_target"];
@@ -246,7 +201,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
         GVAR(CameraFOV),
         GVAR(CameraVision),
         GVAR(CameraSmoothingTime),
-        GVAR(ShoulderOffSet),
+        GVAR(ShoulderOffset),
         GVAR(CameraDirOffset),
         GVAR(CameraPitchOffset),
         GVAR(TopdownOffset)
@@ -256,7 +211,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
 
 
 [{
-    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x != CLib_Player});
+    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
@@ -269,18 +224,6 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
         call FUNC(updateSpectatorArray);
     }, 3] call CFUNC(wait);
 }, QFUNC(updateSpectatorArray)] call CFUNC(compileFinal);
-
-[{
-    private _players = (positionCameraToWorld [0, 0, 0]) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange];
-    if !(isNull GVAR(CameraFollowTarget)) then {
-        _players append (GVAR(CameraFollowTarget) nearEntities [["CAMAnBase"], ace_map_gestures_maxRange]);
-        _players pushBackUnique GVAR(CameraFollowTarget);
-        _players append (crew vehicle GVAR(CameraFollowTarget));
-    };
-    _players = _players arrayIntersect _players;
-    _players select { alive _x && { !((lifeState _x) in ["DEAD-RESPAWN","DEAD-SWITCHING","DEAD","INCAPACITATED","INJURED"]) } };
-}, QFUNC(getNearByTransmitingPlayers)] call CFUNC(compileFinal);
-
 
 private _fnc_init = {
     if (GVAR(aceLoaded)) then {
@@ -335,11 +278,9 @@ private _fnc_init = {
     ["hideObject", [CLib_Player, true]] call CFUNC(serverEvent);
     CLib_Player allowDamage false;
     CLib_Player addEventHandler ["HandleDamage", {0}];
-    if (GVAR(aceSpectatorLoaded)) then {
-        [false] call ace_spectator_fnc_setSpectator;
-    };
+
     // Disable BI
-    ["Terminate"] call BIS_fnc_EGSpectator;
+    "Terminate" call BIS_fnc_EGSpectator;
 
     (findDisplay 46) displayAddEventHandler ["MouseMoving", {_this call FUNC(mouseMovingEH)}];
     (findDisplay 46) displayAddEventHandler ["KeyDown", {_this call FUNC(keyDownEH)}];
@@ -365,9 +306,28 @@ private _fnc_init = {
     call FUNC(buildUI);
     [FUNC(cameraUpdateLoop), 0] call CFUNC(addPerFrameHandler);
 
+    [{
+        [{
+            call FUNC(fixCamera);
+        }, {
+            (getPos GVAR(Camera)) distance (positionCameraToWorld [0,0,0]) > 2;
+        }] call CFUNC(waitUntil);
+    }, 0.5] call CFUNC(wait);
+
     QGVAR(updateMenu) call CFUNC(localEvent);
     QGVAR(spectatorOpened) call CFUNC(localEvent);
     [QGVAR(RegisterStreamator), CLib_Player] call CFUNC(serverEvent);
+};
+
+if (GVAR(aceSpectatorLoaded)) then {
+    ["ace_spectatorSet", {
+        params ["", "_player"];
+        if (_player isEqualTo player && !isNull GVAR(Camera)) then {
+            GVAR(Camera) cameraEffect ["internal", "back"];
+            switchCamera CLib_Player;
+            cameraEffectEnableHUD true;
+        };
+    }] call CBA_fnc_addEventHandler;
 };
 
 if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
@@ -389,29 +349,7 @@ call FUNC(updateSpectatorArray);
     }]]
 ] call CFUNC(addMapGraphicsGroup);
 
-if (GVAR(aceSpectatorLoaded)) then {
-    ["ace_spectatorSet", {
-        params ["", "_player"];
-        if (_player isEqualTo player && !isNull GVAR(Camera)) then {
-            GVAR(Camera) cameraEffect ["internal", "back"];
-            switchCamera CLib_Player;
-            cameraEffectEnableHUD true;
-        };
-    }] call CBA_fnc_addEventHandler;
-};
-
-DFUNC(UpdateValidUnits) = {
-    private _allUnits = allUnits;
-    _allUnits append allUnitsUAV;
-    _allUnits append allDead;
-    _allUnits = _allUnits arrayIntersect _allUnits;
-    {
-        _x setVariable [QGVAR(isValidUnit), _x call FUNC(isValidUnit)];
-    } foreach _allUnits;
-
-} call CFUNC(CompileFinal);
-
 [{
-    call FUNC(UpdateValidUnits);
+    call FUNC(updateValidUnits);
 }, 1] call CFUNC(addPerframeHandler);
-call FUNC(UpdateValidUnits);
+call FUNC(updateValidUnits);

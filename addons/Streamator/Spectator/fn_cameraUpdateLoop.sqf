@@ -112,7 +112,7 @@ if (_cameraFollowTarget call Streamator_fnc_isSpectator && { _cameraMode > CAMER
 };
 
 
-if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) != cameraOn }) exitWith {
+if (GVAR(CameraInFirstPerson) && { _cameraMode == CAMERAMODE_FPS } && { (vehicle _cameraFollowTarget) isNotEqualTo cameraOn }) exitWith {
     GVAR(Camera) cameraEffect ["internal", "back"];
     switchCamera CLib_Player;
     cameraEffectEnableHUD true;
@@ -142,9 +142,9 @@ switch (_cameraMode) do {
         GVAR(CameraPos) = getPosASLVisual _cameraFollowTarget vectorAdd GVAR(CameraRelPos);
     };
     case CAMERAMODE_SHOULDER: { // Over Shoulder
-        GVAR(ShoulderOffSet) = GVAR(ShoulderOffSet) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
+        GVAR(ShoulderOffset) = GVAR(ShoulderOffset) vectorAdd (_velocity vectorMultiply (0.25 * GVAR(CameraSpeed) * diag_deltaTime));
         GVAR(CameraPitch) = -(asin ([0, 1, 0] vectorDotProduct (vectorNormalized ((_cameraFollowTarget selectionPosition "camera") vectorDiff (_cameraFollowTarget selectionPosition "pelvis")))));
-        private _offset = +GVAR(ShoulderOffSet);
+        private _offset = +GVAR(ShoulderOffset);
         _offset set [1, (_offset select 1) * cos GVAR(CameraPitch) - (_offset select 2) * sin GVAR(CameraPitch)];
         _offset set [2, (_offset select 1) * sin GVAR(CameraPitch) + (_offset select 2) * cos GVAR(CameraPitch)];
         GVAR(CameraPos) = (_cameraFollowTarget modelToWorldVisualWorld ((_cameraFollowTarget selectionPosition "camera") vectorAdd _offset));
@@ -162,7 +162,7 @@ switch (_cameraMode) do {
     case CAMERAMODE_FPS: { // FPS
         if !(cameraOn in [CLib_Player, GVAR(Camera)]) then {
             /*
-            if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget != cameraOn) then {
+            if (!(GVAR(CameraFollowTarget) call Streamator_fnc_isSpectator) && _cameraFollowTarget isNotEqualTo cameraOn) then {
                 GVAR(CameraFollowTarget) = cameraOn;
                 [QGVAR(CameraTargetChanged), GVAR(CameraFollowTarget)] call CFUNC(localEvent);
                 [QGVAR(CameraModeChanged), 5] call CFUNC(localEvent);

@@ -21,7 +21,7 @@ params ["_map", "_textSize"];
         private _grpName = groupID (group _x);
 
         // If color settings for the group exist, then use those, otherwise fall back to the default colors
-        private _color = (GVAR(ace_map_gestures_color_namespace) getVariable [_grpName, [GVAR(ace_map_gestures_defaultLeadColor), GVAR(ace_map_gestures_defaultLeadColor)]]) select (_x != leader _x);
+        private _color = (GVAR(ace_map_gestures_color_namespace) getVariable [_grpName, [GVAR(ace_map_gestures_defaultLeadColor), GVAR(ace_map_gestures_defaultLeadColor)]]) select (_x isNotEqualTo leader _x);
 
         // Render icon and player name
         _map drawIcon ["a3\ui_f\data\gui\cfg\Hints\icon_text\group_1_ca.paa", _color, _pos, 55, 55, 0, "", 1];

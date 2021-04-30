@@ -21,7 +21,7 @@ if (_unit isEqualType []) exitWith {
     _unit params ["_target", "_targetDistance", "_targetHeight"];
 
     if (_target isEqualType objNull) then {
-        [_target] call FUNC(setCameraTarget);
+        _target call FUNC(setCameraTarget);
 
         GVAR(CameraRelPos) set [2, 0];
         GVAR(CameraRelPos) = (vectorNormalized GVAR(CameraRelPos)) vectorMultiply _targetDistance;
@@ -77,6 +77,20 @@ if (_cameraMode in [CAMERAMODE_FOLLOW, CAMERAMODE_ORBIT]) then {
     };
     GVAR(CameraPitch) = - asin ((GVAR(CameraRelPos) select 2) / vectorMagnitude GVAR(CameraRelPos) min 1);
     GVAR(CameraDir) = -(GVAR(CameraRelPos) select 0) atan2 -(GVAR(CameraRelPos) select 1);
+};
+
+switch (_cameraMode) do {
+    case (CAMERAMODE_SHOULDER): {
+        GVAR(ShoulderOffset) = _unit call FUNC(getDefaultShoulderOffset);
+    };
+    case CAMERAMODE_TOPDOWN: {
+        GVAR(TopDownOffset) = [0, 0, 100];
+        true;
+    };
+    case CAMERAMODE_ORBIT: {
+        GVAR(CameraRelPos) = [0, 10, 10];
+        true;
+    };
 };
 
 GVAR(CameraMode) = _cameraMode;

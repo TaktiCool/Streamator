@@ -22,39 +22,74 @@ if !(isNil "_customIcon") exitWith {
         _customIcon;
     };
 };
-if (leader _unit == _unit) exitWith {
-    //"\a3\ui_f\data\igui\cfg\cursors\leader_ca.paa";
-    ["\A3\ui_f\data\gui\cfg\ranks\corporal_gs.paa", 1];
+
+
+if !(isNull objectParent _unit) then {
+    private _vehicle = vehicle _unit;
+    private _crewInfo = ((fullCrew _vehicle) select {(_x select 0) isEqualTo _unit}) select 0;
+    _crewInfo params ["", "_role", "", "", "_isTurret"];
+
+    if (_role == "driver") then {
+        if (_vehicle isKindOf "Air") then {
+            ["\A3\ui_f\data\IGUI\Cfg\Actions\getinpilot_ca.paa", 1] breakOut SCRIPTSCOPENAME;
+        } else {
+            ["\A3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa", 1.5] breakOut SCRIPTSCOPENAME;
+        };
+        ["\A3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa", 1.5] breakOut SCRIPTSCOPENAME;
+    };
+    if (_role == "commander") then {
+        ["\A3\ui_f\data\IGUI\Cfg\CommandBar\imageCommander_ca.paa", 1.2] breakOut SCRIPTSCOPENAME;
+    };
+    if (_role == "turret" && _isTurret) then {
+        ["\a3\ui_f\data\igui\cfg\simpletasks\types\rifle_ca.paa", 1] breakOut SCRIPTSCOPENAME;
+    };
+    if (_role == "gunner" || (_role == "turret" && !_isTurret)) then {
+        ["\A3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa", 1.5] breakOut SCRIPTSCOPENAME;
+    };
 };
-if (_unit getUnitTrait "medic") exitWith {
+
+if (leader _unit == _unit) exitWith {
+    private _icon = ["\A3\ui_f\data\gui\cfg\ranks\corporal_gs.paa", 1];
+    if (rankId _unit >= 2) then {
+        _icon set [0, format ["\A3\ui_f\data\gui\cfg\ranks\%1_gs.paa", rank _unit]];
+    };
+    _icon;
+};
+
+if ((_unit getVariable ["ace_medical_medicClass", [0, 1] select (_unit getUnitTrait "medic")] > 0) || _unit getUnitTrait "medic") exitWith {
     //"\a3\ui_f\data\igui\cfg\holdactions\holdaction_revive_ca.paa";
     ["\A3\ui_f\data\igui\cfg\actions\heal_ca.paa", 1];
 };
 
-if (_unit getUnitTrait "explosiveSpecialist") exitWith {
+if ((_unit getVariable ["ACE_isEOD", _unit getUnitTrait "explosiveSpecialist"]) in [1, true]) exitWith {
     //"\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
     ["\A3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa", 1];
 };
 
-if (_unit getUnitTrait "engineer") exitWith {
+private _isEngineer = _unit getVariable ["ACE_isEngineer", _unit getUnitTrait "engineer"];
+if (_isEngineer isEqualType 0) then {_isEngineer = _isEngineer > 0};
+if (_isEngineer) exitWith {
     //"\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
     ["\A3\ui_f\data\gui\cfg\respawnroles\support_ca.paa", 1];
 };
-if ((secondaryWeapon _unit) find "launch" != -1) exitWith {
+if ((toLower (getText(configFile >> "CfgWeapons" >> (secondaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_at_ca.paa")) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\at_ca.paa";
     ["\A3\ui_f\data\gui\rsc\rscdisplayarsenal\secondaryweapon_ca.paa", 1.3];
 };
-if ((primaryWeapon _unit) find "srifle" != -1) exitWith {
+
+private _primaryWeapon = toLower primaryWeapon _unit;
+if ("srifle" in _primaryWeapon) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\srifle_ca.paa";
     ["\A3\ui_f\data\gui\cfg\respawnroles\recon_ca.paa", 1];
 };
-if ((primaryWeapon _unit) find "LMG" != -1 || (primaryWeapon _unit) find "MMG" != -1) exitWith {
-    //"\a3\ui_f\data\igui\cfg\weaponicons\mg_ca.paa";
-    ["\A3\ui_f\data\gui\cfg\respawnroles\assault_ca.paa", 1];
-};
-if ((primaryWeapon _unit) find "GL" != -1) exitWith {
+
+if ("gl" in _primaryWeapon) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\gl_ca.paa";
     ["\A3\ui_f_curator\data\rsccommon\rscattributeinventory\filter_6_ca.paa", 1];
 };
 
+if ((toLower (getText (configFile >> "CfgWeapons" >> (primaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_mg_ca.paa")) exitWith {
+    //"\a3\ui_f\data\igui\cfg\weaponicons\mg_ca.paa";
+    ["\A3\ui_f\data\gui\cfg\respawnroles\assault_ca.paa", 1];
+};
 ["\a3\ui_f\data\igui\cfg\actions\clear_empty_ca.paa", 1];

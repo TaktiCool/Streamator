@@ -74,7 +74,7 @@ private _return = switch (_keyCode) do {
             if (GVAR(InputGuessIndex) >= count GVAR(InputGuess)) then {
                 GVAR(InputGuessIndex) = 0;
             };
-            [QGVAR(updateMenu)] call CFUNC(localEvent);
+            QGVAR(updateMenu) call CFUNC(localEvent);
             true
         };
         GVAR(CameraFOV) = 0.75;
@@ -84,7 +84,7 @@ private _return = switch (_keyCode) do {
     case DIK_BACKSPACE: { // BACKSPACE
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
         QGVAR(toggleUI) call CFUNC(localEvent);
-        call FUNC(UpdateValidUnits);
+        call FUNC(updateValidUnits);
         true;
     };
     case DIK_M: { // M: Map
@@ -151,28 +151,13 @@ private _return = switch (_keyCode) do {
     };
     case DIK_R: { // R
         if (GVAR(InputMode) != INPUTMODE_MOVE) exitWith {false};
-        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
-        switch (GVAR(CameraMode)) do {
-            case CAMERAMODE_FOLLOW: {
-                [GVAR(CameraFollowTarget)] call FUNC(setCameraTarget);
-                true;
-            };
-            case CAMERAMODE_SHOULDER: {
-                GVAR(ShoulderOffSet) = [0.4,-0.5,-0.3];
-                true;
-            };
-            case CAMERAMODE_TOPDOWN: {
-                GVAR(TopDownOffset) = [0, 0, 100];
-                true;
-            };
-            case CAMERAMODE_ORBIT: {
-                GVAR(CameraRelPos) = [0, 10, 10];
-                true;
-            };
-            default {
-                false;
-            };
+        if (GVAR(CameraMode) == CAMERAMODE_FREE) exitWith {
+            call FUNC(fixCamera);
+            true;
         };
+        if (isNull GVAR(CameraFollowTarget)) exitWith {false};
+        [GVAR(CameraFollowTarget), GVAR(CameraMode)] call FUNC(setCameraTarget);
+        true;
     };
     case DIK_MULTIPLY: { // NUM *
         if (!isNull GVAR(CameraFollowTarget)) then {
@@ -221,7 +206,7 @@ private _return = switch (_keyCode) do {
     case DIK_0: {
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false};
         if (_ctrl) then {
-            [_keyCode] call FUNC(savePosition);
+            _keyCode call FUNC(savePosition);
         } else {
             [_keyCode, _alt] call FUNC(restorePosition);
         };
