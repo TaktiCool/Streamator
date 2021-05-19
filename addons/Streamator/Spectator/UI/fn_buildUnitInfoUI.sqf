@@ -305,7 +305,7 @@ private _unitInfoAllCtrls = [
         _healthIcons select 0;
     };
 
-    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", 0 max (round ((1 - _health)*24))];
     _ctrlHealthRing ctrlCommit 0;
     if (_healthIcon isEqualTo "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa") then {
         _ctrlHealthIcon ctrlSetPosition [PX(1.5), PY(1.5), PX(3), PY(3)];
