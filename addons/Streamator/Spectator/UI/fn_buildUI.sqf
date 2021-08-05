@@ -73,12 +73,14 @@ _ctrlTargetInfo ctrlSetFont "RobotoCondensedBold";
 _ctrlTargetInfo ctrlSetText "Target Info";
 _ctrlTargetInfo ctrlCommit 0;
 
+// Target Speed Information
 private _ctrlTargetSpeedInfo = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlTargetSpeedInfo ctrlSetPosition [safeZoneW - PX(36),  PY(0.3), PX(10), PY(1.8)];
 _ctrlTargetSpeedInfo ctrlSetFont "RobotoCondensedBold";
 _ctrlTargetSpeedInfo ctrlSetText "";
 _ctrlTargetSpeedInfo ctrlCommit 0;
 
+// Movement Speed Bar
 private _ctrlMouseSpeedBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlMouseSpeedBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(2 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlMouseSpeedBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
@@ -102,6 +104,7 @@ _ctrlMouseSpeedLabel ctrlSetFont "RobotoCondensedBold";
 _ctrlMouseSpeedLabel ctrlSetText "SPD";
 _ctrlMouseSpeedLabel ctrlCommit 0;
 
+// Movement Smoothing Bar
 private _ctrlMouseSmoothingBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlMouseSmoothingBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(8 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlMouseSmoothingBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
@@ -125,6 +128,7 @@ _ctrlMouseSmoothingLabel ctrlSetFont "RobotoCondensedBold";
 _ctrlMouseSmoothingLabel ctrlSetText "SMTH";
 _ctrlMouseSmoothingLabel ctrlCommit 0;
 
+// Camera FOV Bar
 private _ctrlFOVBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
 _ctrlFOVBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(14 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
 _ctrlFOVBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
@@ -176,6 +180,30 @@ _ctrlFOVDefaultLine ctrlSetPosition [
 _ctrlFOVDefaultLine ctrlSetText "#(argb,8,8,3)color(0,1,0,1)";
 _ctrlFOVDefaultLine ctrlCommit 0;
 
+// Camera Focal Distance Bar
+private _ctrlCameraFocalBarBg = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
+_ctrlCameraFocalBarBg ctrlSetPosition [safeZoneW - PX(BORDERWIDTH * 3 / 4), PY(20 * BORDERWIDTH), PX(BORDERWIDTH / 2), PY(BORDERWIDTH * 4)];
+_ctrlCameraFocalBarBg ctrlSetText "#(argb,8,8,3)color(0.3,0.3,0.3,1)";
+_ctrlCameraFocalBarBg ctrlCommit 0;
+
+private _relLength = sqrt GVAR(CameraSmoothingTime) / sqrt 1.6;
+private _ctrlCameraFocalBar = _display ctrlCreate ["RscPicture", -1, _ctrlGrp];
+_ctrlCameraFocalBar ctrlSetPosition [
+    safeZoneW - PX(BORDERWIDTH * 3 / 4),
+    PY(20 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+    PX(BORDERWIDTH / 2),
+    PY(BORDERWIDTH * 4) * _relLength
+];
+_ctrlCameraFocalBar ctrlSetText "#(argb,8,8,3)color(1,1,1,1)";
+_ctrlCameraFocalBar ctrlCommit 0;
+
+private _ctrlCameraFocalLabel = _display ctrlCreate ["RscTextNoShadow", -1, _ctrlGrp];
+_ctrlCameraFocalLabel ctrlSetPosition [safeZoneW - PX(BORDERWIDTH), PY(24 * BORDERWIDTH), PX(BORDERWIDTH), PY(BORDERWIDTH)];
+_ctrlCameraFocalLabel ctrlSetFontHeight PY(1.2);
+_ctrlCameraFocalLabel ctrlSetFont "RobotoCondensedBold";
+_ctrlCameraFocalLabel ctrlSetText "FDIS";
+_ctrlCameraFocalLabel ctrlCommit 0;
+
 private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ctrlGrp];
 _ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
@@ -225,7 +253,7 @@ _ctrlPlanningChannel ctrlCommit 0;
     _ctrl ctrlCommit 0;
 }, _ctrlMouseSpeedBar] call CFUNC(addEventhandler);
 
-[QGVAR(CameraSpeedChanged)] call CFUNC(localEvent);
+QGVAR(CameraSpeedChanged) call CFUNC(localEvent);
 
 [QGVAR(CameraSmoothingChanged), {
     (_this select 1) params ["_ctrl"];
@@ -248,7 +276,7 @@ _ctrlPlanningChannel ctrlCommit 0;
     _ctrl ctrlCommit 0;
 }, _ctrlMouseSmoothingBar] call CFUNC(addEventhandler);
 
-[QGVAR(CameraSmoothingChanged)] call CFUNC(localEvent);
+QGVAR(CameraSmoothingChanged) call CFUNC(localEvent);
 
 [QGVAR(CameraFOVChanged), {
     (_this select 1) params ["_ctrl"];
@@ -265,6 +293,33 @@ _ctrlPlanningChannel ctrlCommit 0;
     ];
     _ctrl ctrlCommit 0;
 }, _ctrlFOVBar] call CFUNC(addEventhandler);
+
+[QGVAR(CameraFocusDistanceChanged), {
+    (_this select 1) params ["_ctrl"];
+    private _relLength = 0;
+    if (GVAR(CameraFocusDistance) > 0) then {
+        private _log = ln sqrt 2;
+        private _logScale = (ln GVAR(CameraFocusDistance)) / _log;
+        private _logScaleMin = (ln CAMERAMINFOCUSDISTANCE) / _log;
+        private _logScaleMax = (ln CAMERAMAXFOCUSDISTANCE) / _log;
+        _relLength = linearConversion [_logScaleMin, _logScaleMax, _logScale, 0.1, 1];
+    };
+
+    _ctrl ctrlSetPosition [
+        safeZoneW - PX(BORDERWIDTH * 3 / 4),
+        PY(20 * BORDERWIDTH) + PY(4 * BORDERWIDTH) * (1 - _relLength),
+        PX(BORDERWIDTH / 2),
+        PY(BORDERWIDTH * 4) * _relLength
+    ];
+    _ctrl ctrlCommit 0;
+    // we abuse this event here to change the Focus Distance
+    if !(GVAR(CameraDisableFocus)) then {
+        GVAR(Camera) camSetFocus [GVAR(CameraFocusDistance), 1];
+        GVAR(Camera) camCommit 0.1;
+    };
+}, _ctrlCameraFocalBar] call CFUNC(addEventhandler);
+
+QGVAR(CameraFocusDistanceChanged) call CFUNC(localEvent);
 
 QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
@@ -286,7 +341,7 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 }, _ctrlCameraMode] call CFUNC(addEventhandler);
 
 [QGVAR(hightlightModeChanged), {
-    (_this select 1) params ["_ctrlFOVLabel", "_ctrlMouseSmoothingLabel", "_ctrlMouseSpeedLabel"];
+    (_this select 1) params ["_ctrlFOVLabel", "_ctrlMouseSmoothingLabel", "_ctrlMouseSpeedLabel", "_ctrlCameraFocalLabel"];
 
     if (GVAR(CameraSpeedMode)) then {
         _ctrlMouseSpeedLabel ctrlSetTextColor [0, 1, 0, 1];
@@ -303,7 +358,16 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
     } else {
         _ctrlFOVLabel ctrlSetTextColor [1, 1, 1, 1];
     };
-}, [_ctrlFOVLabel, _ctrlMouseSmoothingLabel, _ctrlMouseSpeedLabel]] call CFUNC(addEventhandler);
+    if (GVAR(CameraDisableFocus)) then {
+        _ctrlCameraFocalLabel ctrlSetTextColor [1, 0, 0, 1];
+    } else {
+        if (GVAR(CameraFocusDistanceMode)) then {
+            _ctrlCameraFocalLabel ctrlSetTextColor [0, 1, 0, 1];
+        } else {
+            _ctrlCameraFocalLabel ctrlSetTextColor [1, 1, 1, 1];
+        };
+    };
+}, [_ctrlFOVLabel, _ctrlMouseSmoothingLabel, _ctrlMouseSpeedLabel, _ctrlCameraFocalLabel]] call CFUNC(addEventhandler);
 
 [QGVAR(toggleUI), {
     (_this select 1) params ["_ctrlGrp"];
@@ -314,9 +378,10 @@ QGVAR(CameraFOVChanged) call CFUNC(localEvent);
 
 }, _ctrlGrp] call CFUNC(addEventhandler);
 
-[_ctrlGrp] call FUNC(buildRadioInfoUI);
-[_ctrlGrp] call FUNC(buildUnitInfoUI);
-[_ctrlGrp] call FUNC(buildFPSUI);
+_ctrlGrp call FUNC(buildRadioInfoUI);
+_ctrlGrp call FUNC(buildUnitInfoUI);
+_ctrlGrp call FUNC(buildFPSUI);
+
 _ctrlInfo call FUNC(findInputEvents);
 
 [{

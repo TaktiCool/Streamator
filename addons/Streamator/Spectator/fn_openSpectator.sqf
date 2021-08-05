@@ -54,14 +54,17 @@ GVAR(CameraHeight) = 10;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
+GVAR(CameraFocusDistanceMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
+GVAR(CameraFocusDistance) = 64;
 GVAR(CameraVision) = 9;
 GVAR(ThermalVision) = 0;
 GVAR(PrevCameraVision) = 8;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraInFirstPerson) = false;
+GVAR(CameraDisableFocus) = false;
 
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;

@@ -510,6 +510,25 @@ if (GVAR(aceLaserLoaded)) then {
     }] call FUNC(addMenuItem);
 };
 
+["Disable Camera Focus", "MAIN/MISC", DIK_F7, {
+    GVAR(CameraDisableFocus) = !GVAR(CameraDisableFocus);
+    if (GVAR(CameraDisableFocus)) then {
+        GVAR(Camera) camSetFocus [-1, -1];
+    } else {
+        GVAR(Camera) camSetFocus [GVAR(CameraFocusDistance), 1];
+    };
+    GVAR(Camera) camCommit 0.1;
+    QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+    true
+}, {
+    if (GVAR(CameraDisableFocus)) then {
+        _name = "Enable Camera Focus";
+    } else {
+        _name = "Disable Camera Focus";
+    };
+    true;
+}] call FUNC(addMenuItem);
+
 ["Fix Camera", "MAIN/MISC", DIK_F12, {
     call FUNC(fixCamera);
     true

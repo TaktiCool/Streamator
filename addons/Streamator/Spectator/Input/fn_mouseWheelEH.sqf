@@ -40,6 +40,12 @@ if (GVAR(CameraSmoothingMode)) exitWith {
     true
 };
 
+if (GVAR(CameraFocusDistanceMode)) exitWith {
+    GVAR(CameraFocusDistance) = CAMERAMINFOCUSDISTANCE max (CAMERAMAXFOCUSDISTANCE min (GVAR(CameraFocusDistance) * sqrt 2 ^ _delta));
+    QGVAR(CameraFocusDistanceChanged) call CFUNC(localEvent);
+    true;
+};
+
 if (GVAR(CameraZoomMode)) exitWith {
     GVAR(CameraFOV) = CAMERAMINFOV max (CAMERAMAXFOV min (GVAR(CameraFOV) * sqrt 2 ^ (-_delta)));
     QGVAR(CameraFOVChanged) call CFUNC(localEvent);
