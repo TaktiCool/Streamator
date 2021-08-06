@@ -237,7 +237,7 @@ private _unitInfoAllCtrls = [
     _ctrlUnitName ctrlCommit 0;
 
     // set side color
-    private _color = GVAR(SideColorsArray) getVariable [str side (group _unit), [0,0,0,1]];
+    private _color = GVAR(SideColorsArray) getOrDefault [side (group _unit), [0,0,0,1]];
     _ctrlRoleIconBackground ctrlSetText format ["#(argb,8,8,3)color(%1,%2,%3,1)", _color select 0, _color select 1, _color select 2];
     _ctrlRoleIconBackground ctrlCommit 0;
 

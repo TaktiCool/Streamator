@@ -15,27 +15,26 @@
 */
 
 if (isNil QGVAR(SideColorsArray)) then {
-    GVAR(SideColorsArray) = false call CFUNC(createNamespace);
-    GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
-    GVAR(SideColorsArray) setVariable [str east, [0.6, 0, 0, 1]];
-    GVAR(SideColorsArray) setVariable [str independent, [0, 0.5, 0, 1]];
-    GVAR(SideColorsArray) setVariable [str civilian, [0.4, 0, 0.5, 1]];
-    GVAR(SideColorsArray) setVariable [str sideUnknown, [0.3, 0.3, 0.3, 1]];
+    GVAR(SideColorsArray) = createHashMap;
+    GVAR(SideColorsArray) set [west, [0, 0.4, 0.8, 1]];
+    GVAR(SideColorsArray) set [east, [0.6, 0, 0, 1]];
+    GVAR(SideColorsArray) set [independent, [0, 0.5, 0, 1]];
+    GVAR(SideColorsArray) set [civilian, [0.4, 0, 0.5, 1]];
+    GVAR(SideColorsArray) set [sideUnknown, [0.3, 0.3, 0.3, 1]];
 };
 
 if (isNil QGVAR(SideColorsString)) then {
-    GVAR(SideColorsString) = false call CFUNC(createNamespace);
-    GVAR(SideColorsString) setVariable [str west, "#0099EE"];
-    GVAR(SideColorsString) setVariable [str east, "#CC3333"];
-    GVAR(SideColorsString) setVariable [str independent, "#33CC33"];
-    GVAR(SideColorsString) setVariable [str civilian, "#CC33CC"];
-    GVAR(SideColorsString) setVariable [str sideUnknown, "#4C4C4C"];
+    GVAR(SideColorsString) = createHashMap;
+    GVAR(SideColorsString) set [west, "#0099EE"];
+    GVAR(SideColorsString) set [east, "#CC3333"];
+    GVAR(SideColorsString) set [independent, "#33CC33"];
+    GVAR(SideColorsString) set [civilian, "#CC33CC"];
+    GVAR(SideColorsString) set [sideUnknown, "#4C4C4C"];
 };
 
 if (isNil QGVAR(PositionMemory)) then {
     GVAR(PositionMemory) = false call CFUNC(createNamespace);
 };
-
 
 if (GVAR(aceMapGesturesLoaded)) then {
     GVAR(ace_map_gestures_color_namespace) = missionNamespace getVariable ["ace_map_gestures_GroupColorCfgMappingNew", objNull];

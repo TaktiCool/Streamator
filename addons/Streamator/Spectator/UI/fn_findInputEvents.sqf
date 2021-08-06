@@ -122,14 +122,14 @@ params ["_ctrlInfo"];
                             case ("OBJECT"): {
                                 format [
                                     "<t color='%1'>%2</t>",
-                                    GVAR(SideColorsString) getVariable [str side group _target, "#ffffff"],
+                                    GVAR(SideColorsString) getOrDefault [side group _target, "#ffffff"],
                                     _name
                                 ]
                             };
                             case ("GROUP"): {
                                 format [
                                     "<t color='%1'>%2</t>",
-                                    GVAR(SideColorsString) getVariable [str side _target, "#ffffff"],
+                                    GVAR(SideColorsString) getOrDefault [side _target, "#ffffff"],
                                     _name
                                 ]
                             };
@@ -149,7 +149,7 @@ params ["_ctrlInfo"];
                     };
                     private _color =  "#ffffff";
                     if ((_bestGuess select 1) isEqualType objNull) then {
-                        _color = GVAR(SideColorsString) getVariable [str side group (_bestGuess select 1), "#ffffff"];
+                        _color = GVAR(SideColorsString) getOrDefault [side group (_bestGuess select 1), "#ffffff"];
                     };
 
 

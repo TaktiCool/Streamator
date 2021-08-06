@@ -15,7 +15,7 @@
 */
 params ["_vehicle", "_vehicleIconId", ["_isEmpty", false]];
 
-private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side _vehicle)), [0.5, 0.5, 0.5, 1]];
+private _color = EGVAR(Spectator,SideColorsArray) getOrDefault [side _vehicle, [0.5, 0.5, 0.5, 1]];
 if (_isEmpty) then {
     _color =  [0.93, 0.7, 0.01, 0.6];
 };
