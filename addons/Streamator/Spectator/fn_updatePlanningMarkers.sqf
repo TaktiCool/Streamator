@@ -16,20 +16,27 @@
 params ["_serverTime", ["_cameraPosition", [0, 0, 0]]];
 
 if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) then {
-    (CLib_Player getVariable [QGVAR(cursorPosition), []]) params ["_lastUpdate"];
-    if (_serverTime - _lastUpdate >= 0.2) then {
-        if (GVAR(MapOpen)) then {
-            [CLib_Player, QGVAR(cursorPosition), [_serverTime, (CLib_Player getVariable [QGVAR(cursorPosition), [0, [0, 0, 0]]]) select 1], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
-        } else {
-            private _endPosition = screenToWorld getMousePosition;
-            private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _endPosition, objNull, objNull, true, 1, "GEOM", "NONE", false];
-            if (_intersectArray isNotEqualTo []) then {
-                (_intersectArray select 0) params ["_intersectPosition"];
-                _endPosition = ASLtoAGL _intersectPosition;
-            };
-            [CLib_Player, QGVAR(cursorPosition), [_serverTime, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+    (CLib_Player getVariable [QGVAR(cursorPosition), []]) params [["_lastUpdate", 0], ["_lastPosition", [0,0,0]]];
+    private _position = [0, 0, 0];
+    if (GVAR(MapOpen)) then {
+        _position = (CLib_Player getVariable [QGVAR(cursorPosition), [0, [0, 0, 0]]]) select 1;
+    } else {
+        _position = screenToWorld getMousePosition;
+        private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _position, objNull, objNull, true, 1, "GEOM", "NONE", false];
+        if (_intersectArray isNotEqualTo []) then {
+            (_intersectArray select 0) params ["_intersectPosition"];
+            _position = ASLtoAGL _intersectPosition;
         };
     };
+    [_serverTime, _position] call FUNC(updatePlanningCursorPosition);
+};
+
+private _targets = GVAR(allSpectators);
+_targets pushBackUnique CLib_Player;
+_targets = _targets select {
+    (GVAR(PlanningModeChannel) == 0)
+    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
+    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
 };
 
 {
@@ -74,8 +81,4 @@ if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) t
         _cursorHistory = _cursorHistory - [objNull];
     };
     _x setVariable [QGVAR(cursorPositionHistory), _cursorHistory];
-} forEach ((GVAR(allSpectators) + [CLib_Player]) select {
-    (GVAR(PlanningModeChannel) == 0)
-    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo GVAR(PlanningModeChannel))
-    || ((_x getVariable [QGVAR(PlanningModeChannel), 0]) isEqualTo 0)
-});
+} forEach _targets;

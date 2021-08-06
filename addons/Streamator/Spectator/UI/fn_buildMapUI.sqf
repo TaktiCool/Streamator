@@ -99,7 +99,7 @@ _map ctrlAddEventHandler ["MouseMoving", {
     if (GVAR(InputMode) == INPUTMODE_PLANINGMODE && GVAR(PlanningModeDrawing)) exitWith {
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
         _pos set [2, 0];
-        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        [[time, serverTime] select isMultiplayer, _pos] call FUNC(updatePlanningCursorPosition);
     };
 
 }];
@@ -116,7 +116,7 @@ _map ctrlAddEventHandler  ["MouseButtonDown", {
         GVAR(PlanningModeDrawing) = true;
         private _pos = _map ctrlMapScreenToWorld [_xpos, _ypos];
         _pos set [2, 0];
-        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _pos], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        [[time, serverTime] select isMultiplayer, _pos] call FUNC(updatePlanningCursorPosition);
         true;
     };
     true;

@@ -65,6 +65,8 @@ GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraInFirstPerson) = false;
 GVAR(CameraDisableFocus) = false;
 
+GVAR(lastPlanningModeUpdate) = -999;
+
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;
 
@@ -213,7 +215,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
 
 
 [{
-    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
+    GVAR(allSpectators) = (allPlayers select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;

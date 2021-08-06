@@ -87,6 +87,7 @@ class CfgCLibModules {
             FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
+            FNC(updatePlanningCursorPosition);
             FNC(updatePlanningMarkers);
             FNC(updateValidUnits);
         };

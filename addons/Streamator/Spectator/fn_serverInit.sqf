@@ -13,21 +13,16 @@
     Returns:
     None
 */
-GVAR(Streamators) = [];
-publicVariable QGVAR(Streamators);
+GVAR(StreamatorOwnerIDs) = [];
+publicVariable QGVAR(StreamatorOwnerIDs);
 
-[QGVAR(RegisterStreamator), {
-    GVAR(Streamators) pushBackUnique (_this select 0);
-    GVAR(Streamators) = GVAR(Streamators) - [objNull];
-    publicVariable QGVAR(Streamators);
-}] call CFUNC(addEventHandler);
-
-addMissionEventHandler ["HandleDisconnect", {
-    params ["_unit"];
-    private _index = GVAR(Streamators) find _unit;
-    if (_index != -1) then {
-        GVAR(Streamators) deleteAt _index;
-    };
-    GVAR(Streamators) = GVAR(Streamators) - [objNull];
-    publicVariable QGVAR(Streamators);
-}];
+[{
+    [{
+        call FUNC(CollectStreamators);
+    }, 4] call CFUNC(wait);
+    private _allStreamatorsIDs = allPlayers select {_x call Streamator_fnc_isSpectator} apply {owner _x};
+    if (_allStreamatorsIDs isEqualTo GVAR(StreamatorOwnerIDs)) exitWith {};
+    GVAR(StreamatorOwnerIDs) = _allStreamatorsIDs;
+    publicVariable QGVAR(StreamatorOwnerIDs);
+}, QFUNC(CollectStreamators)] call CFUNC(compileFinal);
+call FUNC(CollectStreamators);

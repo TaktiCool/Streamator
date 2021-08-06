@@ -29,7 +29,7 @@ if (GVAR(InputMode) == INPUTMODE_PLANINGMODE) then {
     };
     if (GVAR(PlanningModeDrawing)) exitWith {
         private _endPosition = call FUNC(getMousePositionInWorld);
-        [CLib_Player, QGVAR(cursorPosition), [[time, serverTime] select isMultiplayer, _endPosition], PLANNINGMODEUPDATETIME] call CFUNC(setVariablePublic);
+        [[time, serverTime] select isMultiplayer, _endPosition] call FUNC(updatePlanningCursorPosition);
     };
 
 } else {
