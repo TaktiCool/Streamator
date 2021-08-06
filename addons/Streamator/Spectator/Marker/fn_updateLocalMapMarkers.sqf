@@ -13,11 +13,14 @@
     Returns:
     None
 */
-private _markers = allMapMarkers select {
-    (_x splitString "#/") params ["_userDef", "", "", "_channel"];
+private _markers = allMapMarkers apply {
+    [(_x splitString "#/"), _x]
+} select {
+    (_x select 0) params ["_userDef"];
     _userDef == "_USER_DEFINED "
-    && !(_channel in [Channel_Side, Channel_Command])
+} apply {
+    _x select 1 call FUNC(collectMarkerData);
 };
-_markers = _markers apply { _x call FUNC(collectMarkerData); };
 if (_markers isEqualTo (CLib_Player getVariable [QGVAR(mapMarkers), []])) exitWith {};
+
 CLib_Player setVariable [QGVAR(mapMarkers), _markers, true];

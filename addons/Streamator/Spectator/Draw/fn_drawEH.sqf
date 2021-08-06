@@ -34,7 +34,7 @@ if (GVAR(OverlayBulletTracer)) then {
 };
 
 if (GVAR(OverlayPlayerMarkers)) then {
-    [_map, _textSize] call FUNC(drawMarkers);
+    [_map, _textSize, _mapScale] call FUNC(drawMarkers);
 };
 
 if  (GVAR(MeasureDistance) && {(GVAR(MeasureDistancePositions) isNotEqualTo [])}) then {

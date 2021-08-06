@@ -18,6 +18,3 @@ GVAR(allMapMarkers) = [];
 ["allMapMarkersChanged", {
     call FUNC(updateLocalMapMarkers);
 }] call CFUNC(addEventHandler);
-
-12 call FUNC(bindMarkerEH);
-53 call FUNC(bindMarkerEH);
