@@ -55,7 +55,6 @@ class CfgCLibModules {
                 FNC(mouseWheelEH);
             };
             MODULE(Marker) {
-                FNC(bindMarkerEH);
                 FNC(clientInitMarker);
                 FNC(collectMarkerData);
                 FNC(updateLocalMapMarkers);
