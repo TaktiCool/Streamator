@@ -60,6 +60,15 @@ class CfgCLibModules {
                 FNC(updateLocalMapMarkers);
             };
             MODULE(Menu) {
+                MODULE(SubMenus) {
+                    FNC(cameraSubMenus);
+                    FNC(crewSubMenus);
+                    FNC(mapSubMenus);
+                    FNC(miscSubMenus);
+                    FNC(overlaySubMenus);
+                    FNC(radioSubMenus);
+                    FNC(visionSubMenus);
+                };
                 FNC(addMenuItem);
                 FNC(executeEntry);
                 FNC(registerMenus);

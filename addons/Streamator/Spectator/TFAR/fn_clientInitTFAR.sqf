@@ -71,7 +71,7 @@ LOG("TFAR Stable Detected");
             0, // set player's voice volume
             profileName, // The player's nickname
             waves, // The waves level
-            TF_terrain_interception_coefficient, // The terrainIntersectionCoefficient
+            [0, TF_terrain_interception_coefficient] select GVAR(useTFARTerrainLoss), // The terrainIntersectionCoefficient
             _globalVolume, // The global volume
             _receivingDistanceMultiplicator, // receivingDistanceMultiplicator
             0 // speakerDistance
