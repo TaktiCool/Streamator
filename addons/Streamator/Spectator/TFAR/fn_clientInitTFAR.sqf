@@ -26,7 +26,7 @@ LOG("TFAR Stable Detected");
     CLib_Player setVariable ["tf_unable_to_use_radio", true];
     CLib_Player setVariable ["tf_forcedCurator", true];
     CLib_Player setVariable ["TFAR_forceSpectator", true];
-
+    CLib_Player setVariable ["TF_fnc_position", {private _pctw = positionCameraToWorld [0,0,0]; [ATLToASL _pctw, (positionCameraToWorld [0,0,1]) vectorDiff _pctw]}];
     [{
         if !(alive GVAR(RadioFollowTarget)) exitWith {
             if (GVAR(RadioInformationPrev) isNotEqualTo []) then {
