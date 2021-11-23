@@ -120,13 +120,13 @@ private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange
 
 {
     [format [QGVAR(%1), _x], _x, {
-        call FUNC(updateTFARFreq);
+        FUNC(updateTFARFreq) call CFUNC(directCall);
     }, CLib_Player] call TFAR_fnc_addEventHandler;
 } forEach _events;
 
 {
     [_x, {
-        call FUNC(updateTFARFreq);
+        FUNC(updateTFARFreq) call CFUNC(directCall);
     }] call CFUNC(addEventhandler);
 } forEach ["vehicleChanged", "playerChanged", "Respawn", "playerInventoryChanged"];
 
