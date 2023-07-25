@@ -1,0 +1,25 @@
+name = "Streamator"
+mainprefix = "tc"
+modname = "Streamator"
+prefix = "TC"
+author = "CLib Team"
+include = ["./include"]
+
+[version]
+path = "addons/Streamator/macros.hpp"
+
+[asc]
+enabled = true
+
+[hemtt.signing]
+authority = "Streamator"
+
+[hemtt.release]
+folder = "Streamator"
+
+[files]
+include = [
+    "mod.cpp",
+    "*.paa",
+    "LICENSE",
+]
