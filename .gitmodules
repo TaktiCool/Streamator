@@ -1,0 +1,3 @@
+[submodule "include/tc/CLib"]
+	path = include/tc/CLib
+	url = https://github.com/TaktiCool/CLib
