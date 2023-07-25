@@ -1,7 +1,7 @@
 #define MODULE Spectator
 #include "\tc\Streamator\addons\Streamator\macros.hpp"
 
-#include "\a3\editor_f\Data\Scripts\dikCodes.h"
+#include "\a3\ui_f\hpp\defineDIKCodes.inc"
 
 #define BORDERWIDTH 2.4
 #define CAMERAMINSPEED 0.625
