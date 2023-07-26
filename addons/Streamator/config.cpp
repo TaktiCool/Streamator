@@ -8,7 +8,7 @@ class CfgPatches {
         author = "TaktiCool Team";
         authors[] = {"joko // Jonas", "NetFusion", "BadGuy"};
         version = VERSION;
-        versionStr = QUOTE(VERSION);
+        versionStr = VERSION;
         versionAr[] = {VERSION_AR};
         requiredAddons[] = {"CLib"};
     };
