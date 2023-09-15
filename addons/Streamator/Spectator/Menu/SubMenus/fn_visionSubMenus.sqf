@@ -50,7 +50,7 @@
     true
 }] call FUNC(addMenuItem);
 // Thermal Vision Modes
-["Thermal Modes", "MAIN/VISION", DIK_F4, { GVAR(currentMenuPath) = "MAIN/VISION/THERMALMODES"; true }, {true}, true] call FUNC(addMenuItem);
+["Thermal Modes", "MAIN/VISION", DIK_F4, "MAIN/VISION/THERMALMODES", {true}, true] call FUNC(addMenuItem);
 CREATE_BACK_ACTION("MAIN/VISION/THERMALMODES", "MAIN/VISION");
 
 private _fnc_setThermalMode = {

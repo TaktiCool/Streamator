@@ -59,7 +59,7 @@
     _ret
 }] call FUNC(addMenuItem);
 
-["View Distance", "MAIN/MISC", DIK_F4, { GVAR(currentMenuPath) = "MAIN/MISC/VIEWDISTANCE"; true }, {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
+["View Distance", "MAIN/MISC", DIK_F4, "MAIN/MISC/VIEWDISTANCE", {!GVAR(MapOpen)}, true] call FUNC(addMenuItem);
 CREATE_BACK_ACTION("MAIN/MISC/VIEWDISTANCE", "MAIN/MISC");
 
 private _fnc_doViewDistance = {

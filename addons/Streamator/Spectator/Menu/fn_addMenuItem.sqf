@@ -19,7 +19,7 @@
     Returns:
     None
 */
-params ["_name", "_path", ["_dik", DIK_F1], ["_onUse", {LOG("Nothing here.")}, []], ["_onRender", {true}, [{}]], ["_hasSubMenus", false], ["_args", []]];
+params ["_name", "_path", ["_dik", DIK_F1], ["_onUse", {LOG("Nothing here.")}, [{}, ""]], ["_onRender", {true}, [{}]], ["_hasSubMenus", false], ["_args", []]];
 if (isNil QGVAR(menuEntries)) then {
     GVAR(menuEntries) = false call CFUNC(createNamespace);
     GVAR(menuEntries) setVariable ["MAIN", []];
