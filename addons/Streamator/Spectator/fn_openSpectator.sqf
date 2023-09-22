@@ -321,6 +321,7 @@ private _fnc_init = {
     QGVAR(updateMenu) call CFUNC(localEvent);
     QGVAR(spectatorOpened) call CFUNC(localEvent);
     [QGVAR(RegisterStreamator), CLib_Player] call CFUNC(serverEvent);
+    [findDisplay 46, [PX(-1.5) ,0]] call CFUNC(registerDisplayNotification);
 };
 
 if (GVAR(aceSpectatorLoaded)) then {
