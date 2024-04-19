@@ -33,7 +33,7 @@ if (isNil QGVAR(SideColorsString)) then {
 };
 
 if (isNil QGVAR(PositionMemory)) then {
-    GVAR(PositionMemory) = false call CFUNC(createNamespace);
+    GVAR(PositionMemory) = createHashMap;
 };
 
 if (GVAR(aceMapGesturesLoaded)) then {

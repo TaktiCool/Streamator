@@ -14,7 +14,7 @@
 
 */
 params ["_path", "_keyCode"];
-private _entries = GVAR(menuEntries) getVariable [_path, []];
+private _entries = GVAR(menuEntries) get [_path, []];
 {
     _x params ["_dik", "", "_onUse", "_onRender", "", "_args"];
     if (_dik == _keyCode) then {

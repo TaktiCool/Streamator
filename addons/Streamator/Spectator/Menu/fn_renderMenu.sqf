@@ -17,7 +17,7 @@ params [["_path", "", [""]], ["_mainPrefixText", ""]];
 if (_path isEqualTo "") then {
     "MAIN" call FUNC(renderMenu);
 };
-private _entry = GVAR(menuEntries) getVariable [_path, []];
+private _entry = GVAR(menuEntries) get [_path, []];
 if (_entry isEqualTo []) exitWith {
     "MAIN" call FUNC(renderMenu);
 };

@@ -29,4 +29,4 @@ private _element = [
     GVAR(ShoulderOffset),
     GVAR(TopDownOffset)
 ];
-GVAR(PositionMemory) setVariable [str _slot, _element];
+GVAR(PositionMemory) set [str _slot, _element];

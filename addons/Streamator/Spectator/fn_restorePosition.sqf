@@ -15,7 +15,7 @@
 */
 params ["_slot", "_smoothTranslation"];
 
-private _element = GVAR(PositionMemory) getVariable (str _slot);
+private _element = GVAR(PositionMemory) get (str _slot);
 if (isNil "_element") exitWith {};
 
 if (count _element != 12) exitWith {};
