@@ -34,8 +34,7 @@ private _buildedIcons = [];
     };
     _x set [13, compile _codeStr];
     _buildedIcons pushBack _x;
-    nil
-} count _icons;
+} forEach _icons;
 
 [
     _id,

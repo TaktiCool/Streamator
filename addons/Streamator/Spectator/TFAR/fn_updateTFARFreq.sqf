@@ -25,8 +25,7 @@ private _freqLR = [];
     if (_adChannel > -1 && {_adChannel == (_x call TFAR_fnc_getSwChannel)}) then {
         _freqSW pushBackUnique [format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc], _x call TFAR_fnc_getAdditionalSwStereo, _x];
     };
-    nil;
-} count (CLib_Player call TFAR_fnc_radiosList);
+} forEach (CLib_Player call TFAR_fnc_radiosList);
 
 {
     private _adChannel = _x call TFAR_fnc_getAdditionalLrChannel;
@@ -35,8 +34,7 @@ private _freqLR = [];
     if (_adChannel > -1 && {_adChannel != (_x call TFAR_fnc_getLrChannel)}) then {
         _freqLR pushBackUnique [format ["%1%2", [_x, _adChannel + 1] call TFAR_fnc_GetChannelFrequency, _rc], _x call TFAR_fnc_getAdditionalLrStereo, typeOf (_x select 0)];
     };
-    nil;
-} count (CLib_Player call TFAR_fnc_lrRadiosList);
+} forEach (CLib_Player call TFAR_fnc_lrRadiosList);
 
 if (_freqSW isEqualTo []) then {
     _freqSW pushBackUnique "No_SW_Radio";

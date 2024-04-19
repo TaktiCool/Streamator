@@ -18,7 +18,7 @@ DUMP("Update Icons");
 {
     // DUMP("ICON REMOVED: " + _x);
     [_x] call CFUNC(removeMapGraphicsGroup);
-} count GVAR(processedIcons);
+} forEach GVAR(processedIcons);
 GVAR(processedIcons) = [];
 
 private _units = +allUnits;

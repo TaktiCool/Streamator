@@ -128,8 +128,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
         {
             _x ctrlCommit 0;
-            nil;
-        } count [_ctrlGrp, _ctrlSquadName, _ctrlBgBottom, _ctrlMemberList];
+        } forEach [_ctrlGrp, _ctrlSquadName, _ctrlBgBottom, _ctrlMemberList];
 
         ctrlSetFocus _ctrlGrp;
 

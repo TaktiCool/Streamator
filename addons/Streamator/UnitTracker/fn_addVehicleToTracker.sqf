@@ -126,8 +126,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
 
         {
             _x ctrlCommit 0;
-            nil;
-        } count [_ctrlGrp, _ctrlVehicleName, _ctrlTotalSeats, _ctrlBgBottom, _ctrlMemberList];
+        } forEach [_ctrlGrp, _ctrlVehicleName, _ctrlTotalSeats, _ctrlBgBottom, _ctrlMemberList];
 
         ctrlSetFocus _ctrlGrp;
 

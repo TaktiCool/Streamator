@@ -44,7 +44,7 @@ _ctrlGrp ctrlCommit 0;
     _tempCtrl ctrlSetPosition _x;
     _tempCtrl ctrlSetText "#(argb,8,8,3)color(0,0,0,1)";
     _tempCtrl ctrlCommit 0;
-} count [
+} forEach [
     [0,  PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
     [safeZoneW - PX(BORDERWIDTH), PY(BORDERWIDTH), PX(BORDERWIDTH), safeZoneH - PY(2 * BORDERWIDTH)],
     [0, 0, safeZoneW, PY(BORDERWIDTH)],
