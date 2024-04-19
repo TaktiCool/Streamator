@@ -71,17 +71,17 @@ params ["_ctrlInfo"];
                             _data = _data select 0;
                         };
                         private _distance = switch (typeName _data) do {
-                            case (typeName ""): {
+                            case ("STRING"): {
                                 GVAR(Camera) distance2D (getMarkerPos _data);
                             };
-                            case (typeName []);
-                            case (typeName objNull): {
+                            case ("ARRAY");
+                            case ("OBJECT"): {
                                 GVAR(Camera) distance _data;
                             };
-                            case (typeName grpNull): {
+                            case ("GROUP"): {
                                 GVAR(Camera) distance (leader _data);
                             };
-                            case (typeName locationNull): {
+                            case ("LOCATION"): {
                                 GVAR(Camera) distance (getPos _data);
                             };
                             default {

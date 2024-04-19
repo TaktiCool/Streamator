@@ -248,11 +248,7 @@ private _return = switch (_keyCode) do {
                 CAMERAMODE_FREE;
             };
             case DIK_RETURN: {
-                if (GVAR(CameraMode) == CAMERAMODE_FREE) then {
-                    CAMERAMODE_FOLLOW
-                } else {
-                    GVAR(CameraMode);
-                };
+                [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE);
             };
             case DIK_NUMPAD1: {CAMERAMODE_FOLLOW};
             case DIK_NUMPAD2: {CAMERAMODE_SHOULDER};
