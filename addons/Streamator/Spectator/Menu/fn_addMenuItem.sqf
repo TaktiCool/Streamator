@@ -25,7 +25,9 @@ if (isNil QGVAR(menuEntries)) then {
     GVAR(menuEntries) set ["MAIN", []];
 };
 
-private _entry = GVAR(menuEntries) get [_path, []];
+_path = toUpper _path;
+
+private _entry = GVAR(menuEntries) getOrDefault [_path, []];
 
 if ((_entry findIf {(_x select 0) == _dik}) != -1) exitWith {
     ["Menu Item %1/%2 reused Keybinding %3", _path, _name, call compile (keyName _dik)] call BIS_fnc_error;
