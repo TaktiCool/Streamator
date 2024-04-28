@@ -1,7 +1,7 @@
 name = "Streamator"
 mainprefix = "tc"
 modname = "Streamator"
-prefix = "TC"
+prefix = "Streamator"
 author = "CLib Team"
 include = ["./include"]
 
