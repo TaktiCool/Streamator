@@ -31,7 +31,7 @@ private _vehicles = (vehicles select { _x call FUNC(isValidVehicle) });
 if (_units isNotEqualTo []) then {
     {
         if (isNull objectParent _x) then { // Infantry
-            private _iconId = toLower format [QGVAR(IconId_Player_%1_%2), _x, (group _x)];
+            private _iconId = toLowerANSI format [QGVAR(IconId_Player_%1_%2), _x, (group _x)];
             if !(_iconId in GVAR(processedIcons)) then {
                 GVAR(processedIcons) pushBack _iconId;
                 // DUMP("UNIT ICON ADDED: " + _iconId);
@@ -39,7 +39,7 @@ if (_units isNotEqualTo []) then {
             };
 
             if (alive _x && { leader _x == _x }) then {
-                _iconId = toLower format [QGVAR(IconId_Group_%1_%2), group _x, _x];
+                _iconId = toLowerANSI format [QGVAR(IconId_Group_%1_%2), group _x, _x];
                 if !(_iconId in GVAR(processedIcons)) then {
                     GVAR(processedIcons) pushBack _iconId;
                     // DUMP("GROUP ICON ADDED: " + _iconId);
@@ -52,7 +52,7 @@ if (_units isNotEqualTo []) then {
             private _inGroup = {
                 if (leader _x == _x) then {
                     _nbrGroups = _nbrGroups + 1;
-                    private _iconId = toLower format [QGVAR(IconId_Group_%1_%2_%3), group _x, _vehicle, _nbrGroups];
+                    private _iconId = toLowerANSI format [QGVAR(IconId_Group_%1_%2_%3), group _x, _vehicle, _nbrGroups];
                     if !(_iconId in GVAR(processedIcons)) then {
                         GVAR(processedIcons) pushBack _iconId;
                         // DUMP("GROUP ICON ADDED: " + _iconId);
@@ -63,7 +63,7 @@ if (_units isNotEqualTo []) then {
             } count (crew _vehicle);
             _inGroup = _inGroup > 0;
             if (!isNull _vehicle) then {
-                private _iconId = toLower format [QGVAR(IconId_Vehicle_%1), _vehicle];
+                private _iconId = toLowerANSI format [QGVAR(IconId_Vehicle_%1), _vehicle];
                 if !(_iconId in GVAR(processedIcons)) then {
                     GVAR(processedIcons) pushBack _iconId;
                     // DUMP("VEHICLE ADDED: " + _iconId);
@@ -76,7 +76,7 @@ if (_units isNotEqualTo []) then {
 
 if (_vehicles isNotEqualTo []) then {
     {
-        private _iconId = toLower format [QGVAR(IconId_Vehicle_%1), _x];
+        private _iconId = toLowerANSI format [QGVAR(IconId_Vehicle_%1), _x];
         if (
             !(_iconId in GVAR(processedIcons))
             && (locked _x) <= 1

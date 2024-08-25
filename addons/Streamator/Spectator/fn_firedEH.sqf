@@ -22,7 +22,7 @@ if (GVAR(OverlayBulletTracer)) then {
     if (isNull _projectile) then {
         _projectile = (getPos _unit) nearestObject _ammo;
     };
-    if (toLower _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
+    if (toLowerANSI _weapon in ["put", "throw"]) then { // Handle Thrown Grenate
         GVAR(ThrownTracked) pushBack [_projectile, time + 10];
     };
     private _color = +(GVAR(SideColorsArray) getOrDefault [side (group _unit), [0.4, 0, 0.5, 1]]);
