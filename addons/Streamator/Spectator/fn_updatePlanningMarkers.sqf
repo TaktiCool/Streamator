@@ -25,7 +25,7 @@ if (GVAR(PlanningModeDrawing) && { GVAR(InputMode) == INPUTMODE_PLANINGMODE }) t
         private _intersectArray = lineIntersectsSurfaces [AGLToASL _cameraPosition, AGLToASL _position, objNull, objNull, true, 1, "GEOM", "NONE", false];
         if (_intersectArray isNotEqualTo []) then {
             (_intersectArray select 0) params ["_intersectPosition"];
-            _position = ASLtoAGL _intersectPosition;
+            _position = ASLToAGL _intersectPosition;
         };
     };
     [_serverTime, _position] call FUNC(updatePlanningCursorPosition);
@@ -52,8 +52,8 @@ _targets = _targets select {
             if (_lastPosition isNotEqualTo _cursorPos) then {
                 _lastPosition params ["_lasttime", "_lastpos"];
                 if ((_newtime - _lasttime) < 0.2) then {
-                    _lastpos = AGLtoASL _lastpos;
-                    _newpos = AGLtoASL _newpos;
+                    _lastpos = AGLToASL _lastpos;
+                    _newpos = AGLToASL _newpos;
                     private _diffpos = _newpos vectorDiff _lastpos;
                     private _dist = vectorMagnitude _diffpos;
                     _diffpos = vectorNormalized _diffPos;
@@ -61,7 +61,7 @@ _targets = _targets select {
                     private _tSteps = (_newtime - _lasttime)/_nSteps;
                     private _sSteps = _dist/_nSteps;
                     for "_cnt" from 1 to _nSteps do {
-                        _cursorHistory pushBackUnique [_lasttime + _tSteps*_cnt, ASLtoAGL (_lastpos vectorAdd (_diffPos vectorMultiply (_cnt*_sSteps)))];
+                        _cursorHistory pushBackUnique [_lasttime + _tSteps*_cnt, ASLToAGL (_lastpos vectorAdd (_diffPos vectorMultiply (_cnt*_sSteps)))];
                     };
                 };
                 _cursorHistory pushBackUnique _cursorPos;

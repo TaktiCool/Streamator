@@ -53,6 +53,6 @@ if (_interSectPos isEqualTo []) then {
     _map drawIcon ["A3\ui_f\data\GUI\Cfg\Cursors\hc_move_gs.paa", [1, 1, 1, 1], _interSectPos, 12.5, 12.5, 0, ""];
     _map drawLine [_pos1, _interSectPos, [0, 1, 0, 1]];
     _map drawEllipse [_pos1, _distance, _distance, 0, [1,0,0,1], ""];
-    _distance = _pos1 distance2d _interSectPos;
+    _distance = _pos1 distance2D _interSectPos;
     _map drawEllipse [_pos1, _distance, _distance, 0, [0,1,0,1], ""];
 };

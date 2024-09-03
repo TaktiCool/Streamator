@@ -18,7 +18,7 @@ if (markerShape _marker == "POLYLINE") then {
     [
         false,
         markerPolyline _marker,
-        (configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA
+        (configFile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA
     ];
 } else {
     [
@@ -27,6 +27,6 @@ if (markerShape _marker == "POLYLINE") then {
         markerPos _marker,
         markerDir _marker,
         getText ([(configFile >> "CfgMarkers" >> markerType _marker >> "icon"), (configFile >> "CfgMarkers" >> markerType _marker >> "texture")] select (isText (configFile >> "CfgMarkers" >> markerType _marker >> "texture"))),
-        (configfile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA
+        (configFile >> "CfgMarkerColors" >> markerColor _marker >> "color") call BIS_fnc_colorConfigToRGBA
     ];
 };

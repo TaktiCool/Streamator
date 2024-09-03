@@ -18,7 +18,7 @@ params ["_map", "_textSize"];
 {
     private _pos = _x getVariable "ace_map_gestures_pointPosition";
     if (!isNil "_pos" && {_pos isNotEqualTo []}) then {
-        private _grpName = groupID (group _x);
+        private _grpName = groupId (group _x);
 
         // If color settings for the group exist, then use those, otherwise fall back to the default colors
         private _color = (GVAR(ace_map_gestures_color_namespace) getVariable [_grpName, [GVAR(ace_map_gestures_defaultLeadColor), GVAR(ace_map_gestures_defaultLeadColor)]]) select (_x isNotEqualTo leader _x);

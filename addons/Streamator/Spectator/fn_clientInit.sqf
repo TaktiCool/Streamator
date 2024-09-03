@@ -28,7 +28,7 @@ GVAR(aceAdvancedThrowingLoaded) = isClass (configFile >> "CfgPatches" >> "ace_ad
         "initializeSpectator" call CFUNC(localEvent);
     };
     CLib_Player setVariable [QGVAR(isPlayer), true, true];
-    CLib_Player addEventhandler ["FiredMan", {
+    CLib_Player addEventHandler ["FiredMan", {
         if (GVAR(Streamators) isEqualTo []) exitWith {};
         params ["_unit", "_weapon", "", "", "_ammo", "", "_projectile"];
         if (_ammo isKindOf "BombCore") then {

@@ -208,7 +208,7 @@ private _ctrlPlanningChannel = _display ctrlCreate ["RscStructuredText", -1, _ct
 _ctrlPlanningChannel ctrlSetPosition [0, safeZoneH - PY(BORDERWIDTH), safeZoneW , PY(1.8)];
 _ctrlPlanningChannel ctrlSetFont "RobotoCondensedBold";
 _ctrlPlanningChannel ctrlSetFontHeight PY(2);
-_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1 | </t><t size='%5' color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
+_ctrlPlanningChannel ctrlSetStructuredText parseText format ["<t color='%2'>Channel: %1 | </t><t color='%3'>Color: %4</t>", "All", ["#ffffff", "#ffffff", "#3CB371"] select GVAR(InputMode), GVAR(PlanningModeColorHTML) select GVAR(PlanningModeColor), GVAR(PlanningModeColor)];
 _ctrlPlanningChannel ctrlCommit 0;
 
 [QGVAR(PlanningModeChannelChanged), {

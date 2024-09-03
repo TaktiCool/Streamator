@@ -155,7 +155,7 @@ private _xPosition = 41;
     _ctrlMagInfo2 ctrlSetText "99"; //Magazine load
     _ctrlMagInfo2 ctrlCommit 0;
     _xPosition = _xPosition + 19.5;
-    _ctrlWeaponSlots pushback [_ctrlGrp, _ctrlWeaponPicture, _ctrlWeaponName, _ctrlMagInfo, _ctrlMagInfo2, _ctrlMagIcon];
+    _ctrlWeaponSlots pushBack [_ctrlGrp, _ctrlWeaponPicture, _ctrlWeaponName, _ctrlMagInfo, _ctrlMagInfo2, _ctrlMagIcon];
 } forEach [
     ["MX 6.5MM", "\A3\weapons_F\Rifles\MX\data\UI\gear_mx_rifle_X_CA.paa"],
     ["NLAW","\A3\weapons_f\launchers\nlaw\data\UI\gear_nlaw_ca.paa"],

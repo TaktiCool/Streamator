@@ -27,7 +27,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
         _height = _width;
     };
 
-    if ((toUpper (lifeState _position)) == "INCAPACITATED") exitWith {
+    if ((toUpperANSI (lifeState _position)) == "INCAPACITATED") exitWith {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\A3\ui_f\data\igui\cfg\revive\overlayicons\u100_ca.paa";
         _color = [1, 0, 0, 1];

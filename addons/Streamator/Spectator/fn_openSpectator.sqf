@@ -335,7 +335,7 @@ if (GVAR(aceSpectatorLoaded)) then {
     }] call CBA_fnc_addEventHandler;
 };
 
-if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
+if (CLib_Player isKindOf "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
     [_fnc_init, {
         (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
     }] call CFUNC(waitUntil);

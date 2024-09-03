@@ -16,7 +16,7 @@
 params ["_bulletDrawCall", "_thrownDrawCall", "_arg"];
 
 private _deleted = false;
-private _ifSkipUpdate = if ((diag_frameno mod 3) == 0);
+private _ifSkipUpdate = if ((diag_frameNo mod 3) == 0);
 {
     _x params ["_color", "_startPos", "_projectile", ["_segments", []]];
     if (alive _projectile) then {
