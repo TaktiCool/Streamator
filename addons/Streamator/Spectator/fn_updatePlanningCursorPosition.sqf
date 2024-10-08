@@ -13,7 +13,7 @@
     Returns:
     None
 */
-params ["_time", "_position"];
+params ["_serverTime", "_position"];
 private _targets = false;
 if (GVAR(lastPlanningModeUpdate) <= time) then {
     GVAR(lastPlanningModeUpdate) = time + PLANNINGMODEUPDATETIME;
