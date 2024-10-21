@@ -117,12 +117,12 @@ private _fnc_renderViewDistance = {
             viewDistance;
         };
     };
-    _name = format ["%1 %2 %3 (%4)", _mType, _value, _type, _current];
+    _name = format [_name, _mType, _value, _type, _current];
     _ret
 };
 
-["Add 100 ViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F1, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ViewDistance"] call FUNC(addMenuItem);
-["Add 100 ObjectViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F2, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ObjectViewDistance"] call FUNC(addMenuItem);
+["%1 %2 %3 (%4)", "MAIN/MISC/VIEWDISTANCE", DIK_F1, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ViewDistance"] call FUNC(addMenuItem);
+["%1 %2 %3 (%4)", "MAIN/MISC/VIEWDISTANCE", DIK_F2, _fnc_doViewDistance, _fnc_renderViewDistance, false, "ObjectViewDistance"] call FUNC(addMenuItem);
 ["Sync ObjectViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F3, { GVAR(SyncObjectViewDistance) = !GVAR(SyncObjectViewDistance); if (GVAR(SyncObjectViewDistance)) then {setObjectViewDistance viewDistance;}; }, { if (GVAR(SyncObjectViewDistance)) then { _color = "#3CB371"; }; true }] call FUNC(addMenuItem);
 ["Reset ViewDistance", "MAIN/MISC/VIEWDISTANCE", DIK_F4, { setObjectViewDistance -1; setViewDistance -1; true }] call FUNC(addMenuItem);
 

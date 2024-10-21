@@ -22,7 +22,7 @@ if (floor(time) % 1 == 0) then {
         private _pos = ASLToAGL getPosASL _x;
         private _index = allPlayers findIf {(laserTarget _x) isEqualTo _x};
         if (_index != -1) then {
-            drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), _pos, [1, 0, 0, 1]];
+            drawLine3D [ASLToAGL (eyePos (allPlayers select _index)), _pos, [1, 0, 0, 1], GVAR(3DLaserTargetLineWidth)];
         };
         drawIcon3D ["a3\ui_f_curator\Data\CfgCurator\laser_ca.paa", [1, 0, 0, 1], _pos, 0.75, 0.75, 0, "", 1, 0.05, TEXT_FONT];
         drawIcon3D ["", [1, 1, 1, 1], _pos, 0.75, 0.75, 0, _text, 1, 0.05, TEXT_FONT];

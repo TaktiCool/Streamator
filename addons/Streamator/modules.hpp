@@ -63,11 +63,13 @@ class CfgCLibModules {
                 MODULE(SubMenus) {
                     FNC(cameraSubMenus);
                     FNC(crewSubMenus);
+                    FNC(lineSubMenus);
                     FNC(mapSubMenus);
                     FNC(miscSubMenus);
                     FNC(overlaySubMenus);
                     FNC(radioSubMenus);
                     FNC(visionSubMenus);
+                    
                 };
                 FNC(addMenuItem);
                 FNC(executeEntry);

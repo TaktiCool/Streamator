@@ -53,3 +53,8 @@ call FUNC(crewSubMenus);
 ["Misc", "MAIN", DIK_F7, "MAIN/MISC", {true}, true] call FUNC(addMenuItem);
 CREATE_BACK_ACTION_MAIN("MAIN/MISC");
 call FUNC(miscSubMenus);
+
+// Lines
+["Lines", "MAIN", DIK_F8, "MAIN/LINES", {true}, true] call FUNC(addMenuItem);
+CREATE_BACK_ACTION_MAIN("MAIN/LINES");
+call FUNC(lineSubMenus);

@@ -151,6 +151,12 @@ GVAR(TopDownOffset) = [0, 0, 100];
 GVAR(SyncObjectViewDistance) = true;
 GVAR(PlaningModeUpdateTime) = 0.05;
 
+GVAR(3DBulletTracerLineWidth) = 3;
+GVAR(MapBulletTracerLineWidth) = 3;
+
+GVAR(3DLaserTargetLineWidth) = 3;
+GVAR(MapLaserTargetLineWidth) = 3;
+
 if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)))) then {
     GVAR(PlaningModeUpdateTime) = getNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)));
 };
@@ -357,4 +363,5 @@ call FUNC(updateSpectatorArray);
 [{
     call FUNC(updateValidUnits);
 }, 1] call CFUNC(addPerframeHandler);
+
 call FUNC(updateValidUnits);

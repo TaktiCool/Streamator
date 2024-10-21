@@ -28,7 +28,7 @@ private _fnc_DrawPolyLine = {
         private _point = [_verts select _i, _verts select _i + 1];
 
         _map drawRectangle [(_prevPoint vectorAdd _point) vectorMultiply 0.5, 15*_mapScale, (_prevPoint distance2D _point) * 0.5, _point getDir _prevPoint, _color, "#(rgb,8,8,3)color(1,1,1,1)"]
-        // _map drawLine [_prevPoint, _point, _color];
+        // _map drawLine [_prevPoint, _point, _color, 10];
     };
 };
 
