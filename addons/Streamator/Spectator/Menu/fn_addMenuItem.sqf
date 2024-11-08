@@ -19,13 +19,15 @@
     Returns:
     None
 */
-params ["_name", "_path", ["_dik", DIK_F1], ["_onUse", {LOG("Nothing here.")}, []], ["_onRender", {true}, [{}]], ["_hasSubMenus", false], ["_args", []]];
+params ["_name", "_path", ["_dik", DIK_F1], ["_onUse", {LOG("Nothing here.")}, [{}, ""]], ["_onRender", {true}, [{}]], ["_hasSubMenus", false], ["_args", []]];
 if (isNil QGVAR(menuEntries)) then {
-    GVAR(menuEntries) = false call CFUNC(createNamespace);
-    GVAR(menuEntries) setVariable ["MAIN", []];
+    GVAR(menuEntries) = createHashMap;
+    GVAR(menuEntries) set ["MAIN", []];
 };
 
-private _entry = GVAR(menuEntries) getVariable [_path, []];
+_path = toUpper _path;
+
+private _entry = GVAR(menuEntries) getOrDefault [_path, []];
 
 if ((_entry findIf {(_x select 0) == _dik}) != -1) exitWith {
     ["Menu Item %1/%2 reused Keybinding %3", _path, _name, call compile (keyName _dik)] call BIS_fnc_error;
@@ -33,4 +35,4 @@ if ((_entry findIf {(_x select 0) == _dik}) != -1) exitWith {
 };
 _entry pushBack [_dik, _name, _onUse, _onRender, _hasSubMenus, _args];
 _entry sort true;
-GVAR(menuEntries) setVariable [_path, _entry];
+GVAR(menuEntries) set [_path, _entry];

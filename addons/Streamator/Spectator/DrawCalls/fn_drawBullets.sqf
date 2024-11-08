@@ -20,8 +20,9 @@ params ["_map"];
     _data params ["_color", "", "_projectile", ["_segments", []]];
     private _segmentCount = count _segments - 1;
     {
+        _x params ["_start", "_end"];
         _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
-        _map drawLine [_x select 0, _x select 1, _color];
+        _map drawLine [_start, _end, _color, GVAR(MapBulletTracerLineWidth)];
     } forEach _segments;
 }, {
     _this params ["_projectile", "_map"];

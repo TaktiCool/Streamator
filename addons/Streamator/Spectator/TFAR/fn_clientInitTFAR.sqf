@@ -26,7 +26,7 @@ LOG("TFAR Stable Detected");
     CLib_Player setVariable ["tf_unable_to_use_radio", true];
     CLib_Player setVariable ["tf_forcedCurator", true];
     CLib_Player setVariable ["TFAR_forceSpectator", true];
-
+    CLib_Player setVariable ["TF_fnc_position", {private _pctw = positionCameraToWorld [0,0,0]; [ATLToASL _pctw, (positionCameraToWorld [0,0,1]) vectorDiff _pctw]}];
     [{
         if !(alive GVAR(RadioFollowTarget)) exitWith {
             if (GVAR(RadioInformationPrev) isNotEqualTo []) then {
@@ -59,18 +59,21 @@ LOG("TFAR Stable Detected");
         if !("No_LR_Radio" in _freqLR) then {
             _freqLR = _freqLR apply {format ["%1|%2|%3|%4", _x select 0, GVAR(TFARRadioVolume), _x select 1, _x select 2]};
         };
+
         TFAR_player_name = name CLib_Player;
-        private _request = "";
-        _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
-            str(_freqSW), // list of short wave frequencies to set (including volume and stero info)
-            str(_freqLR), // list of long range frequencies to set (including volume and stero info)
+        private _globalVolume = CLib_Player getVariable ["tf_globalVolume", 1.0];
+        private _receivingDistanceMultiplicator = (CLib_Player getVariable ["tf_receivingDistanceMultiplicator",1.0]) * (1/TFAR_globalRadioRangeCoef);
+
+        private _request = format ["FREQ	%1	%2	%3	%4	%5	%6	%7	%8	%9	%10~",
+            _freqSW, // list of short wave frequencies to set (including volume and stero info)
+            _freqLR, // list of long range frequencies to set (including volume and stero info)
             true, // Set player's state to "alive"
             0, // set player's voice volume
             profileName, // The player's nickname
             waves, // The waves level
-            0, // The terrainIntersectionCoefficient
-            1.0, // The global volume
-            1.0, // receivingDistanceMultiplicator
+            [0, TF_terrain_interception_coefficient] select GVAR(useTFARTerrainLoss), // The terrainIntersectionCoefficient
+            _globalVolume, // The global volume
+            _receivingDistanceMultiplicator, // receivingDistanceMultiplicator
             0 // speakerDistance
         ];
         private _result = "task_force_radio_pipe" callExtension _request;
@@ -117,13 +120,13 @@ private _events = ["OnRadiosReceived","OnRadioOwnerSet","OnLRChange","OnSWChange
 
 {
     [format [QGVAR(%1), _x], _x, {
-        call FUNC(updateTFARFreq);
+        FUNC(updateTFARFreq) call CFUNC(directCall);
     }, CLib_Player] call TFAR_fnc_addEventHandler;
 } forEach _events;
 
 {
     [_x, {
-        call FUNC(updateTFARFreq);
+        FUNC(updateTFARFreq) call CFUNC(directCall);
     }] call CFUNC(addEventhandler);
 } forEach ["vehicleChanged", "playerChanged", "Respawn", "playerInventoryChanged"];
 

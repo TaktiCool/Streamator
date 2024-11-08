@@ -14,10 +14,13 @@
 
 */
 params [["_path", "", [""]], ["_mainPrefixText", ""]];
+
+_path = toUpper _path;
+
 if (_path isEqualTo "") then {
     "MAIN" call FUNC(renderMenu);
 };
-private _entry = GVAR(menuEntries) getVariable [_path, []];
+private _entry = GVAR(menuEntries) getOrDefault [_path, []];
 if (_entry isEqualTo []) exitWith {
     "MAIN" call FUNC(renderMenu);
 };

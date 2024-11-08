@@ -41,7 +41,7 @@ _allGroups = _allGroups arrayIntersect _allGroups;
             _groupMapIcon = (side _x) call FUNC(getDefaultIcon);
             _x setVariable [QGVAR(GroupIcon), _groupMapIcon];
         };
-        private _sideColor = +(GVAR(SideColorsArray) getVariable [str side _x, [1, 1, 1, 1]]);
+        private _sideColor = _x getVariable [QGVAR(CustomGroupIconColor), +(GVAR(SideColorsArray) getOrDefault [side _x, [1, 1, 1, 1]])];
         _sideColor set [3, 0.7 * _alpha];
         drawIcon3D [_groupMapIcon, _sideColor, _pos, _size, _size, 0];
         if (_distance < _unitDotMaxDistance) then {

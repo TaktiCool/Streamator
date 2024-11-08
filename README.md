@@ -26,6 +26,7 @@ Key Binding | Short Description | Remarks
 **`SHIFT`** + **`Scrollwheel`** | Change Speed | Changes the Speed of the Camera.
 **`CTRL`** + **`Scrollwheel`** | Change Smoothing | Changes the camera smoothing coefficient.
 **`ALT`** + **`Scrollwheel`** | Change FOV | Changes the field of view (zoom).
+**`CAPS LOCK`** + **`Scrollwheel`** | Change Focus Distance | Changes the focus distance of the Camera (zoom).
 **`TAB`** | Resets FOV | Resets the field of View
 **`N`** | Vision mode | Switches Between Normal Vision Mode and Last used Vision Mode
 **`F1-F12 + Escape`** | Menu Navigation | Keybindings used for Menu Navigation
@@ -120,8 +121,9 @@ Key Binding | Short Description | Remarks
     - **[F1]** Toggle Radio Overlay
     - **[F2]** Target current Camera target
     - **[F3]** Radio Volume Down/Up (ACRE2 Only)
-    - **[F3]** Radio Volume Up  (TFAR Only)
-    - **[F4]** Radio Volume Down  (TFAR Only)
+    - **[F3]** Radio Volume Up (TFAR Only)
+    - **[F4]** Radio Volume Down (TFAR Only)
+    - **[F5]** Enable/Disable Terrainloss (TFAR Only)
 - **[F6]** \<Crew\>
     - **[F1]** Commander
     - **[F2]** Gunner
@@ -139,6 +141,7 @@ Key Binding | Short Description | Remarks
         - **[F4]** Reset ViewDistance
     - **[F5]** Use Terrain/Line Intersect for Distance Measuring Tool
     - **[F6]** Show Laser Codes (ACE Only)
+    - **[F7]** Disable/Enable Camera Focus
     - **[F12]** Fix Camera
 
 # Creators Manual

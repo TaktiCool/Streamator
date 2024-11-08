@@ -96,7 +96,7 @@ _ctrlMinimap ctrlAddEventHandler ["Draw", {
 
     private _mapCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + ((_mapPosition select 2)/2),  (_mapPosition select 1) + ((_mapPosition select 3)/2)];
 
-    private _screenCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + safeZoneWAbs/2, (_mapPosition select 1) + (SafeZoneH - 1.5 *((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))/2];
+    private _screenCenterWorldPos = _map ctrlMapScreenToWorld [(_mapPosition select 0) + safeZoneWAbs/2, (_mapPosition select 1) + (safeZoneH - 1.5 *((((safeZoneW / safeZoneH) min 1.2) / 1.2) / 25))/2];
     _screenCenterWorldPos set [2, 0];
     _mapCenterWorldPos set [2, 0];
     _position = _position vectorAdd (_screenCenterWorldPos vectorDiff _mapCenterWorldPos);

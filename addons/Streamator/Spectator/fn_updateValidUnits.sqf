@@ -20,7 +20,7 @@ _allUnits = _allUnits arrayIntersect _allUnits;
 {
     private _valid = _x call FUNC(isValidUnit);
     _x setVariable [QGVAR(isValidUnit), _valid];
-} foreach _allUnits;
+} forEach _allUnits;
 
 {
     private _uavData = UAVControl _x;

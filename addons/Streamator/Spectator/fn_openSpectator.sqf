@@ -15,27 +15,26 @@
 */
 
 if (isNil QGVAR(SideColorsArray)) then {
-    GVAR(SideColorsArray) = false call CFUNC(createNamespace);
-    GVAR(SideColorsArray) setVariable [str west, [0, 0.4, 0.8, 1]];
-    GVAR(SideColorsArray) setVariable [str east, [0.6, 0, 0, 1]];
-    GVAR(SideColorsArray) setVariable [str independent, [0, 0.5, 0, 1]];
-    GVAR(SideColorsArray) setVariable [str civilian, [0.4, 0, 0.5, 1]];
-    GVAR(SideColorsArray) setVariable [str sideUnknown, [0.3, 0.3, 0.3, 1]];
+    GVAR(SideColorsArray) = createHashMap;
+    GVAR(SideColorsArray) set [west, [0, 0.4, 0.8, 1]];
+    GVAR(SideColorsArray) set [east, [0.6, 0, 0, 1]];
+    GVAR(SideColorsArray) set [independent, [0, 0.5, 0, 1]];
+    GVAR(SideColorsArray) set [civilian, [0.4, 0, 0.5, 1]];
+    GVAR(SideColorsArray) set [sideUnknown, [0.3, 0.3, 0.3, 1]];
 };
 
 if (isNil QGVAR(SideColorsString)) then {
-    GVAR(SideColorsString) = false call CFUNC(createNamespace);
-    GVAR(SideColorsString) setVariable [str west, "#0099EE"];
-    GVAR(SideColorsString) setVariable [str east, "#CC3333"];
-    GVAR(SideColorsString) setVariable [str independent, "#33CC33"];
-    GVAR(SideColorsString) setVariable [str civilian, "#CC33CC"];
-    GVAR(SideColorsString) setVariable [str sideUnknown, "#4C4C4C"];
+    GVAR(SideColorsString) = createHashMap;
+    GVAR(SideColorsString) set [west, "#0099EE"];
+    GVAR(SideColorsString) set [east, "#CC3333"];
+    GVAR(SideColorsString) set [independent, "#33CC33"];
+    GVAR(SideColorsString) set [civilian, "#CC33CC"];
+    GVAR(SideColorsString) set [sideUnknown, "#4C4C4C"];
 };
 
 if (isNil QGVAR(PositionMemory)) then {
-    GVAR(PositionMemory) = false call CFUNC(createNamespace);
+    GVAR(PositionMemory) = createHashMap;
 };
-
 
 if (GVAR(aceMapGesturesLoaded)) then {
     GVAR(ace_map_gestures_color_namespace) = missionNamespace getVariable ["ace_map_gestures_GroupColorCfgMappingNew", objNull];
@@ -54,14 +53,19 @@ GVAR(CameraHeight) = 10;
 GVAR(CameraSmoothingMode) = false;
 GVAR(CameraSpeedMode) = false;
 GVAR(CameraZoomMode) = false;
+GVAR(CameraFocusDistanceMode) = false;
 GVAR(CameraSpeed) = 5;
 GVAR(CameraMode) = CAMERAMODE_FREE;
 GVAR(CameraFOV) = 0.75;
+GVAR(CameraFocusDistance) = 64;
 GVAR(CameraVision) = 9;
 GVAR(ThermalVision) = 0;
 GVAR(PrevCameraVision) = 8;
 GVAR(CameraRelPos) = [0, 0, 0];
 GVAR(CameraInFirstPerson) = false;
+GVAR(CameraDisableFocus) = false;
+
+GVAR(lastPlanningModeUpdate) = -999;
 
 GVAR(CameraFollowTarget) = objNull;
 GVAR(RadioFollowTarget) = objNull;
@@ -147,6 +151,12 @@ GVAR(TopDownOffset) = [0, 0, 100];
 GVAR(SyncObjectViewDistance) = true;
 GVAR(PlaningModeUpdateTime) = 0.05;
 
+GVAR(3DBulletTracerLineWidth) = 3;
+GVAR(MapBulletTracerLineWidth) = 3;
+
+GVAR(3DLaserTargetLineWidth) = 3;
+GVAR(MapLaserTargetLineWidth) = 3;
+
 if (isNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)))) then {
     GVAR(PlaningModeUpdateTime) = getNumber (missionConfigFile >> QUOTE(DOUBLE(PREFIX,PlaningModeUpdateTime)));
 };
@@ -211,7 +221,7 @@ GVAR(lastFrameDataUpdate) = diag_frameNo;
 
 
 [{
-    GVAR(allSpectators) = ((entities "") select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
+    GVAR(allSpectators) = (allPlayers select {_x call Streamator_fnc_isSpectator && _x isNotEqualTo CLib_Player});
 
     // hijack this for disabling the UI.
     private _temp = shownHUD;
@@ -317,6 +327,7 @@ private _fnc_init = {
     QGVAR(updateMenu) call CFUNC(localEvent);
     QGVAR(spectatorOpened) call CFUNC(localEvent);
     [QGVAR(RegisterStreamator), CLib_Player] call CFUNC(serverEvent);
+    [findDisplay 46, [PX(-1.5) ,0]] call CFUNC(registerDisplayNotification);
 };
 
 if (GVAR(aceSpectatorLoaded)) then {
@@ -330,7 +341,7 @@ if (GVAR(aceSpectatorLoaded)) then {
     }] call CBA_fnc_addEventHandler;
 };
 
-if (CLib_Player isKindof "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
+if (CLib_Player isKindOf "VirtualSpectator_F" && side CLib_Player isEqualTo sideLogic) then {
     [_fnc_init, {
         (missionNamespace getVariable ["BIS_EGSpectator_initialized", false]) && !isNull findDisplay 60492;
     }] call CFUNC(waitUntil);
@@ -352,4 +363,5 @@ call FUNC(updateSpectatorArray);
 [{
     call FUNC(updateValidUnits);
 }, 1] call CFUNC(addPerframeHandler);
+
 call FUNC(updateValidUnits);

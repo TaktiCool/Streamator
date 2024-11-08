@@ -15,7 +15,7 @@
 */
 params ["_group", "_groupIconId", ["_attachTo", [0, -20]]];
 
-private _color = EGVAR(Spectator,SideColorsArray) getVariable [str side _group, [1, 1, 1, 1]];
+private _color = EGVAR(Spectator,SideColorsArray) getOrDefault [side _group, [1, 1, 1, 1]];
 
 private _groupMapIcon = _group getVariable QEGVAR(Spectator,GroupIcon);
 if (isNil "_groupMapIcon") then {
@@ -128,8 +128,7 @@ private _shortGroupId = format ["%1 %2", _firstGroupIdElement select [0, 1], _gr
 
         {
             _x ctrlCommit 0;
-            nil;
-        } count [_ctrlGrp, _ctrlSquadName, _ctrlBgBottom, _ctrlMemberList];
+        } forEach [_ctrlGrp, _ctrlSquadName, _ctrlBgBottom, _ctrlMemberList];
 
         ctrlSetFocus _ctrlGrp;
 

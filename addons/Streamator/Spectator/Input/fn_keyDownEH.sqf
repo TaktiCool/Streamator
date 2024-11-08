@@ -35,7 +35,7 @@ private _return = switch (_keyCode) do {
         if !(_oldValue) then {
             QGVAR(updateMenu) call CFUNC(localEvent);
         };
-        false;
+        true;
     };
     case DIK_LCONTROL: { // LCTRL
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
@@ -45,7 +45,7 @@ private _return = switch (_keyCode) do {
         if !(_oldValue) then {
             QGVAR(updateMenu) call CFUNC(localEvent);
         };
-        false;
+        true;
     };
     case DIK_LALT: { // LALT
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
@@ -55,7 +55,17 @@ private _return = switch (_keyCode) do {
         if !(_oldValue) then {
             QGVAR(updateMenu) call CFUNC(localEvent);
         };
-        false;
+        true;
+    };
+    case DIK_CAPITAL: { // CAPS LOCK
+        if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {false;};
+        private _oldValue = GVAR(CameraFocusDistanceMode);
+        GVAR(CameraFocusDistanceMode) = true;
+        QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        if !(_oldValue) then {
+            QGVAR(updateMenu) call CFUNC(localEvent);
+        };
+        true;
     };
     case DIK_ESCAPE: { // ESC
         if (GVAR(InputMode) == INPUTMODE_SEARCH) exitWith {
@@ -238,11 +248,7 @@ private _return = switch (_keyCode) do {
                 CAMERAMODE_FREE;
             };
             case DIK_RETURN: {
-                if (GVAR(CameraMode) == CAMERAMODE_FREE) then {
-                    CAMERAMODE_FOLLOW
-                } else {
-                    GVAR(CameraMode);
-                };
+                [GVAR(CameraMode), CAMERAMODE_FOLLOW] select (GVAR(CameraMode) == CAMERAMODE_FREE);
             };
             case DIK_NUMPAD1: {CAMERAMODE_FOLLOW};
             case DIK_NUMPAD2: {CAMERAMODE_SHOULDER};

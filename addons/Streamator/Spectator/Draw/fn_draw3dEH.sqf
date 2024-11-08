@@ -21,8 +21,8 @@ private _intersectTarget = AGLToASL positionCameraToWorld [0, 0, 10000];
 private _object = lineIntersectsSurfaces [
     _intersectCam,
     _intersectTarget,
-    objnull,
-    objnull,
+    objNull,
+    objNull,
     true,
     1,
     "GEOM",

@@ -72,12 +72,12 @@ if (_isEngineer) exitWith {
     //"\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\repair_ca.paa";
     ["\A3\ui_f\data\gui\cfg\respawnroles\support_ca.paa", 1];
 };
-if ((toLower (getText(configFile >> "CfgWeapons" >> (secondaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_at_ca.paa")) exitWith {
+if ((toLowerANSI (getText(configFile >> "CfgWeapons" >> (secondaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_at_ca.paa")) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\at_ca.paa";
     ["\A3\ui_f\data\gui\rsc\rscdisplayarsenal\secondaryweapon_ca.paa", 1.3];
 };
 
-private _primaryWeapon = toLower primaryWeapon _unit;
+private _primaryWeapon = toLowerANSI primaryWeapon _unit;
 if ("srifle" in _primaryWeapon) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\srifle_ca.paa";
     ["\A3\ui_f\data\gui\cfg\respawnroles\recon_ca.paa", 1];
@@ -88,7 +88,7 @@ if ("gl" in _primaryWeapon) exitWith {
     ["\A3\ui_f_curator\data\rsccommon\rscattributeinventory\filter_6_ca.paa", 1];
 };
 
-if ((toLower (getText (configFile >> "CfgWeapons" >> (primaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_mg_ca.paa")) exitWith {
+if ((toLowerANSI (getText (configFile >> "CfgWeapons" >> (primaryWeapon _unit) >> "UIPicture")) == "\a3\weapons_f\data\ui\icon_mg_ca.paa")) exitWith {
     //"\a3\ui_f\data\igui\cfg\weaponicons\mg_ca.paa";
     ["\A3\ui_f\data\gui\cfg\respawnroles\assault_ca.paa", 1];
 };

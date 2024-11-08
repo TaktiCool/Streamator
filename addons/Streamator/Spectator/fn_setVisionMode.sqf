@@ -16,14 +16,14 @@
 switch (GVAR(CameraVision)) do {
     case (9): {
         camUseNVG false;
-        false setCamUseTi 0;
+        false setCamUseTI 0;
     };
     case (8): {
         camUseNVG true;
-        false setCamUseTi 0;
+        false setCamUseTI 0;
     };
     default {
         camUseNVG false;
-        true setCamUseTi GVAR(CameraVision);
+        true setCamUseTI GVAR(CameraVision);
     };
 };

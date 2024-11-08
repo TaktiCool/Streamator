@@ -46,8 +46,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
         [{
             ctrlDelete _this;
         }, 0.2, _x] call CFUNC(wait);
-        nil;
-    } count _elements;
+    } forEach _elements;
     _ctrlGroup setVariable [QGVAR(elements), []];
 }, [_ctrlRadioFollowUnit, _ctrlRadioInfoGrp]] call CFUNC(addEventhandler);
 
@@ -138,8 +137,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
                 };
             };
         };
-        nil;
-    } count _elements;
+    } forEach _elements;
     if (_elementFound) then {
         _elements = _elements - [_element];
     };
@@ -184,8 +182,7 @@ _ctrlRadioInfoGrp ctrlCommit 0;
                 };
             };
         };
-        nil;
-    } count _elements;
+    } forEach _elements;
     if (_elementFound > 0) then {
         _elements = _elements - _element;
     };

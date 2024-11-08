@@ -155,7 +155,7 @@ private _xPosition = 41;
     _ctrlMagInfo2 ctrlSetText "99"; //Magazine load
     _ctrlMagInfo2 ctrlCommit 0;
     _xPosition = _xPosition + 19.5;
-    _ctrlWeaponSlots pushback [_ctrlGrp, _ctrlWeaponPicture, _ctrlWeaponName, _ctrlMagInfo, _ctrlMagInfo2, _ctrlMagIcon];
+    _ctrlWeaponSlots pushBack [_ctrlGrp, _ctrlWeaponPicture, _ctrlWeaponName, _ctrlMagInfo, _ctrlMagInfo2, _ctrlMagIcon];
 } forEach [
     ["MX 6.5MM", "\A3\weapons_F\Rifles\MX\data\UI\gear_mx_rifle_X_CA.paa"],
     ["NLAW","\A3\weapons_f\launchers\nlaw\data\UI\gear_nlaw_ca.paa"],
@@ -237,7 +237,7 @@ private _unitInfoAllCtrls = [
     _ctrlUnitName ctrlCommit 0;
 
     // set side color
-    private _color = GVAR(SideColorsArray) getVariable [str side (group _unit), [0,0,0,1]];
+    private _color = GVAR(SideColorsArray) getOrDefault [side (group _unit), [0,0,0,1]];
     _ctrlRoleIconBackground ctrlSetText format ["#(argb,8,8,3)color(%1,%2,%3,1)", _color select 0, _color select 1, _color select 2];
     _ctrlRoleIconBackground ctrlCommit 0;
 
@@ -305,7 +305,7 @@ private _unitInfoAllCtrls = [
         _healthIcons select 0;
     };
 
-    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", round ((1 - _health)*24)];
+    _ctrlHealthRing ctrlSetText format ["\A3\Ui_f\Data\igui\cfg\holdactions\progress\progress_%1_ca.paa", 0 max (round ((1 - _health)*24))];
     _ctrlHealthRing ctrlCommit 0;
     if (_healthIcon isEqualTo "\A3\ui_f\data\IGUI\Cfg\Actions\bandage_ca.paa") then {
         _ctrlHealthIcon ctrlSetPosition [PX(1.5), PY(1.5), PX(3), PY(3)];

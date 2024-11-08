@@ -4,11 +4,11 @@ class CfgPatches {
         name = "Streamator";
         units[] = {};
         weapons[] = {};
-        requiredVersion = 2.02;
+        requiredVersion = 2.04;
         author = "TaktiCool Team";
         authors[] = {"joko // Jonas", "NetFusion", "BadGuy"};
         version = VERSION;
-        versionStr = QUOTE(VERSION);
+        versionStr = VERSION;
         versionAr[] = {VERSION_AR};
         requiredAddons[] = {"CLib"};
     };

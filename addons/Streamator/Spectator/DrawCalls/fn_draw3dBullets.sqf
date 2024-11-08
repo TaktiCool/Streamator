@@ -19,8 +19,9 @@
     if ((_projectile distance (positionCameraToWorld [0, 0, 0])) < viewDistance) then {
         private _segmentCount = count _segments - 1;
         {
+            _x params ["_start", "_end"];
             _color set [3, linearConversion [_segmentCount, 0, _forEachIndex, 1, 0]];
-            drawLine3D [_x select 0, _x select 1, _color];
+            drawLine3D [_start, _end, _color, GVAR(3DBulletTracerLineWidth)];
         } forEach _segments;
     };
 }, {

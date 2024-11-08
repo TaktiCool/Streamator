@@ -35,13 +35,11 @@ publicVariable QGVAR(radioNamespace);
             _units deleteAt _index;
             GVAR(radioNamespace) setVariable [_x, _units, true];
         };
-        nil;
-    } count (_oldData - _notChanged);
+    } forEach (_oldData - _notChanged);
 
     {
         private _units = GVAR(radioNamespace) getVariable [_x, []];
         _units pushBackUnique _unit;
         GVAR(radioNamespace) setVariable [_x, _units, true];
-        nil
-    } count (_data - _notChanged);
+    } forEach (_data - _notChanged);
 }] call CFUNC(addEventhandler);

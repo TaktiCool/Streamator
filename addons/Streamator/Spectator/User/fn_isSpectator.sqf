@@ -14,5 +14,5 @@
     is Spectator <Bool>
 */
 params ["_unit"];
-(_unit isKindof "VirtualSpectator_F" && side _unit isEqualTo sideLogic)
+(_unit isKindOf "VirtualSpectator_F" && side _unit isEqualTo sideLogic)
 || _unit getVariable ["Streamator_isSpectator", false]

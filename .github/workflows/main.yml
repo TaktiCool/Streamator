@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the source code
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
     - name: Validate SQF
       run: python3 tools/sqf_validator.py
     - name: Check for BOM
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the source code
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
     - name: Validate Diag
       run: python3 tools/diag_checker.py
     - name: Lint (sqflint)
@@ -30,14 +30,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
-      - name: Build addon with HEMTT
-        uses: arma-actions/hemtt@master
-        with:
-          command: 'build --release'
+          submodules: 'true'
+      - name: Setup HEMTT
+        uses: arma-actions/hemtt@v1
+      - name: Run HEMTT build
+        run: hemtt release
       - uses: actions/upload-artifact@master
         with:
           name: '@Streamator'
-          path: 'releases/@Streamator.zip'
+          path: '.hemttout/release/*'

@@ -28,7 +28,7 @@ if (isNil QGVAR(CustomSearchItems)) then {
 };
 private _index = GVAR(CustomSearchItems) findIf {_x select 0 == _name};
 if (_index == -1) then {
-    GVAR(CustomSearchItems) pushback [_name, [_target, _distance, _hight]];
+    GVAR(CustomSearchItems) pushBack [_name, [_target, _distance, _hight]];
 } else {
     GVAR(CustomSearchItems) set [_index, [_name, [_target, _distance, _hight]]]
 };

@@ -20,7 +20,7 @@ private _buildedIcons = [];
 {
     private _code = _x param [13, {}, [{}]];
     private _codeStr = {
-        if (GVAR(hideUI)) then {false} else {GVAR(OverlayCustomMarker)};
+        !GVAR(hideUI) && GVAR(OverlayCustomMarker)
     } call CFUNC(codeToString);
     if (_code isNotEqualTo {}) then {
         private _strCond = _code call CFUNC(codeToString);
@@ -34,8 +34,7 @@ private _buildedIcons = [];
     };
     _x set [13, compile _codeStr];
     _buildedIcons pushBack _x;
-    nil
-} count _icons;
+} forEach _icons;
 
 [
     _id,

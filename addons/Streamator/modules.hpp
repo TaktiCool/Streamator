@@ -55,12 +55,22 @@ class CfgCLibModules {
                 FNC(mouseWheelEH);
             };
             MODULE(Marker) {
-                FNC(bindMarkerEH);
                 FNC(clientInitMarker);
                 FNC(collectMarkerData);
                 FNC(updateLocalMapMarkers);
             };
             MODULE(Menu) {
+                MODULE(SubMenus) {
+                    FNC(cameraSubMenus);
+                    FNC(crewSubMenus);
+                    FNC(lineSubMenus);
+                    FNC(mapSubMenus);
+                    FNC(miscSubMenus);
+                    FNC(overlaySubMenus);
+                    FNC(radioSubMenus);
+                    FNC(visionSubMenus);
+                    
+                };
                 FNC(addMenuItem);
                 FNC(executeEntry);
                 FNC(registerMenus);
@@ -88,6 +98,7 @@ class CfgCLibModules {
             FNC(serverInit);
             FNC(setCameraTarget);
             FNC(setVisionMode);
+            FNC(updatePlanningCursorPosition);
             FNC(updatePlanningMarkers);
             FNC(updateValidUnits);
         };

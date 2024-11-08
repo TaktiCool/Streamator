@@ -36,6 +36,11 @@ switch (_keyCode) do {
         QGVAR(hightlightModeChanged) call CFUNC(localEvent);
         QGVAR(updateMenu) call CFUNC(localEvent);
     };
+    case DIK_CAPITAL: {
+        GVAR(CameraFocusDistanceMode) = false;
+        QGVAR(hightlightModeChanged) call CFUNC(localEvent);
+        QGVAR(updateMenu) call CFUNC(localEvent);
+    };
 };
 
 false

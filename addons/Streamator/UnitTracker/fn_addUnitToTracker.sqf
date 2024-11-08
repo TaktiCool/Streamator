@@ -17,7 +17,7 @@ params ["_newUnit", "_iconId"];
 
 #define DEFAULT_ICON "\A3\ui_f\data\map\vehicleicons\iconMan_ca.paa"
 
-private _color = EGVAR(Spectator,SideColorsArray) getVariable [(str (side (group _newUnit))), [0.5, 0.5, 0.5, 1]];
+private _color = EGVAR(Spectator,SideColorsArray) getOrDefault [side (group _newUnit), [0.5, 0.5, 0.5, 1]];
 
 private _icon = [(configFile >> "CfgVehicles" >> typeOf _newUnit >> "Icon"), DEFAULT_ICON, true] call CFUNC(getConfigDataCached);
 private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
@@ -27,7 +27,7 @@ private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.
         _height = _width;
     };
 
-    if ((toUpper (lifeState _position)) == "INCAPACITATED") exitWith {
+    if ((toUpperANSI (lifeState _position)) == "INCAPACITATED") exitWith {
         _color = [0.3, 0.3, 0.3, 0.5];
         _texture = "\A3\ui_f\data\igui\cfg\revive\overlayicons\u100_ca.paa";
         _color = [1, 0, 0, 1];
