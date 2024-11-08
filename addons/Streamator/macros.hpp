@@ -4,9 +4,9 @@
 
 // Define version information
 #define MAJOR 0
-#define MINOR 6
+#define MINOR 7
 #define PATCHLVL 0
-#define BUILD 374
+#define BUILD 404
 
 // Do not release with this setting enabled!
 // #define DEBUGFULL // Enable all debug methods
