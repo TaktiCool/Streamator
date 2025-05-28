@@ -22,7 +22,7 @@ private _ifSkipUpdate = if ((diag_frameNo mod 3) == 0);
     if (alive _projectile) then {
         _ifSkipUpdate then {
             if (_segments isNotEqualTo []) then {
-                _startPos = _segments select ((count _segments) -1) select 1;
+                _startPos = (_segments select -1) select 1;
             };
             private _index = _segments pushBack [_startPos, getPosVisual _projectile];
             if (_index >= TRACER_SEGMENT_COUNT) then {

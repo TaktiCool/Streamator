@@ -48,7 +48,7 @@ _targets = _targets select {
         if (_cursorHistory isEqualTo []) then {
             _cursorHistory pushBackUnique _cursorPos;
         } else {
-            private _lastPosition = _cursorHistory select ((count _cursorHistory) - 1);
+            private _lastPosition = _cursorHistory select -1;
             if (_lastPosition isNotEqualTo _cursorPos) then {
                 _lastPosition params ["_lasttime", "_lastpos"];
                 if ((_newtime - _lasttime) < 0.2) then {
