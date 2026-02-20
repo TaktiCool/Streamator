@@ -19,7 +19,7 @@ params ["_newUnit", "_iconId"];
 
 private _color = EGVAR(Spectator,SideColorsArray) getOrDefault [side (group _newUnit), [0.5, 0.5, 0.5, 1]];
 
-private _icon = [(configFile >> "CfgVehicles" >> typeOf _newUnit >> "Icon"), DEFAULT_ICON, true] call CFUNC(getConfigDataCached);
+private _icon = [(configOf _newUnit >> "Icon"), DEFAULT_ICON, true] call CFUNC(getConfigDataCached);
 private _manIcon = ["ICON", _icon, _color, _newUnit, 20, 20, _newUnit, "", 1, 0.08, "RobotoCondensed", "right", {
 
     if ((group _position) getVariable [QGVAR(isHoveredOn), false]) then {

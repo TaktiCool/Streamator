@@ -19,7 +19,7 @@ private _color = EGVAR(Spectator,SideColorsArray) getOrDefault [side _vehicle, [
 if (_isEmpty) then {
     _color =  [0.93, 0.7, 0.01, 0.6];
 };
-private _vehicleMapIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "Icon");
+private _vehicleMapIcon = getText (configOf _vehicle >> "Icon");
 
 private _vehIcon = ["ICON", _vehicleMapIcon, _color, _vehicle, 30, 30, _vehicle, "", 1];
 private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa", [0.85,0.85,0,1], _vehicle, 25, 25, _vehicle, "", 1, 0.08, "RobotoCondensed", "right"];
@@ -99,7 +99,7 @@ private _vehIconHover = ["ICON", "\a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca
         _ctrlGrp ctrlSetPosition [_pos select 0, _pos select 1, PX(22), PY(50)];
         _ctrlGrp ctrlShow true;
 
-        _ctrlVehicleName ctrlSetText toUpper getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "displayName");
+        _ctrlVehicleName ctrlSetText toUpper getText (configOf _vehicle >> "displayName");
 
         private _maxCrewSize = [typeOf _vehicle, true] call BIS_fnc_crewCount;
         private _units = crew _vehicle;

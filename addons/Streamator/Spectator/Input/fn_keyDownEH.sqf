@@ -155,6 +155,7 @@ private _return = switch (_keyCode) do {
             if (!GVAR(MinimapVisible)) then {
                 QGVAR(ToggleMinimap) call CFUNC(localEvent);
             };
+            true;
         };
         QGVAR(ToggleMinimap) call CFUNC(localEvent);
         true;
@@ -180,6 +181,7 @@ private _return = switch (_keyCode) do {
             QGVAR(CloseUnitInfo) call CFUNC(localEvent);
         };
         QGVAR(updateMenu) call CFUNC(localEvent);
+        true;
     };
     case DIK_PGDN: { // Page Down
         if (_ctrl) then {
